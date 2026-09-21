@@ -1,6 +1,5 @@
 #!/bin/sh
-# Scan staged changes with gitleaks before every commit.
-# Install once per clone: git config core.hooksPath .githooks
+# Pre-commit gate. Install once per clone: git config core.hooksPath .githooks
 set -e
 
 if ! command -v gitleaks >/dev/null 2>&1; then
@@ -9,3 +8,17 @@ if ! command -v gitleaks >/dev/null 2>&1; then
 fi
 
 gitleaks protect --staged --redact --verbose
+
+# Out-of-scope wording gate. The word list lives at .git/info/banned-words
+# (one regex per line) so it never enters the repository or its history.
+# No list, no gate — create the file to enable it.
+banned_words="$(git rev-parse --git-dir)/info/banned-words"
+if [ -f "$banned_words" ]; then
+  if git diff --cached --unified=0 --diff-filter=ACM |
+    grep '^+' |
+    grep -i -E -q -f "$banned_words"; then
+    echo "pre-commit: staged changes contain out-of-scope wording (see CLAUDE.md > Interdits)." >&2
+    echo "pre-commit: the offending terms are listed in .git/info/banned-words." >&2
+    exit 1
+  fi
+fi

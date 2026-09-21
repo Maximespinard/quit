@@ -52,9 +52,8 @@ persisted; streak, XP, level, badges and money saved are pure functions of `(jou
 centralised in one strings module, no i18n lib. Everything else — code, identifiers, comments,
 commits, branches, tickets — is English.
 
-**Vocabulary** — `CONTEXT.md` is the glossary and it is binding: quit moment, lapse, streak,
-smoke-free day, craving, tag, check-in, XP, level, badge, protocol, step, patch application,
-application site, fact. Use those words in code and copy; never a synonym listed under _Avoid_.
+**Vocabulary** — `CONTEXT.md` is the glossary and it is binding. Use its terms in code and copy;
+never a synonym it lists under _Avoid_.
 
 **Money** — integer cents everywhere (storage, domain, props, tests). Only the display layer divides.
 
@@ -74,6 +73,8 @@ application site, fact. Use those words in code and copy; never a synonym listed
 - Persisting derived state (streak, XP, level, badges) — derive it, always
 - Reading the system clock inside domain code — `now` is injected
 - Granting a level or a badge directly, debug tooling included (`docs/adr/0002`)
+- Mentioning any substance other than tobacco or nicotine — UI, copy, data model, code,
+  comments, commits, tickets. This app tracks one thing: being smoke-free.
 - Committing `BRIEF.md` (gitignored) or any dotenv file
 - Committing without a green `npm run verify`
 

@@ -16,6 +16,9 @@ Install the git hooks once per clone (gitleaks scan on every commit):
 git config core.hooksPath .githooks
 ```
 
+The same hook also rejects a commit whose staged changes match a regex in
+`.git/info/banned-words` — a local, never-committed list of wording that is out of scope here.
+
 ## Scripts
 
 | Script | What it does |
