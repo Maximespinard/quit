@@ -78,6 +78,20 @@ never a synonym it lists under _Avoid_.
 - Committing `BRIEF.md` (gitignored) or any dotenv file
 - Committing without a green `npm run verify`
 
+## Agent skills
+
+### Issue tracker
+
+Issues live in Linear, not in this repo's GitHub Issues. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+The five canonical roles, each label string equal to its name. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: `CONTEXT.md` + `docs/adr/` at the root. See `docs/agents/domain.md`.
+
 ## Gouvernance
 
 Global rules (workflow, commits, permission prompts): `~/.claude/CLAUDE.md` — common code
