@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@theme {
+  /* Design tokens land here (see DESIGN.md). Placeholder until the design pass. */
+  --color-ink: oklch(0.18 0.01 260);
+  --color-paper: oklch(0.98 0.005 260);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
