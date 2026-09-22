@@ -1,6 +1,6 @@
 ---
 name: quit
-description: Un monde plat et typographique — une famille bleu marine, une page blanche, aucune ombre.
+description: Un monde plat et typographique — une famille bleu marine, une page blanche, aucune ombre, et une seule image : la nuit derrière le chiffre.
 colors:
   page: "#fafafa"
   ink: "#1b3c53"
@@ -197,9 +197,15 @@ components:
 **Creative North Star : « Le relevé »**
 
 Une seule famille bleu marine porte tous les faits, sur une page presque blanche. Rien n'est
-texturé, hachuré, grainé, ni ombré : la profondeur vient de la couleur et du filet, jamais de
-la lumière. Le monde est le standard de la catégorie exécuté à fond — plat, typographique,
-lisible en plein soleil à une main.
+grainé ni ombré : la profondeur vient de la couleur et du filet, jamais de la lumière. Le
+monde est le standard de la catégorie exécuté à fond — plat, typographique, lisible en plein
+soleil à une main.
+
+Le monde a gagné **une seule image**, et elle est nommée : une marine de nuit en aplats
+vectoriels derrière le chiffre du streak. Elle ne rompt pas la règle du plat — pas de photo,
+pas de grain, pas de texture, aucune valeur hors de la famille marine — elle donne au seul
+bloc qui porte le chiffre géant une raison d'être un lieu plutôt qu'un rectangle. Partout
+ailleurs, le fond reste un aplat.
 
 La hiérarchie est brutalement inégale, et c'est voulu : un chiffre de 176 px règne sur le bloc
 héros, tout le reste vit entre 10,5 px et 22 px. Une donnée est un chiffre, pas une jauge :
@@ -214,8 +220,9 @@ Registre, jugées froides et « AI-looking ».
 **Key Characteristics :**
 - Une famille marine + un gris, et une seule exception chaude (`alert`)
 - Aucune ombre, nulle part
+- Une seule image dans toute l'app : le fond du héros, en aplats, dans la famille
 - Une seule police variable, chiffres tabulaires partout
-- Un chiffre géant, tout le reste petit
+- Un chiffre géant centré, tout le reste petit
 - Un seul geste de motion signature (240 ms, par crans, jamais fluide)
 - Le pouce d'abord : `Envie` fixe, barre d'onglets basse, cibles ≥ 44 px
 
@@ -252,6 +259,14 @@ réservé au danger.
 - **Filet** (`line`) : filets, contours, pistes de barre et de slider, poignée de tiroir.
   Même valeur que `surface-locked`, rôle différent : ne pas fusionner les deux tokens.
 
+### Hors tokens : la marine de nuit
+
+L'illustration du héros n'introduit aucun token. Ses aplats sont pris dans la famille et
+n'existent que dans le fichier image : fond de ciel et d'eau ≈ `#163e59` (le voisin sombre de
+`ink`), bandes de vagues et collines entre `#265375` et `#426e8e` (autour de `reached`), écume
+en blanc cassé ≈ `#f1f1ee`. Aucune de ces valeurs ne doit être recopiée dans `@theme` ni
+utilisée pour habiller un composant.
+
 ### Named Rules
 
 **The Two Greys Rule.** Le gris de texte muet se choisit **par fond, pas par humeur**.
@@ -264,6 +279,11 @@ teinté tombe à 4,20:1 et échoue : c'est la seule raison d'être de `ink-dim`.
 **The One Warm Value Rule.** `alert` est la seule exception chaude approuvée à la famille
 marine-et-gris. Elle appartient aux actions destructives et aux erreurs, et à rien d'autre.
 Pas de succès vert, pas d'avertissement ambre, pas de second accent.
+
+**The One Illustration Rule.** Il y a **une** image dans toute l'app : la marine de nuit du
+bloc héros. Elle est décorative (`aria-hidden`), en aplats vectoriels, entièrement dans la
+famille marine, et `bg-ink` reste le plancher si elle n'arrive jamais. Pas de seconde
+illustration, pas de photo, pas d'icône décorative, pas de fond illustré sur une carte.
 
 ## Typography
 
@@ -304,7 +324,10 @@ l'écran. Le code, lui, reste en anglais.
 ## Layout
 
 Colonne unique centrée, `max-w-md` (28rem / 448px), pensée pour un iPhone en PWA standalone
-puis simplement centrée au-delà.
+puis simplement centrée au-delà. **Le héros est dans la colonne, pas en pleine page** : sur
+iPhone la colonne *est* le viewport et le bloc touche les deux bords ; au-delà de 448px il se
+centre avec le reste et garde ses coins bas arrondis. Le `<main>` racine porte `min-h-dvh
+bg-page`, et c'est lui qui remplit l'écran quand la colonne ne le fait pas.
 
 - **Gouttières :** utilitaire `px-safe` — `max(1.25rem, env(safe-area-inset-*))`. Jamais un
   `px-5` nu sur un conteneur pleine largeur : l'encoche et le coin arrondi mangeraient le texte.
@@ -314,8 +337,12 @@ puis simplement centrée au-delà.
   badges), 32px entre grandes sections, 10px entre l'en-tête d'une section et son contenu.
 - **Grilles :** badges en 3 colonnes, gap 8px, cartes carrées (`aspect-square`) ;
   multiplicateur en 5 colonnes, gap 6px, hauteur 42px.
-- **Bloc héros :** part du bord haut, pleine largeur, coins bas arrondis 28px. Il n'a pas de
-  marge haute : il *est* le haut de l'écran.
+- **Bloc héros :** part du bord haut de la colonne, coins bas arrondis 28px, `px-safe pt-safe`.
+  Il n'a pas de marge haute : il *est* le haut de l'écran. À l'intérieur, deux zones seulement :
+  une ligne haute de 56px minimum (marque à gauche, contexte + réglages à droite) et, sous elle,
+  **une colonne centrée** — chiffre 176px, libellé, horloge `hh:mm:ss` — en `pt-6 pb-9` avec un
+  interligne de 4px entre les trois. Le chiffre n'est plus aligné à gauche : centré, il tient la
+  même place qu'il affiche 3 ou 128 jours.
 - **Zone pouce :** `Envie` est fixe, aligné à droite, au-dessus de la barre d'onglets. La
   barre d'onglets suit la colonne de contenu (`max-w-md`) — son filet supérieur ne doit pas
   être en pleine largeur, sinon il flotte hors de la colonne sur grand écran.
@@ -329,13 +356,18 @@ spécimen) pour que la pilule `Envie` fixe ne recouvre jamais une information à
 ## Elevation & Depth
 
 **Aucune ombre, nulle part.** Il n'existe aucun token `--shadow-*`, et aucun `box-shadow`
-n'est écrit dans le code. La profondeur se lit sur trois registres seulement :
+n'est écrit dans le code. La profondeur se lit sur quatre registres seulement :
 
 1. **Aplat coloré** — le bloc héros marine sur la page blanche ; une carte `surface` sur la page.
 2. **Filet 1px** — `border-line` pour les contours, `border-t` pour la barre d'onglets,
    `divide-line` pour les listes.
-3. **Voile modal** — `bg-ink/40` pour le fond de `Dialog` et de `Drawer`. C'est le seul
-   assombrissement autorisé.
+3. **Voile modal** — `bg-ink/40` pour le fond de `Dialog` et de `Drawer`.
+4. **Scrim du héros** — une bande de 112px (`h-28`) collée au bas du bloc héros,
+   `bg-linear-to-t from-ink/75 to-transparent`, posée entre l'image et le texte. Elle ne
+   crée pas de relief : elle rachète le contraste du libellé et de l'horloge au-dessus des
+   crêtes claires de la vague, qui seules passeraient sous 4,5:1.
+
+Ce sont les deux seuls assombrissements autorisés, et le scrim est le seul dégradé du monde.
 
 ### Named Rules
 
@@ -343,6 +375,11 @@ n'est écrit dans le code. La profondeur se lit sur trois registres seulement :
 un filet. Elle ne gagne jamais une ombre, ni un `ring-*`, ni un dégradé. Le focus est un
 `outline: 2px solid action` avec `outline-offset: 3px`, posé globalement sur `:focus-visible` —
 les composants ne redéfinissent pas leur anneau.
+
+**The Scrim-Is-Contrast Rule.** Le dégradé n'existe dans ce monde que pour rendre un texte
+lisible au-dessus de l'illustration du héros, jamais pour décorer, adoucir un bord ou
+suggérer de la profondeur. Un fond uni n'a jamais besoin d'un scrim : s'il en réclame un,
+c'est la couleur du texte qui est fausse.
 
 ## Shapes
 
@@ -390,8 +427,27 @@ Désactivée, elle passe `surface-locked` / `ink-dim`.
   Débloqué → fond `surface`, texte `ink`, détail `ink-dim`, pas d'icône. Verrouillé → fond
   `surface-locked`, texte `ink-dim`, cadenas `Lock` 24px (stroke 1,75) en haut. Le suffixe
   « à débloquer » est en `sr-only`, jamais affiché.
-- **Bloc héros :** fond `ink`, texte `on-ink`, coins bas 28px, contexte secondaire à
-  `on-ink/80`.
+### Bloc héros (signature)
+
+Le seul objet illustré de l'app. Une `section` en `relative isolate overflow-hidden`, fond
+`ink`, texte `on-ink`, coins bas 28px, `px-safe pt-safe`, avec un `aria-label` stable qui ne
+suit pas le pluriel du chiffre.
+
+- **Fond :** `HeroBackdrop`, en `absolute inset-0 -z-10`, `aria-hidden`. Une marine de nuit en
+  aplats, servie en AVIF avec repli WebP sur trois largeurs (768 / 1152 / 1536),
+  `sizes="(min-width: 448px) 448px, 100vw"` — 8,7 Ko atteignent le téléphone. `object-cover`,
+  `fetchPriority="high"`, `decoding="async"` : elle peint avec le premier viewport. Les deux
+  formats sont dans le precache Workbox, sinon l'image manque hors ligne. `bg-ink` reste le
+  plancher : si l'image n'arrive jamais, le bloc est exactement le bloc plat d'avant.
+- **Scrim :** `absolute inset-x-0 bottom-0 h-28 bg-linear-to-t from-ink/75 to-transparent`,
+  dans le backdrop, sous le contenu. Contraste, pas décor (voir _Elevation & Depth_).
+- **Ligne haute :** `min-h-14`, marque en `label` 600 à gauche ; à droite, sur une seule ligne,
+  le contexte de protocole en `label` `on-ink/80` puis le contrôle `Réglages` (44×44,
+  `rounded-control`, `active:bg-on-ink/15`). Les deux slots sont optionnels : l'accueil du
+  premier jour les laisse vides sans que la ligne bouge.
+- **Colonne centrée :** chiffre `display` (176px), libellé `body`, horloge `figure`
+  `hh:mm:ss` à deux chiffres, `pt-6 pb-9`, gap 4px. Le chiffre réel est lu en `sr-only` et la
+  valeur animée est `aria-hidden`.
 
 ### Navigation
 
@@ -463,14 +519,18 @@ Aucune exception.
   `src/shared/utils/cn.ts`, sinon la classe sera silencieusement supprimée.
 - **Do** utiliser `px-safe` / `pt-safe` / `pb-safe` sur tout conteneur qui touche un bord.
 - **Do** rendre la profondeur par la couleur ou un filet 1px `line`.
+- **Do** garder `bg-ink` sous l'illustration du héros : le bloc doit rester lisible si l'image
+  n'arrive pas, et le texte posé dessus doit tenir 4,5:1 sur les crêtes claires, scrim compris.
 - **Do** garder les chiffres en `tabular-nums` et poser les valeurs qui changent en `figure`.
 - **Do** écrire toute chaîne visible en français, dans `src/shared/utils/strings.ts`.
 - **Do** garder les cibles tactiles à 44px minimum et le déclencheur principal en zone pouce.
 - **Do** assortir chaque transition d'un garde `motion-safe:` ou `motion-reduce:`.
 
 ### Don't:
-- **Don't** ajouter une ombre, un `ring-*`, un dégradé, une texture ou un grain : rien de tout
-  ça n'existe dans ce monde.
+- **Don't** ajouter une ombre, un `ring-*`, une texture ou un grain : rien de tout ça n'existe
+  dans ce monde. Le seul dégradé autorisé est le scrim du héros, et il sert le contraste.
+- **Don't** ajouter une seconde image. L'app en a une, le fond du héros ; une carte, un état
+  vide ou un badge se dessinent en type et en aplat.
 - **Don't** introduire une seconde couleur d'accent. `alert` est la seule valeur chaude, et
   elle est réservée au destructif et aux erreurs.
 - **Don't** habiller `alert` en aplat plein : fond à 10 % / 20 %, texte en plein.
