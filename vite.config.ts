@@ -37,7 +37,7 @@ export default defineConfig({
         ],
       },
       // Fonts must be precached: the app is used offline and they carry the identity.
-      workbox: { globPatterns: ['**/*.{js,css,html,svg,png,woff2}'] },
+      workbox: { globPatterns: ['**/*.{js,css,html,svg,png,webp,avif,woff2}'] },
       devOptions: { enabled: false },
     }),
   ],
