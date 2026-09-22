@@ -8,14 +8,14 @@ test('first launch sets the quit moment to now and the streak survives a reload'
 
   await page.getByRole('button', { name: 'Maintenant' }).click()
 
-  const streak = page.getByRole('region', { name: 'jours sans fumer' })
+  const streak = page.getByRole('region', { name: 'Temps sans fumer' })
   await expect(streak).toBeVisible()
-  // A minute boundary may pass between the tap and the assertion.
-  await expect(streak).toContainText(/00 h 0[01]/)
+  // A second boundary may pass between the tap and the assertion.
+  await expect(streak).toContainText(/00:00:\d\d/)
 
   await page.reload()
 
   await expect(streak).toBeVisible()
-  await expect(streak).toContainText(/00 h 0[01]/)
+  await expect(streak).toContainText(/00:00:\d\d/)
   await expect(page.getByRole('button', { name: 'Maintenant' })).toHaveCount(0)
 })

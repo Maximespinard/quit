@@ -2,7 +2,13 @@
 
 export const MULTIPLIER_STEPS = [1, 2, 3, 4, 5] as const
 
-export const SPECIMEN_STREAK = { days: 12, hours: 7, minutes: 42, multiplier: 3 } as const
+export const SPECIMEN_STREAK = {
+  days: 12,
+  hours: 7,
+  minutes: 42,
+  seconds: 9,
+  multiplier: 3,
+} as const
 
 export const SPECIMEN_PROTOCOL = { step: 1, doseMg: 21, daysToNext: 16, targetMg: 14 } as const
 

@@ -40,5 +40,5 @@ function HomePage() {
       </AppShell>
     )
   }
-  return <StreakScreen quitMoment={derived.quitMoment} streak={derived.streak} />
+  return <StreakScreen streak={derived.streak} />
 }

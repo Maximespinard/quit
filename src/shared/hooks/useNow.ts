@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import { MINUTE_MS } from '@/shared/utils/duration'
+import { SECOND_MS } from '@/shared/utils/duration'
 
 /**
  * The one place in the UI layer that reads the clock (ADR-0002): everything below
- * takes `now` as a parameter. Ticks on the minute boundary, and again when the tab
+ * takes `now` as a parameter. Ticks on the second boundary, and again when the tab
  * comes back to the foreground, since timers stall while it is hidden.
  */
 export function useNow(): number {
@@ -14,7 +14,7 @@ export function useNow(): number {
     const tick = () => {
       const current = Date.now()
       setNow(current)
-      timer = window.setTimeout(tick, MINUTE_MS - (current % MINUTE_MS))
+      timer = window.setTimeout(tick, SECOND_MS - (current % SECOND_MS))
     }
     const onVisible = () => {
       if (document.visibilityState === 'visible') {

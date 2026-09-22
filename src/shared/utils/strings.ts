@@ -23,8 +23,8 @@ export const strings = {
     future: 'Ce moment n’est pas encore arrivé.',
   },
   streak: {
-    days: 'jours sans fumer',
-    since: (date: string) => `depuis le ${date}`,
+    region: 'Temps sans fumer',
+    days: (count: number) => (count <= 1 ? 'jour sans fumer' : 'jours sans fumer'),
     step: (step: number, doseMg: number, daysToNext: number, targetMg: number) =>
       `Étape ${step} · ${doseMg} mg · J-${daysToNext} avant ${targetMg} mg`,
   },

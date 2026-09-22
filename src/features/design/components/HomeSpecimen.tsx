@@ -19,7 +19,7 @@ const MAX_MULTIPLIER = MULTIPLIER_STEPS[MULTIPLIER_STEPS.length - 1] ?? 1
 
 /** The home screen as the specimen's first viewport: hero, multiplier, level, badges. */
 export function HomeSpecimen() {
-  const { days, hours, minutes, multiplier } = SPECIMEN_STREAK
+  const { days, hours, minutes, seconds, multiplier } = SPECIMEN_STREAK
   const { step, doseMg, daysToNext, targetMg } = SPECIMEN_PROTOCOL
   const { level, xpIntoLevel, xpForLevel } = SPECIMEN_LEVEL
   const unlockedCount = SPECIMEN_BADGES.filter((badge) => badge.unlocked).length
@@ -30,7 +30,9 @@ export function HomeSpecimen() {
         days={days}
         hours={hours}
         minutes={minutes}
-        daysLabel={strings.streak.days}
+        seconds={seconds}
+        daysLabel={strings.streak.days(days)}
+        regionLabel={strings.streak.region}
         brand={strings.app.name}
         context={strings.streak.step(step, doseMg, daysToNext, targetMg)}
         action={

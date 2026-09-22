@@ -16,12 +16,14 @@ it('reads the full day count and pads the clock', () => {
       days={12}
       hours={7}
       minutes={4}
+      seconds={9}
       daysLabel="jours sans fumer"
+      regionLabel="Temps sans fumer"
       brand="quit"
       context="Étape 1 · 21 mg"
     />,
   )
 
-  expect(screen.getByRole('region', { name: 'jours sans fumer' })).toHaveTextContent('12')
-  expect(screen.getByText('07 h 04')).toBeInTheDocument()
+  expect(screen.getByRole('region', { name: 'Temps sans fumer' })).toHaveTextContent('12')
+  expect(screen.getByText('07:04:09')).toBeInTheDocument()
 })
