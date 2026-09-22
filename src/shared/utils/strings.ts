@@ -9,8 +9,22 @@ export const strings = {
     settings: 'Réglages',
   },
   craving: { launch: 'Envie' },
+  journal: {
+    loading: 'Chargement…',
+    error: 'Impossible de lire le journal sur cet appareil.',
+  },
+  quitMoment: {
+    title: 'Depuis quand tu ne fumes plus ?',
+    lead: 'Tout part de ce moment. Tu pourras le corriger plus tard.',
+    now: 'Maintenant',
+    or: 'ou',
+    dateLabel: 'Une autre date et heure',
+    submit: 'C’est depuis là',
+    future: 'Ce moment n’est pas encore arrivé.',
+  },
   streak: {
     days: 'jours sans fumer',
+    since: (date: string) => `depuis le ${date}`,
     step: (step: number, doseMg: number, daysToNext: number, targetMg: number) =>
       `Étape ${step} · ${doseMg} mg · J-${daysToNext} avant ${targetMg} mg`,
   },

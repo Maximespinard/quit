@@ -34,7 +34,7 @@ export function StreakHero({
   return (
     <section aria-label={daysLabel} className="rounded-b-hero bg-ink px-safe pt-safe text-on-ink">
       <div className="flex min-h-14 items-center justify-between gap-3 pt-3">
-        <span className="font-semibold text-label">{brand}</span>
+        <h1 className="font-semibold text-label">{brand}</h1>
         <span className="flex items-center gap-2 text-label text-on-ink/80">
           {context}
           {action}
