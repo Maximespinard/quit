@@ -12,7 +12,9 @@ gitleaks protect --staged --redact --verbose
 # Out-of-scope wording gate. The word list lives at .git/info/banned-words
 # (one regex per line) so it never enters the repository or its history.
 # No list, no gate — create the file to enable it.
-banned_words="$(git rev-parse --git-dir)/info/banned-words"
+# --git-common-dir, not --git-dir: inside a worktree the latter points at
+# .git/worktrees/<name>, where the list does not live.
+banned_words="$(git rev-parse --path-format=absolute --git-common-dir)/info/banned-words"
 if [ -f "$banned_words" ]; then
   if git diff --cached --unified=0 --diff-filter=ACM |
     grep '^+' |
