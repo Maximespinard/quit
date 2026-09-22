@@ -13,11 +13,15 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   // Real bundle + service worker: the production preview build, not the dev server.
+  // `--host 127.0.0.1` is load-bearing: left to its `localhost` default, Vite binds
+  // ::1 first on Linux runners while this url probes IPv4, and the wait times out.
   webServer: {
-    command: `npm run preview -- --port ${port} --strictPort`,
+    command: `npm run preview -- --host 127.0.0.1 --port ${port} --strictPort`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
+    stdout: 'pipe',
+    stderr: 'pipe',
   },
   projects: [
     {
