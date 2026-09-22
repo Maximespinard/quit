@@ -1,0 +1,72 @@
+export const strings = {
+  app: { name: 'quit' },
+  nav: {
+    label: 'Navigation principale',
+    home: 'Accueil',
+    calendar: 'Calendrier',
+    progress: 'Progression',
+    history: 'Historique',
+    settings: 'Réglages',
+  },
+  craving: { launch: 'Envie' },
+  streak: {
+    days: 'jours sans fumer',
+    step: (step: number, doseMg: number, daysToNext: number, targetMg: number) =>
+      `Étape ${step} · ${doseMg} mg · J-${daysToNext} avant ${targetMg} mg`,
+  },
+  multiplier: {
+    label: 'Multiplicateur de streak',
+    title: (current: number) => `Multiplicateur ×${current}`,
+    next: (days: number, next: number) => `encore ${days} j pour ×${next}`,
+    capped: 'au maximum',
+  },
+  level: {
+    title: (level: number) => `Niveau ${level}`,
+    label: (level: number) => `XP du niveau ${level}`,
+    xp: (into: number, total: number) =>
+      `${into.toLocaleString('fr-FR')} / ${total.toLocaleString('fr-FR')} XP`,
+  },
+  badges: {
+    title: 'Badges',
+    count: (unlocked: number, total: number) => `${unlocked} / ${total}`,
+    locked: 'à débloquer',
+  },
+  design: {
+    synthetic: 'Toutes les données sont fictives.',
+    sections: {
+      controls: 'Composants',
+      colors: 'Couleurs',
+      type: 'Typographie',
+    },
+    buttons: {
+      primary: 'Poser le patch',
+      secondary: 'Plus tard',
+      outline: 'Modifier',
+      ghost: 'Annuler',
+      destructive: 'Supprimer ce fait',
+      disabled: 'Indisponible',
+    },
+    switchLabel: 'Rappel du patch',
+    segmentedLabel: 'Intensité de l’envie',
+    segments: ['1', '2', '3'],
+    sliderLabel: 'Humeur du check-in',
+    tabsLabel: 'Période',
+    tabs: ['Semaine', 'Mois', 'Tout'],
+    tabsEmpty: 'Rien à afficher pour cette période.',
+    drawer: {
+      open: 'Ouvrir le tiroir',
+      title: 'Poser le patch',
+      body: 'Site suggéré : bras gauche. Le précédent était sur l’épaule droite.',
+      confirm: 'C’est posé',
+      cancel: 'Plus tard',
+    },
+    dialog: {
+      open: 'Ouvrir la boîte de dialogue',
+      title: 'Enregistrer un écart ?',
+      body: 'Le streak et le multiplicateur repartent de zéro. Tes badges et tes jours sans fumer restent.',
+      confirm: 'Enregistrer',
+      cancel: 'Non, pas cette fois',
+      close: 'Fermer',
+    },
+  },
+} as const
