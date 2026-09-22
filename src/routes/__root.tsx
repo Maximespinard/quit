@@ -6,7 +6,7 @@ export const Route = createRootRoute({
 
 function RootLayout() {
   return (
-    <main className="min-h-full bg-paper text-ink">
+    <main className="min-h-dvh bg-page text-ink">
       <Outlet />
     </main>
   )

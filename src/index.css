@@ -1,13 +1,117 @@
 @import "tailwindcss";
+@import "@fontsource-variable/bricolage-grotesque/opsz.css";
 
+/* Base UI exposes orientation as data-orientation; shadcn classes expect these variants. */
+@custom-variant data-horizontal (&[data-orientation="horizontal"]);
+@custom-variant data-vertical (&[data-orientation="vertical"]);
+
+/* Tokens are documented in DESIGN.md. Every value here is a decision, not a default. */
 @theme {
-  /* Design tokens land here (see DESIGN.md). Placeholder until the design pass. */
-  --color-ink: oklch(0.18 0.01 260);
-  --color-paper: oklch(0.98 0.005 260);
+  --color-*: initial;
+  --color-page: #fafafa;
+  --color-ink: #1b3c53;
+  --color-ink-soft: #5e6c78;
+  --color-ink-dim: #4a5a66;
+  --color-on-ink: #e3e3e3;
+  --color-action: #234c6a;
+  --color-reached: #456882;
+  --color-surface: #e3e3e3;
+  --color-surface-locked: #d4d4d4;
+  --color-line: #d4d4d4;
+  --color-alert: #a6392f;
+  --color-white: #ffffff;
+  --color-transparent: transparent;
+  --color-current-color: currentColor;
+
+  --font-sans: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+
+  --text-display: 11rem;
+  --text-display--line-height: 0.9;
+  --text-display--letter-spacing: -0.02em;
+  --text-display--font-weight: 800;
+  --text-figure: 1.375rem;
+  --text-figure--line-height: 1;
+  --text-figure--font-weight: 600;
+  --text-title: 1.1875rem;
+  --text-title--line-height: 1.2;
+  --text-title--font-weight: 600;
+  --text-cta: 1.0625rem;
+  --text-cta--line-height: 1;
+  --text-cta--font-weight: 700;
+  --text-body: 0.9375rem;
+  --text-body--line-height: 1.35;
+  --text-label: 0.8125rem;
+  --text-label--line-height: 1.25;
+  --text-label--font-weight: 500;
+  --text-detail: 0.6875rem;
+  --text-detail--line-height: 1.2;
+  --text-tab: 0.65625rem;
+  --text-tab--line-height: 1;
+  --text-tab--font-weight: 600;
+
+  --radius-hero: 1.75rem;
+  --radius-card: 0.875rem;
+  --radius-control: 0.75rem;
+  --radius-step: 0.625rem;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-step-in: step-in 240ms var(--ease-out-expo) both;
+
+  @keyframes step-in {
+    from {
+      transform: scale(0.92);
+      opacity: 0.4;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
 }
 
-html,
-body,
-#root {
-  height: 100%;
+@utility pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@utility px-safe {
+  padding-left: max(1.25rem, env(safe-area-inset-left));
+  padding-right: max(1.25rem, env(safe-area-inset-right));
+}
+
+@layer base {
+  html {
+    background-color: var(--color-page);
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-optical-sizing: auto;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-ink);
+    overscroll-behavior-y: none;
+    caret-color: var(--color-action);
+    scrollbar-color: var(--color-line) var(--color-page);
+  }
+
+  ::selection {
+    background-color: var(--color-action);
+    color: var(--color-page);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-action);
+    outline-offset: 3px;
+  }
+}
+
+@utility pb-safe-4 {
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
 }
