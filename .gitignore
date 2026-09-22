@@ -37,6 +37,11 @@ BRIEF.md
 # PWA dev build output
 dev-dist
 
+# Playwright artefacts
+/playwright-report/
+/test-results/
+/blob-report/
+
 # Impeccable: keep surface briefs + config, ignore rendered binaries and round logs
 .impeccable/mocks/
 .impeccable/review/
