@@ -20,7 +20,7 @@ if [ -f "$banned_words" ]; then
     grep '^+' |
     grep -i -E -q -f "$banned_words"; then
     echo "pre-commit: staged changes contain out-of-scope wording (see CLAUDE.md > Interdits)." >&2
-    echo "pre-commit: the offending terms are listed in .git/info/banned-words." >&2
+    echo "pre-commit: the offending terms are listed in $banned_words." >&2
     exit 1
   fi
 fi

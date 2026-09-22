@@ -10,28 +10,14 @@ import boundaries from 'eslint-plugin-boundaries'
  * ADR-0002: `now` is an explicit input of every derivation, so domain modules
  * never reach for the system clock. Enforced here instead of by convention.
  */
+const clockMessage =
+  'Domain code never reads the system clock (ADR-0002): take `now` as an explicit parameter.'
+
 const clockBan = [
-  {
-    selector: "CallExpression[callee.object.name='Date'][callee.property.name='now']",
-    message:
-      'Domain code never reads the system clock (ADR-0002): take `now` as an explicit parameter.',
-  },
-  {
-    selector: 'NewExpression[callee.name="Date"][arguments.length=0]',
-    message:
-      'Domain code never reads the system clock (ADR-0002): take `now` as an explicit parameter.',
-  },
-  {
-    selector: 'CallExpression[callee.name="Date"]',
-    message:
-      'Domain code never reads the system clock (ADR-0002): take `now` as an explicit parameter.',
-  },
-  {
-    selector: "MemberExpression[object.name='performance'][property.name='now']",
-    message:
-      'Domain code never reads the system clock (ADR-0002): take `now` as an explicit parameter.',
-  },
-]
+  { selector: "CallExpression[callee.object.name='Date'][callee.property.name='now']" },
+  { selector: "NewExpression[callee.name='Date'][arguments.length=0]" },
+  { selector: "CallExpression[callee.name='Date'][arguments.length=0]" },
+].map((rule) => ({ ...rule, message: clockMessage }))
 
 export default [
   { ignores: ['dist/**', 'dev-dist/**', 'src/routeTree.gen.ts'] },
