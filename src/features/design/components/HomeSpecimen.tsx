@@ -1,0 +1,94 @@
+import { Settings } from 'lucide-react'
+import { BadgeCard } from '@/shared/ui/BadgeCard'
+import { LevelBar } from '@/shared/ui/LevelBar'
+import { MultiplierSteps } from '@/shared/ui/MultiplierSteps'
+import { StreakHero } from '@/shared/ui/StreakHero'
+import { strings } from '@/shared/utils/strings'
+import {
+  MULTIPLIER_STEPS,
+  SPECIMEN_BADGE_TOTAL,
+  SPECIMEN_BADGES,
+  SPECIMEN_LEVEL,
+  SPECIMEN_MULTIPLIER,
+  SPECIMEN_PROTOCOL,
+  SPECIMEN_STREAK,
+} from '../utils/specimen-data'
+import { SpecimenSection } from './SpecimenSection'
+
+const MAX_MULTIPLIER = MULTIPLIER_STEPS[MULTIPLIER_STEPS.length - 1] ?? 1
+
+/** The home screen as the specimen's first viewport: hero, multiplier, level, badges. */
+export function HomeSpecimen() {
+  const { days, hours, minutes, multiplier } = SPECIMEN_STREAK
+  const { step, doseMg, daysToNext, targetMg } = SPECIMEN_PROTOCOL
+  const { level, xpIntoLevel, xpForLevel } = SPECIMEN_LEVEL
+  const unlockedCount = SPECIMEN_BADGES.filter((badge) => badge.unlocked).length
+
+  return (
+    <>
+      <StreakHero
+        days={days}
+        hours={hours}
+        minutes={minutes}
+        daysLabel={strings.streak.days}
+        brand={strings.app.name}
+        context={strings.streak.step(step, doseMg, daysToNext, targetMg)}
+        action={
+          <button
+            type="button"
+            aria-label={strings.nav.settings}
+            className="grid size-11 place-items-center rounded-control text-on-ink active:bg-on-ink/15"
+          >
+            <Settings className="size-5" strokeWidth={1.75} aria-hidden="true" />
+          </button>
+        }
+      />
+
+      <div className="flex flex-col gap-5 px-safe pt-5">
+        <SpecimenSection
+          title={strings.multiplier.title(multiplier)}
+          aside={
+            multiplier >= MAX_MULTIPLIER
+              ? strings.multiplier.capped
+              : strings.multiplier.next(SPECIMEN_MULTIPLIER.daysToNext, multiplier + 1)
+          }
+        >
+          <MultiplierSteps
+            steps={MULTIPLIER_STEPS}
+            current={multiplier}
+            label={strings.multiplier.label}
+          />
+        </SpecimenSection>
+
+        <SpecimenSection
+          title={strings.level.title(level)}
+          aside={strings.level.xp(xpIntoLevel, xpForLevel)}
+        >
+          <LevelBar
+            label={strings.level.label(level)}
+            xpIntoLevel={xpIntoLevel}
+            xpForLevel={xpForLevel}
+          />
+        </SpecimenSection>
+
+        <SpecimenSection
+          title={strings.badges.title}
+          aside={strings.badges.count(unlockedCount, SPECIMEN_BADGE_TOTAL)}
+        >
+          <ul className="grid grid-cols-3 gap-2">
+            {SPECIMEN_BADGES.map((badge) => (
+              <li key={badge.id}>
+                <BadgeCard
+                  name={badge.name}
+                  detail={badge.detail}
+                  unlocked={badge.unlocked}
+                  lockedLabel={strings.badges.locked}
+                />
+              </li>
+            ))}
+          </ul>
+        </SpecimenSection>
+      </div>
+    </>
+  )
+}
