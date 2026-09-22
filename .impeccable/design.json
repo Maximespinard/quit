@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-22T00:00:00.000Z",
+  "generatedAt": "2026-09-22T12:00:00.000Z",
   "title": "Design System: quit",
   "extensions": {
     "colorMeta": {
@@ -8,109 +8,314 @@
         "role": "neutral",
         "displayName": "Page",
         "canonical": "#fafafa",
-        "tonalRamp": ["oklch(15% 0 0)", "oklch(26% 0 0)", "oklch(38% 0 0)", "oklch(49% 0 0)", "oklch(60% 0 0)", "oklch(72% 0 0)", "oklch(84% 0 0)", "oklch(95% 0 0)"]
+        "tonalRamp": [
+          "oklch(15% 0 0)",
+          "oklch(26% 0 0)",
+          "oklch(38% 0 0)",
+          "oklch(49% 0 0)",
+          "oklch(60% 0 0)",
+          "oklch(72% 0 0)",
+          "oklch(84% 0 0)",
+          "oklch(95% 0 0)"
+        ]
       },
       "ink": {
         "role": "primary",
         "displayName": "Marine profond",
         "canonical": "#1b3c53",
-        "tonalRamp": ["oklch(15% 0.048 240)", "oklch(26% 0.048 240)", "oklch(31% 0.048 240)", "oklch(43% 0.048 240)", "oklch(55% 0.048 240)", "oklch(69% 0.040 240)", "oklch(83% 0.028 240)", "oklch(95% 0.012 240)"]
+        "tonalRamp": [
+          "oklch(15% 0.048 240)",
+          "oklch(26% 0.048 240)",
+          "oklch(31% 0.048 240)",
+          "oklch(43% 0.048 240)",
+          "oklch(55% 0.048 240)",
+          "oklch(69% 0.040 240)",
+          "oklch(83% 0.028 240)",
+          "oklch(95% 0.012 240)"
+        ]
       },
       "ink-soft": {
         "role": "neutral",
         "displayName": "Encre douce",
         "canonical": "#5e6c78",
-        "tonalRamp": ["oklch(15% 0.024 244)", "oklch(26% 0.024 244)", "oklch(38% 0.024 244)", "oklch(53% 0.024 244)", "oklch(64% 0.024 244)", "oklch(75% 0.020 244)", "oklch(86% 0.014 244)", "oklch(95% 0.008 244)"]
+        "tonalRamp": [
+          "oklch(15% 0.024 244)",
+          "oklch(26% 0.024 244)",
+          "oklch(38% 0.024 244)",
+          "oklch(53% 0.024 244)",
+          "oklch(64% 0.024 244)",
+          "oklch(75% 0.020 244)",
+          "oklch(86% 0.014 244)",
+          "oklch(95% 0.008 244)"
+        ]
       },
       "ink-dim": {
         "role": "neutral",
         "displayName": "Encre sourde",
         "canonical": "#4a5a66",
-        "tonalRamp": ["oklch(15% 0.026 244)", "oklch(26% 0.026 244)", "oklch(37% 0.026 244)", "oklch(45% 0.026 244)", "oklch(59% 0.026 244)", "oklch(72% 0.022 244)", "oklch(84% 0.015 244)", "oklch(95% 0.008 244)"]
+        "tonalRamp": [
+          "oklch(15% 0.026 244)",
+          "oklch(26% 0.026 244)",
+          "oklch(37% 0.026 244)",
+          "oklch(45% 0.026 244)",
+          "oklch(59% 0.026 244)",
+          "oklch(72% 0.022 244)",
+          "oklch(84% 0.015 244)",
+          "oklch(95% 0.008 244)"
+        ]
       },
       "on-ink": {
         "role": "neutral",
         "displayName": "Sur encre",
         "canonical": "#e3e3e3",
-        "tonalRamp": ["oklch(15% 0 0)", "oklch(26% 0 0)", "oklch(38% 0 0)", "oklch(49% 0 0)", "oklch(61% 0 0)", "oklch(73% 0 0)", "oklch(91% 0 0)", "oklch(96% 0 0)"]
+        "tonalRamp": [
+          "oklch(15% 0 0)",
+          "oklch(26% 0 0)",
+          "oklch(38% 0 0)",
+          "oklch(49% 0 0)",
+          "oklch(61% 0 0)",
+          "oklch(73% 0 0)",
+          "oklch(91% 0 0)",
+          "oklch(96% 0 0)"
+        ]
       },
       "action": {
         "role": "primary",
         "displayName": "Marine d'action",
         "canonical": "#234c6a",
-        "tonalRamp": ["oklch(15% 0.055 243)", "oklch(26% 0.055 243)", "oklch(38% 0.055 243)", "oklch(50% 0.055 243)", "oklch(62% 0.050 243)", "oklch(74% 0.042 243)", "oklch(85% 0.028 243)", "oklch(95% 0.012 243)"]
+        "tonalRamp": [
+          "oklch(15% 0.055 243)",
+          "oklch(26% 0.055 243)",
+          "oklch(38% 0.055 243)",
+          "oklch(50% 0.055 243)",
+          "oklch(62% 0.050 243)",
+          "oklch(74% 0.042 243)",
+          "oklch(85% 0.028 243)",
+          "oklch(95% 0.012 243)"
+        ]
       },
       "reached": {
         "role": "secondary",
         "displayName": "Acier atteint",
         "canonical": "#456882",
-        "tonalRamp": ["oklch(15% 0.048 244)", "oklch(26% 0.048 244)", "oklch(38% 0.048 244)", "oklch(49% 0.048 244)", "oklch(61% 0.044 244)", "oklch(73% 0.036 244)", "oklch(85% 0.024 244)", "oklch(95% 0.010 244)"]
+        "tonalRamp": [
+          "oklch(15% 0.048 244)",
+          "oklch(26% 0.048 244)",
+          "oklch(38% 0.048 244)",
+          "oklch(49% 0.048 244)",
+          "oklch(61% 0.044 244)",
+          "oklch(73% 0.036 244)",
+          "oklch(85% 0.024 244)",
+          "oklch(95% 0.010 244)"
+        ]
       },
       "surface": {
         "role": "neutral",
         "displayName": "Surface",
         "canonical": "#e3e3e3",
-        "tonalRamp": ["oklch(15% 0 0)", "oklch(26% 0 0)", "oklch(38% 0 0)", "oklch(49% 0 0)", "oklch(61% 0 0)", "oklch(73% 0 0)", "oklch(91% 0 0)", "oklch(96% 0 0)"]
+        "tonalRamp": [
+          "oklch(15% 0 0)",
+          "oklch(26% 0 0)",
+          "oklch(38% 0 0)",
+          "oklch(49% 0 0)",
+          "oklch(61% 0 0)",
+          "oklch(73% 0 0)",
+          "oklch(91% 0 0)",
+          "oklch(96% 0 0)"
+        ]
       },
       "surface-locked": {
         "role": "neutral",
         "displayName": "Surface verrouillée",
         "canonical": "#d4d4d4",
-        "tonalRamp": ["oklch(15% 0 0)", "oklch(26% 0 0)", "oklch(38% 0 0)", "oklch(49% 0 0)", "oklch(61% 0 0)", "oklch(73% 0 0)", "oklch(86% 0 0)", "oklch(95% 0 0)"]
+        "tonalRamp": [
+          "oklch(15% 0 0)",
+          "oklch(26% 0 0)",
+          "oklch(38% 0 0)",
+          "oklch(49% 0 0)",
+          "oklch(61% 0 0)",
+          "oklch(73% 0 0)",
+          "oklch(86% 0 0)",
+          "oklch(95% 0 0)"
+        ]
       },
       "line": {
         "role": "neutral",
         "displayName": "Filet",
         "canonical": "#d4d4d4",
-        "tonalRamp": ["oklch(15% 0 0)", "oklch(26% 0 0)", "oklch(38% 0 0)", "oklch(49% 0 0)", "oklch(61% 0 0)", "oklch(73% 0 0)", "oklch(86% 0 0)", "oklch(95% 0 0)"]
+        "tonalRamp": [
+          "oklch(15% 0 0)",
+          "oklch(26% 0 0)",
+          "oklch(38% 0 0)",
+          "oklch(49% 0 0)",
+          "oklch(61% 0 0)",
+          "oklch(73% 0 0)",
+          "oklch(86% 0 0)",
+          "oklch(95% 0 0)"
+        ]
       },
       "alert": {
         "role": "tertiary",
         "displayName": "Rouge d'alerte",
         "canonical": "#a6392f",
-        "tonalRamp": ["oklch(15% 0.150 27)", "oklch(26% 0.150 27)", "oklch(38% 0.150 27)", "oklch(47% 0.150 27)", "oklch(60% 0.150 27)", "oklch(73% 0.120 27)", "oklch(85% 0.075 27)", "oklch(95% 0.030 27)"]
+        "tonalRamp": [
+          "oklch(15% 0.150 27)",
+          "oklch(26% 0.150 27)",
+          "oklch(38% 0.150 27)",
+          "oklch(47% 0.150 27)",
+          "oklch(60% 0.150 27)",
+          "oklch(73% 0.120 27)",
+          "oklch(85% 0.075 27)",
+          "oklch(95% 0.030 27)"
+        ]
       },
       "white": {
         "role": "neutral",
         "displayName": "Blanc pur",
         "canonical": "#ffffff",
-        "tonalRamp": ["oklch(15% 0 0)", "oklch(26% 0 0)", "oklch(38% 0 0)", "oklch(49% 0 0)", "oklch(61% 0 0)", "oklch(73% 0 0)", "oklch(86% 0 0)", "oklch(100% 0 0)"]
+        "tonalRamp": [
+          "oklch(15% 0 0)",
+          "oklch(26% 0 0)",
+          "oklch(38% 0 0)",
+          "oklch(49% 0 0)",
+          "oklch(61% 0 0)",
+          "oklch(73% 0 0)",
+          "oklch(86% 0 0)",
+          "oklch(100% 0 0)"
+        ]
       }
     },
     "typographyMeta": {
-      "display": { "displayName": "Display", "purpose": "Le chiffre du streak, et lui seul. Un seul par écran." },
-      "figure": { "displayName": "Figure", "purpose": "Temps, XP, argent : les chiffres tabulaires." },
-      "title": { "displayName": "Title", "purpose": "Titres de tiroir et de boîte de dialogue." },
-      "cta": { "displayName": "CTA", "purpose": "Le bouton Envie, et rien d'autre." },
-      "body": { "displayName": "Body", "purpose": "Lecture — boutons, cartes, tout le reste." },
-      "label": { "displayName": "Label", "purpose": "Libellés, contexte, valeurs secondaires." },
-      "detail": { "displayName": "Detail", "purpose": "Détail de badge." },
-      "tab": { "displayName": "Tab", "purpose": "Libellés de la barre d'onglets." }
+      "display": {
+        "displayName": "Display",
+        "purpose": "Le chiffre du streak, et lui seul. Un seul par écran."
+      },
+      "figure": {
+        "displayName": "Figure",
+        "purpose": "Temps, XP, argent : les chiffres tabulaires."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Titres de tiroir et de boîte de dialogue."
+      },
+      "cta": {
+        "displayName": "CTA",
+        "purpose": "Le bouton Envie, et rien d'autre."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Lecture — boutons, cartes, tout le reste."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Libellés, contexte, valeurs secondaires."
+      },
+      "detail": {
+        "displayName": "Detail",
+        "purpose": "Détail de badge."
+      },
+      "tab": {
+        "displayName": "Tab",
+        "purpose": "Libellés de la barre d'onglets."
+      }
     },
     "shadows": [],
     "motion": [
-      { "name": "ease-out-expo", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Seule courbe du système. Toute transition et toute animation la portent." },
-      { "name": "duration-tactile", "value": "150ms", "purpose": "Retour à l'appui : scale de bouton, bascule de Switch, pouce de Slider, couleur d'onglet." },
-      { "name": "duration-dialog", "value": "200ms", "purpose": "Entrée et sortie de Dialog (opacité + scale-95)." },
-      { "name": "count-up", "value": "240ms / pas entiers / 12 pas max", "purpose": "Signature : useCountUp fait monter le chiffre du streak par crans, jamais en interpolation fluide. prefers-reduced-motion rend la cible dès le premier paint." },
-      { "name": "animate-step-in", "value": "step-in 240ms cubic-bezier(0.16, 1, 0.3, 1) both", "purpose": "Entrée des crans de multiplicateur (scale 0.92 → 1, opacité 0.4 → 1), décalée de 60ms par cran, sous motion-safe uniquement." },
-      { "name": "duration-xp", "value": "500ms", "purpose": "Remplissage de la barre de niveau (transition-[width]), coupé sous motion-reduce." },
-      { "name": "duration-drawer", "value": "450ms cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "Mécanique Base UI du Drawer, conservée telle quelle : ce n'est pas du style." }
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Seule courbe du système. Toute transition et toute animation la portent."
+      },
+      {
+        "name": "duration-tactile",
+        "value": "150ms",
+        "purpose": "Retour à l'appui : scale de bouton, bascule de Switch, pouce de Slider, couleur d'onglet."
+      },
+      {
+        "name": "duration-dialog",
+        "value": "200ms",
+        "purpose": "Entrée et sortie de Dialog (opacité + scale-95)."
+      },
+      {
+        "name": "count-up",
+        "value": "240ms / pas entiers / 12 pas max",
+        "purpose": "Signature : useCountUp fait monter le chiffre du streak par crans, jamais en interpolation fluide. prefers-reduced-motion rend la cible dès le premier paint."
+      },
+      {
+        "name": "animate-step-in",
+        "value": "step-in 240ms cubic-bezier(0.16, 1, 0.3, 1) both",
+        "purpose": "Entrée des crans de multiplicateur (scale 0.92 → 1, opacité 0.4 → 1), décalée de 60ms par cran, sous motion-safe uniquement."
+      },
+      {
+        "name": "duration-xp",
+        "value": "500ms",
+        "purpose": "Remplissage de la barre de niveau (transition-[width]), coupé sous motion-reduce."
+      },
+      {
+        "name": "duration-drawer",
+        "value": "450ms cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Mécanique Base UI du Drawer, conservée telle quelle : ce n'est pas du style."
+      }
     ],
     "breakpoints": [
-      { "name": "content", "value": "28rem", "purpose": "max-w-md : la colonne unique de l'app, et la largeur que suit la barre d'onglets." },
-      { "name": "sm", "value": "640px", "purpose": "Seul palier Tailwind utilisé (largeur de Dialog, largeur de Drawer latéral)." }
+      {
+        "name": "content",
+        "value": "28rem",
+        "purpose": "max-w-md : la colonne unique de l'app, et la largeur que suit la barre d'onglets."
+      },
+      {
+        "name": "sm",
+        "value": "640px",
+        "purpose": "Seul palier Tailwind utilisé (largeur de Dialog, largeur de Drawer latéral)."
+      }
     ],
     "safeAreas": [
-      { "name": "px-safe", "value": "padding-inline: max(1.25rem, env(safe-area-inset-left/right))" },
-      { "name": "pt-safe", "value": "padding-top: env(safe-area-inset-top)" },
-      { "name": "pb-safe", "value": "padding-bottom: env(safe-area-inset-bottom)" },
-      { "name": "pb-safe-4", "value": "padding-bottom: calc(1rem + env(safe-area-inset-bottom))" }
+      {
+        "name": "px-safe",
+        "value": "padding-inline: max(1.25rem, env(safe-area-inset-left/right))"
+      },
+      {
+        "name": "pt-safe",
+        "value": "padding-top: env(safe-area-inset-top)"
+      },
+      {
+        "name": "pb-safe",
+        "value": "padding-bottom: env(safe-area-inset-bottom)"
+      },
+      {
+        "name": "pb-safe-4",
+        "value": "padding-bottom: calc(1rem + env(safe-area-inset-bottom))"
+      }
     ],
     "focus": {
       "name": "global-focus-visible",
       "value": ":focus-visible { outline: 2px solid var(--color-action); outline-offset: 3px; }",
       "purpose": "Anneau de focus unique, posé globalement. Aucun composant ne redéfinit le sien."
+    },
+    "imagery": {
+      "hero-backdrop": {
+        "displayName": "Marine de nuit",
+        "purpose": "Unique image du système, derrière le chiffre du streak. Décorative (aria-hidden), aplats vectoriels dans la famille marine.",
+        "source": "src/assets/hero-night-{768,1152,1536}.{avif,webp}",
+        "delivery": "picture > source AVIF + img WebP, srcset 768/1152/1536w, sizes '(min-width: 448px) 448px, 100vw', object-cover, fetchPriority high, decoding async, precached by Workbox",
+        "weight": "8,7 Ko sur le téléphone (AVIF 1152w)",
+        "fallback": "bg-ink — le bloc redevient l'aplat marine si l'image n'arrive pas",
+        "palette": [
+          "#163e59",
+          "#265375",
+          "#3b6788",
+          "#426e8e",
+          "#f1f1ee"
+        ],
+        "paletteNote": "Valeurs internes au fichier image. Aucune n'est un token et aucune ne doit être recopiée dans @theme."
+      },
+      "hero-scrim": {
+        "displayName": "Scrim du héros",
+        "purpose": "Contraste, pas décor : la bande basse de 112px rachète le libellé et l'horloge au-dessus des crêtes claires de la vague.",
+        "value": "linear-gradient(to top, color-mix(in srgb, var(--color-ink) 75%, transparent), transparent)",
+        "size": "h-28 (112px), absolute inset-x-0 bottom-0, sous le contenu",
+        "note": "Seul dégradé du système. Avec le voile modal bg-ink/40, ce sont les deux seuls assombrissements autorisés."
+      }
     }
   },
   "components": [
@@ -150,9 +355,9 @@
       "name": "Streak Hero",
       "kind": "custom",
       "refersTo": "hero",
-      "description": "Le bloc marine qui ouvre l'écran d'accueil : un chiffre de 176px, une ligne de libellé, coins bas 28px.",
-      "html": "<section class=\"ds-hero\"><div class=\"ds-hero-top\"><span class=\"ds-hero-brand\">quit</span><span class=\"ds-hero-context\">Étape 1 · 21 mg · J-16 avant 14 mg</span></div><p class=\"ds-hero-figure\">12</p><div class=\"ds-hero-foot\"><span class=\"ds-hero-label\">jours sans fumer</span><span class=\"ds-hero-time\">07 h 42</span></div></section>",
-      "css": ".ds-hero { border-bottom-left-radius: var(--radius-hero, 1.75rem); border-bottom-right-radius: var(--radius-hero, 1.75rem); background: var(--color-ink, #1b3c53); color: var(--color-on-ink, #e3e3e3); padding: 0.75rem 1.25rem 0; font-family: var(--font-sans, 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif); font-variant-numeric: tabular-nums; } .ds-hero-top { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; min-height: 3.5rem; font-size: 0.8125rem; line-height: 1.25; font-weight: 500; } .ds-hero-context { opacity: 0.8; } .ds-hero-figure { margin: 1.25rem 0 0 -1px; font-size: 11rem; line-height: 0.9; letter-spacing: -0.02em; font-weight: 800; } .ds-hero-foot { display: flex; align-items: baseline; justify-content: space-between; padding: 0.5rem 0 1.75rem; } .ds-hero-label { font-size: 0.9375rem; line-height: 1.35; } .ds-hero-time { font-size: 1.375rem; line-height: 1; font-weight: 600; }"
+      "description": "Le bloc marine qui ouvre l'écran d'accueil : une marine de nuit en aplats, un scrim de contraste en bas, puis une colonne centrée — chiffre de 176px, libellé, horloge. Coins bas 28px.",
+      "html": "<section class=\"ds-hero\" aria-label=\"Temps sans fumer\"><div class=\"ds-hero-backdrop\" aria-hidden=\"true\"><svg class=\"ds-hero-art\" viewBox=\"0 0 448 300\" preserveAspectRatio=\"xMidYMid slice\" aria-hidden=\"true\" focusable=\"false\"><rect width=\"448\" height=\"300\" fill=\"#163e59\"/><path d=\"M0 96 C40 62 84 60 118 86 C146 108 168 104 196 96 L196 118 L0 118 Z\" fill=\"#3b6788\"/><path d=\"M448 104 C410 70 368 72 338 96 C312 116 292 112 268 104 L268 118 L448 118 Z\" fill=\"#3b6788\"/><path d=\"M0 104 C48 92 92 100 128 118 L0 118 Z\" fill=\"#265375\"/><circle cx=\"61\" cy=\"20\" r=\"2\" fill=\"#f1f1ee\"/><circle cx=\"147\" cy=\"31\" r=\"2.5\" fill=\"#f1f1ee\"/><circle cx=\"310\" cy=\"43\" r=\"1.8\" fill=\"#f1f1ee\"/><path d=\"M0 238 C112 210 224 262 336 240 C384 231 420 234 448 240 L448 300 L0 300 Z\" fill=\"#265375\"/><path d=\"M0 262 C112 236 224 286 336 264 C384 255 420 258 448 264 L448 300 L0 300 Z\" fill=\"#426e8e\"/><ellipse cx=\"34\" cy=\"258\" rx=\"46\" ry=\"4\" fill=\"#f1f1ee\"/><ellipse cx=\"40\" cy=\"270\" rx=\"24\" ry=\"3\" fill=\"#f1f1ee\"/><ellipse cx=\"404\" cy=\"260\" rx=\"38\" ry=\"4\" fill=\"#f1f1ee\"/><ellipse cx=\"412\" cy=\"272\" rx=\"20\" ry=\"3\" fill=\"#f1f1ee\"/></svg><div class=\"ds-hero-scrim\"></div></div><div class=\"ds-hero-top\"><span class=\"ds-hero-brand\">quit</span><span class=\"ds-hero-aside\"><span class=\"ds-hero-context\">Étape 1 · 21 mg · J-16 avant 14 mg</span><button type=\"button\" class=\"ds-hero-action\" aria-label=\"Réglages\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"3\"/><path d=\"M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z\"/></svg></button></span></div><div class=\"ds-hero-column\"><p class=\"ds-hero-figure\">12</p><span class=\"ds-hero-label\">jours sans fumer</span><span class=\"ds-hero-time\">07:42:09</span></div></section>",
+      "css": ".ds-hero { position: relative; isolation: isolate; overflow: hidden; max-width: 28rem; border-bottom-left-radius: var(--radius-hero, 1.75rem); border-bottom-right-radius: var(--radius-hero, 1.75rem); background: var(--color-ink, #1b3c53); color: var(--color-on-ink, #e3e3e3); padding: 0 1.25rem; font-family: var(--font-sans, 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif); font-variant-numeric: tabular-nums; } .ds-hero-backdrop { position: absolute; inset: 0; z-index: -10; } .ds-hero-art { width: 100%; height: 100%; display: block; object-fit: cover; } .ds-hero-scrim { position: absolute; left: 0; right: 0; bottom: 0; height: 7rem; background: linear-gradient(to top, color-mix(in srgb, var(--color-ink, #1b3c53) 75%, transparent), transparent); } .ds-hero-top { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; min-height: 3.5rem; padding-top: 0.75rem; font-size: 0.8125rem; line-height: 1.25; font-weight: 500; } .ds-hero-aside { display: flex; align-items: center; gap: 0.5rem; } .ds-hero-context { opacity: 0.8; } .ds-hero-action { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; padding: 0; border: none; border-radius: var(--radius-control, 0.75rem); background: transparent; color: inherit; cursor: pointer; } .ds-hero-action:active { background: color-mix(in srgb, var(--color-on-ink, #e3e3e3) 15%, transparent); } .ds-hero-action:focus-visible { outline: 2px solid var(--color-action, #234c6a); outline-offset: 3px; } .ds-hero-column { position: relative; display: flex; flex-direction: column; align-items: center; gap: 0.25rem; padding: 1.5rem 0 2.25rem; text-align: center; } .ds-hero-figure { margin: 0; font-size: 11rem; line-height: 0.9; letter-spacing: -0.02em; font-weight: 800; } .ds-hero-label { font-size: 0.9375rem; line-height: 1.35; } .ds-hero-time { margin-top: 0.25rem; font-size: 1.375rem; line-height: 1; font-weight: 600; }"
     },
     {
       "name": "Multiplier Steps",
@@ -229,25 +434,72 @@
   ],
   "narrative": {
     "northStar": "Le relevé",
-    "overview": "Une seule famille bleu marine porte tous les faits, sur une page presque blanche. Rien n'est texturé, hachuré, grainé, ni ombré : la profondeur vient de la couleur et du filet, jamais de la lumière. Le monde est le standard de la catégorie exécuté à fond — plat, typographique, lisible en plein soleil à une main.\n\nLa hiérarchie est brutalement inégale, et c'est voulu : un chiffre de 176 px règne sur le bloc héros, tout le reste vit entre 10,5 px et 22 px. Une donnée est un chiffre, pas une jauge : le niveau est une barre de 8 px avec ses bornes chiffrées, le multiplicateur est une rangée de crans, jamais un anneau de progression.\n\nAnti-références confirmées : l'anneau de progression santé vert sur blanc ; le flipper (cartoon, saturé, sur-ornementé) ; toute métaphore matérielle (veste de travail, livret tamponné, manuel en acétate), refusée comme « skin » ; les variantes Instrument / Affiche / Registre, jugées froides et « AI-looking ».",
+    "overview": "Une seule famille bleu marine porte tous les faits, sur une page presque blanche. Rien n'est grainé ni ombré : la profondeur vient de la couleur et du filet, jamais de la lumière. Le monde est le standard de la catégorie exécuté à fond — plat, typographique, lisible en plein soleil à une main.\n\nLe monde a gagné une seule image, et elle est nommée : une marine de nuit en aplats vectoriels derrière le chiffre du streak. Elle ne rompt pas la règle du plat — pas de photo, pas de grain, pas de texture, aucune valeur hors de la famille marine — elle donne au seul bloc qui porte le chiffre géant une raison d'être un lieu plutôt qu'un rectangle. Partout ailleurs, le fond reste un aplat.\n\nLa hiérarchie est brutalement inégale, et c'est voulu : un chiffre de 176 px règne sur le bloc héros, tout le reste vit entre 10,5 px et 22 px. Une donnée est un chiffre, pas une jauge : le niveau est une barre de 8 px avec ses bornes chiffrées, le multiplicateur est une rangée de crans, jamais un anneau de progression.\n\nAnti-références confirmées : l'anneau de progression santé vert sur blanc ; le flipper (cartoon, saturé, sur-ornementé) ; toute métaphore matérielle (veste de travail, livret tamponné, manuel en acétate), refusée comme « skin » ; les variantes Instrument / Affiche / Registre, jugées froides et « AI-looking ».",
     "keyCharacteristics": [
       "Une famille marine + un gris, et une seule exception chaude (alert)",
       "Aucune ombre, nulle part",
+      "Une seule image dans toute l'app : le fond du héros, en aplats, dans la famille",
       "Une seule police variable, chiffres tabulaires partout",
-      "Un chiffre géant, tout le reste petit",
+      "Un chiffre géant centré, tout le reste petit",
       "Un seul geste de motion signature (240 ms, par crans, jamais fluide)",
       "Le pouce d'abord : Envie fixe, barre d'onglets basse, cibles ≥ 44 px"
     ],
     "rules": [
-      { "name": "The Two Greys Rule", "body": "Le gris de texte muet se choisit par fond, pas par humeur. Sur page → ink-soft. Sur n'importe quel fond teinté → ink-dim. ink-soft sur un fond teinté tombe à 4,20:1 et échoue : c'est la seule raison d'être de ink-dim.", "section": "colors" },
-      { "name": "The Three States Rule", "body": "« Sélectionné » est toujours action. « Acquis » est ink. « Courant » est reached. Ces trois-là ne doivent jamais s'effondrer en une seule couleur.", "section": "colors" },
-      { "name": "The One Warm Value Rule", "body": "alert est la seule exception chaude approuvée à la famille marine-et-gris. Elle appartient aux actions destructives et aux erreurs, et à rien d'autre. Pas de succès vert, pas d'avertissement ambre, pas de second accent.", "section": "colors" },
-      { "name": "The cn() Registration Rule", "body": "src/shared/utils/cn.ts enregistre chaque taille de @theme dans le groupe font-size de tailwind-merge. Sans ça, text-tab est lu comme une couleur et silencieusement supprimé dès qu'un text-<couleur> se trouve dans le même appel cn(). Tout nouveau token de taille doit être ajouté à ce tableau — c'est le point unique dont dépend toute l'échelle typographique.", "section": "typography" },
-      { "name": "The One Giant Rule", "body": "Un seul text-display par écran, et seulement pour le chiffre du streak. Il n'y a pas de second niveau « grand » : après 176 px, on retombe à 22 px.", "section": "typography" },
-      { "name": "The French UI Rule", "body": "Toute chaîne visible est en français et vit dans src/shared/utils/strings.ts. Jamais de littéral dans un composant, jamais d'anglais à l'écran. Le code, lui, reste en anglais.", "section": "typography" },
-      { "name": "The Fixed Pill Rule", "body": "Le contenu scrollable réserve un dégagement bas (pb-44 sur le spécimen) pour que la pilule Envie fixe ne recouvre jamais une information à lire.", "section": "layout" },
-      { "name": "The No-Shadow Rule", "body": "Une surface qui doit paraître plus proche change de couleur ou gagne un filet. Elle ne gagne jamais une ombre, ni un ring-*, ni un dégradé. Le focus est un outline: 2px solid action avec outline-offset: 3px, posé globalement sur :focus-visible — les composants ne redéfinissent pas leur anneau.", "section": "elevation" },
-      { "name": "The Motion-Guard Rule", "body": "Toute transition ou animation porte son garde : motion-safe: pour ce qui doit disparaître, motion-reduce:transition-none pour ce qui doit se figer. Aucune exception.", "section": "components" }
+      {
+        "name": "The Two Greys Rule",
+        "body": "Le gris de texte muet se choisit par fond, pas par humeur. Sur page → ink-soft. Sur n'importe quel fond teinté → ink-dim. ink-soft sur un fond teinté tombe à 4,20:1 et échoue : c'est la seule raison d'être de ink-dim.",
+        "section": "colors"
+      },
+      {
+        "name": "The Three States Rule",
+        "body": "« Sélectionné » est toujours action. « Acquis » est ink. « Courant » est reached. Ces trois-là ne doivent jamais s'effondrer en une seule couleur.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Warm Value Rule",
+        "body": "alert est la seule exception chaude approuvée à la famille marine-et-gris. Elle appartient aux actions destructives et aux erreurs, et à rien d'autre. Pas de succès vert, pas d'avertissement ambre, pas de second accent.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Illustration Rule",
+        "body": "Il y a une image dans toute l'app : la marine de nuit du bloc héros. Elle est décorative (aria-hidden), en aplats vectoriels, entièrement dans la famille marine, et bg-ink reste le plancher si elle n'arrive jamais. Pas de seconde illustration, pas de photo, pas d'icône décorative, pas de fond illustré sur une carte.",
+        "section": "colors"
+      },
+      {
+        "name": "The cn() Registration Rule",
+        "body": "src/shared/utils/cn.ts enregistre chaque taille de @theme dans le groupe font-size de tailwind-merge. Sans ça, text-tab est lu comme une couleur et silencieusement supprimé dès qu'un text-<couleur> se trouve dans le même appel cn(). Tout nouveau token de taille doit être ajouté à ce tableau — c'est le point unique dont dépend toute l'échelle typographique.",
+        "section": "typography"
+      },
+      {
+        "name": "The One Giant Rule",
+        "body": "Un seul text-display par écran, et seulement pour le chiffre du streak. Il n'y a pas de second niveau « grand » : après 176 px, on retombe à 22 px.",
+        "section": "typography"
+      },
+      {
+        "name": "The French UI Rule",
+        "body": "Toute chaîne visible est en français et vit dans src/shared/utils/strings.ts. Jamais de littéral dans un composant, jamais d'anglais à l'écran. Le code, lui, reste en anglais.",
+        "section": "typography"
+      },
+      {
+        "name": "The Fixed Pill Rule",
+        "body": "Le contenu scrollable réserve un dégagement bas (pb-44 sur le spécimen) pour que la pilule Envie fixe ne recouvre jamais une information à lire.",
+        "section": "layout"
+      },
+      {
+        "name": "The No-Shadow Rule",
+        "body": "Une surface qui doit paraître plus proche change de couleur ou gagne un filet. Elle ne gagne jamais une ombre, ni un ring-*, ni un dégradé. Le focus est un outline: 2px solid action avec outline-offset: 3px, posé globalement sur :focus-visible — les composants ne redéfinissent pas leur anneau.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Scrim-Is-Contrast Rule",
+        "body": "Le dégradé n'existe dans ce monde que pour rendre un texte lisible au-dessus de l'illustration du héros, jamais pour décorer, adoucir un bord ou suggérer de la profondeur. Un fond uni n'a jamais besoin d'un scrim : s'il en réclame un, c'est la couleur du texte qui est fausse.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Motion-Guard Rule",
+        "body": "Toute transition ou animation porte son garde : motion-safe: pour ce qui doit disparaître, motion-reduce:transition-none pour ce qui doit se figer. Aucune exception.",
+        "section": "components"
+      }
     ],
     "dos": [
       "Do choisir le gris muet par le fond : ink-soft sur page, ink-dim sur tout fond teinté.",
@@ -255,13 +507,15 @@
       "Do enregistrer toute nouvelle taille @theme dans le groupe font-size de src/shared/utils/cn.ts, sinon la classe sera silencieusement supprimée.",
       "Do utiliser px-safe / pt-safe / pb-safe sur tout conteneur qui touche un bord.",
       "Do rendre la profondeur par la couleur ou un filet 1px line.",
+      "Do garder bg-ink sous l'illustration du héros : le bloc doit rester lisible si l'image n'arrive pas, et le texte posé dessus doit tenir 4,5:1 sur les crêtes claires, scrim compris.",
       "Do garder les chiffres en tabular-nums et poser les valeurs qui changent en figure.",
       "Do écrire toute chaîne visible en français, dans src/shared/utils/strings.ts.",
       "Do garder les cibles tactiles à 44px minimum et le déclencheur principal en zone pouce.",
       "Do assortir chaque transition d'un garde motion-safe: ou motion-reduce:."
     ],
     "donts": [
-      "Don't ajouter une ombre, un ring-*, un dégradé, une texture ou un grain : rien de tout ça n'existe dans ce monde.",
+      "Don't ajouter une ombre, un ring-*, une texture ou un grain : rien de tout ça n'existe dans ce monde. Le seul dégradé autorisé est le scrim du héros, et il sert le contraste.",
+      "Don't ajouter une seconde image. L'app en a une, le fond du héros ; une carte, un état vide ou un badge se dessinent en type et en aplat.",
       "Don't introduire une seconde couleur d'accent. alert est la seule valeur chaude, et elle est réservée au destructif et aux erreurs.",
       "Don't habiller alert en aplat plein : fond à 10 % / 20 %, texte en plein.",
       "Don't utiliser reached ailleurs que sur le cran de multiplicateur courant.",
