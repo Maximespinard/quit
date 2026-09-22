@@ -36,3 +36,9 @@ BRIEF.md
 
 # PWA dev build output
 dev-dist
+
+# Impeccable: keep surface briefs + config, ignore rendered binaries and round logs
+.impeccable/mocks/
+.impeccable/review/
+.impeccable/build/
+.impeccable/questions/

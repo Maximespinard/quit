@@ -1,0 +1,276 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-22T00:00:00.000Z",
+  "title": "Design System: quit",
+  "extensions": {
+    "colorMeta": {
+      "page": {
+        "role": "neutral",
+        "displayName": "Page",
+        "canonical": "#fafafa",
+        "tonalRamp": ["oklch(15% 0 0)", "oklch(26% 0 0)", "oklch(38% 0 0)", "oklch(49% 0 0)", "oklch(60% 0 0)", "oklch(72% 0 0)", "oklch(84% 0 0)", "oklch(95% 0 0)"]
+      },
+      "ink": {
+        "role": "primary",
+        "displayName": "Marine profond",
+        "canonical": "#1b3c53",
+        "tonalRamp": ["oklch(15% 0.048 240)", "oklch(26% 0.048 240)", "oklch(31% 0.048 240)", "oklch(43% 0.048 240)", "oklch(55% 0.048 240)", "oklch(69% 0.040 240)", "oklch(83% 0.028 240)", "oklch(95% 0.012 240)"]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Encre douce",
+        "canonical": "#5e6c78",
+        "tonalRamp": ["oklch(15% 0.024 244)", "oklch(26% 0.024 244)", "oklch(38% 0.024 244)", "oklch(53% 0.024 244)", "oklch(64% 0.024 244)", "oklch(75% 0.020 244)", "oklch(86% 0.014 244)", "oklch(95% 0.008 244)"]
+      },
+      "ink-dim": {
+        "role": "neutral",
+        "displayName": "Encre sourde",
+        "canonical": "#4a5a66",
+        "tonalRamp": ["oklch(15% 0.026 244)", "oklch(26% 0.026 244)", "oklch(37% 0.026 244)", "oklch(45% 0.026 244)", "oklch(59% 0.026 244)", "oklch(72% 0.022 244)", "oklch(84% 0.015 244)", "oklch(95% 0.008 244)"]
+      },
+      "on-ink": {
+        "role": "neutral",
+        "displayName": "Sur encre",
+        "canonical": "#e3e3e3",
+        "tonalRamp": ["oklch(15% 0 0)", "oklch(26% 0 0)", "oklch(38% 0 0)", "oklch(49% 0 0)", "oklch(61% 0 0)", "oklch(73% 0 0)", "oklch(91% 0 0)", "oklch(96% 0 0)"]
+      },
+      "action": {
+        "role": "primary",
+        "displayName": "Marine d'action",
+        "canonical": "#234c6a",
+        "tonalRamp": ["oklch(15% 0.055 243)", "oklch(26% 0.055 243)", "oklch(38% 0.055 243)", "oklch(50% 0.055 243)", "oklch(62% 0.050 243)", "oklch(74% 0.042 243)", "oklch(85% 0.028 243)", "oklch(95% 0.012 243)"]
+      },
+      "reached": {
+        "role": "secondary",
+        "displayName": "Acier atteint",
+        "canonical": "#456882",
+        "tonalRamp": ["oklch(15% 0.048 244)", "oklch(26% 0.048 244)", "oklch(38% 0.048 244)", "oklch(49% 0.048 244)", "oklch(61% 0.044 244)", "oklch(73% 0.036 244)", "oklch(85% 0.024 244)", "oklch(95% 0.010 244)"]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "canonical": "#e3e3e3",
+        "tonalRamp": ["oklch(15% 0 0)", "oklch(26% 0 0)", "oklch(38% 0 0)", "oklch(49% 0 0)", "oklch(61% 0 0)", "oklch(73% 0 0)", "oklch(91% 0 0)", "oklch(96% 0 0)"]
+      },
+      "surface-locked": {
+        "role": "neutral",
+        "displayName": "Surface verrouillée",
+        "canonical": "#d4d4d4",
+        "tonalRamp": ["oklch(15% 0 0)", "oklch(26% 0 0)", "oklch(38% 0 0)", "oklch(49% 0 0)", "oklch(61% 0 0)", "oklch(73% 0 0)", "oklch(86% 0 0)", "oklch(95% 0 0)"]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Filet",
+        "canonical": "#d4d4d4",
+        "tonalRamp": ["oklch(15% 0 0)", "oklch(26% 0 0)", "oklch(38% 0 0)", "oklch(49% 0 0)", "oklch(61% 0 0)", "oklch(73% 0 0)", "oklch(86% 0 0)", "oklch(95% 0 0)"]
+      },
+      "alert": {
+        "role": "tertiary",
+        "displayName": "Rouge d'alerte",
+        "canonical": "#a6392f",
+        "tonalRamp": ["oklch(15% 0.150 27)", "oklch(26% 0.150 27)", "oklch(38% 0.150 27)", "oklch(47% 0.150 27)", "oklch(60% 0.150 27)", "oklch(73% 0.120 27)", "oklch(85% 0.075 27)", "oklch(95% 0.030 27)"]
+      },
+      "white": {
+        "role": "neutral",
+        "displayName": "Blanc pur",
+        "canonical": "#ffffff",
+        "tonalRamp": ["oklch(15% 0 0)", "oklch(26% 0 0)", "oklch(38% 0 0)", "oklch(49% 0 0)", "oklch(61% 0 0)", "oklch(73% 0 0)", "oklch(86% 0 0)", "oklch(100% 0 0)"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Le chiffre du streak, et lui seul. Un seul par écran." },
+      "figure": { "displayName": "Figure", "purpose": "Temps, XP, argent : les chiffres tabulaires." },
+      "title": { "displayName": "Title", "purpose": "Titres de tiroir et de boîte de dialogue." },
+      "cta": { "displayName": "CTA", "purpose": "Le bouton Envie, et rien d'autre." },
+      "body": { "displayName": "Body", "purpose": "Lecture — boutons, cartes, tout le reste." },
+      "label": { "displayName": "Label", "purpose": "Libellés, contexte, valeurs secondaires." },
+      "detail": { "displayName": "Detail", "purpose": "Détail de badge." },
+      "tab": { "displayName": "Tab", "purpose": "Libellés de la barre d'onglets." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "ease-out-expo", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Seule courbe du système. Toute transition et toute animation la portent." },
+      { "name": "duration-tactile", "value": "150ms", "purpose": "Retour à l'appui : scale de bouton, bascule de Switch, pouce de Slider, couleur d'onglet." },
+      { "name": "duration-dialog", "value": "200ms", "purpose": "Entrée et sortie de Dialog (opacité + scale-95)." },
+      { "name": "count-up", "value": "240ms / pas entiers / 12 pas max", "purpose": "Signature : useCountUp fait monter le chiffre du streak par crans, jamais en interpolation fluide. prefers-reduced-motion rend la cible dès le premier paint." },
+      { "name": "animate-step-in", "value": "step-in 240ms cubic-bezier(0.16, 1, 0.3, 1) both", "purpose": "Entrée des crans de multiplicateur (scale 0.92 → 1, opacité 0.4 → 1), décalée de 60ms par cran, sous motion-safe uniquement." },
+      { "name": "duration-xp", "value": "500ms", "purpose": "Remplissage de la barre de niveau (transition-[width]), coupé sous motion-reduce." },
+      { "name": "duration-drawer", "value": "450ms cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "Mécanique Base UI du Drawer, conservée telle quelle : ce n'est pas du style." }
+    ],
+    "breakpoints": [
+      { "name": "content", "value": "28rem", "purpose": "max-w-md : la colonne unique de l'app, et la largeur que suit la barre d'onglets." },
+      { "name": "sm", "value": "640px", "purpose": "Seul palier Tailwind utilisé (largeur de Dialog, largeur de Drawer latéral)." }
+    ],
+    "safeAreas": [
+      { "name": "px-safe", "value": "padding-inline: max(1.25rem, env(safe-area-inset-left/right))" },
+      { "name": "pt-safe", "value": "padding-top: env(safe-area-inset-top)" },
+      { "name": "pb-safe", "value": "padding-bottom: env(safe-area-inset-bottom)" },
+      { "name": "pb-safe-4", "value": "padding-bottom: calc(1rem + env(safe-area-inset-bottom))" }
+    ],
+    "focus": {
+      "name": "global-focus-visible",
+      "value": ":focus-visible { outline: 2px solid var(--color-action); outline-offset: 3px; }",
+      "purpose": "Anneau de focus unique, posé globalement. Aucun composant ne redéfinit le sien."
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Action principale d'un écran ou d'un tiroir. Fond plat, rayon 12px, aucune ombre.",
+      "html": "<button class=\"ds-btn-primary\">Poser le patch</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; height: 2.75rem; padding: 0 1rem; border: none; border-radius: var(--radius-control, 0.75rem); background: var(--color-action, #234c6a); color: var(--color-page, #fafafa); font-family: var(--font-sans, 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif); font-size: 0.9375rem; line-height: 1.35; font-weight: 600; transition: transform 150ms cubic-bezier(0.16,1,0.3,1), background-color 150ms cubic-bezier(0.16,1,0.3,1); } .ds-btn-primary:active { background: var(--color-ink, #1b3c53); transform: scale(0.98); } .ds-btn-primary:focus-visible { outline: 2px solid var(--color-action, #234c6a); outline-offset: 3px; } .ds-btn-primary:disabled { background: var(--color-surface-locked, #d4d4d4); color: var(--color-ink-dim, #4a5a66); pointer-events: none; } @media (prefers-reduced-motion: reduce) { .ds-btn-primary { transition: none; } }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Action de second rang : surface grise, encre marine.",
+      "html": "<button class=\"ds-btn-secondary\">Plus tard</button>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; height: 2.75rem; padding: 0 1rem; border: none; border-radius: var(--radius-control, 0.75rem); background: var(--color-surface, #e3e3e3); color: var(--color-ink, #1b3c53); font-family: var(--font-sans, 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif); font-size: 0.9375rem; font-weight: 600; transition: transform 150ms cubic-bezier(0.16,1,0.3,1), background-color 150ms cubic-bezier(0.16,1,0.3,1); } .ds-btn-secondary:active { background: var(--color-surface-locked, #d4d4d4); transform: scale(0.98); } .ds-btn-secondary:focus-visible { outline: 2px solid var(--color-action, #234c6a); outline-offset: 3px; }"
+    },
+    {
+      "name": "Destructive Button",
+      "kind": "button",
+      "refersTo": "button-destructive",
+      "description": "Seule utilisation autorisée du rouge alert : fond à 10 %, texte en plein. Jamais d'aplat rouge.",
+      "html": "<button class=\"ds-btn-destructive\">Supprimer ce fait</button>",
+      "css": ".ds-btn-destructive { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; height: 2.75rem; padding: 0 1rem; border: none; border-radius: var(--radius-control, 0.75rem); background: color-mix(in srgb, var(--color-alert, #a6392f) 10%, transparent); color: var(--color-alert, #a6392f); font-family: var(--font-sans, 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif); font-size: 0.9375rem; font-weight: 600; transition: transform 150ms cubic-bezier(0.16,1,0.3,1), background-color 150ms cubic-bezier(0.16,1,0.3,1); } .ds-btn-destructive:active { background: color-mix(in srgb, var(--color-alert, #a6392f) 20%, transparent); transform: scale(0.98); } .ds-btn-destructive:focus-visible { outline: 2px solid var(--color-action, #234c6a); outline-offset: 3px; }"
+    },
+    {
+      "name": "Envie Pill",
+      "kind": "custom",
+      "refersTo": "craving-button",
+      "description": "Le contrôle permanent en zone pouce : 64px, pilule, aplat action. Rien d'autre ne porte action en aplat à cette échelle.",
+      "html": "<button class=\"ds-craving\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" width=\"20\" height=\"20\" aria-hidden=\"true\"><line x1=\"10\" y1=\"2\" x2=\"14\" y2=\"2\"/><line x1=\"12\" y1=\"14\" x2=\"15\" y2=\"11\"/><circle cx=\"12\" cy=\"14\" r=\"8\"/></svg>Envie</button>",
+      "css": ".ds-craving { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; height: 4rem; min-width: 4rem; padding: 0 1.5rem; border: none; border-radius: 9999px; background: var(--color-action, #234c6a); color: var(--color-page, #fafafa); font-family: var(--font-sans, 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif); font-size: 1.0625rem; line-height: 1; font-weight: 700; transition: transform 150ms cubic-bezier(0.16,1,0.3,1); } .ds-craving:active { transform: scale(0.97); } .ds-craving:focus-visible { outline: 2px solid var(--color-action, #234c6a); outline-offset: 3px; } .ds-craving:disabled { background: var(--color-surface-locked, #d4d4d4); color: var(--color-ink-dim, #4a5a66); } @media (prefers-reduced-motion: reduce) { .ds-craving { transition: none; } }"
+    },
+    {
+      "name": "Streak Hero",
+      "kind": "custom",
+      "refersTo": "hero",
+      "description": "Le bloc marine qui ouvre l'écran d'accueil : un chiffre de 176px, une ligne de libellé, coins bas 28px.",
+      "html": "<section class=\"ds-hero\"><div class=\"ds-hero-top\"><span class=\"ds-hero-brand\">quit</span><span class=\"ds-hero-context\">Étape 1 · 21 mg · J-16 avant 14 mg</span></div><p class=\"ds-hero-figure\">12</p><div class=\"ds-hero-foot\"><span class=\"ds-hero-label\">jours sans fumer</span><span class=\"ds-hero-time\">07 h 42</span></div></section>",
+      "css": ".ds-hero { border-bottom-left-radius: var(--radius-hero, 1.75rem); border-bottom-right-radius: var(--radius-hero, 1.75rem); background: var(--color-ink, #1b3c53); color: var(--color-on-ink, #e3e3e3); padding: 0.75rem 1.25rem 0; font-family: var(--font-sans, 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif); font-variant-numeric: tabular-nums; } .ds-hero-top { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; min-height: 3.5rem; font-size: 0.8125rem; line-height: 1.25; font-weight: 500; } .ds-hero-context { opacity: 0.8; } .ds-hero-figure { margin: 1.25rem 0 0 -1px; font-size: 11rem; line-height: 0.9; letter-spacing: -0.02em; font-weight: 800; } .ds-hero-foot { display: flex; align-items: baseline; justify-content: space-between; padding: 0.5rem 0 1.75rem; } .ds-hero-label { font-size: 0.9375rem; line-height: 1.35; } .ds-hero-time { font-size: 1.375rem; line-height: 1; font-weight: 600; }"
+    },
+    {
+      "name": "Multiplier Steps",
+      "kind": "custom",
+      "refersTo": "multiplier-step-acquired",
+      "description": "Cinq crans plats : acquis en ink, courant en reached, verrouillés en filet. Entrée décalée de 60ms par cran.",
+      "html": "<ol class=\"ds-steps\"><li class=\"ds-step ds-step--acquired\">×1</li><li class=\"ds-step ds-step--acquired\">×2</li><li class=\"ds-step ds-step--current\">×3</li><li class=\"ds-step ds-step--locked\">×4</li><li class=\"ds-step ds-step--locked\">×5</li></ol>",
+      "css": ".ds-steps { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.375rem; list-style: none; margin: 0; padding: 0; } .ds-step { display: grid; place-items: center; height: 2.625rem; border: 1px solid transparent; border-radius: var(--radius-step, 0.625rem); font-family: var(--font-sans, 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif); font-size: 0.9375rem; font-weight: 600; } .ds-step--acquired { border-color: var(--color-ink, #1b3c53); background: var(--color-ink, #1b3c53); color: var(--color-on-ink, #e3e3e3); } .ds-step--current { border-color: var(--color-reached, #456882); background: var(--color-reached, #456882); color: var(--color-white, #ffffff); } .ds-step--locked { border-color: var(--color-line, #d4d4d4); background: transparent; color: var(--color-ink-soft, #5e6c78); } @media (prefers-reduced-motion: no-preference) { .ds-step { animation: ds-step-in 240ms cubic-bezier(0.16,1,0.3,1) both; } .ds-step:nth-child(2) { animation-delay: 60ms; } .ds-step:nth-child(3) { animation-delay: 120ms; } .ds-step:nth-child(4) { animation-delay: 180ms; } .ds-step:nth-child(5) { animation-delay: 240ms; } } @keyframes ds-step-in { from { transform: scale(0.92); opacity: 0.4; } to { transform: scale(1); opacity: 1; } }"
+    },
+    {
+      "name": "Level Bar",
+      "kind": "custom",
+      "refersTo": "level-bar-track",
+      "description": "Barre de 8px, piste line, remplissage action. Les bornes chiffrées vivent à côté, jamais dedans.",
+      "html": "<div class=\"ds-levelbar\" role=\"progressbar\" aria-label=\"XP du niveau 4\" aria-valuemin=\"0\" aria-valuemax=\"1000\" aria-valuenow=\"620\"><div class=\"ds-levelbar-fill\" style=\"width: 62%\"></div></div>",
+      "css": ".ds-levelbar { height: 0.5rem; overflow: hidden; border-radius: 9999px; background: var(--color-line, #d4d4d4); } .ds-levelbar-fill { height: 100%; border-radius: 9999px; background: var(--color-action, #234c6a); transition: width 500ms cubic-bezier(0.16,1,0.3,1); } @media (prefers-reduced-motion: reduce) { .ds-levelbar-fill { transition: none; } }"
+    },
+    {
+      "name": "Badge Card",
+      "kind": "card",
+      "refersTo": "badge-card",
+      "description": "Carte carrée. Débloquée sur surface ; verrouillée sur surface-locked avec cadenas et texte ink-dim.",
+      "html": "<div class=\"ds-badge\"><span class=\"ds-badge-icon\"></span><span class=\"ds-badge-text\"><span class=\"ds-badge-name\">Une semaine</span><span class=\"ds-badge-detail\">J+7</span></span></div><div class=\"ds-badge ds-badge--locked\"><span class=\"ds-badge-icon\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" width=\"24\" height=\"24\" aria-hidden=\"true\"><rect x=\"3\" y=\"11\" width=\"18\" height=\"11\" rx=\"2\"/><path d=\"M7 11V7a5 5 0 0 1 10 0v4\"/></svg></span><span class=\"ds-badge-text\"><span class=\"ds-badge-name\">Palier 14 mg</span><span class=\"ds-badge-detail\">J+28</span></span></div>",
+      "css": ".ds-badge { display: inline-flex; flex-direction: column; justify-content: space-between; aspect-ratio: 1 / 1; width: 7rem; padding: 0.75rem; border-radius: var(--radius-card, 0.875rem); background: var(--color-surface, #e3e3e3); color: var(--color-ink, #1b3c53); font-family: var(--font-sans, 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif); } .ds-badge--locked { background: var(--color-surface-locked, #d4d4d4); color: var(--color-ink-dim, #4a5a66); } .ds-badge-icon { display: block; height: 1.5rem; } .ds-badge-text { display: flex; flex-direction: column; gap: 0.25rem; line-height: 1.15; } .ds-badge-name { font-size: 0.9375rem; font-weight: 600; } .ds-badge-detail { font-size: 0.6875rem; line-height: 1.2; } .ds-badge:not(.ds-badge--locked) .ds-badge-detail { color: var(--color-ink-dim, #4a5a66); }"
+    },
+    {
+      "name": "Tab Bar",
+      "kind": "nav",
+      "refersTo": "tab-item",
+      "description": "Navigation basse : icône 24px sur libellé tab, filet supérieur, actif en couleur seule (action).",
+      "html": "<nav class=\"ds-tabbar\" aria-label=\"Navigation principale\"><ul><li><button class=\"ds-tab ds-tab--active\" aria-current=\"page\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" width=\"24\" height=\"24\" aria-hidden=\"true\"><path d=\"M3 10.5 12 3l9 7.5\"/><path d=\"M5 9.5V21h14V9.5\"/></svg>Accueil</button></li><li><button class=\"ds-tab\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" width=\"24\" height=\"24\" aria-hidden=\"true\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"18\" rx=\"2\"/><path d=\"M16 2v4M8 2v4M3 10h18\"/></svg>Calendrier</button></li><li><button class=\"ds-tab\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" width=\"24\" height=\"24\" aria-hidden=\"true\"><path d=\"M4 20V10M10 20V4M16 20v-6M22 20H2\"/></svg>Progression</button></li><li><button class=\"ds-tab\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" width=\"24\" height=\"24\" aria-hidden=\"true\"><path d=\"M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01\"/></svg>Historique</button></li></ul></nav>",
+      "css": ".ds-tabbar { background: var(--color-page, #fafafa); font-family: var(--font-sans, 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif); } .ds-tabbar ul { display: flex; max-width: 28rem; margin: 0 auto; padding: 0.5rem 0.5rem 0.25rem; list-style: none; border-top: 1px solid var(--color-line, #d4d4d4); } .ds-tabbar li { flex: 1; } .ds-tab { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.25rem; width: 100%; min-height: 3rem; border: none; background: transparent; border-radius: var(--radius-control, 0.75rem); color: var(--color-ink-soft, #5e6c78); font-size: 0.65625rem; line-height: 1; font-weight: 600; } .ds-tab--active { color: var(--color-action, #234c6a); } .ds-tab:active:not(.ds-tab--active) { color: var(--color-ink, #1b3c53); } .ds-tab:focus-visible { outline: 2px solid var(--color-action, #234c6a); outline-offset: 3px; }"
+    },
+    {
+      "name": "Segmented Control",
+      "kind": "chip",
+      "refersTo": "tabs-trigger-active",
+      "description": "ToggleGroup avec spacing=0 et variant=outline : un cadre en filet unique, segments fusionnés, pressé en aplat action.",
+      "html": "<div class=\"ds-segmented\" role=\"group\" aria-label=\"Intensité de l’envie\"><button class=\"ds-segment\">1</button><button class=\"ds-segment ds-segment--pressed\" aria-pressed=\"true\">2</button><button class=\"ds-segment\">3</button></div>",
+      "css": ".ds-segmented { display: flex; width: fit-content; overflow: hidden; border: 1px solid var(--color-line, #d4d4d4); border-radius: var(--radius-step, 0.625rem); } .ds-segment { flex: 1; height: 3rem; min-width: 3rem; padding: 0 0.75rem; border: 0; background: transparent; color: var(--color-ink-soft, #5e6c78); font-family: var(--font-sans, 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif); font-size: 0.9375rem; font-weight: 600; transition: background-color 150ms cubic-bezier(0.16,1,0.3,1), color 150ms cubic-bezier(0.16,1,0.3,1); } .ds-segment + .ds-segment { border-left: 1px solid var(--color-line, #d4d4d4); } .ds-segment--pressed { background: var(--color-action, #234c6a); color: var(--color-page, #fafafa); } .ds-segment:focus-visible { outline: 2px solid var(--color-action, #234c6a); outline-offset: 3px; z-index: 10; } @media (prefers-reduced-motion: reduce) { .ds-segment { transition: none; } }"
+    },
+    {
+      "name": "Switch",
+      "kind": "input",
+      "refersTo": "switch-track",
+      "description": "Piste 51×31 aux dimensions iOS, pouce blanc 27px, action une fois coché.",
+      "html": "<button class=\"ds-switch ds-switch--checked\" role=\"switch\" aria-checked=\"true\" aria-label=\"Rappel du patch\"><span class=\"ds-switch-thumb\"></span></button>",
+      "css": ".ds-switch { position: relative; display: inline-flex; align-items: center; width: 51px; height: 31px; padding: 2px; border: none; border-radius: 9999px; background: var(--color-line, #d4d4d4); transition: background-color 150ms cubic-bezier(0.16,1,0.3,1); } .ds-switch--checked { background: var(--color-action, #234c6a); } .ds-switch-thumb { display: block; width: 27px; height: 27px; border-radius: 9999px; background: var(--color-white, #ffffff); transition: transform 150ms cubic-bezier(0.16,1,0.3,1); } .ds-switch--checked .ds-switch-thumb { transform: translateX(20px); } .ds-switch:focus-visible { outline: 2px solid var(--color-action, #234c6a); outline-offset: 3px; } @media (prefers-reduced-motion: reduce) { .ds-switch, .ds-switch-thumb { transition: none; } }"
+    },
+    {
+      "name": "Slider",
+      "kind": "input",
+      "refersTo": "level-bar-fill",
+      "description": "Piste de 8px identique à la barre XP, remplissage action, pouce 28px blanc cerclé de 2px action.",
+      "html": "<div class=\"ds-slider\" role=\"slider\" aria-label=\"Humeur du check-in\" aria-valuemin=\"1\" aria-valuemax=\"5\" aria-valuenow=\"3\" tabindex=\"0\"><div class=\"ds-slider-track\"><div class=\"ds-slider-fill\"></div></div><div class=\"ds-slider-thumb\"></div></div>",
+      "css": ".ds-slider { position: relative; display: flex; align-items: center; width: 100%; padding: 0.5rem 0; } .ds-slider-track { position: relative; flex: 1; height: 0.5rem; overflow: hidden; border-radius: 9999px; background: var(--color-line, #d4d4d4); } .ds-slider-fill { width: 50%; height: 100%; background: var(--color-action, #234c6a); } .ds-slider-thumb { position: absolute; left: calc(50% - 0.875rem); width: 1.75rem; height: 1.75rem; border: 2px solid var(--color-action, #234c6a); border-radius: 9999px; background: var(--color-white, #ffffff); transition: transform 150ms cubic-bezier(0.16,1,0.3,1); } .ds-slider:active .ds-slider-thumb { transform: scale(1.1); } .ds-slider:focus-visible { outline: 2px solid var(--color-action, #234c6a); outline-offset: 3px; } @media (prefers-reduced-motion: reduce) { .ds-slider-thumb { transition: none; } }"
+    },
+    {
+      "name": "Tabs",
+      "kind": "chip",
+      "refersTo": "tabs-list",
+      "description": "Plateau surface de 44px, texte ink-dim (fond teinté), onglet actif en aplat action.",
+      "html": "<div class=\"ds-tabs\" role=\"tablist\" aria-label=\"Période\"><button class=\"ds-tabs-trigger ds-tabs-trigger--active\" role=\"tab\" aria-selected=\"true\">Semaine</button><button class=\"ds-tabs-trigger\" role=\"tab\" aria-selected=\"false\">Mois</button><button class=\"ds-tabs-trigger\" role=\"tab\" aria-selected=\"false\">Tout</button></div>",
+      "css": ".ds-tabs { display: inline-flex; align-items: center; justify-content: center; width: 100%; height: 2.75rem; padding: 0.25rem; border-radius: var(--radius-control, 0.75rem); background: var(--color-surface, #e3e3e3); color: var(--color-ink-dim, #4a5a66); } .ds-tabs-trigger { flex: 1; height: 100%; padding: 0 0.75rem; border: 0; background: transparent; border-radius: var(--radius-step, 0.625rem); color: var(--color-ink-dim, #4a5a66); font-family: var(--font-sans, 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif); font-size: 0.9375rem; font-weight: 600; transition: background-color 150ms cubic-bezier(0.16,1,0.3,1), color 150ms cubic-bezier(0.16,1,0.3,1); } .ds-tabs-trigger--active { background: var(--color-action, #234c6a); color: var(--color-page, #fafafa); } .ds-tabs-trigger:focus-visible { outline: 2px solid var(--color-action, #234c6a); outline-offset: 3px; } @media (prefers-reduced-motion: reduce) { .ds-tabs-trigger { transition: none; } }"
+    },
+    {
+      "name": "Dialog",
+      "kind": "custom",
+      "refersTo": "dialog",
+      "description": "Carte page sur voile ink/40. Aucun ring, aucune ombre : le voile fait toute la profondeur.",
+      "html": "<div class=\"ds-dialog-scrim\"><div class=\"ds-dialog\" role=\"dialog\" aria-modal=\"true\"><h2 class=\"ds-dialog-title\">Supprimer ce fait ?</h2><p class=\"ds-dialog-body\">Le journal est la seule source de vérité : la suppression est définitive.</p><div class=\"ds-dialog-footer\"><button class=\"ds-btn-ghost\">Annuler</button><button class=\"ds-btn-destructive\">Supprimer</button></div></div></div>",
+      "css": ".ds-dialog-scrim { position: relative; display: grid; place-items: center; padding: 2rem; background: color-mix(in srgb, var(--color-ink, #1b3c53) 40%, transparent); } .ds-dialog { display: grid; gap: 1rem; width: 100%; max-width: 24rem; padding: 1.25rem; border-radius: var(--radius-card, 0.875rem); background: var(--color-page, #fafafa); color: var(--color-ink, #1b3c53); font-family: var(--font-sans, 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif); } .ds-dialog-title { margin: 0; font-size: 1.1875rem; line-height: 1.2; font-weight: 600; } .ds-dialog-body { margin: 0; font-size: 0.9375rem; line-height: 1.35; color: var(--color-ink-soft, #5e6c78); } .ds-dialog-footer { display: flex; justify-content: flex-end; gap: 0.5rem; } .ds-btn-ghost { height: 2.75rem; padding: 0 1rem; border: none; background: transparent; border-radius: var(--radius-control, 0.75rem); color: var(--color-ink, #1b3c53); font: inherit; font-size: 0.9375rem; font-weight: 600; } .ds-btn-ghost:active { background: var(--color-surface, #e3e3e3); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Le relevé",
+    "overview": "Une seule famille bleu marine porte tous les faits, sur une page presque blanche. Rien n'est texturé, hachuré, grainé, ni ombré : la profondeur vient de la couleur et du filet, jamais de la lumière. Le monde est le standard de la catégorie exécuté à fond — plat, typographique, lisible en plein soleil à une main.\n\nLa hiérarchie est brutalement inégale, et c'est voulu : un chiffre de 176 px règne sur le bloc héros, tout le reste vit entre 10,5 px et 22 px. Une donnée est un chiffre, pas une jauge : le niveau est une barre de 8 px avec ses bornes chiffrées, le multiplicateur est une rangée de crans, jamais un anneau de progression.\n\nAnti-références confirmées : l'anneau de progression santé vert sur blanc ; le flipper (cartoon, saturé, sur-ornementé) ; toute métaphore matérielle (veste de travail, livret tamponné, manuel en acétate), refusée comme « skin » ; les variantes Instrument / Affiche / Registre, jugées froides et « AI-looking ».",
+    "keyCharacteristics": [
+      "Une famille marine + un gris, et une seule exception chaude (alert)",
+      "Aucune ombre, nulle part",
+      "Une seule police variable, chiffres tabulaires partout",
+      "Un chiffre géant, tout le reste petit",
+      "Un seul geste de motion signature (240 ms, par crans, jamais fluide)",
+      "Le pouce d'abord : Envie fixe, barre d'onglets basse, cibles ≥ 44 px"
+    ],
+    "rules": [
+      { "name": "The Two Greys Rule", "body": "Le gris de texte muet se choisit par fond, pas par humeur. Sur page → ink-soft. Sur n'importe quel fond teinté → ink-dim. ink-soft sur un fond teinté tombe à 4,20:1 et échoue : c'est la seule raison d'être de ink-dim.", "section": "colors" },
+      { "name": "The Three States Rule", "body": "« Sélectionné » est toujours action. « Acquis » est ink. « Courant » est reached. Ces trois-là ne doivent jamais s'effondrer en une seule couleur.", "section": "colors" },
+      { "name": "The One Warm Value Rule", "body": "alert est la seule exception chaude approuvée à la famille marine-et-gris. Elle appartient aux actions destructives et aux erreurs, et à rien d'autre. Pas de succès vert, pas d'avertissement ambre, pas de second accent.", "section": "colors" },
+      { "name": "The cn() Registration Rule", "body": "src/shared/utils/cn.ts enregistre chaque taille de @theme dans le groupe font-size de tailwind-merge. Sans ça, text-tab est lu comme une couleur et silencieusement supprimé dès qu'un text-<couleur> se trouve dans le même appel cn(). Tout nouveau token de taille doit être ajouté à ce tableau — c'est le point unique dont dépend toute l'échelle typographique.", "section": "typography" },
+      { "name": "The One Giant Rule", "body": "Un seul text-display par écran, et seulement pour le chiffre du streak. Il n'y a pas de second niveau « grand » : après 176 px, on retombe à 22 px.", "section": "typography" },
+      { "name": "The French UI Rule", "body": "Toute chaîne visible est en français et vit dans src/shared/utils/strings.ts. Jamais de littéral dans un composant, jamais d'anglais à l'écran. Le code, lui, reste en anglais.", "section": "typography" },
+      { "name": "The Fixed Pill Rule", "body": "Le contenu scrollable réserve un dégagement bas (pb-44 sur le spécimen) pour que la pilule Envie fixe ne recouvre jamais une information à lire.", "section": "layout" },
+      { "name": "The No-Shadow Rule", "body": "Une surface qui doit paraître plus proche change de couleur ou gagne un filet. Elle ne gagne jamais une ombre, ni un ring-*, ni un dégradé. Le focus est un outline: 2px solid action avec outline-offset: 3px, posé globalement sur :focus-visible — les composants ne redéfinissent pas leur anneau.", "section": "elevation" },
+      { "name": "The Motion-Guard Rule", "body": "Toute transition ou animation porte son garde : motion-safe: pour ce qui doit disparaître, motion-reduce:transition-none pour ce qui doit se figer. Aucune exception.", "section": "components" }
+    ],
+    "dos": [
+      "Do choisir le gris muet par le fond : ink-soft sur page, ink-dim sur tout fond teinté.",
+      "Do garder action pour « sélectionné », ink pour « acquis », reached pour « courant ».",
+      "Do enregistrer toute nouvelle taille @theme dans le groupe font-size de src/shared/utils/cn.ts, sinon la classe sera silencieusement supprimée.",
+      "Do utiliser px-safe / pt-safe / pb-safe sur tout conteneur qui touche un bord.",
+      "Do rendre la profondeur par la couleur ou un filet 1px line.",
+      "Do garder les chiffres en tabular-nums et poser les valeurs qui changent en figure.",
+      "Do écrire toute chaîne visible en français, dans src/shared/utils/strings.ts.",
+      "Do garder les cibles tactiles à 44px minimum et le déclencheur principal en zone pouce.",
+      "Do assortir chaque transition d'un garde motion-safe: ou motion-reduce:."
+    ],
+    "donts": [
+      "Don't ajouter une ombre, un ring-*, un dégradé, une texture ou un grain : rien de tout ça n'existe dans ce monde.",
+      "Don't introduire une seconde couleur d'accent. alert est la seule valeur chaude, et elle est réservée au destructif et aux erreurs.",
+      "Don't habiller alert en aplat plein : fond à 10 % / 20 %, texte en plein.",
+      "Don't utiliser reached ailleurs que sur le cran de multiplicateur courant.",
+      "Don't redéfinir un anneau de focus par composant : l'outline global :focus-visible fait foi.",
+      "Don't transformer une progression en anneau ou en jauge : une barre de 8px avec ses bornes chiffrées, ou une rangée de crans.",
+      "Don't poser un second text-display sur un écran, ni créer un palier intermédiaire entre 176px et 22px.",
+      "Don't fusionner line et surface-locked sous prétexte qu'ils partagent #d4d4d4 : ce sont deux rôles distincts qui peuvent diverger.",
+      "Don't animer en interpolation fluide : la signature est par pas, 240 ms, ease-out-expo.",
+      "Don't écrire un littéral de chaîne dans un composant, ni une chaîne anglaise à l'écran."
+    ]
+  }
+}
