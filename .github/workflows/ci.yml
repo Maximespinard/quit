@@ -27,6 +27,38 @@ jobs:
       # The same gate as locally, kept as one script so the two never drift.
       - run: npm run verify
 
+  e2e:
+    name: e2e (Playwright · WebKit iPhone)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-webkit-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - name: Install WebKit
+        run: npx playwright install --with-deps webkit
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+      - name: Install WebKit's OS deps
+        run: npx playwright install-deps webkit
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+      - run: npm run build
+      - run: npm run test:e2e
+      - name: Upload report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
   secret-scan:
     name: leak scan
     runs-on: ubuntu-latest

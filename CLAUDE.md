@@ -23,6 +23,7 @@ Design context lives in `PRODUCT.md` + `DESIGN.md` (impeccable's own files), not
 npm run dev       # vite --port 3000
 npm run verify    # lint && typecheck && test && build — GREEN before every commit, zero warning
 npm run test      # vitest run (watch: test:watch)
+npm run test:e2e  # Playwright smoke test (WebKit, iPhone) against the preview build — mandatory on UI tickets
 ```
 
 ## Structure (feature-based, one-way flow `shared → features → routes`)
@@ -62,6 +63,7 @@ never a synonym it lists under _Avoid_.
 **Composants** — ≤ ~220 lines, else split; no inline schema/type/constant; explicit loading/error/empty states.
 
 **Tests** — colocated `X.test.ts(x)`; concrete data (integer cents); domain tested as "facts in, state out".
+E2e specs are the exception: Playwright, root `e2e/`, `X.spec.ts`.
 
 **Nommage** — components `PascalCase.tsx` · hooks `useX.ts` · other modules `kebab-case.ts` · features lowercase.
 

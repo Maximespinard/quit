@@ -26,6 +26,7 @@ The same hook also rejects a commit whose staged changes match a regex in
 | `npm run dev` | Vite dev server on port 3000 |
 | `npm run verify` | lint + typecheck + tests + build — the gate before any commit |
 | `npm run test` | Vitest once (`test:watch` to watch) |
+| `npm run test:e2e` | Playwright smoke test (WebKit, iPhone) against the production preview build |
 | `npm run build` | Production build (typecheck included) |
 | `npm run lint:fix` | Biome autofix + ESLint fix |
 

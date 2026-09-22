@@ -7,7 +7,16 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": ["**", "!src/routeTree.gen.ts", "!dev-dist", "!dist", "!.impeccable"]
+    "includes": [
+      "**",
+      "!src/routeTree.gen.ts",
+      "!dev-dist",
+      "!dist",
+      "!.impeccable",
+      "!playwright-report",
+      "!test-results",
+      "!blob-report"
+    ]
   },
   "formatter": {
     "enabled": true,
