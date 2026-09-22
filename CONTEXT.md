@@ -75,3 +75,19 @@ _Avoid_: Location, spot, zone
 **Fact**:
 Something the user recorded as having happened: the quit moment, a patch application, a craving, a lapse, a check-in. Everything else the app shows is derived from facts.
 _Avoid_: Event, entry, record
+
+**Journal**:
+The whole set of facts recorded by one person, plus the settings that shape what is derived from them: the protocol, the weekly spend, the baseline smokes per day and the goal. It is the only thing stored, and the only thing exported and imported.
+_Avoid_: History, database, log, diary
+
+**Scenario**:
+A named journal paired with a value of the current time, describing one precise state of the app. The same scenarios serve as test fixtures, as debug panel presets and as the seed of demo mode.
+_Avoid_: Preset, seed, fixture, state
+
+**Personal best**:
+The longest streak ever held. It is shown only once a lapse exists.
+_Avoid_: Record, best streak, high score
+
+**Goal**:
+The one thing the user is saving towards: a label and a price, against which money saved is shown as progress.
+_Avoid_: Objective, target, reward, wish
