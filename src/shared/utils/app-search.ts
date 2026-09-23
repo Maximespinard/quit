@@ -1,6 +1,6 @@
 /**
- * Search params every route shares. `?debug=true` opens the debug panel on the sandbox
- * journal; `&clock=<ms>` stops the sandbox clock on that instant (end-to-end tests).
+ * Search params every route shares. `?debug=true` switches to the sandbox and its debug
+ * panel; `&clock=<ms>` stops the sandbox clock on that instant (end-to-end tests).
  */
 export type AppSearch = {
   readonly debug?: true

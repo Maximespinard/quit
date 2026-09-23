@@ -1,6 +1,6 @@
 import { expect, type Page } from '@playwright/test'
 
-/** The home screen on the sandbox journal, its clock stopped on `at`: time is deterministic. */
+/** The home screen in the sandbox, its clock stopped on `at`: time is deterministic. */
 export const sandboxAt = (at: number) => `/?debug=true&clock=${at}`
 
 export const streakRegion = (page: Page) => page.getByRole('region', { name: 'Temps sans fumer' })
