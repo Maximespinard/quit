@@ -18,7 +18,7 @@ function RootLayout() {
       <main
         className={cn(
           'min-h-dvh bg-page text-ink',
-          source.kind === 'sandbox' && 'pb-[calc(5rem+env(safe-area-inset-bottom))]',
+          source.kind === 'sandbox' ? 'pb-[calc(5rem+env(safe-area-inset-bottom))]' : 'pb-safe',
         )}
       >
         <Outlet />
