@@ -315,7 +315,9 @@ couleur et silencieusement supprimé dès qu'un `text-<couleur>` se trouve dans 
 dont dépend toute l'échelle typographique.
 
 **The One Giant Rule.** Un seul `text-display` par écran, et seulement pour le chiffre du
-streak. Il n'y a pas de second niveau « grand » : après 176 px, on retombe à 22 px.
+streak — ou, sur l'écran du minuteur d'envie, pour son compte à rebours puis ses minutes
+tenues : le moment d'envie gagne, et le streak n'y est pas affiché. Il n'y a pas de second
+niveau « grand » : après 176 px, on retombe à 22 px.
 
 **The French UI Rule.** Toute chaîne visible est en français et vit dans
 `src/shared/utils/strings.ts`. Jamais de littéral dans un composant, jamais d'anglais à
@@ -420,6 +422,18 @@ La pilule permanente, et le seul objet de l'app de cette taille : 64px de haut,
 `rounded-full`, fond `action`, texte `page` en `cta`, icône `Timer` 20px. Elle s'enfonce à
 `scale-[0.97]` à l'appui. **Rien d'autre ne porte `action` en aplat plein à cette échelle.**
 Désactivée, elle passe `surface-locked` / `ink-dim`.
+
+### Minuteur d'envie (signature)
+
+L'écran entier devient le bloc de nuit : `bg-ink` plein cadre, même marine en fond, `px-safe
+pt-safe`. Au centre, le compte à rebours `m:ss` en `display` (on-ink), dessous **quatre crans
+de minute** (8px, `rounded-full`, grille 4 colonnes, `max-w-60`) : tenue → `on-ink`, en cours →
+`on-ink` à 45 %, à venir → `on-ink` à 15 % ; puis une phrase en `body` `on-ink/85`. `Arrêter`
+est en zone pouce : outline sur marine, filet `on-ink/40`, appui `on-ink/15`. Rien ne bouge
+que les secondes. **Tenu jusqu'au bout**, le bloc reprend la forme du héros (coins bas 28px) :
+les minutes tenues montent en `useCountUp` et les quatre crans entrent en séquence (`step-in`,
+60 ms) — la seule célébration de l'app, sous `motion-safe:`. **Arrêté**, on reste sur la page :
+pas de fête, pas de reproche.
 
 ### Cards / Containers
 

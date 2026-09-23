@@ -41,7 +41,7 @@ export function IntensityForm({ onSubmit, children }: IntensityFormProps) {
           }}
         >
           {CRAVING_INTENSITIES.map((level) => (
-            <ToggleGroupItem key={level} value={String(level)} className="text-cta">
+            <ToggleGroupItem key={level} value={String(level)}>
               {level}
             </ToggleGroupItem>
           ))}

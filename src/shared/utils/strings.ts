@@ -19,6 +19,7 @@ export const strings = {
       stop: 'Arrêter',
     },
     held: {
+      minutes: 'minutes tenues',
       title: 'Tu as tenu jusqu’au bout.',
       lead: 'L’envie est passée sans cigarette.',
     },

@@ -3,7 +3,6 @@ import { CravingTimerScreen } from '@/features/craving/components/CravingTimerSc
 import { useCravingRecorded } from '@/features/craving/hooks/useCravingRecorded'
 import { validateCravingTimerSearch } from '@/features/craving/utils/timer-search'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
-import { AppShell } from '@/shared/ui/app-shell'
 import { ReadyJournal } from '@/shared/ui/ReadyJournal'
 import { validateAppSearch } from '@/shared/utils/app-search'
 
@@ -28,16 +27,14 @@ function CravingTimerPage() {
   return (
     <ReadyJournal state={state}>
       {(journal) => (
-        <AppShell>
-          <CravingTimerScreen
-            journal={journal}
-            now={now}
-            startedAt={startedAt}
-            stoppedAt={search.stoppedAt ?? null}
-            onStop={stop}
-            onRecorded={recorded}
-          />
-        </AppShell>
+        <CravingTimerScreen
+          journal={journal}
+          now={now}
+          startedAt={startedAt}
+          stoppedAt={search.stoppedAt ?? null}
+          onStop={stop}
+          onRecorded={recorded}
+        />
       )}
     </ReadyJournal>
   )
