@@ -1,15 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { StreakHero } from './StreakHero'
 
-beforeAll(() => {
-  window.matchMedia = vi.fn().mockImplementation((query: string) => ({
-    matches: query.includes('reduce'),
-    media: query,
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-  }))
-})
-
 it('reads the full day count and pads the clock', () => {
   render(
     <StreakHero
