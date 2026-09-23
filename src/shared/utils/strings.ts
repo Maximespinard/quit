@@ -41,6 +41,7 @@ export const strings = {
     dayForward: '+1 j',
     realTime: 'Revenir à l’heure réelle',
     wipe: 'Vider le bac à sable',
+    leave: 'Quitter le bac à sable',
     close: 'Fermer',
   },
   multiplier: {

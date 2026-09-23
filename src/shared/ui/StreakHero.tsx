@@ -12,7 +12,7 @@ type StreakHeroProps = {
   /** Stable name for the region, independent of the figure's plural. */
   regionLabel: string
   /** Top-left brand mark. */
-  brand: string
+  brand: ReactNode
   /** Top-right context, e.g. the current protocol step. */
   context?: ReactNode
   /** Optional control rendered after the context (settings). */

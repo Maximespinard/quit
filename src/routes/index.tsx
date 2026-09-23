@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { SandboxEntry } from '@/features/debug/components/SandboxEntry'
 import { QuitMomentPrompt } from '@/features/quit-moment/components/QuitMomentPrompt'
 import { StreakScreen } from '@/features/streak/components/StreakScreen'
 import { derive } from '@/shared/domain/derive'
@@ -12,17 +13,18 @@ export const Route = createFileRoute('/')({
 
 function HomePage() {
   const { state, commit, now } = useJournalSource()
+  const brand = <SandboxEntry>{strings.app.name}</SandboxEntry>
 
   if (state.status === 'loading') {
     return (
-      <AppShell>
+      <AppShell brand={brand}>
         <p className="text-body text-ink-soft">{strings.journal.loading}</p>
       </AppShell>
     )
   }
   if (state.status === 'error') {
     return (
-      <AppShell>
+      <AppShell brand={brand}>
         <p role="alert" className="text-alert text-body">
           {strings.journal.error}
         </p>
@@ -33,10 +35,10 @@ function HomePage() {
   const derived = derive(state.journal, now)
   if (derived.streak === null) {
     return (
-      <AppShell>
+      <AppShell brand={brand}>
         <QuitMomentPrompt journal={state.journal} now={now} onRecorded={commit} />
       </AppShell>
     )
   }
-  return <StreakScreen streak={derived.streak} />
+  return <StreakScreen streak={derived.streak} brand={brand} />
 }

@@ -71,3 +71,32 @@ test('a sandbox session never reads nor writes the real journal', async ({ page 
   await expect(marker(page)).toHaveCount(0)
   await expectStreak(page, 0, '00:00:\\d\\d')
 })
+
+// The installed PWA has no address bar: the sandbox opens and closes from inside the app.
+test('a long press on the brand opens the sandbox, and the panel leaves it', async ({ page }) => {
+  await page.goto('/')
+  await tap(page, 'Maintenant')
+  await expectStreak(page, 0, '00:00:\\d\\d')
+
+  await page.getByRole('heading', { name: 'quit' }).getByText('quit').hover()
+  await page.mouse.down()
+  await page.waitForTimeout(1200)
+  await page.mouse.up()
+
+  await expect(marker(page)).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Maintenant' })).toBeVisible()
+
+  await marker(page).click()
+  await tap(page, 'Quitter le bac à sable')
+
+  await expect(marker(page)).toHaveCount(0)
+  await expectStreak(page, 0, '00:00:\\d\\d')
+})
+
+test('a short tap on the brand does nothing', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('heading', { name: 'quit' }).getByText('quit').click()
+  await page.waitForTimeout(1200)
+
+  await expect(marker(page)).toHaveCount(0)
+})
