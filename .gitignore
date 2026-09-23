@@ -30,6 +30,7 @@ dist-ssr
 
 # Local agent state
 .claude/settings.local.json
+.claude/worktrees/
 
 # Grill seed — never commit (durable record lives in CONTEXT.md + docs/adr)
 BRIEF.md
