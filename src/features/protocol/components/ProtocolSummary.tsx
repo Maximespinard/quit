@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { useId } from 'react'
 import type { ProtocolPosition } from '@/shared/domain/protocol-position'
 import { buttonVariants } from '@/shared/ui/base/button'
+import { keepSearch } from '@/shared/utils/app-search'
 import { formatDose } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
 
@@ -31,11 +32,13 @@ export function ProtocolSummary({ position }: { position: ProtocolPosition }) {
               {copy.day(position.dayInStep, position.step.durationDays)}
             </p>
             <p className="text-ink-dim text-label">
-              {copy.dose(formatDose(position.step.doseMg), position.step.brand)}
-              {' · '}
-              {position.nextStep === null
-                ? copy.untilEnd(position.daysLeft)
-                : copy.untilNext(position.daysLeft, formatDose(position.nextStep.doseMg))}
+              {copy.detail(
+                formatDose(position.step.doseMg),
+                position.step.brand,
+                position.nextStep === null
+                  ? copy.untilEnd(position.daysLeft)
+                  : copy.untilNext(position.daysLeft, formatDose(position.nextStep.doseMg)),
+              )}
             </p>
           </div>
         ) : (
@@ -46,7 +49,7 @@ export function ProtocolSummary({ position }: { position: ProtocolPosition }) {
         )}
         <Link
           to="/protocol"
-          search={(previous) => previous}
+          search={keepSearch}
           className={buttonVariants({ variant: 'outline', size: 'sm' })}
         >
           {copy.edit}

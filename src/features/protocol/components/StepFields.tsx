@@ -2,8 +2,7 @@ import { ChevronDown, ChevronUp, Trash2 } from 'lucide-react'
 import { useId } from 'react'
 import { Button } from '@/shared/ui/base/button'
 import { strings } from '@/shared/utils/strings'
-import type { DraftField } from '../hooks/useStepDrafts'
-import type { StepDraft } from '../utils/step-draft'
+import type { DraftField, StepDraft } from '../utils/step-draft'
 
 const copy = strings.protocol
 

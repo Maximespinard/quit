@@ -1,6 +1,6 @@
 import type { Journal } from './journal'
 
-/** One stage of the protocol: a 24 h patch dose and how many days it lasts. */
+/** One step of the protocol: a 24 h patch dose and how many days it lasts. */
 export type Step = {
   readonly doseMg: number
   readonly durationDays: number

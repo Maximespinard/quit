@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import type { Protocol } from '@/shared/domain/protocol'
-import { draftsFrom, moveDraft, type StepDraft } from '../utils/step-draft'
-
-export type DraftField = 'dose' | 'duration' | 'brand'
+import { type DraftField, draftsFrom, moveDraft, type StepDraft } from '../utils/step-draft'
 
 /** The editor's working copy of the protocol: nothing reaches the journal until it is saved. */
 export function useStepDrafts(protocol: Protocol) {
