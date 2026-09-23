@@ -47,4 +47,13 @@ describe('derive', () => {
       streak: { elapsedMs: 2 * DAY },
     })
   })
+
+  it('holds the streak at zero while now is still before the quit moment', () => {
+    const quitMoment = NOW + HOUR
+
+    expect(derive(journalWithQuitMoment(quitMoment), NOW)).toEqual({
+      quitMoment,
+      streak: { elapsedMs: 0 },
+    })
+  })
 })
