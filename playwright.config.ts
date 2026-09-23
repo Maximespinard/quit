@@ -25,8 +25,8 @@ export default defineConfig({
   },
   projects: [
     {
-      name: 'webkit-iphone',
-      use: { ...devices['iPhone 13'], browserName: 'webkit' },
+      name: 'webkit-iphone-16-pro',
+      use: { ...devices['iPhone 16 Pro'], browserName: 'webkit' },
     },
   ],
 })

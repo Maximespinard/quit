@@ -9,7 +9,7 @@ web
 ## Users
 
 One user: the author, quitting smoking under a self-managed nicotine patch taper (21 → 14 → 7 mg).
-Single device: an iPhone, app installed to the home screen as a PWA, used offline.
+Single device: an iPhone 16 Pro (402×874 CSS px, Dynamic Island), app installed to the home screen as a PWA, used offline.
 
 Three usage situations, in priority order when they conflict on screen:
 
