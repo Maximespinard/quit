@@ -1,0 +1,61 @@
+import type { Journal } from './journal'
+
+/** One stage of the protocol: a 24 h patch dose and how many days it lasts. */
+export type Step = {
+  readonly doseMg: number
+  readonly durationDays: number
+  /** Free-text brand, noted by the user. */
+  readonly brand?: string
+}
+
+/** The user-defined taper, in order. Never empty; a lapse never alters it. */
+export type Protocol = readonly Step[]
+
+/**
+ * Every new journal starts on this taper. The durations are placeholders until the research
+ * ticket sets them from official patch notices (SYR-31).
+ */
+export const defaultProtocol: Protocol = [
+  { doseMg: 21, durationDays: 28 },
+  { doseMg: 14, durationDays: 14 },
+  { doseMg: 7, durationDays: 14 },
+]
+
+const isValidStep = ({ doseMg, durationDays }: Step) =>
+  Number.isFinite(doseMg) && doseMg > 0 && Number.isInteger(durationDays) && durationDays > 0
+
+/** A blank brand is no brand: the key is dropped rather than stored empty. */
+function normaliseStep({ doseMg, durationDays, brand }: Step): Step {
+  const trimmed = brand?.trim() ?? ''
+  return trimmed === '' ? { doseMg, durationDays } : { doseMg, durationDays, brand: trimmed }
+}
+
+export type SetProtocolResult =
+  | { readonly ok: true; readonly journal: Journal }
+  | { readonly ok: false; readonly reason: 'empty' | 'invalid' }
+
+/** Replaces the whole protocol, at any time. Zero steps, or a step without a dose or a duration, is refused. */
+export function setProtocol(journal: Journal, steps: readonly Step[]): SetProtocolResult {
+  if (steps.length === 0) return { ok: false, reason: 'empty' }
+  if (!steps.every(isValidStep)) return { ok: false, reason: 'invalid' }
+  return { ok: true, journal: { ...journal, protocol: steps.map(normaliseStep) } }
+}
+
+function decodeStep(raw: unknown): Step | null {
+  if (typeof raw !== 'object' || raw === null) return null
+  const { doseMg, durationDays, brand } = raw as Record<string, unknown>
+  if (typeof doseMg !== 'number' || typeof durationDays !== 'number') return null
+  const step = normaliseStep({
+    doseMg,
+    durationDays,
+    ...(typeof brand === 'string' ? { brand } : {}),
+  })
+  return isValidStep(step) ? step : null
+}
+
+/** Rebuilds a stored protocol; anything missing or malformed yields the default protocol. */
+export function decodeProtocol(raw: unknown): Protocol {
+  if (!Array.isArray(raw) || raw.length === 0) return defaultProtocol
+  const steps = raw.map(decodeStep)
+  return steps.every((step) => step !== null) ? steps : defaultProtocol
+}

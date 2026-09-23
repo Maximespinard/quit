@@ -29,5 +29,5 @@ export function recordQuitMoment(
   now: number,
 ): RecordQuitMomentResult {
   if (at > now) return { ok: false, reason: 'future' }
-  return { ok: true, journal: { facts: [...journal.facts, { type: QUIT_MOMENT, at }] } }
+  return { ok: true, journal: { ...journal, facts: [...journal.facts, { type: QUIT_MOMENT, at }] } }
 }
