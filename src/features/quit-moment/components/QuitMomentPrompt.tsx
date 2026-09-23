@@ -2,8 +2,8 @@ import { type FormEvent, useId, useState } from 'react'
 import { recordQuitMoment } from '@/shared/domain/facts/quit-moment'
 import type { Journal } from '@/shared/domain/journal'
 import { Button } from '@/shared/ui/base/button'
+import { fromDatetimeLocal, toDatetimeLocal } from '@/shared/utils/datetime-local'
 import { strings } from '@/shared/utils/strings'
-import { fromDatetimeLocal, toDatetimeLocal } from '../utils/datetime-local'
 
 type QuitMomentPromptProps = {
   journal: Journal
