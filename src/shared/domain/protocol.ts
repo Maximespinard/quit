@@ -21,8 +21,15 @@ export const defaultProtocol: Protocol = [
   { doseMg: 7, durationDays: 14 },
 ]
 
+/** Any positive dose: a cut patch gives a half dose. */
+export const isValidDose = (doseMg: number) => Number.isFinite(doseMg) && doseMg > 0
+
+/** Whole days only: every patch is a 24 h patch. */
+export const isValidDuration = (durationDays: number) =>
+  Number.isInteger(durationDays) && durationDays > 0
+
 const isValidStep = ({ doseMg, durationDays }: Step) =>
-  Number.isFinite(doseMg) && doseMg > 0 && Number.isInteger(durationDays) && durationDays > 0
+  isValidDose(doseMg) && isValidDuration(durationDays)
 
 /** A blank brand is no brand: the key is dropped rather than stored empty. */
 function normaliseStep({ doseMg, durationDays, brand }: Step): Step {
