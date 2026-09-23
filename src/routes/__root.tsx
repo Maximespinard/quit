@@ -1,7 +1,7 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router'
 import { DebugPanel } from '@/features/debug/components/DebugPanel'
 import { JournalSourceProvider } from '@/shared/ui/JournalSourceProvider'
-import { validateAppSearch } from '@/shared/utils/app-search'
+import { journalSourceFrom, validateAppSearch } from '@/shared/utils/app-search'
 import { cn } from '@/shared/utils/cn'
 
 export const Route = createRootRoute({
@@ -10,16 +10,20 @@ export const Route = createRootRoute({
 })
 
 function RootLayout() {
-  const { debug, clock } = Route.useSearch()
-  const sandbox = debug === true
+  const source = journalSourceFrom(Route.useSearch())
 
   return (
-    <JournalSourceProvider sandbox={sandbox} clockAt={clock ?? null}>
-      {/* The sandbox marker is a fixed pill: content keeps clear of it. */}
-      <main className={cn('min-h-dvh bg-page text-ink', sandbox && 'pb-24')}>
+    <JournalSourceProvider source={source}>
+      {/* The Fixed Pill Rule: content keeps clear of the sandbox marker and the home indicator. */}
+      <main
+        className={cn(
+          'min-h-dvh bg-page text-ink',
+          source.kind === 'sandbox' && 'pb-[calc(5rem+env(safe-area-inset-bottom))]',
+        )}
+      >
         <Outlet />
       </main>
-      {sandbox ? <DebugPanel /> : null}
+      <DebugPanel />
     </JournalSourceProvider>
   )
 }
