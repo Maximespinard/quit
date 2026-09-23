@@ -18,3 +18,14 @@ it('refuses a quit moment in the future and says so', async () => {
   expect(screen.getByRole('alert')).toHaveTextContent(strings.quitMoment.future)
   expect(onRecorded).not.toHaveBeenCalled()
 })
+
+it('says so when the date is empty or unreadable instead of doing nothing', async () => {
+  const onRecorded = vi.fn()
+  render(<QuitMomentPrompt journal={emptyJournal} now={NOW} onRecorded={onRecorded} />)
+
+  await userEvent.clear(screen.getByLabelText(strings.quitMoment.dateLabel))
+  await userEvent.click(screen.getByRole('button', { name: strings.quitMoment.submit }))
+
+  expect(screen.getByRole('alert')).toHaveTextContent(strings.quitMoment.invalid)
+  expect(onRecorded).not.toHaveBeenCalled()
+})

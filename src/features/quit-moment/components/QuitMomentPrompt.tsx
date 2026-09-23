@@ -17,19 +17,20 @@ export function QuitMomentPrompt({ journal, now, onRecorded }: QuitMomentPromptP
   const inputId = useId()
   const errorId = useId()
   const [value, setValue] = useState(() => toDatetimeLocal(now))
-  const [refused, setRefused] = useState(false)
+  const [error, setError] = useState<'future' | 'invalid' | null>(null)
   const copy = strings.quitMoment
 
   const record = (at: number) => {
     const result = recordQuitMoment(journal, at, now)
     if (result.ok) onRecorded(result.journal)
-    else setRefused(true)
+    else setError(result.reason)
   }
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const at = fromDatetimeLocal(value)
-    if (at !== null) record(at)
+    if (at === null) setError('invalid')
+    else record(at)
   }
 
   return (
@@ -56,15 +57,15 @@ export function QuitMomentPrompt({ journal, now, onRecorded }: QuitMomentPromptP
           value={value}
           onChange={(event) => {
             setValue(event.target.value)
-            setRefused(false)
+            setError(null)
           }}
-          aria-invalid={refused}
-          aria-describedby={refused ? errorId : undefined}
+          aria-invalid={error !== null}
+          aria-describedby={error !== null ? errorId : undefined}
           className="h-12 rounded-control border border-line bg-white px-4 font-medium text-cta text-ink"
         />
-        {refused ? (
+        {error !== null ? (
           <p id={errorId} role="alert" className="text-alert text-label">
-            {copy.future}
+            {copy[error]}
           </p>
         ) : null}
         <Button type="submit" variant="secondary" size="lg">
