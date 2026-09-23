@@ -2,8 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { QuitMomentPrompt } from '@/features/quit-moment/components/QuitMomentPrompt'
 import { StreakScreen } from '@/features/streak/components/StreakScreen'
 import { derive } from '@/shared/domain/derive'
-import { useJournal } from '@/shared/hooks/useJournal'
-import { useNow } from '@/shared/hooks/useNow'
+import { useJournalSource } from '@/shared/hooks/useJournalSource'
 import { AppShell } from '@/shared/ui/app-shell'
 import { strings } from '@/shared/utils/strings'
 
@@ -12,8 +11,7 @@ export const Route = createFileRoute('/')({
 })
 
 function HomePage() {
-  const now = useNow()
-  const { state, commit } = useJournal()
+  const { state, commit, now } = useJournalSource()
 
   if (state.status === 'loading') {
     return (

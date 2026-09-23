@@ -1,6 +1,12 @@
 import { type DBSchema, openDB } from 'idb'
 import { decodeJournal, type Journal } from '@/shared/domain/journal'
 
+/** Where a journal is kept: the device for the real one, memory for the sandbox. */
+export type JournalStore = {
+  readonly load: () => Promise<Journal>
+  readonly save: (journal: Journal) => Promise<void>
+}
+
 interface QuitDB extends DBSchema {
   journal: { key: string; value: unknown }
 }
@@ -19,7 +25,7 @@ const open = () =>
   })
 
 /** Reads the journal from the device; an unknown or empty store yields the empty journal. */
-export async function loadJournal(): Promise<Journal> {
+async function loadJournal(): Promise<Journal> {
   const db = await open()
   try {
     return decodeJournal(await db.get(STORE, KEY))
@@ -28,7 +34,7 @@ export async function loadJournal(): Promise<Journal> {
   }
 }
 
-export async function saveJournal(journal: Journal): Promise<void> {
+async function saveJournal(journal: Journal): Promise<void> {
   const db = await open()
   try {
     await db.put(STORE, journal, KEY)
@@ -36,3 +42,6 @@ export async function saveJournal(journal: Journal): Promise<void> {
     db.close()
   }
 }
+
+/** The real journal, in IndexedDB on the device. */
+export const deviceJournalStore: JournalStore = { load: loadJournal, save: saveJournal }
