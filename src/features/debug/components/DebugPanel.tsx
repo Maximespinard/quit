@@ -1,5 +1,5 @@
 import { useNavigate } from '@tanstack/react-router'
-import { FlaskConical } from 'lucide-react'
+import { FlaskConical, X } from 'lucide-react'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
 import { Button } from '@/shared/ui/base/button'
 import {
@@ -7,7 +7,6 @@ import {
   DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
@@ -38,18 +37,27 @@ export function DebugPanel() {
           </DrawerTrigger>
         </div>
       </div>
-      <DrawerContent>
-        <DrawerHeader>
-          <DrawerTitle>{copy.title}</DrawerTitle>
-          <DrawerDescription>{copy.lead}</DrawerDescription>
-        </DrawerHeader>
-        <div className="flex flex-col gap-4 px-5 pt-5">
-          <div className="flex flex-col gap-1">
-            <span className="text-ink-soft text-label">{copy.clock}</span>
-            <output className="font-semibold text-body tabular-nums">{formatClock(now)}</output>
+      {/* Kept short so the hero's clock stays in view above it. */}
+      <DrawerContent className="mx-auto w-full max-w-md">
+        <DrawerHeader className="flex-row items-start justify-between gap-3 pr-2">
+          <div className="flex flex-col gap-1 pt-2">
+            <DrawerTitle>{copy.title}</DrawerTitle>
+            <DrawerDescription>{copy.lead}</DrawerDescription>
           </div>
-          <fieldset className="flex flex-col gap-2">
-            <legend className="pb-2 text-ink-soft text-label">{copy.shifts}</legend>
+          <DrawerClose render={<Button variant="ghost" size="icon" aria-label={copy.close} />}>
+            <X aria-hidden="true" />
+          </DrawerClose>
+        </DrawerHeader>
+        <div className="flex flex-col gap-3 px-5 pt-4 pb-safe-4">
+          {/* Not an <output>: a live region would read the running clock out every second. */}
+          <time
+            dateTime={new Date(now).toISOString()}
+            className="font-semibold text-body tabular-nums"
+          >
+            {formatClock(now)}
+          </time>
+          <fieldset>
+            <legend className="sr-only">{copy.shifts}</legend>
             <div className="grid grid-cols-4 gap-2">
               {clockShifts.map((shift) => (
                 <Button
@@ -66,20 +74,15 @@ export function DebugPanel() {
           <Button variant="outline" onClick={sandbox.resetClock}>
             {copy.realTime}
           </Button>
+          <div className="grid grid-cols-2 gap-2 pt-2">
+            <Button variant="destructive" onClick={() => void sandbox.wipe()}>
+              {copy.wipe}
+            </Button>
+            <Button variant="outline" onClick={() => void navigate({ to: '/', search: {} })}>
+              {copy.leave}
+            </Button>
+          </div>
         </div>
-        <DrawerFooter>
-          <Button variant="destructive" size="lg" onClick={() => void sandbox.wipe()}>
-            {copy.wipe}
-          </Button>
-          <Button
-            variant="outline"
-            size="lg"
-            onClick={() => void navigate({ to: '/', search: {} })}
-          >
-            {copy.leave}
-          </Button>
-          <DrawerClose render={<Button variant="ghost" size="lg" />}>{copy.close}</DrawerClose>
-        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   )

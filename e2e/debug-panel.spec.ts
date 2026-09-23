@@ -47,7 +47,7 @@ test('wiping the sandbox returns it to an empty journal', async ({ page }) => {
   await expectStreak(page, 0, '00:00:00')
 
   await marker(page).click()
-  await tap(page, 'Vider le bac à sable')
+  await tap(page, 'Vider')
 
   await expect(page.getByRole('button', { name: 'Maintenant' })).toBeVisible()
   await expect(streakRegion(page)).toHaveCount(0)
@@ -87,7 +87,7 @@ test('a long press on the brand opens the sandbox, and the panel leaves it', asy
   await expect(page.getByRole('button', { name: 'Maintenant' })).toBeVisible()
 
   await marker(page).click()
-  await tap(page, 'Quitter le bac à sable')
+  await tap(page, 'Sortir')
 
   await expect(marker(page)).toHaveCount(0)
   await expectStreak(page, 0, '00:00:\\d\\d')
