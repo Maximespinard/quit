@@ -23,7 +23,7 @@ Design context lives in `PRODUCT.md` + `DESIGN.md` (impeccable's own files), not
 npm run dev       # vite --port 3000
 npm run verify    # lint && typecheck && test && build — GREEN before every commit, zero warning
 npm run test      # vitest run (watch: test:watch)
-npm run test:e2e  # Playwright smoke test (WebKit, iPhone) against the preview build — mandatory on UI tickets
+npm run test:e2e  # Playwright (WebKit iPhone; offline spec in Chromium) against the preview build — mandatory on UI tickets
                   # parallel worktrees: one unique E2E_PORT per session (E2E_PORT=4174 npm run test:e2e)
 ```
 
