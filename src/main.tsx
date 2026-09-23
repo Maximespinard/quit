@@ -21,6 +21,10 @@ declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router
   }
+  interface HistoryState {
+    /** Set by the navigation that follows a recorded craving: the home screen confirms it. */
+    cravingRecorded?: boolean
+  }
 }
 
 const rootElement = document.getElementById('root')

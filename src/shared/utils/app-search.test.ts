@@ -18,6 +18,10 @@ describe('validateAppSearch', () => {
     expect(validateAppSearch({ clock: '2026-01-01' })).toEqual({})
     expect(validateAppSearch({ clock: Number.POSITIVE_INFINITY })).toEqual({})
   })
+
+  it('drops the params of a single route, so a navigation keeps only the shared ones', () => {
+    expect(validateAppSearch({ debug: true, startedAt: 1, stoppedAt: 2 })).toEqual({ debug: true })
+  })
 })
 
 describe('journalSourceFrom', () => {
