@@ -31,4 +31,20 @@ describe('derive', () => {
       streak: { elapsedMs: 3 * DAY + 7 * HOUR + 4 * MINUTE },
     })
   })
+
+  it('measures the streak from the latest quit moment recorded', () => {
+    const first = NOW - 10 * DAY
+    const corrected = NOW - 2 * DAY
+    const journal: Journal = {
+      facts: [
+        { type: 'quit-moment', at: first },
+        { type: 'quit-moment', at: corrected },
+      ],
+    }
+
+    expect(derive(journal, NOW)).toEqual({
+      quitMoment: corrected,
+      streak: { elapsedMs: 2 * DAY },
+    })
+  })
 })
