@@ -26,24 +26,21 @@ export const strings = {
   streak: {
     region: 'Temps sans fumer',
     days: (count: number) => (count <= 1 ? 'jour sans fumer' : 'jours sans fumer'),
-    step: (step: number, doseMg: number, daysToNext: number, targetMg: number) =>
-      `Étape ${step} · ${doseMg} mg · J-${daysToNext} avant ${targetMg} mg`,
   },
   protocol: {
     title: 'Protocole',
     stepOf: (number: number, count: number) => `Étape ${number} / ${count}`,
-    context: (number: number, doseMg: string) => `Étape ${number} · ${doseMg} mg`,
-    /** The current step's dose, its brand when noted, then how long until what comes next. */
-    detail: (doseMg: string, brand: string | undefined, remaining: string) =>
-      [`${doseMg} mg`, brand, remaining].filter((part) => part !== undefined).join(' · '),
+    context: (number: number, doseMg: string) => `Étape\u00a0${number} · ${doseMg}\u00a0mg`,
+    /** The current step's dose, then how long until what comes next. */
+    detail: (doseMg: string, remaining: string) => `${doseMg}\u00a0mg · ${remaining}`,
     day: (day: number, duration: number) => `Jour ${day} sur ${duration}`,
-    untilNext: (days: number, doseMg: string) => `encore ${days} j avant ${doseMg} mg`,
-    untilEnd: (days: number) => `encore ${days} j avant la fin`,
+    untilNext: (days: number, doseMg: string) => `encore ${days}\u00a0j avant ${doseMg}\u00a0mg`,
+    untilEnd: (days: number) => `encore ${days}\u00a0j avant la fin`,
     over: 'Protocole terminé',
     overLead: 'Plus de patch à poser. Le streak, lui, continue.',
     edit: 'Modifier',
     back: 'Retour',
-    lead: 'Chaque étape est un patch de 24 h. Tu peux tout changer, même en cours d’étape.',
+    lead: 'Chaque étape est un patch de 24\u00a0h. Tu peux tout changer, même en cours d’étape.',
     step: (number: number) => `Étape ${number}`,
     doseLabel: 'Dose (mg)',
     durationLabel: 'Durée (jours)',

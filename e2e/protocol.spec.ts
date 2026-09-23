@@ -35,8 +35,8 @@ test('editing a step shows on the home screen, in the same sandbox', async ({ pa
   await expect(page).toHaveURL(new RegExp(`debug=true.*clock=${NOW}`))
   await expect(streakRegion(page)).toContainText('Étape 1 · 25 mg')
   await expect(protocolSummary(page)).toContainText('Jour 1 sur 10')
-  await expect(protocolSummary(page)).toContainText('25 mg · Nicopatch')
-  await expect(protocolSummary(page)).toContainText('encore 10 j avant 14 mg')
+  await expect(protocolSummary(page)).toContainText('25 mg · encore 10 j avant 14 mg')
+  await expect(protocolSummary(page)).toContainText('Nicopatch')
 })
 
 test('steps can be added, reordered and removed, never down to zero', async ({ page }) => {

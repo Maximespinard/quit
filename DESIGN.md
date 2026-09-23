@@ -427,6 +427,20 @@ Désactivée, elle passe `surface-locked` / `ink-dim`.
   Débloqué → fond `surface`, texte `ink`, détail `ink-dim`, pas d'icône. Verrouillé → fond
   `surface-locked`, texte `ink-dim`, cadenas `Lock` 24px (stroke 1,75) en haut. Le suffixe
   « à débloquer » est en `sr-only`, jamais affiché.
+- **Résumé du protocole (accueil) :** section titrée comme les autres blocs (`Protocole` en
+  `body` 600, `Étape n / N` en aside `ink-soft`), puis une carte `surface`, `rounded-card`,
+  padding 16px. À gauche : `Jour d sur D` en `figure`, puis dose et jours restants en `label`
+  `ink-dim`, puis la marque seule sur sa ligne, tronquée. À droite : `Modifier` en outline
+  `sm`, appui en `surface-locked` (sur `surface`, l'appui par défaut ne se verrait pas).
+  Protocole fini → `Protocole terminé` en `title`, jamais en `figure` : ce n'est pas un chiffre.
+- **Carte d'étape (éditeur) :** `fieldset` à filet `line`, `rounded-card`, padding 16px,
+  **sans `legend`** (WebKit la laisse couper le filet) : un `h3` nomme le groupe via
+  `aria-labelledby`. Ligne haute : titre à gauche, trois boutons `ghost` `icon` (monter,
+  descendre, supprimer) à droite ; désactivés, ils s'estompent à 30 % sans aplat, car l'aplat
+  `surface-locked` s'y lirait comme une sélection. Dose et durée côte à côte, marque pleine
+  largeur.
+- **Unités :** toujours une espace insécable entre un nombre et son unité (`21 mg`,
+  `28 j`, `24 h`), dans `strings.ts`.
 ### Bloc héros (signature)
 
 Le seul objet illustré de l'app. Une `section` en `relative isolate overflow-hidden`, fond
@@ -474,6 +488,10 @@ au-dessus du libellé `tab`, hauteur d'item 48px, filet supérieur `line`, fond 
   padding horizontal 16px, texte `ink` en `cta` semi-gras. Le sélecteur reste celui du
   système. Erreur : `aria-invalid` + un `<p role="alert">` en `text-alert` / `label` sous le
   champ, relié par `aria-describedby` — le même pour la date future et la date illisible.
+- **Champ texte / nombre :** même peau que le champ date. Les nombres sont des `input` texte
+  avec `inputMode` (`decimal` pour une dose, qui accepte la virgule ; `numeric` pour des
+  jours), jamais `type="number"`. Erreur : même mécanique, un seul `<p role="alert">` pour le
+  formulaire, près du bouton d'enregistrement, et `aria-invalid` sur chaque champ fautif.
 
 ### Overlays
 
