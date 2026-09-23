@@ -469,6 +469,11 @@ au-dessus du libellé `tab`, hauteur d'item 48px, filet supérieur `line`, fond 
 - **Tabs :** plateau `surface` de 44px, padding 4px, `rounded-control`, texte `ink-dim` ;
   onglet actif en aplat `action` / texte `page`, `rounded-step`. Variante `line` : pas de
   plateau, filet bas `line`, actif en `text-action` + soulignement 2px `action`.
+- **Champ date et heure :** `input type="datetime-local"` natif, hauteur 48px,
+  `rounded-control`, filet 1px `line`, fond `white` (le champ se détache de la `page`),
+  padding horizontal 16px, texte `ink` en `cta` semi-gras. Le sélecteur reste celui du
+  système. Erreur : `aria-invalid` + un `<p role="alert">` en `text-alert` / `label` sous le
+  champ, relié par `aria-describedby` — le même pour la date future et la date illisible.
 
 ### Overlays
 
