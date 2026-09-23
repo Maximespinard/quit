@@ -65,7 +65,7 @@ The user-defined ordered list of steps describing the patch taper. A lapse never
 _Avoid_: Plan, schedule, program
 
 **Step**:
-One stage of the protocol: a patch dose in mg and a duration in days, both user-editable.
+One step of the protocol: a patch dose in mg and a duration in days, both user-editable.
 _Avoid_: Phase, stage, level
 
 **Patch application**:
