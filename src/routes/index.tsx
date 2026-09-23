@@ -1,5 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { SandboxEntry } from '@/features/debug/components/SandboxEntry'
+import { ProtocolSummary } from '@/features/protocol/components/ProtocolSummary'
+import { protocolContext } from '@/features/protocol/utils/protocol-context'
 import { QuitMomentPrompt } from '@/features/quit-moment/components/QuitMomentPrompt'
 import { StreakScreen } from '@/features/streak/components/StreakScreen'
 import { derive } from '@/shared/domain/derive'
@@ -40,5 +42,9 @@ function HomePage() {
       </AppShell>
     )
   }
-  return <StreakScreen streak={derived.streak} brand={brand} />
+  return (
+    <StreakScreen streak={derived.streak} brand={brand} context={protocolContext(derived.protocol)}>
+      <ProtocolSummary position={derived.protocol} />
+    </StreakScreen>
+  )
 }
