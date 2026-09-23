@@ -29,6 +29,20 @@ export const strings = {
     step: (step: number, doseMg: number, daysToNext: number, targetMg: number) =>
       `Étape ${step} · ${doseMg} mg · J-${daysToNext} avant ${targetMg} mg`,
   },
+  debug: {
+    marker: 'Bac à sable',
+    title: 'Bac à sable',
+    lead: 'Journal en mémoire, horloge déplaçable. Ton vrai journal n’est ni lu ni modifié.',
+    clock: 'Horloge',
+    shifts: 'Déplacer l’horloge',
+    dayBack: '−1 j',
+    hourBack: '−1 h',
+    hourForward: '+1 h',
+    dayForward: '+1 j',
+    realTime: 'Revenir à l’heure réelle',
+    wipe: 'Vider le bac à sable',
+    close: 'Fermer',
+  },
   multiplier: {
     label: 'Multiplicateur de streak',
     title: (current: number) => `Multiplicateur ×${current}`,
