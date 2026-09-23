@@ -8,7 +8,38 @@ export const strings = {
     history: 'Historique',
     settings: 'Réglages',
   },
-  craving: { launch: 'Envie' },
+  craving: {
+    launch: 'Envie',
+    logPast: 'Noter une envie passée',
+    recorded: 'Envie notée.',
+    timer: {
+      region: 'Minuteur d’envie',
+      lead: 'Respire. Une envie passe en quelques minutes.',
+      remaining: 'Temps restant',
+      stop: 'Arrêter',
+    },
+    held: {
+      title: 'Tu as tenu jusqu’au bout.',
+      lead: 'L’envie est passée sans cigarette.',
+    },
+    stopped: {
+      title: 'Minuteur arrêté.',
+      lead: 'L’envie compte quand même : note-la.',
+    },
+    intensity: {
+      label: 'Intensité de l’envie',
+      hint: '1 légère · 2 forte · 3 très forte',
+      submit: 'Enregistrer l’envie',
+    },
+    past: {
+      title: 'Une envie passée',
+      lead: 'Sans minuteur : quand elle est arrivée, et sa force.',
+      dateLabel: 'Date et heure',
+      future: 'Ce moment n’est pas encore arrivé.',
+      invalid: 'Indique une date et une heure complètes.',
+      cancel: 'Annuler',
+    },
+  },
   journal: {
     loading: 'Chargement…',
     error: 'Impossible de lire le journal sur cet appareil.',
