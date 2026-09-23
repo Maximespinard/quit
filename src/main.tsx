@@ -1,8 +1,19 @@
+import { registerSW } from 'virtual:pwa-register'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
+import { checkForUpdateOnReturn } from '@/shared/utils/service-worker'
 import { routeTree } from './routeTree.gen'
+
+// autoUpdate: a new build takes over and reloads the page on its own. The journal lives in
+// IndexedDB, which the service worker never touches, so it survives every update.
+registerSW({
+  immediate: true,
+  onRegisteredSW(_url, registration) {
+    if (registration) checkForUpdateOnReturn(registration, document)
+  },
+})
 
 const router = createRouter({ routeTree })
 
