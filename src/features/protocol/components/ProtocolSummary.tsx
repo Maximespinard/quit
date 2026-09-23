@@ -3,6 +3,7 @@ import { useId } from 'react'
 import type { ProtocolPosition } from '@/shared/domain/protocol-position'
 import { buttonVariants } from '@/shared/ui/base/button'
 import { keepSearch } from '@/shared/utils/app-search'
+import { cn } from '@/shared/utils/cn'
 import { formatDose } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
 
@@ -27,30 +28,36 @@ export function ProtocolSummary({ position }: { position: ProtocolPosition }) {
 
       <div className="flex items-center justify-between gap-3 rounded-card bg-surface p-4">
         {position.status === 'running' ? (
-          <div className="flex flex-col gap-1">
+          <div className="flex min-w-0 flex-col gap-1">
             <p className="text-figure tabular-nums">
               {copy.day(position.dayInStep, position.step.durationDays)}
             </p>
             <p className="text-ink-dim text-label">
               {copy.detail(
                 formatDose(position.step.doseMg),
-                position.step.brand,
                 position.nextStep === null
                   ? copy.untilEnd(position.daysLeft)
                   : copy.untilNext(position.daysLeft, formatDose(position.nextStep.doseMg)),
               )}
             </p>
+            {position.step.brand !== undefined ? (
+              <p className="truncate text-ink-dim text-label">{position.step.brand}</p>
+            ) : null}
           </div>
         ) : (
           <div className="flex flex-col gap-1">
-            <p className="text-figure">{copy.over}</p>
+            <p className="text-title">{copy.over}</p>
             <p className="text-ink-dim text-label">{copy.overLead}</p>
           </div>
         )}
         <Link
           to="/protocol"
           search={keepSearch}
-          className={buttonVariants({ variant: 'outline', size: 'sm' })}
+          // On the surface card the outline's own press fill would not show.
+          className={cn(
+            buttonVariants({ variant: 'outline', size: 'sm' }),
+            'active:bg-surface-locked',
+          )}
         >
           {copy.edit}
         </Link>

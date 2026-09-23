@@ -3,6 +3,7 @@ import { BadgeCard } from '@/shared/ui/BadgeCard'
 import { LevelBar } from '@/shared/ui/LevelBar'
 import { MultiplierSteps } from '@/shared/ui/MultiplierSteps'
 import { StreakHero } from '@/shared/ui/StreakHero'
+import { formatDose } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
 import {
   MULTIPLIER_STEPS,
@@ -20,7 +21,7 @@ const MAX_MULTIPLIER = MULTIPLIER_STEPS[MULTIPLIER_STEPS.length - 1] ?? 1
 /** The home screen as the specimen's first viewport: hero, multiplier, level, badges. */
 export function HomeSpecimen() {
   const { duration, multiplier } = SPECIMEN_STREAK
-  const { step, doseMg, daysToNext, targetMg } = SPECIMEN_PROTOCOL
+  const { stepNumber, doseMg } = SPECIMEN_PROTOCOL
   const { level, xpIntoLevel, xpForLevel } = SPECIMEN_LEVEL
   const unlockedCount = SPECIMEN_BADGES.filter((badge) => badge.unlocked).length
 
@@ -31,7 +32,7 @@ export function HomeSpecimen() {
         daysLabel={strings.streak.days(duration.days)}
         regionLabel={strings.streak.region}
         brand={strings.app.name}
-        context={strings.streak.step(step, doseMg, daysToNext, targetMg)}
+        context={strings.protocol.context(stepNumber, formatDose(doseMg))}
         action={
           <button
             type="button"

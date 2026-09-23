@@ -6,6 +6,9 @@ import type { DraftField, StepDraft } from '../utils/step-draft'
 
 const copy = strings.protocol
 
+/** A disabled place control fades out instead of taking the disabled fill, which reads as selected here. */
+const placeControl = 'disabled:bg-transparent disabled:opacity-30'
+
 const fieldClass =
   'h-12 w-full min-w-0 rounded-control border border-line bg-white px-4 font-medium text-cta text-ink tabular-nums'
 
@@ -42,39 +45,48 @@ export function StepFields({
   const describedBy = (isInvalid: boolean) => (isInvalid ? errorId : undefined)
 
   return (
-    <fieldset className="relative flex flex-col gap-3 rounded-card border border-line p-4">
-      {/* Floated so the legend lays out as a normal row instead of cutting the border. */}
-      <legend className="float-left flex h-11 w-full items-center font-semibold text-body">
-        {copy.step(number)}
-      </legend>
-      <div className="absolute top-4 right-3 flex gap-1">
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label={copy.moveUp(number)}
-          disabled={isFirst}
-          onClick={() => onMove(-1)}
-        >
-          <ChevronUp strokeWidth={1.75} aria-hidden="true" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label={copy.moveDown(number)}
-          disabled={isLast}
-          onClick={() => onMove(1)}
-        >
-          <ChevronDown strokeWidth={1.75} aria-hidden="true" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label={copy.remove(number)}
-          disabled={!canRemove}
-          onClick={onRemove}
-        >
-          <Trash2 strokeWidth={1.75} aria-hidden="true" />
-        </Button>
+    // No legend: WebKit lets a legend cut the card's border whatever its styling. The heading
+    // names the group instead.
+    <fieldset
+      aria-labelledby={`${id}-title`}
+      className="flex min-w-0 flex-col gap-3 rounded-card border border-line p-4"
+    >
+      <div className="-my-1 -mr-2 flex items-center justify-between">
+        <h3 id={`${id}-title`} className="font-semibold text-body">
+          {copy.step(number)}
+        </h3>
+        <div className="flex">
+          <Button
+            variant="ghost"
+            size="icon"
+            className={placeControl}
+            aria-label={copy.moveUp(number)}
+            disabled={isFirst}
+            onClick={() => onMove(-1)}
+          >
+            <ChevronUp strokeWidth={1.75} aria-hidden="true" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className={placeControl}
+            aria-label={copy.moveDown(number)}
+            disabled={isLast}
+            onClick={() => onMove(1)}
+          >
+            <ChevronDown strokeWidth={1.75} aria-hidden="true" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className={placeControl}
+            aria-label={copy.remove(number)}
+            disabled={!canRemove}
+            onClick={onRemove}
+          >
+            <Trash2 strokeWidth={1.75} aria-hidden="true" />
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-3">
