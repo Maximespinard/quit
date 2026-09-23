@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { useCountUp } from '@/shared/hooks/useCountUp'
 import type { SplitDuration } from '@/shared/utils/duration'
+import { twoDigits } from '@/shared/utils/format'
 import { HeroBackdrop } from './HeroBackdrop'
 
 type StreakHeroProps = {
@@ -17,8 +18,6 @@ type StreakHeroProps = {
   /** Optional control rendered after the context (settings). */
   action?: ReactNode
 }
-
-const pad = (n: number) => n.toString().padStart(2, '0')
 
 /** The navy block that opens the home screen: one huge figure, one label row. */
 export function StreakHero({
@@ -52,7 +51,7 @@ export function StreakHero({
         </p>
         <span className="text-body">{daysLabel}</span>
         <span className="mt-1 text-figure">
-          {pad(hours)}:{pad(minutes)}:{pad(seconds)}
+          {twoDigits(hours)}:{twoDigits(minutes)}:{twoDigits(seconds)}
         </span>
       </div>
     </section>
