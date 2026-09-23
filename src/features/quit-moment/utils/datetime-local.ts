@@ -1,9 +1,9 @@
-const pad = (n: number) => n.toString().padStart(2, '0')
+import { twoDigits } from '@/shared/utils/format'
 
 /** Formats a timestamp as the local `YYYY-MM-DDTHH:mm` value a `datetime-local` input takes. */
 export function toDatetimeLocal(ms: number): string {
   const d = new Date(ms)
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
+  return `${d.getFullYear()}-${twoDigits(d.getMonth() + 1)}-${twoDigits(d.getDate())}T${twoDigits(d.getHours())}:${twoDigits(d.getMinutes())}`
 }
 
 /** Parses a `datetime-local` value as local time; `null` when the browser gave nothing usable. */
