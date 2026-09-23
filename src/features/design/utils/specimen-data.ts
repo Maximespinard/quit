@@ -1,12 +1,13 @@
+import type { SplitDuration } from '@/shared/utils/duration'
+
 /** Synthetic figures for the /design specimen. Nothing here is read from a journal. */
 
 export const MULTIPLIER_STEPS = [1, 2, 3, 4, 5] as const
 
+const SPECIMEN_DURATION: SplitDuration = { days: 12, hours: 7, minutes: 42, seconds: 9 }
+
 export const SPECIMEN_STREAK = {
-  days: 12,
-  hours: 7,
-  minutes: 42,
-  seconds: 9,
+  duration: SPECIMEN_DURATION,
   multiplier: 3,
 } as const
 

@@ -1,14 +1,11 @@
 import type { ReactNode } from 'react'
 import { useCountUp } from '@/shared/hooks/useCountUp'
+import type { SplitDuration } from '@/shared/utils/duration'
 import { HeroBackdrop } from './HeroBackdrop'
 
 type StreakHeroProps = {
-  /** Whole smoke-free days in the current streak. */
-  days: number
-  /** Hours, minutes and seconds past the last whole day. */
-  hours: number
-  minutes: number
-  seconds: number
+  /** The streak, split into whole days and the hours, minutes and seconds past them. */
+  duration: SplitDuration
   /** Copy for the figure, e.g. "jours sans fumer". Carries its own plural. */
   daysLabel: string
   /** Stable name for the region, independent of the figure's plural. */
@@ -25,16 +22,14 @@ const pad = (n: number) => n.toString().padStart(2, '0')
 
 /** The navy block that opens the home screen: one huge figure, one label row. */
 export function StreakHero({
-  days,
-  hours,
-  minutes,
-  seconds,
+  duration,
   daysLabel,
   regionLabel,
   brand,
   context,
   action,
 }: StreakHeroProps) {
+  const { days, hours, minutes, seconds } = duration
   const shown = useCountUp(days)
 
   return (

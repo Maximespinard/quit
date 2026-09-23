@@ -9,16 +9,13 @@ type StreakScreenProps = {
 
 /** The home screen once a quit moment exists: the streak as elapsed time, live. */
 export function StreakScreen({ streak }: StreakScreenProps) {
-  const { days, hours, minutes, seconds } = splitDuration(streak.elapsedMs)
+  const duration = splitDuration(streak.elapsedMs)
 
   return (
     <div className="mx-auto max-w-md">
       <StreakHero
-        days={days}
-        hours={hours}
-        minutes={minutes}
-        seconds={seconds}
-        daysLabel={strings.streak.days(days)}
+        duration={duration}
+        daysLabel={strings.streak.days(duration.days)}
         regionLabel={strings.streak.region}
         brand={strings.app.name}
       />

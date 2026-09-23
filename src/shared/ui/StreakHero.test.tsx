@@ -13,10 +13,7 @@ beforeAll(() => {
 it('reads the full day count and pads the clock', () => {
   render(
     <StreakHero
-      days={12}
-      hours={7}
-      minutes={4}
-      seconds={9}
+      duration={{ days: 12, hours: 7, minutes: 4, seconds: 9 }}
       daysLabel="jours sans fumer"
       regionLabel="Temps sans fumer"
       brand="quit"
