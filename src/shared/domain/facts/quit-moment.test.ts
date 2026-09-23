@@ -8,7 +8,7 @@ describe('recordQuitMoment', () => {
   it('records a quit moment set to now', () => {
     expect(recordQuitMoment(emptyJournal, NOW, NOW)).toEqual({
       ok: true,
-      journal: { facts: [{ type: 'quit-moment', at: NOW }] },
+      journal: { ...emptyJournal, facts: [{ type: 'quit-moment', at: NOW }] },
     })
   })
 
@@ -17,7 +17,7 @@ describe('recordQuitMoment', () => {
 
     expect(recordQuitMoment(emptyJournal, at, NOW)).toEqual({
       ok: true,
-      journal: { facts: [{ type: 'quit-moment', at }] },
+      journal: { ...emptyJournal, facts: [{ type: 'quit-moment', at }] },
     })
   })
 
