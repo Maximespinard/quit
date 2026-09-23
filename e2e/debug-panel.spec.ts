@@ -2,6 +2,7 @@ import { expect, type Page, test } from '@playwright/test'
 import { expectStreak, sandboxAt, streakRegion } from './sandbox'
 
 const NOW = Date.UTC(2026, 0, 1, 12, 0, 0)
+const DAY_MS = 24 * 60 * 60 * 1000
 
 const marker = (page: Page) => page.getByRole('button', { name: 'Bac à sable' })
 const tap = (page: Page, name: string) => page.getByRole('button', { name }).click()
@@ -34,9 +35,10 @@ test('the sandbox clock moves by an hour and a day, and the streak follows', asy
   await tap(page, '−1 h')
   await expectStreak(page, 0, '00:00:00')
 
-  // Real time is months after the stopped instant.
+  // Back on real time, the streak counts from the stopped instant to today.
   await tap(page, 'Revenir à l’heure réelle')
-  await expect(streakRegion(page)).toContainText('jours sans fumer')
+  const days = Math.floor((Date.now() - NOW) / DAY_MS)
+  await expectStreak(page, days, '\\d\\d:\\d\\d:\\d\\d')
 })
 
 test('wiping the sandbox returns it to an empty journal', async ({ page }) => {

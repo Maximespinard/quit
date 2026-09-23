@@ -17,6 +17,7 @@ import { formatClock } from '../utils/format-clock'
 
 /**
  * The sandbox marker, always on screen while the sandbox is active, opening the debug panel.
+ * Renders nothing on the real journal.
  * The panel only moves time and wipes facts: nothing here grants a derived value (ADR-0002).
  */
 export function DebugPanel() {
@@ -50,12 +51,12 @@ export function DebugPanel() {
             <div className="grid grid-cols-4 gap-2">
               {clockShifts.map((shift) => (
                 <Button
-                  key={shift.label}
+                  key={shift.copyKey}
                   variant="secondary"
                   className="tabular-nums"
                   onClick={() => sandbox.shiftClock(shift.byMs)}
                 >
-                  {copy[shift.label]}
+                  {copy[shift.copyKey]}
                 </Button>
               ))}
             </div>

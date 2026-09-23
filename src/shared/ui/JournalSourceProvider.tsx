@@ -5,6 +5,7 @@ import { JournalSourceContext } from '@/shared/hooks/useJournalSource'
 import { useNow } from '@/shared/hooks/useNow'
 import { deviceJournalStore } from '@/shared/storage/journal-store'
 import { createMemoryJournalStore } from '@/shared/storage/memory-journal-store'
+import type { JournalSourceChoice } from '@/shared/utils/app-search'
 import {
   readSandboxClock,
   realTimeClock,
@@ -14,18 +15,17 @@ import {
 } from '@/shared/utils/sandbox-clock'
 
 type JournalSourceProviderProps = {
-  /** On: an in-memory journal and a movable clock. The device journal is never read or written. */
-  sandbox: boolean
-  /** Starts the sandbox clock stopped on this instant (ms since epoch); `null` follows real time. */
-  clockAt: number | null
+  /** Sandbox: an in-memory journal and a movable clock. The device journal is never read or written. */
+  source: JournalSourceChoice
   children: ReactNode
 }
 
-/** The journal source switch: which journal and which clock the whole app uses. */
-export function JournalSourceProvider({ sandbox, clockAt, children }: JournalSourceProviderProps) {
-  if (!sandbox) return <DeviceSource>{children}</DeviceSource>
+/** Provides the journal and the clock the url chose (`journalSourceFrom`) to the whole app. */
+export function JournalSourceProvider({ source, children }: JournalSourceProviderProps) {
+  if (source.kind === 'real') return <DeviceSource>{children}</DeviceSource>
+  // A new clock instant in the url starts a new sandbox: its in-memory journal starts empty.
   return (
-    <SandboxSource key={clockAt ?? 'real-time'} clockAt={clockAt}>
+    <SandboxSource key={source.clockAt ?? 'real-time'} clockAt={source.clockAt}>
       {children}
     </SandboxSource>
   )
