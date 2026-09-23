@@ -53,8 +53,12 @@ A hand-written message citing one of the user's real figures, shown or pushed at
 _Avoid_: Notification, quote, tip
 
 **Demo mode**:
-A state in which the app shows a fictional journey instead of the user's data, without ever reading or writing the real data.
+A read-only state in which the app shows a fictional journey instead of the user's data, without ever reading or writing the real data. Nothing can be recorded in it.
 _Avoid_: Fake mode, sandbox
+
+**Sandbox**:
+A throwaway journal, empty at the start, paired with a clock that can be moved at will. Facts can be recorded in it and time moved to see any state; the real journal is never read or written, and the sandbox is gone on reload.
+_Avoid_: Sandbox journal, test mode, playground, debug mode
 
 **Protocol**:
 The user-defined ordered list of steps describing the patch taper. A lapse never alters it.
