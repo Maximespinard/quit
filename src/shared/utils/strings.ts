@@ -21,6 +21,7 @@ export const strings = {
     dateLabel: 'Une autre date et heure',
     submit: 'C’est depuis là',
     future: 'Ce moment n’est pas encore arrivé.',
+    invalid: 'Indique une date et une heure complètes.',
   },
   streak: {
     region: 'Temps sans fumer',
