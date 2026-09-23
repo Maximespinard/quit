@@ -13,6 +13,8 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
+      // Registered from main.tsx through `virtual:pwa-register`, which also reloads on update.
+      injectRegister: false,
       includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
       manifest: {
         name: 'Quit',
@@ -36,8 +38,13 @@ export default defineConfig({
           },
         ],
       },
-      // Fonts must be precached: the app is used offline and they carry the identity.
-      workbox: { globPatterns: ['**/*.{js,css,html,svg,png,webp,avif,woff2}'] },
+      workbox: {
+        // Fonts must be precached: the app is used offline and they carry the identity.
+        globPatterns: ['**/*.{js,css,html,svg,png,webp,avif,woff2}'],
+        // What autoUpdate means; the plugin only sets these itself when it injects the register.
+        skipWaiting: true,
+        clientsClaim: true,
+      },
       devOptions: { enabled: false },
     }),
   ],
