@@ -8,6 +8,9 @@ export type StepDraft = {
   readonly brand: string
 }
 
+/** The editable fields of a step draft. */
+export type DraftField = Exclude<keyof StepDraft, 'id'>
+
 const toText = (value: number) => String(value).replace('.', ',')
 
 /** Accepts the French decimal comma. Blank reads as 0 and garbage as NaN: the domain refuses both. */

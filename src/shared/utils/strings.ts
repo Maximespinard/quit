@@ -33,8 +33,9 @@ export const strings = {
     title: 'Protocole',
     stepOf: (number: number, count: number) => `Étape ${number} / ${count}`,
     context: (number: number, doseMg: string) => `Étape ${number} · ${doseMg} mg`,
-    dose: (doseMg: string, brand: string | undefined) =>
-      brand === undefined ? `${doseMg} mg` : `${doseMg} mg · ${brand}`,
+    /** The current step's dose, its brand when noted, then how long until what comes next. */
+    detail: (doseMg: string, brand: string | undefined, remaining: string) =>
+      [`${doseMg} mg`, brand, remaining].filter((part) => part !== undefined).join(' · '),
     day: (day: number, duration: number) => `Jour ${day} sur ${duration}`,
     untilNext: (days: number, doseMg: string) => `encore ${days} j avant ${doseMg} mg`,
     untilEnd: (days: number) => `encore ${days} j avant la fin`,

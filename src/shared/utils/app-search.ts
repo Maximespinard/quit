@@ -15,6 +15,12 @@ export function validateAppSearch(search: Record<string, unknown>): AppSearch {
   }
 }
 
+/**
+ * Every in-app link keeps the current search: it carries the sandbox, and dropping it would
+ * land on the real journal.
+ */
+export const keepSearch = (current: AppSearch): AppSearch => current
+
 /** Which journal and which clock the app runs on. Demo mode will be a third kind. */
 export type JournalSourceChoice =
   | { readonly kind: 'real' }

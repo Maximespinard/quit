@@ -5,6 +5,7 @@ import type { Journal } from '@/shared/domain/journal'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
 import { AppShell } from '@/shared/ui/app-shell'
 import { buttonVariants } from '@/shared/ui/base/button'
+import { keepSearch } from '@/shared/utils/app-search'
 import { strings } from '@/shared/utils/strings'
 
 export const Route = createFileRoute('/protocol')({
@@ -18,8 +19,7 @@ function ProtocolPage() {
 
   const save = async (journal: Journal) => {
     await commit(journal)
-    // The search carries the sandbox: leaving it out would land on the real journal.
-    await navigate({ to: '/', search: (previous) => previous })
+    await navigate({ to: '/', search: keepSearch })
   }
 
   return (
@@ -27,7 +27,7 @@ function ProtocolPage() {
       <div className="flex items-center gap-2">
         <Link
           to="/"
-          search={(previous) => previous}
+          search={keepSearch}
           aria-label={copy.back}
           className={buttonVariants({ variant: 'ghost', size: 'icon' })}
         >
