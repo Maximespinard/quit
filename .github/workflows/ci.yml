@@ -42,12 +42,13 @@ jobs:
         id: playwright-cache
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-webkit-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-      - name: Install WebKit
-        run: npx playwright install --with-deps webkit
+          key: playwright-webkit-chromium-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      # Chromium runs the offline spec only: Playwright's WebKit blocks service worker responses offline.
+      - name: Install WebKit and Chromium
+        run: npx playwright install --with-deps webkit chromium --only-shell
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-      - name: Install WebKit's OS deps
-        run: npx playwright install-deps webkit
+      - name: Install the browsers' OS deps
+        run: npx playwright install-deps webkit chromium
         if: steps.playwright-cache.outputs.cache-hit == 'true'
       - run: npm run build
       - run: npm run test:e2e

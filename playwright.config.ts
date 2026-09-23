@@ -26,7 +26,16 @@ export default defineConfig({
   projects: [
     {
       name: 'webkit-iphone-16-pro',
+      testIgnore: 'offline.spec.ts',
       use: { ...devices['iPhone 16 Pro'], browserName: 'webkit' },
+    },
+    // Playwright's WebKit blocks every request once offline, even those the service worker
+    // answers from its cache, so the offline proof runs in Chromium at the same size.
+    // Offline launch on iOS itself is a manual check on the device.
+    {
+      name: 'chromium-iphone-16-pro',
+      testMatch: 'offline.spec.ts',
+      use: { ...devices['iPhone 16 Pro'], browserName: 'chromium' },
     },
   ],
 })
