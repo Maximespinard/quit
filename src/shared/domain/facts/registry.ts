@@ -10,8 +10,8 @@ export type Fact = NonNullable<ReturnType<(typeof factModules)[number]['decode']
 
 /** Turns a stored value back into a known fact, or `null` when no module claims it. */
 export function decodeFact(raw: unknown): Fact | null {
-  for (const module of factModules) {
-    const fact = module.decode(raw)
+  for (const factModule of factModules) {
+    const fact = factModule.decode(raw)
     if (fact) return fact
   }
   return null
