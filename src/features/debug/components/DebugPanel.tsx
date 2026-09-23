@@ -1,3 +1,4 @@
+import { useNavigate } from '@tanstack/react-router'
 import { FlaskConical } from 'lucide-react'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
 import { Button } from '@/shared/ui/base/button'
@@ -22,6 +23,7 @@ import { formatClock } from '../utils/format-clock'
  */
 export function DebugPanel() {
   const { now, sandbox } = useJournalSource()
+  const navigate = useNavigate()
   if (sandbox === null) return null
   const copy = strings.debug
 
@@ -68,6 +70,13 @@ export function DebugPanel() {
         <DrawerFooter>
           <Button variant="destructive" size="lg" onClick={() => void sandbox.wipe()}>
             {copy.wipe}
+          </Button>
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={() => void navigate({ to: '/', search: {} })}
+          >
+            {copy.leave}
           </Button>
           <DrawerClose render={<Button variant="ghost" size="lg" />}>{copy.close}</DrawerClose>
         </DrawerFooter>
