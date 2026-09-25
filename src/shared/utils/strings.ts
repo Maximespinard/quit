@@ -104,9 +104,9 @@ export const strings = {
   },
   patch: {
     title: 'Patch du jour',
-    due: 'Pas encore posé aujourd’hui.',
-    logged: 'Posé aujourd’hui',
-    loggedDetail: (time: string, doseMg: string) => `à ${time} · ${doseMg}\u00a0mg`,
+    due: 'Pas encore posé aujourd’hui',
+    logged: (time: string) => `Posé à ${time}`,
+    loggedDetail: (doseMg: string) => `aujourd’hui · ${doseMg}\u00a0mg`,
     /** The one-tap log: the dose is the running step's. */
     apply: (doseMg: string) => `Poser le patch · ${doseMg}\u00a0mg`,
     other: 'Autre dose ou autre date',

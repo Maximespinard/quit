@@ -48,17 +48,13 @@ function HomePage() {
                   journal={journal}
                   patch={derived.patch}
                   now={now}
+                  recorded={patchRecorded === true}
                   onRecorded={commit}
                 />
               )}
               <ProtocolSummary position={derived.protocol} />
             </StreakScreen>
             <div className="mx-auto flex max-w-md flex-col items-start gap-3 px-safe pt-5">
-              {patchRecorded === true ? (
-                <p role="status" className="text-body text-ink-soft">
-                  {strings.patch.recorded}
-                </p>
-              ) : null}
               {cravingRecorded === true ? (
                 <p role="status" className="text-body text-ink-soft">
                   {strings.craving.recorded}

@@ -26,17 +26,17 @@ const homeWithStreak = async (page: Page) => {
 
 test('one tap logs today’s patch, and the next day asks again', async ({ page }) => {
   await homeWithStreak(page)
-  await expect(patchCard(page)).toContainText('Pas encore posé aujourd’hui.')
+  await expect(patchCard(page)).toContainText('Pas encore posé aujourd’hui')
 
   await tap(page, /^Poser le patch · 21\smg$/)
 
-  await expect(patchCard(page)).toContainText('Posé aujourd’hui')
-  await expect(patchCard(page)).toContainText(/à 13:00 · 21\smg/)
+  await expect(patchCard(page)).toContainText('Posé à 13:00')
+  await expect(patchCard(page)).toContainText(/aujourd’hui · 21\smg/)
   await expect(page.getByRole('button', { name: /^Poser le patch/ })).toHaveCount(0)
 
   await shiftClock(page, '+1 j')
 
-  await expect(patchCard(page)).toContainText('Pas encore posé aujourd’hui.')
+  await expect(patchCard(page)).toContainText('Pas encore posé aujourd’hui')
   await expect(page.getByRole('button', { name: /^Poser le patch · 21\smg$/ })).toBeVisible()
 })
 
@@ -50,7 +50,7 @@ test('a missed day is caught up and a dose overridden for one patch only', async
   await tap(page, 'Enregistrer le patch')
 
   await expect(page.getByRole('status').filter({ hasText: 'Patch noté.' })).toBeVisible()
-  await expect(patchCard(page)).toContainText('Pas encore posé aujourd’hui.')
+  await expect(patchCard(page)).toContainText('Pas encore posé aujourd’hui')
 
   // Today, a cut patch: the dose differs, the protocol does not.
   await page.getByRole('link', { name: 'Autre dose ou autre date' }).click()
@@ -58,7 +58,8 @@ test('a missed day is caught up and a dose overridden for one patch only', async
   await page.getByLabel('Dose (mg)').fill('10,5')
   await tap(page, 'Enregistrer le patch')
 
-  await expect(patchCard(page)).toContainText(/à 13:00 · 10,5\smg/)
+  await expect(patchCard(page)).toContainText('Posé à 13:00')
+  await expect(patchCard(page)).toContainText(/aujourd’hui · 10,5\smg/)
   await expect(page.getByRole('region', { name: 'Protocole' })).toContainText(/21\smg/)
 })
 
@@ -86,7 +87,8 @@ test('the form sent untouched logs a patch seconds after the quit moment', async
   await tap(page, 'Enregistrer le patch')
 
   await expect(page.getByRole('status').filter({ hasText: 'Patch noté.' })).toBeVisible()
-  await expect(patchCard(page)).toContainText(/à 13:00 · 21\smg/)
+  await expect(patchCard(page)).toContainText('Posé à 13:00')
+  await expect(patchCard(page)).toContainText(/aujourd’hui · 21\smg/)
 })
 
 test('a tap refused on a clock moved before the quit moment says why', async ({ page }) => {
