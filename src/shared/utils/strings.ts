@@ -102,6 +102,28 @@ export const strings = {
     invalid: 'Chaque étape a besoin d’une dose et d’une durée en jours entiers.',
     empty: 'Garde au moins une étape.',
   },
+  patch: {
+    title: 'Patch du jour',
+    due: 'Pas encore posé aujourd’hui.',
+    logged: 'Posé aujourd’hui',
+    loggedDetail: (time: string, doseMg: string) => `à ${time} · ${doseMg}\u00a0mg`,
+    /** The one-tap log: the dose is the running step's. */
+    apply: (doseMg: string) => `Poser le patch · ${doseMg}\u00a0mg`,
+    other: 'Autre dose ou autre date',
+    recorded: 'Patch noté.',
+    form: {
+      title: 'Noter un patch',
+      lead: 'Un jour à rattraper, ou une dose différente pour ce patch seulement. Le protocole ne change pas.',
+      doseLabel: 'Dose (mg)',
+      dateLabel: 'Date et heure',
+      submit: 'Enregistrer le patch',
+      cancel: 'Annuler',
+      future: 'Ce moment n’est pas encore arrivé.',
+      'before-quit-moment': 'C’est avant ton arrêt : le protocole n’avait pas commencé.',
+      'invalid-dose': 'Indique une dose en mg, plus grande que zéro.',
+      invalid: 'Indique une date et une heure complètes.',
+    },
+  },
   debug: {
     marker: 'Bac à sable',
     title: 'Bac à sable',

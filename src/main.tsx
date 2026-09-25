@@ -24,6 +24,8 @@ declare module '@tanstack/react-router' {
   interface HistoryState {
     /** Set by the navigation that follows a recorded craving: the home screen confirms it. */
     cravingRecorded?: boolean
+    /** Set by the navigation that follows a patch application logged from its form. */
+    patchRecorded?: boolean
   }
 }
 
