@@ -74,9 +74,9 @@ export const strings = {
   },
   streak: {
     region: 'Temps sans fumer',
-    days: (count: number) => (count <= 1 ? 'jour sans fumer' : 'jours sans fumer'),
+    days: (count: number) => (count <= 1 ? 'jour d’affilée' : 'jours d’affilée'),
     totals: 'Ce qui reste acquis',
-    smokeFreeDays: 'Jours sans fumer au total',
+    smokeFreeDays: 'Jours sans fumer',
     personalBest: 'Plus long streak',
     /** A streak as whole days and the hours past them. */
     duration: (days: number, hours: string) => `${days}\u00a0j ${hours}\u00a0h`,
@@ -84,7 +84,7 @@ export const strings = {
   lapse: {
     declare: 'J’ai fumé',
     recorded: 'C’est noté. Le streak repart de ce moment.',
-    title: 'Tu as fumé',
+    title: 'Tu as fumé ?',
     lead: 'Une taffe compte. Le streak repart de ce moment ; tes jours sans fumer et le protocole ne bougent pas.',
     dateLabel: 'Quand',
     confirm: 'Oui, noter',
