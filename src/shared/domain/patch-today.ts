@@ -13,7 +13,8 @@ export type PatchToday =
 /**
  * "Today" is the local calendar day holding `now`, midnight to midnight. A patch application
  * later than `now` (a clock moved back) has not happened yet, and one before the quit moment
- * (corrected since) is outside the protocol. Only reachable through `derive`.
+ * (corrected since) is outside the protocol. On a tie, the one recorded last wins. Only reachable
+ * through `derive`.
  */
 export function patchToday(
   journal: Journal,
@@ -26,7 +27,7 @@ export function patchToday(
   let latest: PatchApplicationInput | null = null
   for (const fact of journal.facts) {
     if (fact.type !== PATCH_APPLICATION || fact.at < from || fact.at > now) continue
-    if (latest === null || fact.at > latest.at) latest = fact
+    if (latest === null || fact.at >= latest.at) latest = fact
   }
   return latest === null
     ? { status: 'due', doseMg: position.step.doseMg }

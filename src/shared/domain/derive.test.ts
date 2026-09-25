@@ -238,6 +238,14 @@ describe('derive — today’s patch application', () => {
     })
   })
 
+  it('shows the one recorded last when two patch applications share the same instant', () => {
+    expect(patchAt(local(22, 20), applied(local(22, 12)), applied(local(22, 12), 14))).toEqual({
+      status: 'logged',
+      at: local(22, 12),
+      doseMg: 14,
+    })
+  })
+
   it('ignores a patch application later today than now (a clock moved back)', () => {
     expect(patchAt(local(22, 9), applied(local(22, 10)))).toMatchObject({ status: 'due' })
   })
