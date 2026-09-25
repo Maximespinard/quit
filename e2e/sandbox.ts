@@ -12,5 +12,5 @@ export const streakRegion = (page: Page) => page.getByRole('region', { name: 'Te
 export const expectStreak = (page: Page, days: number, clock: string) =>
   expect(streakRegion(page)).toMatchAriaSnapshot(`
     - paragraph: "${days}"
-    - text: /${days <= 1 ? 'jour' : 'jours'} sans fumer ${clock}/
+    - text: /${days <= 1 ? 'jour' : 'jours'} d’affilée ${clock}/
   `)

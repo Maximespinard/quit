@@ -25,20 +25,20 @@ test('a declared lapse restarts the streak, keeps the total and shows the person
   await threeDaysIn(page)
   // Quit mid-day on day 1, now mid-day on day 4: days 2 and 3 are whole and over.
   await expect(totals(page)).toMatchAriaSnapshot(`
-    - term: Jours sans fumer au total
+    - term: Jours sans fumer
     - definition: "2"
   `)
   await expect(totals(page).getByText('Plus long streak')).toHaveCount(0)
   await expect(protocolSummary(page)).toContainText('Jour 4 sur 28')
 
   await page.getByRole('link', { name: 'J’ai fumé' }).click()
-  await expect(page.getByRole('heading', { name: 'Tu as fumé' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Tu as fumé ?' })).toBeVisible()
   await tap(page, 'Oui, noter')
 
   await expect(page.getByRole('status').filter({ hasText: 'C’est noté.' })).toBeVisible()
   await expectStreak(page, 0, '00:00:00')
   await expect(totals(page)).toMatchAriaSnapshot(`
-    - term: Jours sans fumer au total
+    - term: Jours sans fumer
     - definition: "2"
     - term: Plus long streak
     - definition: 3 j 00 h

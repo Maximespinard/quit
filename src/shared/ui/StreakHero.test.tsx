@@ -5,7 +5,7 @@ it('reads the full day count and pads the clock', () => {
   render(
     <StreakHero
       duration={{ days: 12, hours: 7, minutes: 4, seconds: 9 }}
-      daysLabel="jours sans fumer"
+      daysLabel="jours d’affilée"
       regionLabel="Temps sans fumer"
       brand="quit"
       context="Étape 1 · 21 mg"

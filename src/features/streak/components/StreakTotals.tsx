@@ -22,13 +22,14 @@ export function StreakTotals({ smokeFreeDays, personalBest }: StreakTotalsProps)
       <h2 id={titleId} className="sr-only">
         {copy.totals}
       </h2>
-      <dl className="grid grid-flow-col auto-cols-fr gap-3">
-        <div className="flex flex-col gap-1 rounded-card bg-surface p-4">
+      {/* One statement card, not stat tiles: columns share a 1px rule and a figure row. */}
+      <dl className="grid auto-cols-fr grid-flow-col divide-x divide-line rounded-card bg-surface py-4">
+        <div className="flex flex-col justify-between gap-1 px-4">
           <dt className="text-ink-dim text-label">{copy.smokeFreeDays}</dt>
           <dd className="text-figure tabular-nums">{smokeFreeDays}</dd>
         </div>
         {best !== null ? (
-          <div className="flex flex-col gap-1 rounded-card bg-surface p-4">
+          <div className="flex flex-col justify-between gap-1 px-4">
             <dt className="text-ink-dim text-label">{copy.personalBest}</dt>
             <dd className="text-figure tabular-nums">
               {copy.duration(best.days, twoDigits(best.hours))}
