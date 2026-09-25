@@ -56,6 +56,9 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/test/setup.ts'],
+    // Smoke-free days follow local calendar days: pin a zone with daylight saving so the
+    // DST cases test what they claim on any machine.
+    env: { TZ: 'Europe/Paris' },
     // e2e/ is Playwright's suite, run separately via `test:e2e`; .claude/ holds the
     // parallel sessions' worktrees, each with its own copy of the suite.
     exclude: ['node_modules/**', 'e2e/**', '.claude/**'],
