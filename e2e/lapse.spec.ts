@@ -2,6 +2,8 @@ import { expect, type Page, test } from '@playwright/test'
 import { expectStreak, sandboxAt } from './sandbox'
 
 const NOW = Date.UTC(2026, 0, 1, 12, 0, 0)
+const HOUR = 60 * 60_000
+const DAY = 24 * HOUR
 
 const tap = (page: Page, name: string) => page.getByRole('button', { name, exact: true }).click()
 const totals = (page: Page) => page.getByRole('region', { name: 'Ce qui reste acquis' })
@@ -48,12 +50,14 @@ test('a backdated lapse restarts the streak from its own time', async ({ page })
   await threeDaysIn(page)
 
   await page.getByRole('link', { name: 'J’ai fumé' }).click()
-  const when = page.getByLabel('Quand')
-  const now = await when.inputValue()
-  // Two hours before the sandbox clock, on the same local day.
-  await when.fill(
-    now.replace(/T(\d\d)/, (_, hour: string) => `T${String(Number(hour) - 2).padStart(2, '0')}`),
-  )
+  // The sandbox clock sits three days after `NOW`; the field reads local time.
+  const twoHoursEarlier = new Date(NOW + 3 * DAY - 2 * HOUR)
+  const local = (part: number) => String(part).padStart(2, '0')
+  await page
+    .getByLabel('Quand')
+    .fill(
+      `${twoHoursEarlier.getFullYear()}-${local(twoHoursEarlier.getMonth() + 1)}-${local(twoHoursEarlier.getDate())}T${local(twoHoursEarlier.getHours())}:${local(twoHoursEarlier.getMinutes())}`,
+    )
   await tap(page, 'Oui, noter')
 
   await expectStreak(page, 0, '02:00:00')

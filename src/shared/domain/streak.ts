@@ -1,20 +1,6 @@
-import { LAPSE } from './facts/lapse'
-import type { Journal } from './journal'
-
 export type Streak = {
   /** Time elapsed since the latest lapse, or since the quit moment, in ms. Only the display layer divides it. */
   readonly elapsedMs: number
-}
-
-/**
- * The lapses that count at `now`, oldest first: at or after the quit moment (earlier ones
- * predate a corrected quit moment) and not after `now` (not happened yet on a moved clock).
- */
-export function lapsesUntil(journal: Journal, quitMoment: number, now: number): number[] {
-  return journal.facts
-    .filter((fact) => fact.type === LAPSE && fact.at >= quitMoment && fact.at <= now)
-    .map((fact) => fact.at)
-    .sort((a, b) => a - b)
 }
 
 /** The streak running at `now`, and the longest one ever held — `null` until a lapse exists. */

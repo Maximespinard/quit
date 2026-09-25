@@ -1,5 +1,5 @@
 import { type FormEvent, useId, useState } from 'react'
-import { recordLapse } from '@/shared/domain/facts/lapse'
+import { type RecordLapseResult, recordLapse } from '@/shared/domain/facts/lapse'
 import type { Journal } from '@/shared/domain/journal'
 import { Button } from '@/shared/ui/base/button'
 import { fromDatetimeLocal, toDatetimeLocal } from '@/shared/utils/datetime-local'
@@ -12,7 +12,7 @@ type LapseFormProps = {
   onRecorded: (journal: Journal) => void
 }
 
-type LapseError = 'future' | 'before-quit-moment' | 'invalid'
+type LapseError = Extract<RecordLapseResult, { ok: false }>['reason'] | 'invalid'
 
 /**
  * Declares a lapse, now or backdated. Reaching this screen is the first deliberate step;
@@ -22,12 +22,14 @@ export function LapseForm({ journal, now, onRecorded }: LapseFormProps) {
   const inputId = useId()
   const errorId = useId()
   const [value, setValue] = useState(() => toDatetimeLocal(now))
+  // The field only shows minutes: left untouched it means now, to the millisecond.
+  const [edited, setEdited] = useState(false)
   const [error, setError] = useState<LapseError | null>(null)
   const copy = strings.lapse
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const at = fromDatetimeLocal(value)
+    const at = edited ? fromDatetimeLocal(value) : now
     if (at === null) {
       setError('invalid')
       return
@@ -54,6 +56,7 @@ export function LapseForm({ journal, now, onRecorded }: LapseFormProps) {
           value={value}
           onChange={(event) => {
             setValue(event.target.value)
+            setEdited(true)
             setError(null)
           }}
           aria-invalid={error !== null}

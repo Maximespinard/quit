@@ -1,9 +1,10 @@
+import { lapsesUntil } from './facts/lapse'
 import { latestQuitMoment } from './facts/quit-moment'
 import type { Journal } from './journal'
 import { type ProtocolDayPatch, protocolDayPatch } from './protocol-day-patch'
 import { type ProtocolPosition, protocolPosition } from './protocol-position'
 import { smokeFreeDays } from './smoke-free-days'
-import { lapsesUntil, type Streak, streaks } from './streak'
+import { type Streak, streaks } from './streak'
 
 export type { Streak }
 

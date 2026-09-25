@@ -34,3 +34,14 @@ export function recordLapse(journal: Journal, at: number, now: number): RecordLa
   if (quitMoment === null || at < quitMoment) return { ok: false, reason: 'before-quit-moment' }
   return { ok: true, journal: { ...journal, facts: [...journal.facts, { type: LAPSE, at }] } }
 }
+
+/**
+ * The lapses that count at `now`, oldest first: at or after the quit moment (earlier ones
+ * predate a corrected quit moment) and not after `now` (not happened yet on a moved clock).
+ */
+export function lapsesUntil(journal: Journal, quitMoment: number, now: number): number[] {
+  return journal.facts
+    .filter((fact) => fact.type === LAPSE && fact.at >= quitMoment && fact.at <= now)
+    .map((fact) => fact.at)
+    .sort((a, b) => a - b)
+}
