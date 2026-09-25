@@ -26,6 +26,7 @@ _Avoid_: Urge, trigger
 
 **Tag**:
 An optional label describing the situation in which a craving arose, picked from a default set or typed by the user.
+A default tag is stored by its id (`coffee`), a typed one by its words; two tags differing only by case or spacing are the same tag.
 _Avoid_: Trigger, category, context
 
 **Check-in**:
