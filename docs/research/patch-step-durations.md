@@ -24,9 +24,9 @@ Every brand found uses the 21 / 14 / 7 mg/24 h strengths.
 
 ## Patch alone: standard schedule
 
-All four notices use the same three-phase table. Its header reads, verbatim: "Phase initiale
+All four notices use the same three-step table. Its header reads, verbatim: "Phase initiale
 3 à 4 semaines | Suivi de traitement 3 à 4 semaines | Sevrage thérapeutique 3 à 4 semaines"
-(B names the last phase "Sevrage tabagique").
+(B names the last step "Sevrage tabagique").
 
 For 20 cigarettes a day or more ("20 cigarettes ou plus par jour"):
 
@@ -49,7 +49,7 @@ C's row, verbatim: "NICOTINELL TTS 21 mg/24 h | NICOTINELL TTS 14 mg/24 h * ou N
 TTS 21 mg/24 h* | NICOTINELL TTS 7 mg/24 h ou NICOTINELL TTS 14 mg/24 h puis NICOTINELL TTS
 7 mg/24 h*".
 
-Dose changes between phases follow withdrawal symptoms. A and D: "augmentation de la dose ou
+Dose changes between steps follow withdrawal symptoms. A and D: "augmentation de la dose ou
 maintien de la plus forte dose si l'abstinence tabagique n'est pas complète ou si des
 symptômes de sevrage sont observés, diminution en cas de suspicion de surdosage ou de
 résultats satisfaisants." B and C give the same sentence without "maintien" and without
@@ -57,7 +57,7 @@ résultats satisfaisants." B and C give the same sentence without "maintien" and
 
 ## Patch alone: lighter-smoker variant
 
-For fewer than 20 cigarettes a day ("moins de 20 cigarettes par jour"), the same three phases
+For fewer than 20 cigarettes a day ("moins de 20 cigarettes par jour"), the same three steps
 of 3–4 weeks start one strength lower:
 
 | Brand | Phase initiale | Suivi de traitement | Sevrage | Source |
@@ -77,7 +77,7 @@ The step to stop early is marked "en cas de résultats satisfaisants" (A).
   then the same 3–6 weeks at 14 mg and 7 mg. C: "Premières 6-12 semaines", then "3 à 6 premières
   semaines" at 14 mg and "3 à 6 semaines suivantes" at 7 mg. D matches A.
 - **Niquitin "arrêt progressif"** (B only), where smoking continues at first. Its table has four
-  phases, "Préparation à l'arrêt", "Phase initiale", "Suivi de traitement" and "Sevrage
+  steps, "Préparation à l'arrêt", "Phase initiale", "Suivi de traitement" and "Sevrage
   thérapeutique", lasting 2, 6, 2 and 2 weeks, at 21 / 21 / 14 / 7 mg for 20 cigarettes a day
   or more.
 
@@ -87,18 +87,18 @@ The step to stop early is marked "en cas de résultats satisfaisants" (A).
 |-------|-------------|-----------------|--------|
 | Nicopatchlib | "environ 3 mois"; "ne pas utiliser ce médicament au-delà de 6 mois sans avis médical" (RCP); "La durée du traitement est limitée à 6 mois" (notice) | 12 months | [A](https://base-donnees-publique.medicaments.gouv.fr/medicament/62155071/extrait) |
 | Niquitin | "environ 3 mois"; "La durée totale du traitement ne doit pas dépasser 6 mois" | 12 months | [B](https://base-donnees-publique.medicaments.gouv.fr/medicament/61056501/extrait) |
-| Nicotinell TTS | "environ 3 mois"; "La durée totale du traitement ne doit pas dépasser 6 mois" | 6 months | [C](https://base-donnees-publique.medicaments.gouv.fr/medicament/62267070/extrait) |
+| Nicotinell TTS | "environ 3 mois"; "La durée totale du traitement ne doit pas dépasser 6 mois" | "La durée totale du traitement est de 6 mois" | [C](https://base-donnees-publique.medicaments.gouv.fr/medicament/62267070/extrait) |
 | Nicotine EG | "environ 3 mois"; "ne doit pas dépasser 6 mois" | 9 months (see below) | [D](https://base-donnees-publique.medicaments.gouv.fr/medicament/67906013/extrait) |
 
 ## Gaps / disagreements
 
-- **Step length depends on the schedule.** Patch alone: 3–4 weeks per phase, 9–12 weeks in
+- **Step length depends on the schedule.** Patch alone: 3–4 weeks per step, 9–12 weeks in
   total. Patch with oral forms: 6–12 weeks at 21 mg, then 3–6 weeks at 14 mg and 3–6 weeks at 7 mg.
   Niquitin "arrêt progressif": 2 + 6 + 2 + 2 weeks.
-- **The phases are not strictly 21 → 14 → 7 mg.** Each phase offers an "ou" alternative:
-  stay on 21 mg in phase 2, or run 14 mg then 7 mg inside phase 3. The phase lengths do not change.
+- **The steps are not strictly 21 → 14 → 7 mg.** Each step offers an "ou" alternative:
+  stay on 21 mg in step 2, or run 14 mg then 7 mg inside step 3. The step lengths do not change.
 - **Lighter smokers start lower.** Below 20 cigarettes a day, every notice starts at 14 mg, not
-  21 mg. The notices count factory cigarettes and say nothing about hand-rolled ones.
+  21 mg. The notices count cigarettes and never mention hand-rolled ones.
 - **Maximum total differs.** Patch alone is 6 months in all four. Nicopatchlib's RCP adds "sans
   avis médical" while its notice says "limitée à 6 mois". With oral forms: 12 months (A, B),
   6 months (C), 9 months (D).
@@ -113,7 +113,9 @@ The step to stop early is marked "en cas de résultats satisfaisants" (A).
 ## Recommended default
 
 The notices describe one duration for every step of the patch-alone schedule, whatever the
-dose, so the default uses the same duration for all three steps.
+dose, so the default uses the same duration for all three steps. The user's baseline, 6 to 8
+hand-rolled cigarettes a day, falls in the notices' "moins de 20 cigarettes par jour" variant,
+which keeps the same 3–4 weeks per step: the durations below hold for both variants.
 
 | Step | Dose | Default duration | Reasoning |
 |------|------|------------------|-----------|
@@ -123,7 +125,7 @@ dose, so the default uses the same duration for all three steps.
 
 - **Why the upper bound.** 3 × 4 weeks = 12 weeks, which matches the "environ 3 mois" all four
   notices give for the whole course. It stays well under their 6-month maximum.
-- **Why not per brand.** All four brands give the same 3–4 weeks per phase, so mixing brands
+- **Why not per brand.** All four brands give the same 3–4 weeks per step, so mixing brands
   changes nothing.
 - **What the default leaves open.** The doses stay 21 / 14 / 7 mg, as the spec sets them. The
   notices point below 20 cigarettes a day to a 14 mg start, and they do not say how a
