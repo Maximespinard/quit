@@ -56,7 +56,7 @@ test('steps can be added, reordered and removed, never down to zero', async ({ p
 
   await page.getByRole('button', { name: 'Enregistrer' }).click()
   await expect(streakRegion(page)).toContainText('Étape 1 · 3,5 mg')
-  await expect(protocolSummary(page)).toContainText('encore 14 j avant la fin')
+  await expect(protocolSummary(page)).toContainText('encore 28 j avant la fin')
 })
 
 test('a step without a dose is refused and nothing is saved', async ({ page }) => {

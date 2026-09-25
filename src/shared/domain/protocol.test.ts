@@ -5,6 +5,10 @@ describe('defaultProtocol', () => {
   it('tapers 21, 14 then 7 mg', () => {
     expect(defaultProtocol.map((step) => step.doseMg)).toEqual([21, 14, 7])
   })
+
+  it('lasts 4 weeks per step, the upper bound of the notices (docs/research/patch-step-durations.md)', () => {
+    expect(defaultProtocol.map((step) => step.durationDays)).toEqual([28, 28, 28])
+  })
 })
 
 describe('setProtocol', () => {
