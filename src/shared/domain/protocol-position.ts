@@ -18,6 +18,13 @@ export type ProtocolPosition =
   | { readonly status: 'over' }
 
 /**
+ * Which 24 h block since the quit moment `now` falls in, 0 for the first: a protocol day.
+ * `now` before the quit moment waits on day 0.
+ */
+export const protocolDayIndex = (quitMoment: number, now: number) =>
+  Math.floor(Math.max(0, now - quitMoment) / DAY_MS)
+
+/**
  * The protocol starts at the quit moment and runs in whole 24 h blocks from it; every patch
  * is a 24 h patch. Only reachable through `derive`.
  */
@@ -26,7 +33,7 @@ export function protocolPosition(
   quitMoment: number,
   now: number,
 ): ProtocolPosition {
-  const dayIndex = Math.floor(Math.max(0, now - quitMoment) / DAY_MS)
+  const dayIndex = protocolDayIndex(quitMoment, now)
   let stepStart = 0
   for (const [index, step] of protocol.entries()) {
     const stepEnd = stepStart + step.durationDays

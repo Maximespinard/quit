@@ -1,7 +1,7 @@
 import { expect, type Page, test } from '@playwright/test'
 import { expectStreak, sandboxAt } from './sandbox'
 
-// "Today" is the local calendar day: the timezone is pinned so the times below are fixed.
+// Times on screen are local: the timezone is pinned so the times below are fixed.
 test.use({ timezoneId: 'Europe/Paris' })
 
 /** 13:00 in Paris. */
@@ -24,9 +24,11 @@ const homeWithStreak = async (page: Page) => {
   await expectStreak(page, 0, '00:00:00')
 }
 
-test('one tap logs today’s patch, and the next day asks again', async ({ page }) => {
+test('one tap logs the patch; it holds past midnight, the next protocol day asks again', async ({
+  page,
+}) => {
   await homeWithStreak(page)
-  await expect(patchCard(page)).toContainText('Pas encore posé aujourd’hui')
+  await expect(patchCard(page)).toContainText('Pas encore posé')
 
   await tap(page, /^Poser le patch · 21\smg$/)
 
@@ -34,9 +36,15 @@ test('one tap logs today’s patch, and the next day asks again', async ({ page 
   await expect(patchCard(page)).toContainText(/aujourd’hui · 21\smg/)
   await expect(page.getByRole('button', { name: /^Poser le patch/ })).toHaveCount(0)
 
-  await shiftClock(page, '+1 j')
+  // Past midnight the protocol day, begun at 13:00, still runs: nothing more is asked.
+  await tap(page, 'Bac à sable')
+  for (let hour = 0; hour < 11; hour++) await tap(page, '+1 h')
+  await tap(page, 'Fermer')
+  await expect(patchCard(page)).toContainText(/hier · 21\smg/)
 
-  await expect(patchCard(page)).toContainText('Pas encore posé aujourd’hui')
+  // 13:00 the next day: a new protocol day, a new patch.
+  await shiftClock(page, '+1 j')
+  await expect(patchCard(page)).toContainText('Pas encore posé')
   await expect(page.getByRole('button', { name: /^Poser le patch · 21\smg$/ })).toBeVisible()
 })
 
@@ -50,7 +58,7 @@ test('a missed day is caught up and a dose overridden for one patch only', async
   await tap(page, 'Enregistrer le patch')
 
   await expect(page.getByRole('status').filter({ hasText: 'Patch noté.' })).toBeVisible()
-  await expect(patchCard(page)).toContainText('Pas encore posé aujourd’hui')
+  await expect(patchCard(page)).toContainText('Pas encore posé')
 
   // Today, a cut patch: the dose differs, the protocol does not.
   await page.getByRole('link', { name: 'Autre dose ou autre date' }).click()

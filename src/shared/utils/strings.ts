@@ -87,9 +87,11 @@ export const strings = {
   },
   patch: {
     title: 'Patch du jour',
-    due: 'Pas encore posé aujourd’hui',
+    /** A protocol day runs 24 h from the quit moment's time, so it may have begun yesterday. */
+    due: 'Pas encore posé',
     logged: (time: string) => `Posé à ${time}`,
-    loggedDetail: (doseMg: string) => `aujourd’hui · ${doseMg}\u00a0mg`,
+    loggedDetail: (sameDay: boolean, doseMg: string) =>
+      `${sameDay ? 'aujourd’hui' : 'hier'} · ${doseMg}\u00a0mg`,
     /** The one-tap log: the dose is the running step's. */
     apply: (doseMg: string) => `Poser le patch · ${doseMg}\u00a0mg`,
     other: 'Autre dose ou autre date',

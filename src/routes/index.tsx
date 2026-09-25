@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useLocation } from '@tanstack/react-router'
 import { CravingLauncher } from '@/features/craving/components/CravingLauncher'
 import { SandboxEntry } from '@/features/debug/components/SandboxEntry'
-import { PatchTodayCard } from '@/features/patch/components/PatchTodayCard'
+import { DayPatchCard } from '@/features/patch/components/DayPatchCard'
 import { ProtocolSummary } from '@/features/protocol/components/ProtocolSummary'
 import { protocolContext } from '@/features/protocol/utils/protocol-context'
 import { QuitMomentPrompt } from '@/features/quit-moment/components/QuitMomentPrompt'
@@ -44,7 +44,7 @@ function HomePage() {
               context={protocolContext(derived.protocol)}
             >
               {derived.patch.status === 'over' ? null : (
-                <PatchTodayCard
+                <DayPatchCard
                   journal={journal}
                   patch={derived.patch}
                   now={now}
