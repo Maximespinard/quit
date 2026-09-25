@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { LapseForm } from '@/features/lapse/components/LapseForm'
-import { useLapseRecorded } from '@/features/lapse/hooks/useLapseRecorded'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
+import { useRecordedThenHome } from '@/shared/hooks/useRecordedThenHome'
 import { AppShell } from '@/shared/ui/app-shell'
 import { buttonVariants } from '@/shared/ui/base/button'
 import { ReadyJournal } from '@/shared/ui/ReadyJournal'
@@ -15,7 +15,7 @@ export const Route = createFileRoute('/lapse')({
 function LapsePage() {
   const appSearch = validateAppSearch(Route.useSearch())
   const { state, now } = useJournalSource()
-  const recorded = useLapseRecorded(appSearch)
+  const recorded = useRecordedThenHome(appSearch, 'lapseRecorded')
 
   return (
     <ReadyJournal state={state}>

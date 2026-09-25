@@ -73,26 +73,48 @@ export const strings = {
     invalid: 'Indique une date et une heure complètes.',
   },
   streak: {
-    region: 'Temps sans fumer',
-    days: (count: number) => (count <= 1 ? 'jour d’affilée' : 'jours d’affilée'),
+    region: 'Streak',
+    days: (count: number) => (count <= 1 ? 'jour de streak' : 'jours de streak'),
     totals: 'Ce qui reste acquis',
     smokeFreeDays: 'Jours sans fumer',
     personalBest: 'Plus long streak',
     /** A streak as whole days and the hours past them. */
     duration: (days: number, hours: string) => `${days}\u00a0j ${hours}\u00a0h`,
   },
+
   lapse: {
     declare: 'J’ai fumé',
-    recorded: 'C’est noté. Le streak repart de ce moment.',
+    recorded: 'C’est noté.',
     title: 'Tu as fumé ?',
-    lead: 'Une taffe compte. Le streak repart de ce moment ; tes jours sans fumer et le protocole ne bougent pas.',
+    lead: 'Une taffe compte. Un écart coûte son jour sans fumer, pas ton streak. Trois jours de suite avec un écart font une rechute.',
     dateLabel: 'Quand',
+    countLabel: 'Cigarettes',
+    fewer: 'Une de moins',
+    more: 'Une de plus',
+    relapseTitle: 'Ce sera une rechute',
+    relapseCost:
+      'Trois jours de suite avec un écart : le streak repartira de ce moment. Tes jours sans fumer et le protocole restent.',
     confirm: 'Oui, noter',
     cancel: 'Annuler',
     future: 'Ce moment n’est pas encore arrivé.',
     'before-quit-moment': 'C’est avant ton arrêt : rien à noter.',
+    'invalid-count': 'Indique au moins une cigarette.',
     invalid: 'Indique une date et une heure complètes.',
+    /** How long since the last cigarette, shown after a slip. */
+    lastCigarette: (ago: string) => `Dernière cigarette il y a ${ago}.`,
+    /** A duration to the hour past a day, to the minute below one. */
+    ago: (days: number, hours: number, minutes: number) => {
+      if (days > 0) return `${days}\u00a0j ${hours}\u00a0h`
+      if (hours > 0) return `${hours}\u00a0h ${minutes}\u00a0min`
+      return minutes > 0 ? `${minutes}\u00a0min` : 'moins d’une minute'
+    },
+    /** The open run of lapse days, while it is still short of a relapse. */
+    lapseDays: (days: number) =>
+      days <= 1
+        ? 'Un jour avec un écart. Trois jours de suite font une rechute.'
+        : 'Deux jours de suite avec un écart. Un troisième ferait une rechute.',
   },
+
   protocol: {
     title: 'Protocole',
     stepOf: (number: number, count: number) => `Étape ${number} / ${count}`,

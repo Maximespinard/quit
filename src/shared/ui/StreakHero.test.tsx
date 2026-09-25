@@ -5,13 +5,13 @@ it('reads the full day count and pads the clock', () => {
   render(
     <StreakHero
       duration={{ days: 12, hours: 7, minutes: 4, seconds: 9 }}
-      daysLabel="jours d’affilée"
-      regionLabel="Temps sans fumer"
+      daysLabel="jours de streak"
+      regionLabel="Streak"
       brand="quit"
       context="Étape 1 · 21 mg"
     />,
   )
 
-  expect(screen.getByRole('region', { name: 'Temps sans fumer' })).toHaveTextContent('12')
+  expect(screen.getByRole('region', { name: 'Streak' })).toHaveTextContent('12')
   expect(screen.getByText('07:04:09')).toBeInTheDocument()
 })

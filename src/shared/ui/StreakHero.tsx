@@ -7,7 +7,7 @@ import { HeroBackdrop } from './HeroBackdrop'
 type StreakHeroProps = {
   /** The streak, split into whole days and the hours, minutes and seconds past them. */
   duration: SplitDuration
-  /** Copy for the figure, e.g. "jours d’affilée". Carries its own plural. */
+  /** Copy for the figure, e.g. "jours de streak". Carries its own plural. */
   daysLabel: string
   /** Stable name for the region, independent of the figure's plural. */
   regionLabel: string

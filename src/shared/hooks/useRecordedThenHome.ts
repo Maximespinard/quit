@@ -4,7 +4,7 @@ import { useJournalSource } from '@/shared/hooks/useJournalSource'
 import { type AppSearch, validateAppSearch } from '@/shared/utils/app-search'
 
 /** The history flags a screen sets to have home confirm what it just recorded. */
-export type RecordedNotice = 'cravingRecorded' | 'patchRecorded'
+export type RecordedNotice = 'cravingRecorded' | 'patchRecorded' | 'lapseRecorded'
 
 /**
  * Commits the journal holding a newly recorded fact, then returns home, where `notice`

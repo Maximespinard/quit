@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useLocation } from '@tanstack/react-router'
 import { CravingLauncher } from '@/features/craving/components/CravingLauncher'
 import { SandboxEntry } from '@/features/debug/components/SandboxEntry'
+import { SlipNote } from '@/features/lapse/components/SlipNote'
 import { DayPatchCard } from '@/features/patch/components/DayPatchCard'
 import { ProtocolSummary } from '@/features/protocol/components/ProtocolSummary'
 import { protocolContext } from '@/features/protocol/utils/protocol-context'
@@ -49,6 +50,10 @@ function HomePage() {
               <StreakTotals
                 smokeFreeDays={derived.smokeFreeDays}
                 personalBest={derived.personalBest}
+              />
+              <SlipNote
+                lastCigarette={derived.lastCigarette}
+                lapseDaysInARow={derived.lapseDaysInARow}
               />
               {derived.patch.status === 'over' ? null : (
                 <DayPatchCard

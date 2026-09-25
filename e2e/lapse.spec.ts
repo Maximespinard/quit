@@ -9,66 +9,110 @@ const tap = (page: Page, name: string) => page.getByRole('button', { name, exact
 const totals = (page: Page) => page.getByRole('region', { name: 'Ce qui reste acquis' })
 const protocolSummary = (page: Page) => page.getByRole('region', { name: 'Protocole' })
 
-/** A sandbox whose quit moment is `NOW`, its clock then moved three days on. */
-const threeDaysIn = async (page: Page) => {
-  await page.goto(sandboxAt(NOW))
-  await tap(page, 'Maintenant')
+/** Moves the sandbox clock on by whole days from the debug panel. */
+const daysLater = async (page: Page, days: number) => {
   await tap(page, 'Bac à sable')
-  for (let day = 0; day < 3; day += 1) await tap(page, '+1 j')
+  for (let day = 0; day < days; day += 1) await tap(page, '+1 j')
   await tap(page, 'Fermer')
-  await expectStreak(page, 3, '00:00:00')
 }
 
-test('a declared lapse restarts the streak, keeps the total and shows the personal best', async ({
-  page,
-}) => {
-  await threeDaysIn(page)
-  // Quit mid-day on day 1, now mid-day on day 4: days 2 and 3 are whole and over.
-  await expect(totals(page)).toMatchAriaSnapshot(`
-    - term: Jours sans fumer
-    - definition: "2"
-  `)
-  await expect(totals(page).getByText('Plus long streak')).toHaveCount(0)
-  await expect(protocolSummary(page)).toContainText('Jour 4 sur 28')
+/** A sandbox whose quit moment is `NOW`, its clock then moved `days` on. */
+const daysIn = async (page: Page, days: number) => {
+  await page.goto(sandboxAt(NOW))
+  await tap(page, 'Maintenant')
+  await daysLater(page, days)
+  await expectStreak(page, days, '00:00:00')
+}
 
+const declareLapse = async (page: Page) => {
   await page.getByRole('link', { name: 'J’ai fumé' }).click()
   await expect(page.getByRole('heading', { name: 'Tu as fumé ?' })).toBeVisible()
   await tap(page, 'Oui, noter')
-
   await expect(page.getByRole('status').filter({ hasText: 'C’est noté.' })).toBeVisible()
-  await expectStreak(page, 0, '00:00:00')
-  await expect(totals(page)).toMatchAriaSnapshot(`
-    - term: Jours sans fumer
-    - definition: "2"
-    - term: Plus long streak
-    - definition: 3 j 00 h
-  `)
+}
+
+const expectSmokeFreeDays = (page: Page, days: number) =>
+  expect(totals(page).getByRole('definition').first()).toHaveText(String(days))
+
+test('a slip keeps the streak running and costs its smoke-free day', async ({ page }) => {
+  // Quit mid-day on day 1, now mid-day on day 4: days 2 and 3 are whole and over.
+  await daysIn(page, 3)
+  await expectSmokeFreeDays(page, 2)
   await expect(protocolSummary(page)).toContainText('Jour 4 sur 28')
+
+  await declareLapse(page)
+
+  await expectStreak(page, 3, '00:00:00')
+  await expect(page.getByText('Dernière cigarette il y a moins d’une minute.')).toBeVisible()
+  await expect(page.getByText('Un jour avec un écart.', { exact: false })).toBeVisible()
+  await expect(totals(page).getByText('Plus long streak')).toHaveCount(0)
+  await expect(protocolSummary(page)).toContainText('Jour 4 sur 28')
+
+  // Day 4 is over: it held the lapse, so the total stays at 2 instead of 3.
+  await daysLater(page, 1)
+  await expectStreak(page, 4, '00:00:00')
+  await expectSmokeFreeDays(page, 2)
+  await expect(page.getByText('Dernière cigarette il y a 1 j 0 h.')).toBeVisible()
 })
 
-test('a backdated lapse restarts the streak from its own time', async ({ page }) => {
-  await threeDaysIn(page)
+test('three lapse days in a row are a relapse, announced before it lands', async ({ page }) => {
+  await daysIn(page, 5)
+  await expectSmokeFreeDays(page, 4)
+
+  await declareLapse(page)
+  await daysLater(page, 1)
+  await declareLapse(page)
+  await expect(page.getByText('Deux jours de suite avec un écart.', { exact: false })).toBeVisible()
+  await expectStreak(page, 6, '00:00:00')
+  await daysLater(page, 1)
 
   await page.getByRole('link', { name: 'J’ai fumé' }).click()
-  // The sandbox clock sits three days after `NOW`; the field reads local time.
-  const twoHoursEarlier = new Date(NOW + 3 * DAY - 2 * HOUR)
+  await expect(page.getByText('Ce sera une rechute')).toBeVisible()
+  await tap(page, 'Oui, noter')
+
+  await expectStreak(page, 0, '00:00:00')
+  await expect(page.getByText(/Dernière cigarette/)).toHaveCount(0)
+  await expectSmokeFreeDays(page, 4)
+  await expect(totals(page)).toMatchAriaSnapshot(`
+    - term: Jours sans fumer
+    - definition: "4"
+    - term: Plus long streak
+    - definition: 7 j 00 h
+  `)
+  await expect(protocolSummary(page)).toContainText('Jour 8 sur 28')
+})
+
+test('a backdated lapse filling the gap between two lapse days makes a relapse', async ({
+  page,
+}) => {
+  await daysIn(page, 3)
+  await declareLapse(page)
+  await daysLater(page, 2)
+  await declareLapse(page)
+  await expectStreak(page, 5, '00:00:00')
+
+  // Lapses on day 4 and day 6 (now): the day in between completes the run.
+  await page.getByRole('link', { name: 'J’ai fumé' }).click()
+  const dayBefore = new Date(NOW + 4 * DAY)
   const local = (part: number) => String(part).padStart(2, '0')
   await page
     .getByLabel('Quand')
     .fill(
-      `${twoHoursEarlier.getFullYear()}-${local(twoHoursEarlier.getMonth() + 1)}-${local(twoHoursEarlier.getDate())}T${local(twoHoursEarlier.getHours())}:${local(twoHoursEarlier.getMinutes())}`,
+      `${dayBefore.getFullYear()}-${local(dayBefore.getMonth() + 1)}-${local(dayBefore.getDate())}T${local(dayBefore.getHours())}:${local(dayBefore.getMinutes())}`,
     )
+  await expect(page.getByText('Ce sera une rechute')).toBeVisible()
   await tap(page, 'Oui, noter')
 
-  await expectStreak(page, 0, '02:00:00')
+  // The streak restarts from the run's latest lapse, today's, not from the backdated one.
+  await expectStreak(page, 0, '00:00:00')
 })
 
 test('leaving the lapse screen records nothing', async ({ page }) => {
-  await threeDaysIn(page)
+  await daysIn(page, 3)
 
   await page.getByRole('link', { name: 'J’ai fumé' }).click()
   await page.getByRole('link', { name: 'Annuler' }).click()
 
   await expectStreak(page, 3, '00:00:00')
-  await expect(totals(page).getByText('Plus long streak')).toHaveCount(0)
+  await expect(page.getByText(/Dernière cigarette/)).toHaveCount(0)
 })
