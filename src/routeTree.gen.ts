@@ -14,6 +14,7 @@ import { Route as DesignRouteImport } from './routes/design'
 import { Route as ProtocolRouteImport } from './routes/protocol'
 import { Route as CravingPastRouteImport } from './routes/craving/past'
 import { Route as CravingTimerRouteImport } from './routes/craving/timer'
+import { Route as PatchLogRouteImport } from './routes/patch/log'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +41,11 @@ const CravingTimerRoute = CravingTimerRouteImport.update({
   path: '/craving/timer',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PatchLogRoute = PatchLogRouteImport.update({
+  id: '/patch/log',
+  path: '/patch/log',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/protocol': typeof ProtocolRoute
   '/craving/past': typeof CravingPastRoute
   '/craving/timer': typeof CravingTimerRoute
+  '/patch/log': typeof PatchLogRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/protocol': typeof ProtocolRoute
   '/craving/past': typeof CravingPastRoute
   '/craving/timer': typeof CravingTimerRoute
+  '/patch/log': typeof PatchLogRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,12 +70,25 @@ export interface FileRoutesById {
   '/protocol': typeof ProtocolRoute
   '/craving/past': typeof CravingPastRoute
   '/craving/timer': typeof CravingTimerRoute
+  '/patch/log': typeof PatchLogRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/design' | '/protocol' | '/craving/past' | '/craving/timer'
+  fullPaths:
+    | '/'
+    | '/design'
+    | '/protocol'
+    | '/craving/past'
+    | '/craving/timer'
+    | '/patch/log'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/design' | '/protocol' | '/craving/past' | '/craving/timer'
+  to:
+    | '/'
+    | '/design'
+    | '/protocol'
+    | '/craving/past'
+    | '/craving/timer'
+    | '/patch/log'
   id:
     | '__root__'
     | '/'
@@ -75,6 +96,7 @@ export interface FileRouteTypes {
     | '/protocol'
     | '/craving/past'
     | '/craving/timer'
+    | '/patch/log'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -83,6 +105,7 @@ export interface RootRouteChildren {
   ProtocolRoute: typeof ProtocolRoute
   CravingPastRoute: typeof CravingPastRoute
   CravingTimerRoute: typeof CravingTimerRoute
+  PatchLogRoute: typeof PatchLogRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -122,6 +145,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CravingTimerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/patch/log': {
+      id: '/patch/log'
+      path: '/patch/log'
+      fullPath: '/patch/log'
+      preLoaderRoute: typeof PatchLogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -131,6 +161,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProtocolRoute: ProtocolRoute,
   CravingPastRoute: CravingPastRoute,
   CravingTimerRoute: CravingTimerRoute,
+  PatchLogRoute: PatchLogRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

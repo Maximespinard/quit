@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useLocation } from '@tanstack/react-router'
 import { CravingLauncher } from '@/features/craving/components/CravingLauncher'
 import { SandboxEntry } from '@/features/debug/components/SandboxEntry'
+import { PatchTodayCard } from '@/features/patch/components/PatchTodayCard'
 import { ProtocolSummary } from '@/features/protocol/components/ProtocolSummary'
 import { protocolContext } from '@/features/protocol/utils/protocol-context'
 import { QuitMomentPrompt } from '@/features/quit-moment/components/QuitMomentPrompt'
@@ -20,7 +21,7 @@ export const Route = createFileRoute('/')({
 function HomePage() {
   const { state, commit, now } = useJournalSource()
   const appSearch = validateAppSearch(Route.useSearch())
-  const cravingRecorded = useLocation({ select: (location) => location.state.cravingRecorded })
+  const { cravingRecorded, patchRecorded } = useLocation({ select: (location) => location.state })
   const brand = <SandboxEntry>{strings.app.name}</SandboxEntry>
 
   return (
@@ -42,9 +43,22 @@ function HomePage() {
               brand={brand}
               context={protocolContext(derived.protocol)}
             >
+              {derived.patch.status === 'over' ? null : (
+                <PatchTodayCard
+                  journal={journal}
+                  patch={derived.patch}
+                  now={now}
+                  onRecorded={commit}
+                />
+              )}
               <ProtocolSummary position={derived.protocol} />
             </StreakScreen>
             <div className="mx-auto flex max-w-md flex-col items-start gap-3 px-safe pt-5">
+              {patchRecorded === true ? (
+                <p role="status" className="text-body text-ink-soft">
+                  {strings.patch.recorded}
+                </p>
+              ) : null}
               {cravingRecorded === true ? (
                 <p role="status" className="text-body text-ink-soft">
                   {strings.craving.recorded}
