@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router'
-import { Check } from 'lucide-react'
 import { useId, useState } from 'react'
 import {
   type RecordPatchApplicationResult,
@@ -23,11 +22,13 @@ type PatchTodayCardProps = {
   patch: Exclude<PatchToday, { status: 'over' }>
   /** Injected clock: a one-tap log records at this instant. */
   now: number
+  /** Set on arrival from the form: the header confirms it, even for a day other than today. */
+  recorded: boolean
   onRecorded: (journal: Journal) => void
 }
 
 /** Home screen block: whether today's patch is on, and the one tap that logs it. */
-export function PatchTodayCard({ journal, patch, now, onRecorded }: PatchTodayCardProps) {
+export function PatchTodayCard({ journal, patch, now, recorded, onRecorded }: PatchTodayCardProps) {
   const titleId = useId()
   // Reachable in the sandbox only: a clock moved before the quit moment refuses the tap.
   const [refusal, setRefusal] = useState<Refusal | null>(null)
@@ -40,26 +41,29 @@ export function PatchTodayCard({ journal, patch, now, onRecorded }: PatchTodayCa
 
   return (
     <section aria-labelledby={titleId} className="flex flex-col gap-2.5">
-      <h2 id={titleId} className="font-semibold text-body text-ink">
-        {copy.title}
-      </h2>
+      <div className="flex items-baseline justify-between text-label">
+        <h2 id={titleId} className="font-semibold text-body text-ink">
+          {copy.title}
+        </h2>
+        {recorded ? (
+          <p role="status" className="text-ink-soft">
+            {copy.recorded}
+          </p>
+        ) : null}
+      </div>
 
       <div className="flex flex-col gap-3 rounded-card bg-surface p-4">
         {patch.status === 'logged' ? (
-          <div className="flex items-center gap-3">
-            <span className="grid size-9 shrink-0 place-items-center rounded-full bg-action text-page">
-              <Check className="size-5" strokeWidth={2} aria-hidden="true" />
+          // The protocol card's shape: the figure that changes, then its detail.
+          <p className="flex flex-col gap-1">
+            <span className="text-figure tabular-nums">{copy.logged(formatTime(patch.at))}</span>
+            <span className="text-ink-dim text-label">
+              {copy.loggedDetail(formatDose(patch.doseMg))}
             </span>
-            <p className="flex flex-col">
-              <span className="font-semibold text-body">{copy.logged}</span>
-              <span className="text-ink-dim text-label tabular-nums">
-                {copy.loggedDetail(formatTime(patch.at), formatDose(patch.doseMg))}
-              </span>
-            </p>
-          </div>
+          </p>
         ) : (
           <>
-            <p className="text-body text-ink-soft">{copy.due}</p>
+            <p className="font-semibold text-body">{copy.due}</p>
             <Button size="lg" onClick={() => applyNow(patch.doseMg)}>
               {copy.apply(formatDose(patch.doseMg))}
             </Button>
@@ -73,10 +77,11 @@ export function PatchTodayCard({ journal, patch, now, onRecorded }: PatchTodayCa
         <Link
           to="/patch/new"
           search={keepSearch}
-          // Text aligned with the card's; on the surface the ghost's own press fill would not show.
+          // Text aligned with the card's edge and its bottom inset, the 44px target kept; on the
+          // surface the ghost's own press fill would not show.
           className={cn(
             buttonVariants({ variant: 'ghost' }),
-            '-ml-4 self-start active:bg-surface-locked',
+            '-mb-3 -ml-4 self-start active:bg-surface-locked',
           )}
         >
           {copy.other}
