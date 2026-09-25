@@ -61,9 +61,17 @@ export function CravingForm({ tagOptions, onSubmit, children }: CravingFormProps
       {intensity !== null ? (
         <CravingTagPicker offered={tagOptions} value={tags} onValueChange={setTags} />
       ) : null}
-      <Button type="submit" size="lg" disabled={intensity === null || recorded}>
-        {copy.submit}
-      </Button>
+      {/* Stuck to the thumb zone: however many tags push it down, recording stays one tap away. */}
+      <div className="sticky bottom-0 bg-page pt-3 pb-safe-4">
+        <Button
+          type="submit"
+          size="lg"
+          className="w-full"
+          disabled={intensity === null || recorded}
+        >
+          {copy.submit}
+        </Button>
+      </div>
     </form>
   )
 }

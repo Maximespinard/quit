@@ -61,7 +61,7 @@ export function CravingTimerScreen({
 
   if (!heldToEnd) return <AppShell>{rating}</AppShell>
   return (
-    <div className="mx-auto max-w-md pb-safe-4">
+    <div className="mx-auto max-w-md">
       <CravingHeld />
       <div className="px-safe">{rating}</div>
     </div>
