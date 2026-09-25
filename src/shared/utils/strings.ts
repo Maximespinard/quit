@@ -32,6 +32,23 @@ export const strings = {
       hint: '1 légère · 2 forte · 3 très forte',
       submit: 'Enregistrer l’envie',
     },
+    tags: {
+      label: 'La situation',
+      hint: 'Facultatif · plusieurs possibles',
+      defaults: {
+        coffee: 'Café',
+        meal: 'Repas',
+        stress: 'Stress',
+        boredom: 'Ennui',
+        break: 'Pause',
+        'evening-out': 'Soirée',
+        youtube: 'YouTube',
+        'after-exercise': 'Après le sport',
+      },
+      customLabel: 'Une autre situation',
+      customPlaceholder: 'Ex. voiture',
+      add: 'Ajouter',
+    },
     past: {
       title: 'Une envie passée',
       lead: 'Sans minuteur : quand elle est arrivée, et sa force.',

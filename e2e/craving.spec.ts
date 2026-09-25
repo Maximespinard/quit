@@ -72,3 +72,65 @@ test('a reload mid-timer keeps counting from the start instant', async ({ page }
 
   await expect(timer(page)).toHaveText(/^3:5\d$/)
 })
+
+/** The cravings as stored on the device: no screen lists their tags yet. */
+const storedCravingTags = (page: Page) =>
+  page.evaluate(
+    () =>
+      new Promise<unknown>((resolve, reject) => {
+        const request = indexedDB.open('quit')
+        request.onerror = () => reject(request.error)
+        request.onsuccess = () => {
+          const read = request.result.transaction('journal').objectStore('journal').get('current')
+          read.onerror = () => reject(read.error)
+          read.onsuccess = () => {
+            const facts = (read.result as { facts: { type: string; tags?: string[] }[] }).facts
+            resolve(facts.filter((fact) => fact.type === 'craving').map((fact) => fact.tags))
+            request.result.close()
+          }
+        }
+      }),
+  )
+
+// Real journal: the typed tag must come back from IndexedDB after a reload.
+test('a craving is tagged, and the typed tag is offered again on the next one', async ({
+  page,
+}) => {
+  await page.goto('/')
+  await tap(page, 'Maintenant')
+
+  await tap(page, 'Envie')
+  await tap(page, 'Arrêter')
+  await expect(page.getByRole('group', { name: 'La situation' })).toHaveCount(0)
+  await tap(page, '2')
+  await tap(page, 'Café')
+  await page.getByLabel('Une autre situation').fill('Voiture')
+  await tap(page, 'Ajouter')
+  await tap(page, 'Enregistrer l’envie')
+  await expect(recordedNotice(page)).toBeVisible()
+
+  expect(await storedCravingTags(page)).toEqual([['coffee', 'Voiture']])
+
+  await page.reload()
+  await tap(page, 'Envie')
+  await tap(page, 'Arrêter')
+  await tap(page, '1')
+  await expect(page.getByRole('button', { name: 'Voiture', exact: true })).toHaveAttribute(
+    'aria-pressed',
+    'false',
+  )
+
+  // Closing without a tag is the one tap it always was.
+  await tap(page, 'Enregistrer l’envie')
+  await expect(recordedNotice(page)).toBeVisible()
+  expect(await storedCravingTags(page)).toEqual([['coffee', 'Voiture'], []])
+
+  // Words typed but never added still count once the craving is recorded.
+  await tap(page, 'Envie')
+  await tap(page, 'Arrêter')
+  await tap(page, '3')
+  await page.getByLabel('Une autre situation').fill('Métro')
+  await tap(page, 'Enregistrer l’envie')
+  await expect(recordedNotice(page)).toBeVisible()
+  expect(await storedCravingTags(page)).toEqual([['coffee', 'Voiture'], [], ['Métro']])
+})

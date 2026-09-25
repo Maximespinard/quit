@@ -3,24 +3,32 @@ import { CRAVING_INTENSITIES, type CravingIntensity } from '@/shared/domain/fact
 import { Button } from '@/shared/ui/base/button'
 import { ToggleGroup, ToggleGroupItem } from '@/shared/ui/base/toggle-group'
 import { strings } from '@/shared/utils/strings'
+import type { CravingTagOption } from '../domain/craving-tags'
+import { CravingTagPicker } from './CravingTagPicker'
 
-type IntensityFormProps = {
+type CravingFormProps = {
+  /** The tags to offer once the intensity is picked. */
+  tagOptions: readonly CravingTagOption[]
   /** Returns whether the craving was recorded: once it is, the form locks against a second tap. */
-  onSubmit: (intensity: CravingIntensity) => boolean
+  onSubmit: (intensity: CravingIntensity, tags: readonly string[]) => boolean
   /** Extra fields shown above the intensity, e.g. the backdated moment. */
   children?: ReactNode
 }
 
-/** Rates a craving 1–3 and submits it. No intensity is preselected: the user picks one. */
-export function IntensityForm({ onSubmit, children }: IntensityFormProps) {
+/**
+ * Rates a craving 1–3, then offers its tags, and submits it. No intensity is preselected: the
+ * user picks one. Tags appear only once it is picked, and submitting without any is fine.
+ */
+export function CravingForm({ tagOptions, onSubmit, children }: CravingFormProps) {
   const hintId = useId()
   const [intensity, setIntensity] = useState<CravingIntensity | null>(null)
+  const [tags, setTags] = useState<readonly string[]>([])
   const [recorded, setRecorded] = useState(false)
   const copy = strings.craving.intensity
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (intensity !== null && !recorded) setRecorded(onSubmit(intensity))
+    if (intensity !== null && !recorded) setRecorded(onSubmit(intensity, tags))
   }
 
   return (
@@ -50,6 +58,9 @@ export function IntensityForm({ onSubmit, children }: IntensityFormProps) {
           {copy.hint}
         </p>
       </div>
+      {intensity !== null ? (
+        <CravingTagPicker offered={tagOptions} value={tags} onValueChange={setTags} />
+      ) : null}
       <Button type="submit" size="lg" disabled={intensity === null || recorded}>
         {copy.submit}
       </Button>

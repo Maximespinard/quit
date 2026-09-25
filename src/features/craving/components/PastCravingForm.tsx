@@ -3,7 +3,8 @@ import { type CravingIntensity, recordCraving } from '@/shared/domain/facts/crav
 import type { Journal } from '@/shared/domain/journal'
 import { fromDatetimeLocal, toDatetimeLocal } from '@/shared/utils/datetime-local'
 import { strings } from '@/shared/utils/strings'
-import { IntensityForm } from './IntensityForm'
+import { tagOptions } from '../utils/tag-options'
+import { CravingForm } from './CravingForm'
 
 type PastCravingFormProps = {
   journal: Journal
@@ -20,13 +21,13 @@ export function PastCravingForm({ journal, now, onRecorded }: PastCravingFormPro
   const [error, setError] = useState<'future' | 'invalid' | null>(null)
   const copy = strings.craving.past
 
-  const record = (intensity: CravingIntensity) => {
+  const record = (intensity: CravingIntensity, tags: readonly string[]) => {
     const at = fromDatetimeLocal(value)
     if (at === null) {
       setError('invalid')
       return false
     }
-    const result = recordCraving(journal, { at, intensity, heldToEnd: false }, now)
+    const result = recordCraving(journal, { at, intensity, heldToEnd: false, tags }, now)
     if (result.ok) onRecorded(result.journal)
     else setError(result.reason)
     return result.ok
@@ -38,7 +39,7 @@ export function PastCravingForm({ journal, now, onRecorded }: PastCravingFormPro
         <h2 className="text-title">{copy.title}</h2>
         <p className="text-body text-ink-soft">{copy.lead}</p>
       </div>
-      <IntensityForm onSubmit={record}>
+      <CravingForm tagOptions={tagOptions(journal)} onSubmit={record}>
         <div className="flex flex-col gap-2">
           <label htmlFor={inputId} className="text-label">
             {copy.dateLabel}
@@ -62,7 +63,7 @@ export function PastCravingForm({ journal, now, onRecorded }: PastCravingFormPro
             </p>
           ) : null}
         </div>
-      </IntensityForm>
+      </CravingForm>
     </section>
   )
 }

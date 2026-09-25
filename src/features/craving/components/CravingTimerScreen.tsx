@@ -3,9 +3,10 @@ import type { Journal } from '@/shared/domain/journal'
 import { AppShell } from '@/shared/ui/app-shell'
 import { strings } from '@/shared/utils/strings'
 import { cravingTimer } from '../domain/craving-timer'
+import { tagOptions } from '../utils/tag-options'
+import { CravingForm } from './CravingForm'
 import { CravingHeld } from './CravingHeld'
 import { CravingTimerRunning } from './CravingTimerRunning'
-import { IntensityForm } from './IntensityForm'
 
 type CravingTimerScreenProps = {
   journal: Journal
@@ -19,7 +20,7 @@ type CravingTimerScreenProps = {
 }
 
 /**
- * The craving timer: counts down, then asks the intensity and records the craving.
+ * The craving timer: counts down, then asks the intensity and the tags, and records the craving.
  * Held to the end → celebration first; stopped early → recorded all the same, unmarked.
  */
 export function CravingTimerScreen({
@@ -41,8 +42,8 @@ export function CravingTimerScreen({
     )
   }
 
-  const record = (intensity: CravingIntensity) => {
-    const result = recordCraving(journal, { at: startedAt, intensity, heldToEnd }, now)
+  const record = (intensity: CravingIntensity, tags: readonly string[]) => {
+    const result = recordCraving(journal, { at: startedAt, intensity, heldToEnd, tags }, now)
     if (result.ok) onRecorded(result.journal)
     return result.ok
   }
@@ -54,7 +55,7 @@ export function CravingTimerScreen({
         <h2 className="text-title">{outcome.title}</h2>
         <p className="text-body text-ink-soft">{outcome.lead}</p>
       </div>
-      <IntensityForm onSubmit={record} />
+      <CravingForm tagOptions={tagOptions(journal)} onSubmit={record} />
     </section>
   )
 
