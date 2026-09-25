@@ -19,6 +19,8 @@ describe('derive', () => {
     expect(derive(emptyJournal, NOW)).toEqual({
       quitMoment: null,
       streak: null,
+      personalBest: null,
+      smokeFreeDays: null,
       protocol: null,
       patch: null,
     })
@@ -287,5 +289,176 @@ describe('derive — the patch application of the protocol day', () => {
     ).toEqual({
       status: 'over',
     })
+  })
+})
+
+/** A local wall-clock time; `month` is 1-based. The suite runs in Europe/Paris (vite.config). */
+const local = (month: number, day: number, hour = 0, minute = 0, year = 2026) =>
+  new Date(year, month - 1, day, hour, minute).getTime()
+
+const journalOf = (quitMoment: number, lapses: readonly number[] = []): Journal => ({
+  protocol: defaultProtocol,
+  facts: [
+    { type: 'quit-moment', at: quitMoment },
+    ...lapses.map((at) => ({ type: 'lapse' as const, at })),
+  ],
+})
+
+describe('derive — streak after lapses', () => {
+  it('counts the streak from a lapse', () => {
+    const journal = journalOf(NOW - 10 * DAY, [NOW - 3 * HOUR])
+
+    expect(derive(journal, NOW).streak).toEqual({ elapsedMs: 3 * HOUR })
+  })
+
+  it('counts the streak from the latest lapse, whatever the order they were recorded in', () => {
+    const journal = journalOf(NOW - 10 * DAY, [NOW - 2 * DAY, NOW - 5 * HOUR, NOW - 6 * DAY])
+
+    expect(derive(journal, NOW).streak).toEqual({ elapsedMs: 5 * HOUR })
+  })
+
+  it('ignores a lapse before the quit moment, left behind by a corrected quit moment', () => {
+    const journal: Journal = {
+      protocol: defaultProtocol,
+      facts: [
+        { type: 'quit-moment', at: NOW - 10 * DAY },
+        { type: 'lapse', at: NOW - 8 * DAY },
+        { type: 'quit-moment', at: NOW - 4 * DAY },
+      ],
+    }
+
+    expect(derive(journal, NOW)).toMatchObject({
+      streak: { elapsedMs: 4 * DAY },
+      personalBest: null,
+    })
+  })
+
+  it('ignores a lapse that has not happened yet on a clock moved back', () => {
+    const journal = journalOf(NOW - 10 * DAY, [NOW + HOUR])
+
+    expect(derive(journal, NOW)).toMatchObject({
+      streak: { elapsedMs: 10 * DAY },
+      personalBest: null,
+    })
+  })
+
+  it('leaves the protocol position exactly where it was', () => {
+    const quitMoment = NOW - 30 * DAY
+    const before = derive(journalOf(quitMoment), NOW).protocol
+    const after = derive(journalOf(quitMoment, [NOW - DAY, NOW - HOUR]), NOW).protocol
+
+    expect(after).toEqual(before)
+  })
+})
+
+describe('derive — personal best', () => {
+  it('is hidden while there is no lapse', () => {
+    expect(derive(journalOf(NOW - 40 * DAY), NOW).personalBest).toBeNull()
+  })
+
+  it('is the longest streak held before a lapse', () => {
+    const quitMoment = NOW - 20 * DAY
+    const journal = journalOf(quitMoment, [quitMoment + 9 * DAY, quitMoment + 12 * DAY])
+
+    expect(derive(journal, NOW).personalBest).toEqual({ elapsedMs: 9 * DAY })
+  })
+
+  it('is the current streak once it runs longer than every earlier one', () => {
+    const journal = journalOf(NOW - 10 * DAY, [NOW - 7 * DAY])
+
+    expect(derive(journal, NOW).personalBest).toEqual({ elapsedMs: 7 * DAY })
+  })
+
+  it('exists as soon as a lapse does, even one at the quit moment', () => {
+    const journal = journalOf(NOW - HOUR, [NOW - HOUR])
+
+    expect(derive(journal, NOW).personalBest).toEqual({ elapsedMs: HOUR })
+  })
+})
+
+describe('derive — smoke-free days', () => {
+  const smokeFreeDays = (quitMoment: number, now: number, lapses: readonly number[] = []) =>
+    derive(journalOf(quitMoment, lapses), now).smokeFreeDays
+
+  it('counts nothing from an empty journal', () => {
+    expect(derive(emptyJournal, NOW).smokeFreeDays).toBeNull()
+  })
+
+  it('counts each whole local day after the quit moment, once it is over', () => {
+    // Quit on day 1 at 20:00: day 1 had smoke before the quit moment, day 4 is not over.
+    expect(smokeFreeDays(local(1, 1, 20), local(1, 4, 10))).toBe(2)
+  })
+
+  it('counts the quit day when the quit moment is its very first instant', () => {
+    expect(smokeFreeDays(local(1, 1), local(1, 2))).toBe(1)
+    expect(smokeFreeDays(local(1, 1, 0, 1), local(1, 2))).toBe(0)
+  })
+
+  it('adds a day exactly at midnight, not a millisecond before', () => {
+    const quitMoment = local(1, 1, 20)
+
+    expect(smokeFreeDays(quitMoment, local(1, 4) - 1)).toBe(1)
+    expect(smokeFreeDays(quitMoment, local(1, 4))).toBe(2)
+  })
+
+  it('does not count day 12 when a lapse happened on it at 23:00', () => {
+    const quitMoment = local(1, 1, 20)
+    const now = local(1, 20, 10)
+
+    expect(smokeFreeDays(quitMoment, now)).toBe(18)
+    expect(smokeFreeDays(quitMoment, now, [local(1, 12, 23)])).toBe(17)
+  })
+
+  it('puts a lapse at midnight on the day it opens', () => {
+    const quitMoment = local(1, 1, 20)
+    const now = local(1, 14)
+
+    // Day 12 stays smoke-free; day 13 does not.
+    expect(smokeFreeDays(quitMoment, now, [local(1, 13)])).toBe(11)
+    expect(smokeFreeDays(quitMoment, local(1, 13), [local(1, 13)])).toBe(11)
+  })
+
+  it('removes a day once however many lapses it holds', () => {
+    const lapses = [local(1, 12, 9), local(1, 12, 23)]
+
+    expect(smokeFreeDays(local(1, 1, 20), local(1, 20, 10), lapses)).toBe(17)
+  })
+
+  it('takes nothing more away for a lapse on a quit day that never counted', () => {
+    expect(smokeFreeDays(local(1, 1, 8), local(1, 5, 10), [local(1, 1, 21)])).toBe(3)
+  })
+
+  it('takes the quit day away when it had counted', () => {
+    expect(smokeFreeDays(local(1, 1), local(1, 3))).toBe(2)
+    expect(smokeFreeDays(local(1, 1), local(1, 3), [local(1, 1, 21)])).toBe(1)
+  })
+
+  it('keeps the total when the streak restarts', () => {
+    const quitMoment = local(1, 1, 20)
+    const now = local(1, 20, 10)
+
+    expect(smokeFreeDays(quitMoment, now, [now - HOUR])).toBe(18)
+  })
+
+  it('counts nothing while now is still before the quit moment', () => {
+    expect(smokeFreeDays(local(1, 5), local(1, 3))).toBe(0)
+  })
+
+  it('follows the calendar across the spring daylight-saving change (23 h day)', () => {
+    // 29 March 2026: clocks go from 02:00 to 03:00 in Europe/Paris.
+    const quitMoment = local(3, 27, 20)
+
+    expect(smokeFreeDays(quitMoment, local(3, 30))).toBe(2)
+    expect(smokeFreeDays(quitMoment, local(3, 31, 10), [local(3, 29, 23, 30)])).toBe(2)
+    expect(smokeFreeDays(quitMoment, local(3, 31, 10), [local(3, 30, 0, 30)])).toBe(2)
+  })
+
+  it('follows the calendar across the autumn daylight-saving change (25 h day)', () => {
+    // 25 October 2026: clocks go from 03:00 back to 02:00 in Europe/Paris.
+    const quitMoment = local(10, 23, 20)
+
+    expect(smokeFreeDays(quitMoment, local(10, 26) - 1)).toBe(1)
+    expect(smokeFreeDays(quitMoment, local(10, 26))).toBe(2)
+    expect(smokeFreeDays(quitMoment, local(10, 27, 10), [local(10, 25, 23, 30)])).toBe(2)
   })
 })
