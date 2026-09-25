@@ -93,7 +93,7 @@ export const strings = {
     more: 'Une de plus',
     relapseTitle: 'Ce sera une rechute',
     relapseCost:
-      'Trois jours de suite avec un écart : le streak repartira de ce moment. Tes jours sans fumer et le protocole restent.',
+      'Trois jours de suite avec un écart : le streak repartira du dernier écart de la série. Tes jours sans fumer et le protocole restent.',
     confirm: 'Oui, noter',
     cancel: 'Annuler',
     future: 'Ce moment n’est pas encore arrivé.',
