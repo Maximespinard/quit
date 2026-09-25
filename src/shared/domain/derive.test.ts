@@ -168,8 +168,8 @@ describe('derive — protocol position', () => {
   })
 })
 
-describe('derive — today’s patch application', () => {
-  // Local wall-clock times: "today" is the user's calendar day, midnight to midnight.
+describe('derive — the patch application of the protocol day', () => {
+  // A protocol day is a 24 h block from the quit moment (18:00 here), not a calendar day.
   const local = (day: number, hour: number, minute = 0) =>
     new Date(2026, 8, day, hour, minute).getTime()
   const QUIT = local(20, 18)
@@ -180,11 +180,11 @@ describe('derive — today’s patch application', () => {
       now,
     ).patch
 
-  it('is due with the current step’s dose while nothing is logged today', () => {
+  it('is due with the current step’s dose while nothing is logged this protocol day', () => {
     expect(patchAt(local(22, 9))).toEqual({ status: 'due', doseMg: 21 })
   })
 
-  it('is logged once a patch application is recorded today, with its time and dose', () => {
+  it('is logged once a patch application is recorded this protocol day, with its time and dose', () => {
     expect(patchAt(local(22, 9), applied(local(22, 8, 15), 14))).toEqual({
       status: 'logged',
       at: local(22, 8, 15),
@@ -192,46 +192,47 @@ describe('derive — today’s patch application', () => {
     })
   })
 
-  it('still counts a patch application put on at 00:00 today', () => {
-    expect(patchAt(local(22, 23, 59), applied(local(22, 0)))).toMatchObject({ status: 'logged' })
+  it('counts a patch application put on the minute the protocol day begins', () => {
+    expect(patchAt(local(22, 17, 59), applied(local(21, 18)))).toMatchObject({ status: 'logged' })
   })
 
-  it('does not count yesterday’s 23:59 patch application for today', () => {
-    expect(patchAt(local(22, 0), applied(local(21, 23, 59)))).toEqual({
+  it('does not count one put on a minute before the protocol day began', () => {
+    expect(patchAt(local(21, 18), applied(local(21, 17, 59)))).toEqual({
       status: 'due',
       doseMg: 21,
     })
   })
 
-  it('resets at midnight: logged at 23:59, due again at 00:00', () => {
-    const application = applied(local(22, 8))
+  it('stays logged across midnight and resets when the protocol day ends', () => {
+    const application = applied(local(21, 19))
 
-    expect(patchAt(local(22, 23, 59), application)).toMatchObject({ status: 'logged' })
-    expect(patchAt(local(23, 0), application)).toMatchObject({ status: 'due' })
+    expect(patchAt(local(22, 0, 30), application)).toMatchObject({ status: 'logged' })
+    expect(patchAt(local(22, 17, 59), application)).toMatchObject({ status: 'logged' })
+    expect(patchAt(local(22, 18), application)).toMatchObject({ status: 'due' })
   })
 
-  it('counts a patch application backdated to earlier today', () => {
+  it('counts a patch application backdated to earlier in the protocol day', () => {
     const journal = {
       facts: [{ type: 'quit-moment', at: QUIT } as const],
       protocol: defaultProtocol,
     }
-    const now = local(22, 20)
-    const backdated = recordPatchApplication(journal, { at: local(22, 7), doseMg: 21 }, now)
+    const now = local(22, 10)
+    const backdated = recordPatchApplication(journal, { at: local(21, 20), doseMg: 21 }, now)
     if (!backdated.ok) throw new Error('the backdated application should be accepted')
 
     expect(derive(backdated.journal, now).patch).toEqual({
       status: 'logged',
-      at: local(22, 7),
+      at: local(21, 20),
       doseMg: 21,
     })
   })
 
-  it('leaves today due when the backdated patch application is for another day', () => {
-    expect(patchAt(local(22, 20), applied(local(21, 7)))).toMatchObject({ status: 'due' })
+  it('leaves the protocol day due when the backdated patch application is for the one before', () => {
+    expect(patchAt(local(22, 10), applied(local(21, 7)))).toMatchObject({ status: 'due' })
   })
 
-  it('shows the latest of several patch applications logged today', () => {
-    expect(patchAt(local(22, 20), applied(local(22, 12), 14), applied(local(22, 7)))).toEqual({
+  it('shows the latest of several patch applications logged this protocol day', () => {
+    expect(patchAt(local(22, 17), applied(local(22, 12), 14), applied(local(21, 19)))).toEqual({
       status: 'logged',
       at: local(22, 12),
       doseMg: 14,
@@ -239,19 +240,18 @@ describe('derive — today’s patch application', () => {
   })
 
   it('shows the one recorded last when two patch applications share the same instant', () => {
-    expect(patchAt(local(22, 20), applied(local(22, 12)), applied(local(22, 12), 14))).toEqual({
+    expect(patchAt(local(22, 17), applied(local(22, 12)), applied(local(22, 12), 14))).toEqual({
       status: 'logged',
       at: local(22, 12),
       doseMg: 14,
     })
   })
 
-  it('ignores a patch application later today than now (a clock moved back)', () => {
+  it('ignores a patch application later than now (a clock moved back)', () => {
     expect(patchAt(local(22, 9), applied(local(22, 10)))).toMatchObject({ status: 'due' })
   })
 
-  it('ignores a patch application from before a quit moment corrected later', () => {
-    const now = local(22, 20)
+  it('counts protocol days from a quit moment corrected later', () => {
     const journal = {
       facts: [
         { type: 'quit-moment', at: QUIT } as const,
@@ -261,11 +261,21 @@ describe('derive — today’s patch application', () => {
       protocol: defaultProtocol,
     }
 
-    expect(derive(journal, now).patch).toEqual({ status: 'due', doseMg: 21 })
+    expect(derive(journal, local(22, 20)).patch).toEqual({ status: 'due', doseMg: 21 })
   })
 
   it('prefills the dose of the step now running', () => {
     expect(patchAt(QUIT + 30 * DAY)).toEqual({ status: 'due', doseMg: 14 })
+  })
+
+  it('asks for no extra patch on the last morning, while the last protocol day still runs', () => {
+    const lastDay = QUIT + 55 * DAY
+
+    expect(patchAt(lastDay + 16 * HOUR, applied(lastDay + HOUR, 7))).toEqual({
+      status: 'logged',
+      at: lastDay + HOUR,
+      doseMg: 7,
+    })
   })
 
   it('requests no patch application once the protocol is over', () => {
