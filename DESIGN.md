@@ -452,6 +452,13 @@ pas de fête, pas de reproche.
   stat. `Jours sans fumer` toujours ; `Plus long streak` (`2 j 23 h`) seulement après une
   rechute. Libellé `label` `ink-dim`, chiffre `figure`, chiffres alignés en bas de colonne.
   Le héros dit « jours de streak » : « jours sans fumer » est réservé au total.
+- **Note d'écart (accueil) :** après un écart seulement, collée sous la carte des acquis
+  (gap 12px, c'est sa note de bas de carte) : `Dernière cigarette il y a …` en `body`
+  `ink-soft`, puis, tant que la série est ouverte (un ou deux jours), la ligne du seuil de
+  rechute. Pas de carte, pas de couleur : un constat.
+- **Encart de rechute (écran d'écart) :** carte `surface`, `rounded-card`, padding 16px,
+  entre le compteur et le bouton, seulement quand l'écart saisi ferait une rechute. Titre en
+  `body` 600, coût en `body` `ink-dim`. Jamais `alert` : c'est une information, pas une erreur.
 - **Carte d'étape (éditeur) :** `fieldset` à filet `line`, `rounded-card`, padding 16px,
   **sans `legend`** (WebKit la laisse couper le filet) : un `h3` nomme le groupe via
   `aria-labelledby`. Ligne haute : titre à gauche, trois boutons `ghost` `icon` (monter,
@@ -507,6 +514,10 @@ au-dessus du libellé `tab`, hauteur d'item 48px, filet supérieur `line`, fond 
   padding horizontal 16px, texte `ink` en `cta` semi-gras. Le sélecteur reste celui du
   système. Erreur : `aria-invalid` + un `<p role="alert">` en `text-alert` / `label` sous le
   champ, relié par `aria-describedby` — le même pour la date future et la date illisible.
+- **Compteur (stepper) :** même peau que le champ date (48px, filet `line`, fond `white`),
+  boutons `ghost` `icon` `−` / `+` (lucide) aux bords, valeur centrée en `cta` chiffres
+  tabulaires dans un `output`. Plancher : `−` désactivé, sans aplat. `fieldset` sans
+  `legend`, nommé par son libellé via `aria-labelledby`.
 - **Champ texte / nombre :** même peau que le champ date. Les nombres sont des `input` texte
   avec `inputMode` (`decimal` pour une dose, qui accepte la virgule ; `numeric` pour des
   jours), jamais `type="number"`. Erreur : même mécanique, un seul `<p role="alert">` pour le

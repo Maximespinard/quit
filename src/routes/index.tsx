@@ -47,14 +47,17 @@ function HomePage() {
               brand={brand}
               context={protocolContext(derived.protocol)}
             >
-              <StreakTotals
-                smokeFreeDays={derived.smokeFreeDays}
-                personalBest={derived.personalBest}
-              />
-              <SlipNote
-                lastCigarette={derived.lastCigarette}
-                lapseDaysInARow={derived.lapseDaysInARow}
-              />
+              {/* The slip note reads as the totals' footnote: grouped tight under the card. */}
+              <div className="flex flex-col gap-3">
+                <StreakTotals
+                  smokeFreeDays={derived.smokeFreeDays}
+                  personalBest={derived.personalBest}
+                />
+                <SlipNote
+                  lastCigarette={derived.lastCigarette}
+                  lapseDaysInARow={derived.lapseDaysInARow}
+                />
+              </div>
               {derived.patch.status === 'over' ? null : (
                 <DayPatchCard
                   journal={journal}
