@@ -13,7 +13,7 @@ export type Protocol = readonly Step[]
 
 /**
  * Every new journal starts on this taper. Each step lasts 4 weeks, the upper bound of the
- * 3 to 4 weeks the French patch notices give per phase: docs/research/patch-step-durations.md.
+ * 3 to 4 weeks the French patch notices give per step: docs/research/patch-step-durations.md.
  */
 export const defaultProtocol: Protocol = [
   { doseMg: 21, durationDays: 28 },
