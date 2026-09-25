@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { emptyJournal } from '@/shared/domain/journal'
+import { emptyJournal, type Journal } from '@/shared/domain/journal'
 import { strings } from '@/shared/utils/strings'
 import { CravingTimerScreen } from './CravingTimerScreen'
 
@@ -9,12 +9,12 @@ const MINUTE = 60 * SECOND
 const STARTED_AT = Date.UTC(2026, 8, 22, 10, 0, 0)
 const copy = strings.craving
 
-const renderTimer = (props: { now: number; stoppedAt?: number }) => {
+const renderTimer = (props: { now: number; stoppedAt?: number; journal?: Journal }) => {
   const onStop = vi.fn()
   const onRecorded = vi.fn()
   render(
     <CravingTimerScreen
-      journal={emptyJournal}
+      journal={props.journal ?? emptyJournal}
       now={props.now}
       startedAt={STARTED_AT}
       stoppedAt={props.stoppedAt ?? null}
@@ -53,7 +53,7 @@ it('celebrates at the end, then records the rated craving as held to the end', a
 
   expect(onRecorded).toHaveBeenCalledWith({
     ...emptyJournal,
-    facts: [{ type: 'craving', at: STARTED_AT, intensity: 3, heldToEnd: true }],
+    facts: [{ type: 'craving', at: STARTED_AT, intensity: 3, heldToEnd: true, tags: [] }],
   })
 })
 
@@ -69,7 +69,7 @@ it('records a craving stopped early without the full-timer mark and without cele
 
   expect(onRecorded).toHaveBeenCalledWith({
     ...emptyJournal,
-    facts: [{ type: 'craving', at: STARTED_AT, intensity: 1, heldToEnd: false }],
+    facts: [{ type: 'craving', at: STARTED_AT, intensity: 1, heldToEnd: false, tags: [] }],
   })
 })
 
@@ -87,4 +87,102 @@ it('does not record until an intensity is chosen', async () => {
 
   expect(screen.getByRole('button', { name: copy.intensity.submit })).toBeDisabled()
   expect(onRecorded).not.toHaveBeenCalled()
+})
+
+describe('tags', () => {
+  const tagGroup = () => screen.queryByRole('group', { name: copy.tags.label })
+  const customInput = () => screen.getByLabelText(copy.tags.customLabel)
+
+  it('offers the tags only once the intensity is picked', async () => {
+    renderTimer({ now: STARTED_AT + 4 * MINUTE })
+
+    expect(tagGroup()).not.toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: '2' }))
+
+    expect(tagGroup()).toBeVisible()
+    expect(screen.getByRole('button', { name: 'Café' })).toBeVisible()
+  })
+
+  it('records several default tags and a typed one with the craving', async () => {
+    const { onRecorded } = renderTimer({ now: STARTED_AT + 4 * MINUTE })
+
+    await userEvent.click(screen.getByRole('button', { name: '2' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Café' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Stress' }))
+    await userEvent.type(customInput(), '  Voiture {Enter}')
+    await userEvent.click(screen.getByRole('button', { name: copy.intensity.submit }))
+
+    expect(onRecorded).toHaveBeenCalledWith({
+      ...emptyJournal,
+      facts: [
+        {
+          type: 'craving',
+          at: STARTED_AT,
+          intensity: 2,
+          heldToEnd: true,
+          tags: ['coffee', 'stress', 'Voiture'],
+        },
+      ],
+    })
+  })
+
+  it('shows a typed tag pressed, and unpressing it leaves it out', async () => {
+    const { onRecorded } = renderTimer({ now: STARTED_AT + 4 * MINUTE })
+
+    await userEvent.click(screen.getByRole('button', { name: '1' }))
+    await userEvent.type(customInput(), 'Voiture')
+    await userEvent.click(screen.getByRole('button', { name: copy.tags.add }))
+    const typed = screen.getByRole('button', { name: 'Voiture' })
+    expect(typed).toHaveAttribute('aria-pressed', 'true')
+    expect(customInput()).toHaveValue('')
+
+    await userEvent.click(typed)
+    await userEvent.click(screen.getByRole('button', { name: copy.intensity.submit }))
+
+    expect(onRecorded).toHaveBeenCalledWith(
+      expect.objectContaining({ facts: [expect.objectContaining({ tags: [] })] }),
+    )
+  })
+
+  it('keeps a typed tag left unadded when the craving is recorded', async () => {
+    const { onRecorded } = renderTimer({ now: STARTED_AT + 4 * MINUTE })
+
+    await userEvent.click(screen.getByRole('button', { name: '2' }))
+    await userEvent.type(customInput(), 'Voiture')
+    await userEvent.click(screen.getByRole('button', { name: copy.intensity.submit }))
+
+    expect(onRecorded).toHaveBeenCalledWith(
+      expect.objectContaining({ facts: [expect.objectContaining({ tags: ['Voiture'] })] }),
+    )
+  })
+
+  it('merges a typed tag into an offered one differing only by case or spacing', async () => {
+    renderTimer({ now: STARTED_AT + 4 * MINUTE })
+
+    await userEvent.click(screen.getByRole('button', { name: '1' }))
+    await userEvent.type(customInput(), '  youtube {Enter}')
+
+    expect(screen.getAllByRole('button', { name: 'YouTube' })).toHaveLength(1)
+    expect(screen.getByRole('button', { name: 'YouTube' })).toHaveAttribute('aria-pressed', 'true')
+  })
+
+  it('offers again the tags typed on past cravings', async () => {
+    const journal: Journal = {
+      ...emptyJournal,
+      facts: [
+        {
+          type: 'craving',
+          at: STARTED_AT - MINUTE,
+          intensity: 2,
+          heldToEnd: false,
+          tags: ['Voiture'],
+        },
+      ],
+    }
+    renderTimer({ now: STARTED_AT + 4 * MINUTE, journal })
+
+    await userEvent.click(screen.getByRole('button', { name: '3' }))
+
+    expect(screen.getByRole('button', { name: 'Voiture' })).toHaveAttribute('aria-pressed', 'false')
+  })
 })

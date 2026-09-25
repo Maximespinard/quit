@@ -29,8 +29,23 @@ it('records a backdated craving, never marked as held to the end', async () => {
         at: new Date(2026, 8, 22, 8, 30).getTime(),
         intensity: 2,
         heldToEnd: false,
+        tags: [],
       },
     ],
+  })
+})
+
+it('records the tags of a backdated craving', async () => {
+  const onRecorded = vi.fn()
+  render(<PastCravingForm journal={emptyJournal} now={NOW} onRecorded={onRecorded} />)
+
+  await userEvent.click(screen.getByRole('button', { name: '3' }))
+  await userEvent.click(screen.getByRole('button', { name: 'Repas' }))
+  await userEvent.click(screen.getByRole('button', { name: copy.intensity.submit }))
+
+  expect(onRecorded).toHaveBeenCalledWith({
+    ...emptyJournal,
+    facts: [{ type: 'craving', at: NOW, intensity: 3, heldToEnd: false, tags: ['meal'] }],
   })
 })
 

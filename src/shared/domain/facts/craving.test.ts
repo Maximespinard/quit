@@ -8,20 +8,27 @@ describe('recordCraving', () => {
   it('records a craving held to the end of the timer', () => {
     const at = NOW - 4 * MINUTE
 
-    expect(recordCraving(emptyJournal, { at, intensity: 3, heldToEnd: true }, NOW)).toEqual({
+    expect(
+      recordCraving(emptyJournal, { at, intensity: 3, heldToEnd: true, tags: [] }, NOW),
+    ).toEqual({
       ok: true,
-      journal: { ...emptyJournal, facts: [{ type: 'craving', at, intensity: 3, heldToEnd: true }] },
+      journal: {
+        ...emptyJournal,
+        facts: [{ type: 'craving', at, intensity: 3, heldToEnd: true, tags: [] }],
+      },
     })
   })
 
   it('records a craving stopped before the end, without the full-timer mark', () => {
     const at = NOW - MINUTE
 
-    expect(recordCraving(emptyJournal, { at, intensity: 1, heldToEnd: false }, NOW)).toEqual({
+    expect(
+      recordCraving(emptyJournal, { at, intensity: 1, heldToEnd: false, tags: [] }, NOW),
+    ).toEqual({
       ok: true,
       journal: {
         ...emptyJournal,
-        facts: [{ type: 'craving', at, intensity: 1, heldToEnd: false }],
+        facts: [{ type: 'craving', at, intensity: 1, heldToEnd: false, tags: [] }],
       },
     })
   })
@@ -33,11 +40,14 @@ describe('recordCraving', () => {
     }
     const at = NOW - 90 * MINUTE
 
-    expect(recordCraving(journal, { at, intensity: 2, heldToEnd: false }, NOW)).toEqual({
+    expect(recordCraving(journal, { at, intensity: 2, heldToEnd: false, tags: [] }, NOW)).toEqual({
       ok: true,
       journal: {
         ...journal,
-        facts: [...journal.facts, { type: 'craving', at, intensity: 2, heldToEnd: false }],
+        facts: [
+          ...journal.facts,
+          { type: 'craving', at, intensity: 2, heldToEnd: false, tags: [] },
+        ],
       },
     })
   })
@@ -46,21 +56,60 @@ describe('recordCraving', () => {
     const journal: Journal = { facts: [], protocol: [{ doseMg: 14, durationDays: 21 }] }
     const at = NOW - MINUTE
 
-    const result = recordCraving(journal, { at, intensity: 2, heldToEnd: false }, NOW)
+    const result = recordCraving(journal, { at, intensity: 2, heldToEnd: false, tags: [] }, NOW)
 
     expect(result.ok && result.journal.protocol).toEqual([{ doseMg: 14, durationDays: 21 }])
   })
 
+  it('records the tags picked for a craving', () => {
+    const at = NOW - MINUTE
+
+    const result = recordCraving(
+      emptyJournal,
+      { at, intensity: 2, heldToEnd: true, tags: ['coffee', 'Yoga'] },
+      NOW,
+    )
+
+    expect(result.ok && result.journal.facts).toEqual([
+      { type: 'craving', at, intensity: 2, heldToEnd: true, tags: ['coffee', 'Yoga'] },
+    ])
+  })
+
+  it('trims the tags, drops the blank ones and merges those differing only by case or spacing', () => {
+    const at = NOW - MINUTE
+
+    const result = recordCraving(
+      emptyJournal,
+      {
+        at,
+        intensity: 1,
+        heldToEnd: false,
+        tags: ['  Jeu   vidéo ', 'jeu vidéo', '   ', 'JEU VIDÉO', 'stress'],
+      },
+      NOW,
+    )
+
+    expect(result.ok && result.journal.facts).toEqual([
+      { type: 'craving', at, intensity: 1, heldToEnd: false, tags: ['Jeu vidéo', 'stress'] },
+    ])
+  })
+
   it('refuses a craving in the future', () => {
     expect(
-      recordCraving(emptyJournal, { at: NOW + MINUTE, intensity: 2, heldToEnd: false }, NOW),
+      recordCraving(
+        emptyJournal,
+        { at: NOW + MINUTE, intensity: 2, heldToEnd: false, tags: [] },
+        NOW,
+      ),
     ).toEqual({ ok: false, reason: 'future' })
   })
 })
 
 describe('craving decoding', () => {
   it('reads a stored craving back', () => {
-    const stored = { facts: [{ type: 'craving', at: NOW, intensity: 2, heldToEnd: true }] }
+    const stored = {
+      facts: [{ type: 'craving', at: NOW, intensity: 2, heldToEnd: true, tags: [] }],
+    }
 
     expect(decodeJournal(stored).facts).toEqual(stored.facts)
   })
@@ -68,9 +117,36 @@ describe('craving decoding', () => {
   it('drops a stored craving whose intensity is outside 1 to 3', () => {
     const stored = {
       facts: [
-        { type: 'craving', at: NOW, intensity: 0, heldToEnd: true },
-        { type: 'craving', at: NOW, intensity: 4, heldToEnd: true },
-        { type: 'craving', at: NOW, intensity: 1.5, heldToEnd: true },
+        { type: 'craving', at: NOW, intensity: 0, heldToEnd: true, tags: [] },
+        { type: 'craving', at: NOW, intensity: 4, heldToEnd: true, tags: [] },
+        { type: 'craving', at: NOW, intensity: 1.5, heldToEnd: true, tags: [] },
+      ],
+    }
+
+    expect(decodeJournal(stored)).toEqual(emptyJournal)
+  })
+
+  it('reads a stored craving back with its tags', () => {
+    const stored = {
+      facts: [{ type: 'craving', at: NOW, intensity: 2, heldToEnd: true, tags: ['meal', 'Yoga'] }],
+    }
+
+    expect(decodeJournal(stored).facts).toEqual(stored.facts)
+  })
+
+  it('reads a craving stored before tags existed as one without tags', () => {
+    const stored = { facts: [{ type: 'craving', at: NOW, intensity: 2, heldToEnd: true }] }
+
+    expect(decodeJournal(stored).facts).toEqual([
+      { type: 'craving', at: NOW, intensity: 2, heldToEnd: true, tags: [] },
+    ])
+  })
+
+  it('drops a stored craving whose tags are not a list of words', () => {
+    const stored = {
+      facts: [
+        { type: 'craving', at: NOW, intensity: 2, heldToEnd: true, tags: 'coffee' },
+        { type: 'craving', at: NOW, intensity: 2, heldToEnd: true, tags: ['coffee', 3] },
       ],
     }
 
