@@ -65,8 +65,12 @@ The user-defined ordered list of steps describing the patch taper. A lapse never
 _Avoid_: Plan, schedule, program
 
 **Step**:
-One step of the protocol: a patch dose in mg and a duration in days, both user-editable.
+One step of the protocol: a patch dose in mg and a duration in protocol days, both user-editable.
 _Avoid_: Phase, stage, level
+
+**Protocol day**:
+One of the successive 24 h blocks that start at the quit moment; the protocol is counted in them, and one patch application is expected per protocol day. Unlike a smoke-free day, it is not a calendar day.
+_Avoid_: Patch day, cycle, today
 
 **Patch application**:
 The recorded fact that a patch was put on, at a given time and dose, optionally with its application site.
