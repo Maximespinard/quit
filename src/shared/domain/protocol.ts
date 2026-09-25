@@ -12,13 +12,13 @@ export type Step = {
 export type Protocol = readonly Step[]
 
 /**
- * Every new journal starts on this taper. The durations are placeholders until the research
- * ticket sets them from official patch notices (SYR-31).
+ * Every new journal starts on this taper. Each step lasts 4 weeks, the upper bound of the
+ * 3 to 4 weeks the French patch notices give per phase: docs/research/patch-step-durations.md.
  */
 export const defaultProtocol: Protocol = [
   { doseMg: 21, durationDays: 28 },
-  { doseMg: 14, durationDays: 14 },
-  { doseMg: 7, durationDays: 14 },
+  { doseMg: 14, durationDays: 28 },
+  { doseMg: 7, durationDays: 28 },
 ]
 
 /** Any positive dose: a cut patch gives a half dose. */
