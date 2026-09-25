@@ -1,6 +1,10 @@
 import { type FormEvent, useId, useState } from 'react'
-import { recordPatchApplication } from '@/shared/domain/facts/patch-application'
+import {
+  type RecordPatchApplicationResult,
+  recordPatchApplication,
+} from '@/shared/domain/facts/patch-application'
 import type { Journal } from '@/shared/domain/journal'
+import type { ProtocolPosition } from '@/shared/domain/protocol-position'
 import { Button } from '@/shared/ui/base/button'
 import { fromDatetimeLocal, toDatetimeLocal } from '@/shared/utils/datetime-local'
 import { fromDecimalText, toDecimalText } from '@/shared/utils/decimal-text'
@@ -11,12 +15,13 @@ const copy = strings.patch.form
 const fieldClass =
   'h-12 w-full min-w-0 rounded-control border border-line bg-white px-4 font-medium text-cta text-ink tabular-nums'
 
-type FormError = 'future' | 'before-quit-moment' | 'invalid-dose' | 'invalid'
+/** The domain's refusals, plus a date the browser could not give. */
+type FormError = Extract<RecordPatchApplicationResult, { ok: false }>['reason'] | 'invalid'
 
 type PatchApplicationFormProps = {
   journal: Journal
-  /** The running step's dose, prefilled; `null` once the protocol is over. */
-  stepDoseMg: number | null
+  /** Where the taper stands: the running step's dose is prefilled. */
+  position: ProtocolPosition
   /** Injected clock: the form never reads the system time itself. */
   now: number
   onRecorded: (journal: Journal) => void
@@ -25,19 +30,24 @@ type PatchApplicationFormProps = {
 /** Logs one patch application with its own dose and time: the catch-up and the exception. */
 export function PatchApplicationForm({
   journal,
-  stepDoseMg,
+  position,
   now,
   onRecorded,
 }: PatchApplicationFormProps) {
   const id = useId()
   const errorId = `${id}-error`
-  const [dose, setDose] = useState(() => (stepDoseMg === null ? '' : toDecimalText(stepDoseMg)))
-  const [date, setDate] = useState(() => toDatetimeLocal(now))
+  // The input shows whole minutes; left untouched, the date means this exact instant, so a
+  // quit moment set with "Maintenant" seconds ago is not refused as later than it.
+  const [openedAt] = useState(now)
+  const [dose, setDose] = useState(() =>
+    position.status === 'running' ? toDecimalText(position.step.doseMg) : '',
+  )
+  const [date, setDate] = useState(() => toDatetimeLocal(openedAt))
   const [error, setError] = useState<FormError | null>(null)
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const at = fromDatetimeLocal(date)
+    const at = date === toDatetimeLocal(openedAt) ? openedAt : fromDatetimeLocal(date)
     if (at === null) {
       setError('invalid')
       return

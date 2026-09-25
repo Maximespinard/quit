@@ -1,7 +1,10 @@
 import { Link } from '@tanstack/react-router'
 import { Check } from 'lucide-react'
-import { useId } from 'react'
-import { recordPatchApplication } from '@/shared/domain/facts/patch-application'
+import { useId, useState } from 'react'
+import {
+  type RecordPatchApplicationResult,
+  recordPatchApplication,
+} from '@/shared/domain/facts/patch-application'
 import type { Journal } from '@/shared/domain/journal'
 import type { PatchToday } from '@/shared/domain/patch-today'
 import { Button, buttonVariants } from '@/shared/ui/base/button'
@@ -11,6 +14,8 @@ import { formatDose, formatTime } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
 
 const copy = strings.patch
+
+type Refusal = Extract<RecordPatchApplicationResult, { ok: false }>['reason']
 
 type PatchTodayCardProps = {
   journal: Journal
@@ -24,10 +29,13 @@ type PatchTodayCardProps = {
 /** Home screen block: whether today's patch is on, and the one tap that logs it. */
 export function PatchTodayCard({ journal, patch, now, onRecorded }: PatchTodayCardProps) {
   const titleId = useId()
+  // Reachable in the sandbox only: a clock moved before the quit moment refuses the tap.
+  const [refusal, setRefusal] = useState<Refusal | null>(null)
 
   const applyNow = (doseMg: number) => {
     const result = recordPatchApplication(journal, { at: now, doseMg }, now)
     if (result.ok) onRecorded(result.journal)
+    else setRefusal(result.reason)
   }
 
   return (
@@ -55,15 +63,20 @@ export function PatchTodayCard({ journal, patch, now, onRecorded }: PatchTodayCa
             <Button size="lg" onClick={() => applyNow(patch.doseMg)}>
               {copy.apply(formatDose(patch.doseMg))}
             </Button>
+            {refusal !== null ? (
+              <p role="alert" className="text-alert text-label">
+                {copy.form[refusal]}
+              </p>
+            ) : null}
           </>
         )}
         <Link
-          to="/patch/log"
+          to="/patch/new"
           search={keepSearch}
           // Text aligned with the card's; on the surface the ghost's own press fill would not show.
           className={cn(
-            buttonVariants({ variant: 'ghost', size: 'sm' }),
-            '-ml-3 self-start active:bg-surface-locked',
+            buttonVariants({ variant: 'ghost' }),
+            '-ml-4 self-start active:bg-surface-locked',
           )}
         >
           {copy.other}

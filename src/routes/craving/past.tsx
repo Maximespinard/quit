@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { PastCravingForm } from '@/features/craving/components/PastCravingForm'
-import { useCravingRecorded } from '@/features/craving/hooks/useCravingRecorded'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
+import { useRecordedThenHome } from '@/shared/hooks/useRecordedThenHome'
 import { AppShell } from '@/shared/ui/app-shell'
 import { buttonVariants } from '@/shared/ui/base/button'
 import { ReadyJournal } from '@/shared/ui/ReadyJournal'
@@ -15,7 +15,7 @@ export const Route = createFileRoute('/craving/past')({
 function PastCravingPage() {
   const appSearch = validateAppSearch(Route.useSearch())
   const { state, now } = useJournalSource()
-  const recorded = useCravingRecorded(appSearch)
+  const recorded = useRecordedThenHome(appSearch, 'cravingRecorded')
 
   return (
     <ReadyJournal state={state}>

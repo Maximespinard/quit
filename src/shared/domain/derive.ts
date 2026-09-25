@@ -8,7 +8,10 @@ export type Streak = {
   readonly elapsedMs: number
 }
 
-/** Without a quit moment nothing is derived; with one, the streak and the protocol position always exist. */
+/**
+ * Without a quit moment nothing is derived; with one, the streak, the protocol position and
+ * today's patch always exist.
+ */
 export type DerivedState =
   | {
       readonly quitMoment: null
@@ -35,6 +38,6 @@ export function derive(journal: Journal, now: number): DerivedState {
     quitMoment,
     streak: { elapsedMs: Math.max(0, now - quitMoment) },
     protocol,
-    patch: patchToday(journal, protocol, now),
+    patch: patchToday(journal, quitMoment, protocol, now),
   }
 }

@@ -242,6 +242,20 @@ describe('derive — today’s patch application', () => {
     expect(patchAt(local(22, 9), applied(local(22, 10)))).toMatchObject({ status: 'due' })
   })
 
+  it('ignores a patch application from before a quit moment corrected later', () => {
+    const now = local(22, 20)
+    const journal = {
+      facts: [
+        { type: 'quit-moment', at: QUIT } as const,
+        applied(local(22, 8)),
+        { type: 'quit-moment', at: local(22, 12) } as const,
+      ],
+      protocol: defaultProtocol,
+    }
+
+    expect(derive(journal, now).patch).toEqual({ status: 'due', doseMg: 21 })
+  })
+
   it('prefills the dose of the step now running', () => {
     expect(patchAt(QUIT + 30 * DAY)).toEqual({ status: 'due', doseMg: 14 })
   })
