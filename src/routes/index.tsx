@@ -6,6 +6,7 @@ import { ProtocolSummary } from '@/features/protocol/components/ProtocolSummary'
 import { protocolContext } from '@/features/protocol/utils/protocol-context'
 import { QuitMomentPrompt } from '@/features/quit-moment/components/QuitMomentPrompt'
 import { StreakScreen } from '@/features/streak/components/StreakScreen'
+import { StreakTotals } from '@/features/streak/components/StreakTotals'
 import { derive } from '@/shared/domain/derive'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
 import { AppShell } from '@/shared/ui/app-shell'
@@ -21,7 +22,9 @@ export const Route = createFileRoute('/')({
 function HomePage() {
   const { state, commit, now } = useJournalSource()
   const appSearch = validateAppSearch(Route.useSearch())
-  const { cravingRecorded, patchRecorded } = useLocation({ select: (location) => location.state })
+  const { cravingRecorded, patchRecorded, lapseRecorded } = useLocation({
+    select: (location) => location.state,
+  })
   const brand = <SandboxEntry>{strings.app.name}</SandboxEntry>
 
   return (
@@ -43,6 +46,10 @@ function HomePage() {
               brand={brand}
               context={protocolContext(derived.protocol)}
             >
+              <StreakTotals
+                smokeFreeDays={derived.smokeFreeDays}
+                personalBest={derived.personalBest}
+              />
               {derived.patch.status === 'over' ? null : (
                 <DayPatchCard
                   journal={journal}
@@ -60,12 +67,20 @@ function HomePage() {
                   {strings.craving.recorded}
                 </p>
               ) : null}
+              {lapseRecorded === true ? (
+                <p role="status" className="text-body text-ink-soft">
+                  {strings.lapse.recorded}
+                </p>
+              ) : null}
               <Link
                 to="/craving/past"
                 search={appSearch}
                 className={buttonVariants({ variant: 'outline' })}
               >
                 {strings.craving.logPast}
+              </Link>
+              <Link to="/lapse" search={appSearch} className={buttonVariants({ variant: 'ghost' })}>
+                {strings.lapse.declare}
               </Link>
             </div>
             <CravingLauncher now={now} />
