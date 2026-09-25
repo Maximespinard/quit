@@ -1,4 +1,5 @@
 import type { Step } from '@/shared/domain/protocol'
+import { fromDecimalText, toDecimalText } from '@/shared/utils/decimal-text'
 
 /** A step as the editor holds it: raw field text, with a stable id for list keys. */
 export type StepDraft = {
@@ -11,23 +12,18 @@ export type StepDraft = {
 /** The editable fields of a step draft. */
 export type DraftField = Exclude<keyof StepDraft, 'id'>
 
-const toText = (value: number) => String(value).replace('.', ',')
-
-/** Accepts the French decimal comma. Blank reads as 0 and garbage as NaN: the domain refuses both. */
-const toNumber = (text: string) => Number(text.trim().replace(',', '.'))
-
 export const draftsFrom = (steps: readonly Step[]): StepDraft[] =>
   steps.map((step, id) => ({
     id,
-    dose: toText(step.doseMg),
-    duration: toText(step.durationDays),
+    dose: toDecimalText(step.doseMg),
+    duration: toDecimalText(step.durationDays),
     brand: step.brand ?? '',
   }))
 
 /** Validation is the domain's job (`setProtocol`): this only reads the text. */
 export const stepFrom = (draft: StepDraft): Step => ({
-  doseMg: toNumber(draft.dose),
-  durationDays: toNumber(draft.duration),
+  doseMg: fromDecimalText(draft.dose),
+  durationDays: fromDecimalText(draft.duration),
   brand: draft.brand,
 })
 
