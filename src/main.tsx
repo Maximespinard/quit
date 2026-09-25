@@ -26,6 +26,8 @@ declare module '@tanstack/react-router' {
     cravingRecorded?: boolean
     /** Set by the navigation that follows a patch application logged from its form. */
     patchRecorded?: boolean
+    /** Set by the navigation that follows a declared lapse: the home screen confirms it. */
+    lapseRecorded?: boolean
   }
 }
 
