@@ -32,7 +32,7 @@ The quit never waits for the app: every fact can be backdated, and there is no "
 - Built around a **user-defined protocol** (dose + duration per step, free-text brand), not a fixed program.
 - **Everything shown is derived from recorded facts**; nothing is granted, nothing is stored as a total. XP, level, badges and money saved re-score from the journal.
 - **One tracker, one streak.** No patch streak, no check-in streak.
-- A lapse is a fact with a defined cost, never a verdict: streak and streak multiplier reset, level drops one threshold; XP, badges and smoke-free days stay.
+- A lapse is a fact with a defined cost, never a verdict. A slip costs its smoke-free day and its cigarettes. A relapse (three calendar days in a row with a lapse) also restarts the streak, resets the streak multiplier and drops the level one threshold. XP, badges and smoke-free days stay. The cost is announced before it lands, in a neutral tone.
 
 Explicitly refused:
 
@@ -51,8 +51,8 @@ Explicitly refused:
 - Vocabulary is binding: `CONTEXT.md`. Use its terms in UI copy, never a synonym listed under _Avoid_.
 - UI strings are French, centralised in one strings module. Everything else is English.
 - The app tracks one thing: being smoke-free. Only tobacco and nicotine are ever mentioned.
-- Money is the user's weekly tobacco spend, gross, in integer cents; only the display layer divides.
-- Two elapsed figures: streak (resets on a lapse) and smoke-free days (never resets). Personal best streak appears only once a lapse exists.
+- Money is the user's weekly tobacco spend, gross, in integer cents; every cigarette smoked in a lapse is subtracted from money saved and cigarettes not smoked; only the display layer divides.
+- Two elapsed figures: streak (restarts on a relapse, survives a slip) and smoke-free days (never resets). The hero shows the streak, the totals card the smoke-free days; after a slip the home also says how long since the last cigarette. Personal best streak appears only once a relapse exists.
 - Application site is auto-suggested, switchable, never the same as the previous one.
 - Craving intensity is 1–3; tags are optional and offered after the timer. Check-in mood is 1–5.
 - Out of scope: plasma nicotine curve, shareable card, "comeback" badge, per-brand presets, 16 h patches.

@@ -9,12 +9,24 @@ The exact timestamp at which the user stopped smoking. Every elapsed-time figure
 _Avoid_: Quit date, start date, day zero
 
 **Lapse**:
-Any smoke inhaled after the quit moment, recorded with its timestamp. There is no threshold: one puff is a lapse.
-_Avoid_: Relapse, slip, failure, reset
+Any smoke inhaled after the quit moment, recorded as one episode with its timestamp and its number of cigarettes (one by default). There is no threshold: one puff is a lapse. Every lapse is a slip or part of a relapse.
+_Avoid_: Failure, reset, incident
+
+**Slip**:
+A lapse that is not part of a relapse. It costs its smoke-free day and its cigarettes, nothing else: the streak, the streak multiplier and the level stay. French copy: « écart ».
+_Avoid_: Cheat, exception, mistake
+
+**Relapse**:
+The state reached when three consecutive calendar days each contain a lapse. It is derived, never declared, and a backdated lapse can create one after the fact. It restarts the streak from the latest lapse of the run (again while the run goes on; a day without a lapse breaks it), resets the streak multiplier and drops the level one threshold. Badges, smoke-free days and the protocol stay. French copy: « rechute ».
+_Avoid_: Failure, reset, back to zero
 
 **Streak**:
-The time elapsed since the latest lapse, or since the quit moment if there is none.
+The time elapsed since the latest relapse, or since the quit moment if there is none. A slip does not restart it. Every time-based mechanic (streak multiplier, time badges, personal best) keys on it.
 _Avoid_: Counter, run, clean time
+
+**Last cigarette**:
+The time elapsed since the latest lapse. Shown after a slip; it drives nothing.
+_Avoid_: Clean time, since lapse
 
 **Smoke-free day**:
 A calendar day after the quit moment containing no lapse. Their total never resets.
@@ -38,11 +50,11 @@ Points earned from real recorded facts: smoke-free time, cravings overcome, patc
 _Avoid_: Points, score, coins
 
 **Streak multiplier**:
-A factor applied to every XP gain that grows with the streak up to a cap. A lapse resets it to its starting value.
+A factor applied to every XP gain that grows with the streak up to a cap. A relapse resets it to its starting value; a slip does not.
 _Avoid_: Bonus, combo
 
 **Level**:
-The rank reached from accumulated XP. A lapse drops the user to the entry threshold of the previous level.
+The rank reached from accumulated XP. A relapse drops the user to the entry threshold of the previous level; a slip does not.
 _Avoid_: Rank, tier, grade
 
 **Badge**:
@@ -94,7 +106,7 @@ A named journal paired with a value of the current time, describing one precise 
 _Avoid_: Preset, seed, fixture, mock
 
 **Personal best**:
-The longest streak ever held. It is shown only once a lapse exists.
+The longest streak ever held. It is shown only once a relapse exists.
 _Avoid_: Record, best streak, high score
 
 **Goal**:
