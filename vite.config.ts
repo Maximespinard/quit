@@ -56,7 +56,8 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/test/setup.ts'],
-    // e2e/ is Playwright's suite, run separately via `test:e2e`.
-    exclude: ['node_modules/**', 'e2e/**'],
+    // e2e/ is Playwright's suite, run separately via `test:e2e`; .claude/ holds the
+    // parallel sessions' worktrees, each with its own copy of the suite.
+    exclude: ['node_modules/**', 'e2e/**', '.claude/**'],
   },
 })
