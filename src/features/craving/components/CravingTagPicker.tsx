@@ -58,7 +58,7 @@ export function CravingTagPicker({ offered, value, onValueChange }: CravingTagPi
           onValueChange={(tags: string[]) => onValueChange(tags)}
         >
           {options.map((option) => (
-            <ToggleGroupItem key={option.tag} value={option.tag}>
+            <ToggleGroupItem key={option.tag} value={option.tag} className="h-11">
               {option.label}
             </ToggleGroupItem>
           ))}
@@ -83,7 +83,7 @@ export function CravingTagPicker({ offered, value, onValueChange }: CravingTagPi
             onKeyDown={addOnEnter}
             // Tapping `Enregistrer` with words left in the field keeps them: nothing typed is lost.
             onBlur={add}
-            className="h-12 min-w-0 flex-1 rounded-control border border-line bg-white px-4 font-medium text-cta text-ink"
+            className="h-12 min-w-0 flex-1 rounded-control border border-line bg-white px-4 font-medium text-cta text-ink placeholder:text-ink-soft"
           />
           <Button type="button" variant="outline" size="lg" onClick={add}>
             {copy.add}
