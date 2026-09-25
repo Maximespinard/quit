@@ -156,6 +156,17 @@ describe('tags', () => {
     )
   })
 
+  it('leaves the screen as it is when the field loses focus, so the next tap lands', async () => {
+    renderTimer({ now: STARTED_AT + 4 * MINUTE })
+
+    await userEvent.click(screen.getByRole('button', { name: '2' }))
+    await userEvent.type(customInput(), 'Métro')
+    await userEvent.tab()
+
+    expect(screen.queryByRole('button', { name: 'Métro' })).not.toBeInTheDocument()
+    expect(customInput()).toHaveValue('Métro')
+  })
+
   it('merges a typed tag into an offered one differing only by case or spacing', async () => {
     renderTimer({ now: STARTED_AT + 4 * MINUTE })
 

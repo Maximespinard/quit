@@ -9,14 +9,22 @@ type CravingTagPickerProps = {
   offered: readonly CravingTagOption[]
   value: readonly string[]
   onValueChange: (tags: readonly string[]) => void
+  /** The tag the field would add right now, or `null`: the form records it on submit. */
+  onPendingChange: (tag: string | null) => void
 }
 
 /**
  * Optional tags for a craving: several can be pressed, and a typed one joins the list pressed.
  * A typed tag matching an offered one, case and spacing aside, presses that one instead.
- * Leaving the field adds what it holds, so words typed without `Ajouter` still count.
+ * Words typed without `Ajouter` are reported as pending and recorded with the craving. Leaving
+ * the field changes nothing on screen: a tap on `Enregistrer` must land where the finger is.
  */
-export function CravingTagPicker({ offered, value, onValueChange }: CravingTagPickerProps) {
+export function CravingTagPicker({
+  offered,
+  value,
+  onValueChange,
+  onPendingChange,
+}: CravingTagPickerProps) {
   const labelId = useId()
   const hintId = useId()
   const inputId = useId()
@@ -33,6 +41,12 @@ export function CravingTagPicker({ offered, value, onValueChange }: CravingTagPi
     }
     if (!value.includes(tag)) onValueChange([...value, tag])
     setTyped('')
+    onPendingChange(null)
+  }
+
+  const type = (text: string) => {
+    setTyped(text)
+    onPendingChange(resolveTypedTag(text, options))
   }
 
   // Enter adds the tag rather than submitting the whole craving.
@@ -79,10 +93,8 @@ export function CravingTagPicker({ offered, value, onValueChange }: CravingTagPi
             autoComplete="off"
             placeholder={copy.customPlaceholder}
             value={typed}
-            onChange={(event) => setTyped(event.target.value)}
+            onChange={(event) => type(event.target.value)}
             onKeyDown={addOnEnter}
-            // Tapping `Enregistrer` with words left in the field keeps them: nothing typed is lost.
-            onBlur={add}
             className="h-12 min-w-0 flex-1 rounded-control border border-line bg-white px-4 font-medium text-cta text-ink placeholder:text-ink-soft"
           />
           <Button type="button" variant="outline" size="lg" onClick={add}>
