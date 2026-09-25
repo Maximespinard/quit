@@ -169,6 +169,8 @@ describe('derive — protocol position', () => {
 })
 
 describe('derive — the patch application of the protocol day', () => {
+  // Derived from the default taper, so the end of it follows the durations wherever they come from.
+  const PROTOCOL_DAYS = defaultProtocol.reduce((days, step) => days + step.durationDays, 0)
   // A protocol day is a 24 h block from the quit moment (18:00 here), not a calendar day.
   const local = (day: number, hour: number, minute = 0) =>
     new Date(2026, 8, day, hour, minute).getTime()
@@ -269,7 +271,7 @@ describe('derive — the patch application of the protocol day', () => {
   })
 
   it('asks for no extra patch on the last morning, while the last protocol day still runs', () => {
-    const lastDay = QUIT + 55 * DAY
+    const lastDay = QUIT + (PROTOCOL_DAYS - 1) * DAY
 
     expect(patchAt(lastDay + 16 * HOUR, applied(lastDay + HOUR, 7))).toEqual({
       status: 'logged',
@@ -279,8 +281,10 @@ describe('derive — the patch application of the protocol day', () => {
   })
 
   it('requests no patch application once the protocol is over', () => {
-    expect(patchAt(QUIT + 56 * DAY)).toEqual({ status: 'over' })
-    expect(patchAt(QUIT + 56 * DAY, applied(QUIT + 56 * DAY - HOUR, 7))).toEqual({
+    expect(patchAt(QUIT + PROTOCOL_DAYS * DAY)).toEqual({ status: 'over' })
+    expect(
+      patchAt(QUIT + PROTOCOL_DAYS * DAY, applied(QUIT + PROTOCOL_DAYS * DAY - HOUR, 7)),
+    ).toEqual({
       status: 'over',
     })
   })
