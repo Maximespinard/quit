@@ -23,12 +23,15 @@ export function CravingForm({ tagOptions, onSubmit, children }: CravingFormProps
   const hintId = useId()
   const [intensity, setIntensity] = useState<CravingIntensity | null>(null)
   const [tags, setTags] = useState<readonly string[]>([])
+  const [pending, setPending] = useState<string | null>(null)
   const [recorded, setRecorded] = useState(false)
   const copy = strings.craving.intensity
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (intensity !== null && !recorded) setRecorded(onSubmit(intensity, tags))
+    if (intensity === null || recorded) return
+    const withPending = pending === null || tags.includes(pending) ? tags : [...tags, pending]
+    setRecorded(onSubmit(intensity, withPending))
   }
 
   return (
@@ -59,7 +62,12 @@ export function CravingForm({ tagOptions, onSubmit, children }: CravingFormProps
         </p>
       </div>
       {intensity !== null ? (
-        <CravingTagPicker offered={tagOptions} value={tags} onValueChange={setTags} />
+        <CravingTagPicker
+          offered={tagOptions}
+          value={tags}
+          onValueChange={setTags}
+          onPendingChange={setPending}
+        />
       ) : null}
       {/* Stuck to the thumb zone: however many tags push it down, recording stays one tap away. */}
       <div className="sticky bottom-0 bg-page pt-3 pb-safe-4">
