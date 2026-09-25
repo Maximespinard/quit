@@ -1,11 +1,12 @@
 import { cravingModule } from './craving'
+import { patchApplicationModule } from './patch-application'
 import { quitMomentModule } from './quit-moment'
 
 /**
  * Every fact type the journal knows. Adding one is its own module plus one line here:
  * the `Fact` union and the journal decoder follow from this list.
  */
-export const factModules = [quitMomentModule, cravingModule] as const
+export const factModules = [quitMomentModule, cravingModule, patchApplicationModule] as const
 
 export type Fact = NonNullable<ReturnType<(typeof factModules)[number]['decode']>>
 

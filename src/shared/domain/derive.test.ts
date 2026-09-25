@@ -1,4 +1,5 @@
 import { derive } from './derive'
+import { recordPatchApplication } from './facts/patch-application'
 import { emptyJournal, type Journal } from './journal'
 import { defaultProtocol, type Protocol, setProtocol } from './protocol'
 
@@ -14,8 +15,13 @@ const journalWithQuitMoment = (at: number, protocol: Protocol = defaultProtocol)
 })
 
 describe('derive', () => {
-  it('has no quit moment, no streak and no protocol position from an empty journal', () => {
-    expect(derive(emptyJournal, NOW)).toEqual({ quitMoment: null, streak: null, protocol: null })
+  it('derives nothing from an empty journal', () => {
+    expect(derive(emptyJournal, NOW)).toEqual({
+      quitMoment: null,
+      streak: null,
+      protocol: null,
+      patch: null,
+    })
   })
 
   it('starts the streak at zero when the quit moment is now', () => {
@@ -158,6 +164,92 @@ describe('derive — protocol position', () => {
       dayInStep: 3,
       daysLeft: 5,
       nextStep: null,
+    })
+  })
+})
+
+describe('derive — today’s patch application', () => {
+  // Local wall-clock times: "today" is the user's calendar day, midnight to midnight.
+  const local = (day: number, hour: number, minute = 0) =>
+    new Date(2026, 8, day, hour, minute).getTime()
+  const QUIT = local(20, 18)
+  const applied = (at: number, doseMg = 21) => ({ type: 'patch-application', at, doseMg }) as const
+  const patchAt = (now: number, ...applications: ReturnType<typeof applied>[]) =>
+    derive(
+      { facts: [{ type: 'quit-moment', at: QUIT }, ...applications], protocol: defaultProtocol },
+      now,
+    ).patch
+
+  it('is due with the current step’s dose while nothing is logged today', () => {
+    expect(patchAt(local(22, 9))).toEqual({ status: 'due', doseMg: 21 })
+  })
+
+  it('is logged once a patch application is recorded today, with its time and dose', () => {
+    expect(patchAt(local(22, 9), applied(local(22, 8, 15), 14))).toEqual({
+      status: 'logged',
+      at: local(22, 8, 15),
+      doseMg: 14,
+    })
+  })
+
+  it('still counts a patch application put on at 00:00 today', () => {
+    expect(patchAt(local(22, 23, 59), applied(local(22, 0)))).toMatchObject({ status: 'logged' })
+  })
+
+  it('does not count yesterday’s 23:59 patch application for today', () => {
+    expect(patchAt(local(22, 0), applied(local(21, 23, 59)))).toEqual({
+      status: 'due',
+      doseMg: 21,
+    })
+  })
+
+  it('resets at midnight: logged at 23:59, due again at 00:00', () => {
+    const application = applied(local(22, 8))
+
+    expect(patchAt(local(22, 23, 59), application)).toMatchObject({ status: 'logged' })
+    expect(patchAt(local(23, 0), application)).toMatchObject({ status: 'due' })
+  })
+
+  it('counts a patch application backdated to earlier today', () => {
+    const journal = {
+      facts: [{ type: 'quit-moment', at: QUIT } as const],
+      protocol: defaultProtocol,
+    }
+    const now = local(22, 20)
+    const backdated = recordPatchApplication(journal, { at: local(22, 7), doseMg: 21 }, now)
+    if (!backdated.ok) throw new Error('the backdated application should be accepted')
+
+    expect(derive(backdated.journal, now).patch).toEqual({
+      status: 'logged',
+      at: local(22, 7),
+      doseMg: 21,
+    })
+  })
+
+  it('leaves today due when the backdated patch application is for another day', () => {
+    expect(patchAt(local(22, 20), applied(local(21, 7)))).toMatchObject({ status: 'due' })
+  })
+
+  it('shows the latest of several patch applications logged today', () => {
+    expect(patchAt(local(22, 20), applied(local(22, 12), 14), applied(local(22, 7)))).toEqual({
+      status: 'logged',
+      at: local(22, 12),
+      doseMg: 14,
+    })
+  })
+
+  it('ignores a patch application later today than now (a clock moved back)', () => {
+    expect(patchAt(local(22, 9), applied(local(22, 10)))).toMatchObject({ status: 'due' })
+  })
+
+  it('prefills the dose of the step now running', () => {
+    expect(patchAt(QUIT + 30 * DAY)).toEqual({ status: 'due', doseMg: 14 })
+  })
+
+  it('requests no patch application once the protocol is over', () => {
+    expect(patchAt(QUIT + 56 * DAY)).toEqual({ status: 'over' })
+    expect(patchAt(QUIT + 56 * DAY, applied(QUIT + 56 * DAY - HOUR, 7))).toEqual({
+      status: 'over',
     })
   })
 })

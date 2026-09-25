@@ -18,6 +18,11 @@ export const quitMomentModule = {
   },
 }
 
+/** The quit moment in force: the latest one recorded, a correction replacing the earlier. */
+export function latestQuitMoment(journal: Journal): number | null {
+  return journal.facts.findLast((fact) => fact.type === QUIT_MOMENT)?.at ?? null
+}
+
 export type RecordQuitMomentResult =
   | { readonly ok: true; readonly journal: Journal }
   | { readonly ok: false; readonly reason: 'future' }
