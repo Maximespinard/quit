@@ -1,8 +1,4 @@
-/** Local midnight opening the calendar day `offset` days after the one holding `at`. */
-const localMidnight = (at: number, offset = 0): number => {
-  const date = new Date(at)
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate() + offset).getTime()
-}
+import { localMidnight } from './local-day'
 
 /**
  * Whole local calendar days, over by `now`, lying entirely at or after the quit moment and

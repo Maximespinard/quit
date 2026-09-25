@@ -1,6 +1,7 @@
 import { derive } from './derive'
+import { recordLapse } from './facts/lapse'
 import { recordPatchApplication } from './facts/patch-application'
-import { emptyJournal, type Journal } from './journal'
+import { decodeJournal, emptyJournal, type Journal } from './journal'
 import { defaultProtocol, type Protocol, setProtocol } from './protocol'
 
 const MINUTE = 60_000
@@ -20,6 +21,10 @@ describe('derive', () => {
       quitMoment: null,
       streak: null,
       personalBest: null,
+      lastCigarette: null,
+      lapseDaysInARow: null,
+      relapses: null,
+      cigarettesSmoked: null,
       smokeFreeDays: null,
       protocol: null,
       patch: null,
@@ -300,21 +305,38 @@ const journalOf = (quitMoment: number, lapses: readonly number[] = []): Journal 
   protocol: defaultProtocol,
   facts: [
     { type: 'quit-moment', at: quitMoment },
-    ...lapses.map((at) => ({ type: 'lapse' as const, at })),
+    ...lapses.map((at) => ({ type: 'lapse' as const, at, count: 1 })),
   ],
 })
 
-describe('derive — streak after lapses', () => {
-  it('counts the streak from a lapse', () => {
-    const journal = journalOf(NOW - 10 * DAY, [NOW - 3 * HOUR])
+// Quit on 1 January at 20:00; the lapses below fall on the following days.
+const QUIT = local(1, 1, 20)
+const derivedAt = (now: number, lapses: readonly number[]) => derive(journalOf(QUIT, lapses), now)
 
-    expect(derive(journal, NOW).streak).toEqual({ elapsedMs: 3 * HOUR })
+describe('derive — a slip', () => {
+  it('leaves the streak running from the quit moment', () => {
+    const now = local(1, 10, 12)
+
+    expect(derivedAt(now, [local(1, 5, 21)]).streak).toEqual({ elapsedMs: now - QUIT })
   })
 
-  it('counts the streak from the latest lapse, whatever the order they were recorded in', () => {
-    const journal = journalOf(NOW - 10 * DAY, [NOW - 2 * DAY, NOW - 5 * HOUR, NOW - 6 * DAY])
+  it('shows how long since the last cigarette', () => {
+    const now = local(1, 10, 12)
 
-    expect(derive(journal, NOW).streak).toEqual({ elapsedMs: 5 * HOUR })
+    expect(derivedAt(now, [local(1, 5, 21), local(1, 9, 9)]).lastCigarette).toEqual({
+      elapsedMs: now - local(1, 9, 9),
+    })
+  })
+
+  it('shows no last cigarette while there is no lapse', () => {
+    expect(derivedAt(local(1, 10), []).lastCigarette).toBeNull()
+  })
+
+  it('makes no relapse and no personal best', () => {
+    expect(derivedAt(local(1, 10), [local(1, 5, 21)])).toMatchObject({
+      relapses: [],
+      personalBest: null,
+    })
   })
 
   it('ignores a lapse before the quit moment, left behind by a corrected quit moment', () => {
@@ -322,14 +344,15 @@ describe('derive — streak after lapses', () => {
       protocol: defaultProtocol,
       facts: [
         { type: 'quit-moment', at: NOW - 10 * DAY },
-        { type: 'lapse', at: NOW - 8 * DAY },
+        { type: 'lapse', at: NOW - 8 * DAY, count: 1 },
         { type: 'quit-moment', at: NOW - 4 * DAY },
       ],
     }
 
     expect(derive(journal, NOW)).toMatchObject({
       streak: { elapsedMs: 4 * DAY },
-      personalBest: null,
+      lastCigarette: null,
+      cigarettesSmoked: 0,
     })
   })
 
@@ -338,41 +361,178 @@ describe('derive — streak after lapses', () => {
 
     expect(derive(journal, NOW)).toMatchObject({
       streak: { elapsedMs: 10 * DAY },
-      personalBest: null,
+      lastCigarette: null,
+    })
+  })
+})
+
+describe('derive — relapse', () => {
+  it('is not reached with two calendar days in a row holding a lapse', () => {
+    const now = local(1, 7, 12)
+
+    expect(derivedAt(now, [local(1, 5, 10), local(1, 6, 22)])).toMatchObject({
+      relapses: [],
+      streak: { elapsedMs: now - QUIT },
+    })
+  })
+
+  it('restarts the streak from the latest lapse of three days in a row', () => {
+    const now = local(1, 7, 12)
+
+    expect(derivedAt(now, [local(1, 5, 10), local(1, 6, 22), local(1, 7, 9)])).toMatchObject({
+      relapses: [{ at: local(1, 7, 9) }],
+      streak: { elapsedMs: 3 * HOUR },
+      lastCigarette: null,
+    })
+  })
+
+  it('counts a day once however many lapses it holds', () => {
+    const lapses = [local(1, 5, 9), local(1, 5, 13), local(1, 5, 23), local(1, 6, 10)]
+
+    expect(derivedAt(local(1, 7, 12), lapses).relapses).toEqual([])
+  })
+
+  it('moves the streak again with each further lapse day of the run', () => {
+    const lapses = [local(1, 5, 10), local(1, 6, 22), local(1, 7, 9), local(1, 8, 8)]
+
+    expect(derivedAt(local(1, 8, 10), lapses)).toMatchObject({
+      relapses: [{ at: local(1, 8, 8) }],
+      streak: { elapsedMs: 2 * HOUR },
+    })
+  })
+
+  it('is broken by a day without a lapse', () => {
+    const now = local(1, 9, 12)
+
+    expect(derivedAt(now, [local(1, 5, 10), local(1, 6, 22), local(1, 8, 9)])).toMatchObject({
+      relapses: [],
+      streak: { elapsedMs: now - QUIT },
+    })
+  })
+
+  it('counts a lapse at 23:59 then one at 00:01 as two days', () => {
+    const twoDays = [local(1, 5, 23, 59), local(1, 6, 0, 1)]
+
+    expect(derivedAt(local(1, 6, 12), twoDays)).toMatchObject({ relapses: [], lapseDaysInARow: 2 })
+    expect(derivedAt(local(1, 7, 12), [...twoDays, local(1, 7, 8)]).relapses).toEqual([
+      { at: local(1, 7, 8) },
+    ])
+  })
+
+  it('is created after the fact by a backdated lapse completing a run', () => {
+    const now = local(1, 9, 12)
+    const before = journalOf(QUIT, [local(1, 5, 10), local(1, 7, 9)])
+    const backdated = recordLapse(before, { at: local(1, 6, 22), count: 1 }, now)
+    if (!backdated.ok) throw new Error('the backdated lapse should be accepted')
+
+    expect(derive(before, now).relapses).toEqual([])
+    expect(derive(backdated.journal, now)).toMatchObject({
+      relapses: [{ at: local(1, 7, 9) }],
+      streak: { elapsedMs: now - local(1, 7, 9) },
+    })
+  })
+
+  it('keeps each run apart, the streak counting from the latest', () => {
+    const lapses = [
+      ...[5, 6, 7].map((day) => local(1, day, 10)),
+      ...[15, 16, 17].map((day) => local(1, day, 11)),
+    ]
+
+    expect(derivedAt(local(1, 20), lapses)).toMatchObject({
+      relapses: [{ at: local(1, 7, 10) }, { at: local(1, 17, 11) }],
+      streak: { elapsedMs: local(1, 20) - local(1, 17, 11) },
+    })
+  })
+
+  it('shows the last cigarette again for a slip after a relapse', () => {
+    const lapses = [local(1, 5, 10), local(1, 6, 10), local(1, 7, 10), local(1, 12, 10)]
+    const now = local(1, 12, 14)
+
+    expect(derivedAt(now, lapses)).toMatchObject({
+      streak: { elapsedMs: now - local(1, 7, 10) },
+      lastCigarette: { elapsedMs: 4 * HOUR },
     })
   })
 
   it('leaves the protocol position exactly where it was', () => {
-    const quitMoment = NOW - 30 * DAY
-    const before = derive(journalOf(quitMoment), NOW).protocol
-    const after = derive(journalOf(quitMoment, [NOW - DAY, NOW - HOUR]), NOW).protocol
+    const now = local(1, 20)
+    const before = derivedAt(now, []).protocol
+    const after = derivedAt(
+      now,
+      [5, 6, 7].map((day) => local(1, day, 10)),
+    ).protocol
 
     expect(after).toEqual(before)
   })
 })
 
-describe('derive — personal best', () => {
-  it('is hidden while there is no lapse', () => {
-    expect(derive(journalOf(NOW - 40 * DAY), NOW).personalBest).toBeNull()
+describe('derive — lapse days in a row', () => {
+  it('counts none while there is no lapse', () => {
+    expect(derivedAt(local(1, 10), []).lapseDaysInARow).toBe(0)
   })
 
-  it('is the longest streak held before a lapse', () => {
-    const quitMoment = NOW - 20 * DAY
-    const journal = journalOf(quitMoment, [quitMoment + 9 * DAY, quitMoment + 12 * DAY])
+  it('counts a lapse today or yesterday: the run is still open', () => {
+    expect(derivedAt(local(1, 9, 12), [local(1, 9, 8)]).lapseDaysInARow).toBe(1)
+    expect(derivedAt(local(1, 10, 23), [local(1, 9, 8)]).lapseDaysInARow).toBe(1)
+  })
 
-    expect(derive(journal, NOW).personalBest).toEqual({ elapsedMs: 9 * DAY })
+  it('counts none once a whole day without a lapse has passed', () => {
+    expect(derivedAt(local(1, 11), [local(1, 9, 8)]).lapseDaysInARow).toBe(0)
+  })
+
+  it('counts consecutive days up to the latest', () => {
+    const lapses = [local(1, 5, 8), local(1, 7, 8), local(1, 8, 8)]
+
+    expect(derivedAt(local(1, 8, 12), lapses).lapseDaysInARow).toBe(2)
+  })
+})
+
+describe('derive — cigarettes smoked', () => {
+  it('adds up every lapse’s cigarettes', () => {
+    const journal: Journal = {
+      protocol: defaultProtocol,
+      facts: [
+        { type: 'quit-moment', at: QUIT },
+        { type: 'lapse', at: local(1, 5, 10), count: 3 },
+        { type: 'lapse', at: local(1, 9, 10), count: 1 },
+      ],
+    }
+
+    expect(derive(journal, local(1, 10)).cigarettesSmoked).toBe(4)
+  })
+
+  it('reads a stored lapse without a count as one cigarette', () => {
+    const stored = {
+      facts: [
+        { type: 'quit-moment', at: QUIT },
+        { type: 'lapse', at: local(1, 5, 10) },
+      ],
+    }
+
+    expect(derive(decodeJournal(stored), local(1, 10)).cigarettesSmoked).toBe(1)
+  })
+})
+
+describe('derive — personal best', () => {
+  const run = (...days: number[]) => days.map((day) => local(1, day, 10))
+
+  it('is hidden while there is no relapse, slips included', () => {
+    expect(derivedAt(local(2, 10), []).personalBest).toBeNull()
+    expect(derivedAt(local(2, 10), run(5, 6)).personalBest).toBeNull()
+  })
+
+  it('is the streak held until the relapse', () => {
+    expect(derivedAt(local(1, 9), run(5, 6, 7)).personalBest).toEqual({
+      elapsedMs: local(1, 7, 10) - QUIT,
+    })
   })
 
   it('is the current streak once it runs longer than every earlier one', () => {
-    const journal = journalOf(NOW - 10 * DAY, [NOW - 7 * DAY])
+    const now = local(2, 1)
 
-    expect(derive(journal, NOW).personalBest).toEqual({ elapsedMs: 7 * DAY })
-  })
-
-  it('exists as soon as a lapse does, even one at the quit moment', () => {
-    const journal = journalOf(NOW - HOUR, [NOW - HOUR])
-
-    expect(derive(journal, NOW).personalBest).toEqual({ elapsedMs: HOUR })
+    expect(derivedAt(now, run(3, 4, 5)).personalBest).toEqual({
+      elapsedMs: now - local(1, 5, 10),
+    })
   })
 })
 

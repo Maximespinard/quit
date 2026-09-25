@@ -27,7 +27,7 @@ it('records nothing until the lapse is confirmed', async () => {
 
   expect(onRecorded).toHaveBeenCalledWith({
     ...journal,
-    facts: [...journal.facts, { type: 'lapse', at: NOW }],
+    facts: [...journal.facts, { type: 'lapse', at: NOW, count: 1 }],
   })
 })
 
@@ -39,7 +39,10 @@ it('records a backdated lapse', async () => {
 
   expect(onRecorded).toHaveBeenCalledWith({
     ...journal,
-    facts: [...journal.facts, { type: 'lapse', at: new Date(2026, 8, 21, 23, 0).getTime() }],
+    facts: [
+      ...journal.facts,
+      { type: 'lapse', at: new Date(2026, 8, 21, 23, 0).getTime(), count: 1 },
+    ],
   })
 })
 
@@ -66,6 +69,57 @@ it('records now to the second when the time is left untouched', async () => {
 
   expect(onRecorded).toHaveBeenCalledWith({
     ...journal,
-    facts: [...journal.facts, { type: 'lapse', at: now }],
+    facts: [...journal.facts, { type: 'lapse', at: now, count: 1 }],
+  })
+})
+
+it('records the number of cigarettes, one by default and never fewer', async () => {
+  const onRecorded = vi.fn()
+  render(<LapseForm journal={journal} now={NOW} onRecorded={onRecorded} />)
+
+  expect(screen.getByRole('button', { name: copy.fewer })).toBeDisabled()
+  await userEvent.click(screen.getByRole('button', { name: copy.more }))
+  await userEvent.click(screen.getByRole('button', { name: copy.more }))
+  await userEvent.click(screen.getByRole('button', { name: copy.fewer }))
+  await userEvent.click(screen.getByRole('button', { name: copy.confirm }))
+
+  expect(onRecorded).toHaveBeenCalledWith({
+    ...journal,
+    facts: [...journal.facts, { type: 'lapse', at: NOW, count: 2 }],
+  })
+})
+
+describe('the relapse a lapse would trigger', () => {
+  const lapse = (at: number) => ({ type: 'lapse' as const, at, count: 1 })
+  const twoDaysOfLapses: Journal = {
+    ...journal,
+    facts: [
+      ...journal.facts,
+      lapse(new Date(2026, 8, 20, 21, 0).getTime()),
+      lapse(new Date(2026, 8, 21, 21, 0).getTime()),
+    ],
+  }
+
+  it('is named, with its cost, before the lapse is confirmed', () => {
+    render(<LapseForm journal={twoDaysOfLapses} now={NOW} onRecorded={vi.fn()} />)
+
+    expect(screen.getByText(copy.relapseTitle)).toBeVisible()
+    expect(screen.getByText(copy.relapseCost)).toBeVisible()
+  })
+
+  it('is not mentioned for a slip', () => {
+    render(<LapseForm journal={journal} now={NOW} onRecorded={vi.fn()} />)
+
+    expect(screen.queryByText(copy.relapseTitle)).toBeNull()
+  })
+
+  it('follows the time picked: a day that breaks the run is a slip', async () => {
+    render(<LapseForm journal={twoDaysOfLapses} now={NOW} onRecorded={vi.fn()} />)
+    const input = screen.getByLabelText(copy.dateLabel)
+
+    await userEvent.clear(input)
+    await userEvent.type(input, '2026-09-20T08:30')
+
+    expect(screen.queryByText(copy.relapseTitle)).toBeNull()
   })
 })

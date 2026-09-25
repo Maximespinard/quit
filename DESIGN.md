@@ -449,9 +449,9 @@ pas de fête, pas de reproche.
   Protocole fini → `Protocole terminé` en `title`, jamais en `figure` : ce n'est pas un chiffre.
 - **Acquis (accueil, sous le héros) :** une seule carte `surface`, `rounded-card`, `py-4`,
   en `dl` à colonnes égales séparées par un filet `divide-line` — un relevé, pas des tuiles de
-  stat. `Jours sans fumer` toujours ; `Plus long streak` (`2 j 23 h`) seulement après un
-  écart. Libellé `label` `ink-dim`, chiffre `figure`, chiffres alignés en bas de colonne.
-  Le héros dit « jours d'affilée » : « jours sans fumer » est réservé au total.
+  stat. `Jours sans fumer` toujours ; `Plus long streak` (`2 j 23 h`) seulement après une
+  rechute. Libellé `label` `ink-dim`, chiffre `figure`, chiffres alignés en bas de colonne.
+  Le héros dit « jours de streak » : « jours sans fumer » est réservé au total.
 - **Carte d'étape (éditeur) :** `fieldset` à filet `line`, `rounded-card`, padding 16px,
   **sans `legend`** (WebKit la laisse couper le filet) : un `h3` nomme le groupe via
   `aria-labelledby`. Ligne haute : titre à gauche, trois boutons `ghost` `icon` (monter,

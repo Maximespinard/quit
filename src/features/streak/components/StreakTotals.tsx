@@ -6,7 +6,7 @@ import { strings } from '@/shared/utils/strings'
 
 type StreakTotalsProps = {
   smokeFreeDays: number
-  /** `null` until a lapse exists: then it would only repeat the streak. */
+  /** `null` until a relapse exists: before, it would only repeat the streak. */
   personalBest: Streak | null
 }
 
