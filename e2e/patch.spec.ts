@@ -76,3 +76,26 @@ test('a patch before the quit moment or in the future is refused', async ({ page
   await tap(page, 'Enregistrer le patch')
   await expect(page.getByRole('alert')).toHaveText('Ce moment n’est pas encore arrivé.')
 })
+
+test('the form sent untouched logs a patch seconds after the quit moment', async ({ page }) => {
+  // The quit moment carries seconds the minute-precision date field cannot show.
+  await page.goto(sandboxAt(NOW + 37_000))
+  await tap(page, 'Maintenant')
+
+  await page.getByRole('link', { name: 'Autre dose ou autre date' }).click()
+  await tap(page, 'Enregistrer le patch')
+
+  await expect(page.getByRole('status').filter({ hasText: 'Patch noté.' })).toBeVisible()
+  await expect(patchCard(page)).toContainText(/à 13:00 · 21\smg/)
+})
+
+test('a tap refused on a clock moved before the quit moment says why', async ({ page }) => {
+  await homeWithStreak(page)
+  await shiftClock(page, '−1 h')
+
+  await tap(page, /^Poser le patch/)
+
+  await expect(patchCard(page).getByRole('alert')).toHaveText(
+    'C’est avant ton arrêt : le protocole n’avait pas commencé.',
+  )
+})

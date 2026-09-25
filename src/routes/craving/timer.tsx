@@ -1,8 +1,8 @@
 import { createFileRoute, Navigate } from '@tanstack/react-router'
 import { CravingTimerScreen } from '@/features/craving/components/CravingTimerScreen'
-import { useCravingRecorded } from '@/features/craving/hooks/useCravingRecorded'
 import { validateCravingTimerSearch } from '@/features/craving/utils/timer-search'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
+import { useRecordedThenHome } from '@/shared/hooks/useRecordedThenHome'
 import { ReadyJournal } from '@/shared/ui/ReadyJournal'
 import { validateAppSearch } from '@/shared/utils/app-search'
 
@@ -15,7 +15,7 @@ function CravingTimerPage() {
   const search = Route.useSearch()
   const navigate = Route.useNavigate()
   const { state, now } = useJournalSource()
-  const recorded = useCravingRecorded(search)
+  const recorded = useRecordedThenHome(search, 'cravingRecorded')
 
   if (search.startedAt === undefined)
     return <Navigate to="/" search={validateAppSearch(search)} replace />
