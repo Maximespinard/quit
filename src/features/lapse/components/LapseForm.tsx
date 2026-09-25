@@ -75,7 +75,7 @@ export function LapseForm({ journal, now, onRecorded }: LapseFormProps) {
           {relapse ? (
             <div className="flex flex-col gap-1 rounded-card bg-surface p-4">
               <p className="font-semibold text-body">{copy.relapseTitle}</p>
-              <p className="text-body text-ink-soft">{copy.relapseCost}</p>
+              <p className="text-body text-ink-dim">{copy.relapseCost}</p>
             </div>
           ) : null}
         </div>
