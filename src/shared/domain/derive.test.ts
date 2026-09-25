@@ -527,6 +527,12 @@ describe('derive — personal best', () => {
     })
   })
 
+  it('stops growing while the relapse run goes on: each further lapse day restarted the streak', () => {
+    expect(derivedAt(local(1, 9, 12), run(5, 6, 7, 8, 9)).personalBest).toEqual({
+      elapsedMs: local(1, 7, 10) - QUIT,
+    })
+  })
+
   it('is the current streak once it runs longer than every earlier one', () => {
     const now = local(2, 1)
 

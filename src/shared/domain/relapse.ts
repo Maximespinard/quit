@@ -2,6 +2,7 @@ import { type Lapse, lapsesUntil, recordLapse } from './facts/lapse'
 import { latestQuitMoment } from './facts/quit-moment'
 import type { Journal } from './journal'
 import { localMidnight } from './local-day'
+import type { Elapsed } from './streak'
 
 /** How many consecutive calendar days holding a lapse make a relapse. */
 export const RELAPSE_DAYS = 3
@@ -13,6 +14,8 @@ export type LapseRun = {
   readonly days: number
   /** The run's latest lapse. */
   readonly latest: number
+  /** Its lapses from the {@link RELAPSE_DAYS}th day on: each one restarted the streak. */
+  readonly restarts: readonly number[]
 }
 
 /** A relapse restarts the streak from the latest lapse of its run. Derived, never declared. */
@@ -24,10 +27,15 @@ export function lapseRuns(lapses: readonly Lapse[]): LapseRun[] {
   for (const { at } of lapses) {
     const day = localMidnight(at)
     const run = runs.at(-1)
-    if (run !== undefined && day === run.lastDay) runs[runs.length - 1] = { ...run, latest: at }
-    else if (run !== undefined && day === localMidnight(run.lastDay, 1))
-      runs[runs.length - 1] = { lastDay: day, days: run.days + 1, latest: at }
-    else runs.push({ lastDay: day, days: 1, latest: at })
+    const sameDay = run !== undefined && day === run.lastDay
+    const nextDay = run !== undefined && day === localMidnight(run.lastDay, 1)
+    if (run === undefined || !(sameDay || nextDay)) {
+      runs.push({ lastDay: day, days: 1, latest: at, restarts: [] })
+      continue
+    }
+    const days = nextDay ? run.days + 1 : run.days
+    const restarts = days >= RELAPSE_DAYS ? [...run.restarts, at] : run.restarts
+    runs[runs.length - 1] = { lastDay: day, days, latest: at, restarts }
   }
   return runs
 }
@@ -35,6 +43,24 @@ export function lapseRuns(lapses: readonly Lapse[]): LapseRun[] {
 /** One relapse per run long enough, dated by its latest lapse, which moves while the run goes on. */
 export const relapsesOf = (runs: readonly LapseRun[]): Relapse[] =>
   runs.filter((run) => run.days >= RELAPSE_DAYS).map((run) => ({ at: run.latest }))
+
+/** The latest run while it is still open: its last day is today or yesterday. */
+export const openRun = (runs: readonly LapseRun[], now: number): LapseRun | null => {
+  const latest = runs.at(-1)
+  return latest !== undefined && latest.lastDay >= localMidnight(now, -1) ? latest : null
+}
+
+/** Since the latest lapse, while it is a slip: once part of a relapse, the streak says it. */
+export const lastSlip = (runs: readonly LapseRun[], now: number): Elapsed | null => {
+  const latest = runs.at(-1)
+  return latest === undefined || latest.days >= RELAPSE_DAYS
+    ? null
+    : { elapsedMs: now - latest.latest }
+}
+
+/** Every moment the streak restarted, oldest first. */
+export const streakRestarts = (runs: readonly LapseRun[]): number[] =>
+  runs.flatMap((run) => run.restarts)
 
 const relapsesAt = (journal: Journal, now: number): Relapse[] => {
   const quitMoment = latestQuitMoment(journal)

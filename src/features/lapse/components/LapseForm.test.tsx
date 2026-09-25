@@ -60,7 +60,7 @@ it.each([
   expect(onRecorded).not.toHaveBeenCalled()
 })
 
-it('records now to the second when the time is left untouched', async () => {
+it('records now to the millisecond when the time is left untouched', async () => {
   const onRecorded = vi.fn()
   const now = NOW + 42_500
   render(<LapseForm journal={journal} now={now} onRecorded={onRecorded} />)
