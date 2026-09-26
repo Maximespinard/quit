@@ -14,7 +14,7 @@ Issues, specs and tickets for this repo live in Linear, not in this repo's GitHu
 - **Comment on an issue**: `save_comment`.
 - **Apply / remove labels**: `save_issue` with `labels` (replaces the full set) — read the current set with `get_issue` first if adding one label without dropping the others.
 - **Close**: `save_issue` with `state` set to `"Done"` (finished) or `"Canceled"` (won't do).
-- **PR title**: conventional commit + ticket id — `feat(protocol): default taper and step editing (SYR-25)`. The repo rebase-merges, so the title never reaches `main`'s history; it only labels the PR list.
+- **PR title**: conventional commit + ticket id — `feat(protocol): default taper and step editing (SYR-25)`. The repo squash-merges, so the title becomes the commit message on `main`: one clean conventional commit per ticket.
 
 Statuses in this team: `Backlog`, `Todo`, `In Progress`, `Done`, `Canceled`, `Duplicate`.
 
