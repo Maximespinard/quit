@@ -38,10 +38,11 @@ function HistoryDaySection({
   const headingId = useId()
   return (
     <section aria-labelledby={headingId} className="flex flex-col gap-1">
-      <h3 id={headingId} className="font-semibold text-ink-soft text-label first-letter:uppercase">
+      <h3 id={headingId} className="font-semibold text-body first-letter:uppercase">
         {heading}
       </h3>
-      <ul className="flex flex-col">
+      {/* A statement, not tiles: rows split by a 1px rule, like the totals card's columns. */}
+      <ul className="flex flex-col divide-y divide-line">
         {entries.map(({ index, fact }) => {
           const { title, detail } = describeFact(fact)
           return (
@@ -50,7 +51,8 @@ function HistoryDaySection({
                 to="/history/$position"
                 params={{ position: String(index) }}
                 search={keepSearch}
-                className="-mx-2 flex min-h-14 items-center gap-4 rounded-control px-2 py-2 active:bg-surface"
+                // The time sits on the title's baseline; the chevron centres on the row.
+                className="-mx-2 flex min-h-16 items-baseline gap-4 rounded-control px-2 py-3 transition-colors duration-150 ease-out-expo active:bg-surface motion-reduce:transition-none"
               >
                 <span className="w-12 shrink-0 font-medium text-body text-ink-soft tabular-nums">
                   {formatTime(fact.at)}
@@ -59,7 +61,7 @@ function HistoryDaySection({
                   <span className="font-semibold text-body">{title}</span>
                   <span className="truncate text-ink-soft text-label">{detail}</span>
                 </span>
-                <ChevronRight aria-hidden className="size-5 shrink-0 text-ink-dim" />
+                <ChevronRight aria-hidden className="size-5 shrink-0 self-center text-ink-soft" />
               </Link>
             </li>
           )

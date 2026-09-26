@@ -176,7 +176,7 @@ export const strings = {
   history: {
     title: 'Historique',
     open: 'Historique',
-    lead: 'Tout ce que tu as noté, du plus récent au plus ancien. Touche une ligne pour la modifier.',
+    lead: 'Du plus récent au plus ancien. Touche une ligne pour la modifier ou la supprimer.',
     empty:
       'Rien de noté pour l’instant. Tes patchs, tes envies et tes cigarettes apparaîtront ici.',
     today: 'Aujourd’hui',

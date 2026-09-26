@@ -63,10 +63,13 @@ function EditFactPage() {
             ) : (
               <>
                 {form}
-                <DeleteFact
-                  confirm={fact.type === 'lapse'}
-                  onDelete={() => commitThenHistory(rest, 'factDeleted')}
-                />
+                {/* Set apart under a rule: saving and deleting never sit one mis-tap apart. */}
+                <div className="mt-4 flex flex-col border-line border-t pt-6">
+                  <DeleteFact
+                    confirm={fact.type === 'lapse'}
+                    onDelete={() => commitThenHistory(rest, 'factDeleted')}
+                  />
+                </div>
               </>
             )}
             <Link

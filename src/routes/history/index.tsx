@@ -22,27 +22,31 @@ function HistoryPage() {
 
   return (
     <ReadyJournal state={state}>
-      {(journal) => (
-        <AppShell>
-          <div className="flex flex-col gap-2 pt-6">
-            <h2 className="text-title">{copy.title}</h2>
-            <p className="text-body text-ink-soft">{copy.lead}</p>
-          </div>
-          {notice !== null ? (
-            <p role="status" className="text-body text-ink-soft">
-              {notice}
-            </p>
-          ) : null}
-          <FactHistory days={historyDays(journal)} now={now} />
-          <Link
-            to="/"
-            search={appSearch}
-            className={buttonVariants({ variant: 'ghost', size: 'lg' })}
-          >
-            {copy.back}
-          </Link>
-        </AppShell>
-      )}
+      {(journal) => {
+        const days = historyDays(journal)
+        return (
+          <AppShell>
+            <div className="flex flex-col gap-2 pt-6">
+              <h2 className="text-title">{copy.title}</h2>
+              {/* Only a list has lines to touch: the empty state says it all by itself. */}
+              {days.length > 0 ? <p className="text-body text-ink-soft">{copy.lead}</p> : null}
+            </div>
+            {notice !== null ? (
+              <p role="status" className="text-body text-ink-soft">
+                {notice}
+              </p>
+            ) : null}
+            <FactHistory days={days} now={now} />
+            <Link
+              to="/"
+              search={appSearch}
+              className={buttonVariants({ variant: 'ghost', size: 'lg' })}
+            >
+              {copy.back}
+            </Link>
+          </AppShell>
+        )
+      }}
     </ReadyJournal>
   )
 }

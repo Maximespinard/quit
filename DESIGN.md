@@ -467,6 +467,14 @@ pas de fête, pas de reproche.
   largeur.
 - **Unités :** toujours une espace insécable entre un nombre et son unité (`21 mg`,
   `28 j`, `24 h`), dans `strings.ts`.
+- **Historique :** un relevé, pas des cartes. Un jour par section, titré comme les blocs de
+  l'accueil (`body` 600 : `Aujourd’hui`, `Hier`, puis la date). Lignes séparées par
+  `divide-line`, 64px minimum, appui en `surface` : heure en `body` `ink-soft` sur la ligne de
+  base du titre, titre en `body` 600, détails en `label` `ink-soft` tronqués, chevron `ink-soft`
+  centré. La consigne n'apparaît que s'il y a des lignes ; vide, une seule phrase.
+- **Écran d'un fait :** le formulaire qui l'a enregistré, prérempli ; `Supprimer` (destructif,
+  `lg`) vient **sous un filet `line`**, jamais collé à `Enregistrer`. Supprimer une cigarette
+  passe par un `Dialog` (`Oui, supprimer` / `Garder`) ; les autres faits partent en un tap.
 ### Bloc héros (signature)
 
 Le seul objet illustré de l'app. Une `section` en `relative isolate overflow-hidden`, fond
