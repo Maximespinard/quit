@@ -32,7 +32,6 @@ fetch, the abstract was read through Europe PMC (noted in the table).
 | I | Perkins, Karelitz & Jao, "Optimal Carbon Monoxide Criteria to Confirm 24-hr Smoking Abstinence", Nicotine Tob Res 2013;15(5):978–982 | Peer-reviewed | https://pmc.ncbi.nlm.nih.gov/articles/PMC3733388/ |
 | J | Rose et al., "Carbon Monoxide Poisoning: Pathogenesis, Management, and Future Directions of Therapy", Am J Respir Crit Care Med 2017 (poisoning context) | Peer-reviewed review | https://pmc.ncbi.nlm.nih.gov/articles/PMC5363978/ |
 | K | Chéruel, Jarlier & Sancho-Garnier, "Effect of cigarette smoke on gustatory sensitivity, evaluation of the deficit and of the recovery time-course after smoking cessation", Tob Induc Dis 2017;15 | Peer-reviewed | https://pmc.ncbi.nlm.nih.gov/articles/PMC5329949/ |
-| L | Hughes, "Effects of abstinence from tobacco: valid symptoms and time course", Nicotine Tob Res 2007;9(3):315–327 | Peer-reviewed review | https://academic.oup.com/ntr/article-pdf/9/3/315/3842403/9-3-315.pdf |
 | M | Kanner et al., Lung Health Study, "Effects of randomized assignment to a smoking cessation intervention…on respiratory symptoms…", Am J Med 1999 (abstract via Europe PMC, PMID 10225243) | Peer-reviewed RCT | https://pubmed.ncbi.nlm.nih.gov/10225243/ |
 | N | US Pharmacist, "Reviewing the 2020 Surgeon General Report on Smoking Cessation" (secondary summary of the 2020 report) | Secondary | https://www.uspharmacist.com/article/reviewing-the-2020-surgeon-general-report-on-smoking-cessation |
 
@@ -97,13 +96,16 @@ fetch, the abstract was read through Europe PMC (noted in the table).
 
 ### 1 week
 
-- **Fact.** Tobacco withdrawal symptoms peak within the first week, then last 2 to 4 weeks.
-- **French.** « En général, le manque culmine la 1re semaine et dure 2 à 4 semaines au total. »
-- **Sources.** L: "Anger, anxiety, depression, difficulty concentrating, impatience, insomnia,
-  and restlessness are valid withdrawal symptoms that peak within the first week and last 2–4
-  weeks."
-- **Confidence: high** for the fact (review of the literature), **medium** for the fit: it describes
-  withdrawal, not a physiological gain, and a patch lessens withdrawal. See Gaps.
+- **Fact.** The carbon monoxide level in the blood is back to that of a non-smoker.
+- **French.** « Monoxyde de carbone du sang : niveau d'un non-fumeur, selon les agences de santé. »
+- **Sources.** A: "12 hours, the carbon monoxide level in your blood drops to normal." C: "24
+  hours to a few days after quitting — […] The carbon monoxide level in your blood drops to
+  normal." B: "Several days — Carbon monoxide level in the blood drops to level of someone who
+  does not smoke."
+- **Confidence: high.** Three agencies agree, and each gives a window ending before day 7
+  ("several days" in B is the latest). No source names day 7 itself, so the badge reports a
+  change already reached, not one that happens that day. Unaffected by the patch: nicotine
+  replacement does not deliver carbon monoxide.
 
 ### 2 weeks
 
@@ -178,8 +180,8 @@ fetch, the abstract was read through Europe PMC (noted in the table).
 - **8 h vs 12 h vs days for carbon monoxide.** F: halved at 8 h. WHO (A): normal at 12 h. ACS
   (C): normal at 24 h to a few days. CDC (B): non-smoker level after several days. Half-life
   papers (I, J; J is about poisoning, not smokers) give about 4–5 h, which fits F and A. The
-  8 h badge keeps "halved"; the 24 h badge attributes "normal" to WHO. If one wording must hold
-  for every source, "normal" belongs at 1 week, not 24 h.
+  8 h badge keeps "halved"; the 24 h badge attributes "normal" to WHO; the 1 week badge states
+  "non-smoker level", the one wording every source supports.
 - **24 h: F's claims are rejected.** "Le risque d'infarctus du myocarde diminue déjà": no primary
   source found; A, B, C, D and E give no 24 h cardiac claim. "Le corps ne contient plus de
   nicotine" (also C, B: "Nicotine level in the blood drops to zero"): false for a patch user.
@@ -187,15 +189,17 @@ fetch, the abstract was read through Europe PMC (noted in the table).
   fact.
 - **48 h: no primary source for taste and smell.** Only F gives 48 h; NHS (D) says "within days
   or weeks"; the only measured data (K) show taste recovery from 2 weeks. Proposed: keep the
-  hedged "jours ou semaines" copy, or move the taste fact to 2 weeks (done) and give 48 h a
-  carbon monoxide fact ("the sources agree it is normal within a few days").
+  hedged "jours ou semaines" copy (taste already has its measured fact at 2 weeks).
 - **72 h: no primary source.** "Respirer devient plus facile / les bronches se relâchent" traces
   only to F; NHS (D) supports the direction with a vague window. The popular list trail ends in
-  public-health pages without a study. Proposed alternative: the ACS/CDC carbon monoxide fact
-  ("24 hours to a few days", "several days"), the point where all agencies agree.
-- **1 week: no physiological fact found at this threshold.** No agency lists a 7-day change. The
-  withdrawal time course (L) is well sourced but is not a health gain. Alternative: the
-  carbon monoxide "non-smoker level" fact, on which A, B and C all agree by one week.
+  public-health pages without a study. The carbon monoxide agreement point is used at 1 week,
+  so the hedged NHS wording stays.
+- **1 week: no change is timed at day 7.** No agency lists a 7-day change. The withdrawal time
+  course was rejected: Hughes 2007 says symptoms "peak within the first week and last 2–4
+  weeks" (https://academic.oup.com/ntr/article-pdf/9/3/315/3842403/9-3-315.pdf), but a patch
+  damps withdrawal, so that curve does not describe this user, and it is not a health gain. The
+  badge uses the carbon monoxide "non-smoker level" fact instead, on which A, B and C all agree
+  by one week.
 - **1 month: range, not a point.** WHO's "2-12 weeks" is a window; no source ties a change to
   day 30.
 - **6 months: range, not a point.** "1-9 months" (A) and "1 to 12 months" (B, C) are windows.
