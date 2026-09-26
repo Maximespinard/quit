@@ -471,7 +471,7 @@ pas de fête, pas de reproche.
   l'accueil (`body` 600 : `Aujourd’hui`, `Hier`, puis la date). Lignes séparées par
   `divide-line`, 64px minimum, appui en `surface` : heure en `body` `ink-soft` sur la ligne de
   base du titre, titre en `body` 600, détails en `label` `ink-soft` tronqués, chevron `ink-soft`
-  centré. La consigne n'apparaît que s'il y a des lignes ; vide, une seule phrase.
+  centré — les trois passent `ink-dim` pendant l'appui (The Two Greys Rule). La consigne n'apparaît que s'il y a des lignes ; vide, une seule phrase.
 - **Écran d'un fait :** le formulaire qui l'a enregistré, prérempli ; `Supprimer` (destructif,
   `lg`) vient **sous un filet `line`**, jamais collé à `Enregistrer`. Supprimer une cigarette
   passe par un `Dialog` (`Oui, supprimer` / `Garder`) ; les autres faits partent en un tap.

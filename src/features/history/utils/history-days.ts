@@ -7,10 +7,10 @@ import { localMidnight } from '@/shared/domain/local-day'
 export type HistoryFact = Exclude<Fact, QuitMomentFact>
 
 /** One fact of the history, with its place in the journal: what an edit or a delete targets. */
-export type HistoryEntry = { readonly index: number; readonly fact: HistoryFact }
+export type HistoryItem = { readonly index: number; readonly fact: HistoryFact }
 
-/** The entries of one local calendar day, `day` being its midnight. */
-export type HistoryDay = { readonly day: number; readonly entries: readonly HistoryEntry[] }
+/** The items of one local calendar day, `day` being its midnight. */
+export type HistoryDay = { readonly day: number; readonly items: readonly HistoryItem[] }
 
 const isHistoryFact = (fact: Fact): fact is HistoryFact => fact.type !== 'quit-moment'
 
@@ -19,15 +19,21 @@ const isHistoryFact = (fact: Fact): fact is HistoryFact => fact.type !== 'quit-m
  * comes first. Any fact type but the quit moment is listed, known or added later.
  */
 export function historyDays(journal: Journal): readonly HistoryDay[] {
-  const entries = journal.facts
+  const items = journal.facts
     .flatMap((fact, index) => (isHistoryFact(fact) ? [{ index, fact }] : []))
     .sort((a, b) => b.fact.at - a.fact.at || b.index - a.index)
-  const days: { day: number; entries: HistoryEntry[] }[] = []
-  for (const entry of entries) {
-    const day = localMidnight(entry.fact.at)
+  const days: { day: number; items: HistoryItem[] }[] = []
+  for (const item of items) {
+    const day = localMidnight(item.fact.at)
     const last = days.at(-1)
-    if (last?.day === day) last.entries.push(entry)
-    else days.push({ day, entries: [entry] })
+    if (last?.day === day) last.items.push(item)
+    else days.push({ day, items: [item] })
   }
   return days
+}
+
+/** The fact a history item points to, or `null` when that index holds none the history lists. */
+export function historyFactAt(journal: Journal, index: number): HistoryFact | null {
+  const fact = Number.isInteger(index) ? journal.facts[index] : undefined
+  return fact !== undefined && isHistoryFact(fact) ? fact : null
 }

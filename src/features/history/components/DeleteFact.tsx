@@ -10,18 +10,21 @@ import {
   DialogTrigger,
 } from '@/shared/ui/base/dialog'
 import { strings } from '@/shared/utils/strings'
+import type { HistoryFact } from '../utils/history-days'
 
 type DeleteFactProps = {
-  /** A lapse asks first: the guard is against a mis-tap, not against the user. */
-  confirm: boolean
+  fact: HistoryFact
   onDelete: () => void
 }
 
 const copy = strings.history
 
-/** Deletes the fact being edited; every derived figure follows on the next render. */
-export function DeleteFact({ confirm, onDelete }: DeleteFactProps) {
-  if (!confirm) {
+/**
+ * Deletes the fact being edited; every derived figure follows on the next render. A lapse
+ * asks first: the guard is against a mis-tap, not against the user.
+ */
+export function DeleteFact({ fact, onDelete }: DeleteFactProps) {
+  if (fact.type !== 'lapse') {
     return (
       <Button variant="destructive" size="lg" onClick={onDelete}>
         {copy.delete}

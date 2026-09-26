@@ -5,9 +5,14 @@ import { DeleteFact } from './DeleteFact'
 
 const copy = strings.history
 
-it('deletes in one tap a fact that asks for no confirmation', async () => {
+it('deletes any fact but a lapse in one tap', async () => {
   const onDelete = vi.fn()
-  render(<DeleteFact confirm={false} onDelete={onDelete} />)
+  render(
+    <DeleteFact
+      fact={{ type: 'craving', at: 0, intensity: 1, heldToEnd: false, tags: [] }}
+      onDelete={onDelete}
+    />,
+  )
 
   await userEvent.click(screen.getByRole('button', { name: copy.delete }))
 
@@ -16,7 +21,7 @@ it('deletes in one tap a fact that asks for no confirmation', async () => {
 
 it('asks before deleting a lapse, and keeps it when the user says so', async () => {
   const onDelete = vi.fn()
-  render(<DeleteFact confirm onDelete={onDelete} />)
+  render(<DeleteFact fact={{ type: 'lapse', at: 0, count: 1 }} onDelete={onDelete} />)
 
   await userEvent.click(screen.getByRole('button', { name: copy.delete }))
   expect(onDelete).not.toHaveBeenCalled()

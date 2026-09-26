@@ -1,5 +1,5 @@
 import { emptyJournal, type Journal } from '@/shared/domain/journal'
-import { historyDays } from './history-days'
+import { historyDays, historyFactAt } from './history-days'
 
 const QUIT = new Date(2026, 0, 1, 9, 0).getTime()
 const at = (day: number, hour: number, minute = 0) => new Date(2026, 0, day, hour, minute).getTime()
@@ -19,14 +19,14 @@ it('lists every recorded fact newest first, grouped by local day, each with its 
   expect(historyDays(journal)).toEqual([
     {
       day: at(2, 0),
-      entries: [
+      items: [
         { index: 2, fact: { type: 'lapse', at: at(2, 22), count: 2 } },
         { index: 4, fact: { type: 'patch-application', at: at(2, 8), doseMg: 21 } },
       ],
     },
     {
       day: at(1, 0),
-      entries: [
+      items: [
         {
           index: 3,
           fact: { type: 'craving', at: at(1, 14), intensity: 2, heldToEnd: true, tags: [] },
@@ -37,7 +37,7 @@ it('lists every recorded fact newest first, grouped by local day, each with its 
   ])
 })
 
-it('leaves the quit moment out: it anchors the history, it is not an entry of it', () => {
+it('leaves the quit moment out: it anchors the history, it is not an item of it', () => {
   const onlyQuit: Journal = { ...emptyJournal, facts: [{ type: 'quit-moment', at: QUIT }] }
 
   expect(historyDays(onlyQuit)).toEqual([])
@@ -52,5 +52,17 @@ it('puts the one recorded last first on a tie', () => {
     ],
   }
 
-  expect(historyDays(tie)[0]?.entries.map((entry) => entry.index)).toEqual([1, 0])
+  expect(historyDays(tie)[0]?.items.map((item) => item.index)).toEqual([1, 0])
+})
+
+describe('historyFactAt', () => {
+  it('finds the fact an item points to', () => {
+    expect(historyFactAt(journal, 2)).toEqual({ type: 'lapse', at: at(2, 22), count: 2 })
+  })
+
+  it('finds nothing at the quit moment, past the end or at a non-index', () => {
+    expect(historyFactAt(journal, 0)).toBeNull()
+    expect(historyFactAt(journal, 5)).toBeNull()
+    expect(historyFactAt(journal, Number('x'))).toBeNull()
+  })
 })
