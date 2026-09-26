@@ -12,7 +12,8 @@ type ValueSettingProps = {
   value: number | null
   /** The journal with the new value, or `null` when the domain refuses it. */
   apply: (value: number) => Journal | null
-  onSaved: (journal: Journal) => void
+  /** Resolves once the journal is stored: only then is the save confirmed. */
+  onSaved: (journal: Journal) => Promise<void>
 }
 
 /** A numeric setting edited in place; nothing changes until a valid value is saved. */
@@ -23,13 +24,16 @@ export function ValueSetting({ label, input, value, apply, onSaved }: ValueSetti
   const [text, setText] = useState(inForce)
   const [status, setStatus] = useState<'editing' | 'saved' | 'refused'>('editing')
 
-  const save = () => {
-    const journal = apply(input.read(text))
+  const save = async () => {
+    const read = input.read(text)
+    const journal = apply(read)
     if (journal === null) {
       setStatus('refused')
       return
     }
-    onSaved(journal)
+    await onSaved(journal)
+    // `35,5` is stored as 3550: the field shows it back as `35,50`, no longer a pending edit.
+    setText(input.toText(read))
     setStatus('saved')
   }
 

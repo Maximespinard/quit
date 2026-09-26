@@ -94,3 +94,32 @@ test('settings open the protocol editor', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Protocole' })).toBeVisible()
   await expect(streakRegion(page)).toHaveCount(0)
 })
+
+// Persistence is the real journal's job: real IndexedDB, real clock.
+test('a spend and a baseline edited in settings survive a reload', async ({ page }) => {
+  await page.goto('/')
+  await startNow(page)
+  await openSettings(page)
+
+  await spendSetting(page).getByRole('textbox').fill('35,5')
+  await spendSetting(page).getByRole('button', { name: 'Enregistrer' }).click()
+  // Stored as 3550 cents, shown back as it is kept: nothing left to save.
+  await expect(spendSetting(page).getByRole('textbox')).toHaveValue('35,50')
+  await expect(spendSetting(page).getByRole('button', { name: 'Enregistrer' })).toBeDisabled()
+  const baseline = setting(page, 'Cigarettes par jour, avant')
+  await baseline.getByRole('textbox').fill('20')
+  await baseline.getByRole('button', { name: 'Enregistrer' }).click()
+  await expect(baseline.getByRole('status')).toHaveText('Enregistré.')
+
+  await page.reload()
+
+  await expect(spendSetting(page).getByRole('textbox')).toHaveValue('35,50')
+  await expect(baseline.getByRole('textbox')).toHaveValue('20')
+})
+
+test('settings before first launch lead back to it', async ({ page }) => {
+  await page.goto(`/settings?debug=true&clock=${NOW}`)
+
+  await expect(page.getByRole('button', { name: 'Maintenant', exact: true })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Réglages' })).toHaveCount(0)
+})

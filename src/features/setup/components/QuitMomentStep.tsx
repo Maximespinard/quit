@@ -9,16 +9,18 @@ type QuitMomentStepProps = {
   journal: Journal
   /** Injected clock: the step never reads the system time itself. */
   now: number
+  /** The moment already picked, when the user came back to this step. */
+  initial: number | null
   onPicked: (at: number) => void
 }
 
 const copy = strings.quitMoment
 
 /** First launch, first step: the quit moment as "now" in one tap, or as any past date and time. */
-export function QuitMomentStep({ journal, now, onPicked }: QuitMomentStepProps) {
+export function QuitMomentStep({ journal, now, initial, onPicked }: QuitMomentStepProps) {
   const inputId = useId()
   const errorId = useId()
-  const [value, setValue] = useState(() => toDatetimeLocal(now))
+  const [value, setValue] = useState(() => toDatetimeLocal(initial ?? now))
   // A new journal holds no fact yet: only the future can be refused.
   const [error, setError] = useState<'future' | 'invalid' | null>(null)
 

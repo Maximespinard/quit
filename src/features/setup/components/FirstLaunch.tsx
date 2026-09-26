@@ -23,8 +23,8 @@ type Answers = {
   baselineSmokesPerDay: number | null
 }
 
-const STEP_COUNT = 4
 const STEPS = [1, 2, 3, 4] as const
+const STEP_COUNT = STEPS.length
 const copy = strings.firstLaunch
 
 /**
@@ -93,6 +93,7 @@ export function FirstLaunch({ journal, now, onStarted }: FirstLaunchProps) {
         <QuitMomentStep
           journal={journal}
           now={now}
+          initial={answers.quitMoment}
           onPicked={(quitMoment) => answer({ quitMoment })}
         />
       ) : step === 2 ? (

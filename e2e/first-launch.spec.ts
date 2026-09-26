@@ -61,9 +61,14 @@ test('the full first launch: a backdated quit moment, the spend, the baseline, t
   await expect(page.getByRole('alert')).toHaveText(
     'Indique un nombre entier de cigarettes, au moins une.',
   )
-  // Back keeps what was already answered.
+  // Back keeps what was already answered, the backdated moment included.
   await tap(page, 'Retour')
   await expect(spendField(page)).toHaveValue('42,50')
+  await tap(page, 'Retour')
+  await expect(page.getByLabel('Une autre date et heure')).toHaveValue(
+    await localInput(page, NOW - 51 * HOUR),
+  )
+  await tap(page, 'C’est depuis là')
   await tap(page, 'Continuer')
   await baselineField(page).fill('12')
   await tap(page, 'Continuer')

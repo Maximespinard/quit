@@ -13,7 +13,7 @@ type SettingsScreenProps = {
   journal: Journal
   /** Injected clock: the screen never reads the system time itself. */
   now: number
-  onSaved: (journal: Journal) => void
+  onSaved: (journal: Journal) => Promise<void>
 }
 
 const copy = strings.settings
@@ -48,7 +48,7 @@ export function SettingsScreen({ journal, now, onSaved }: SettingsScreenProps) {
         <span className="flex flex-col gap-1">
           <span className="font-semibold text-body">{copy.protocol.open}</span>
           <span className="text-ink-dim text-label">
-            {journal.protocol.map((step) => `${formatDose(step.doseMg)} mg`).join(' → ')}
+            {copy.protocol.doses(journal.protocol.map((step) => formatDose(step.doseMg)))}
           </span>
         </span>
         <ChevronRight className="size-5 text-ink-soft" strokeWidth={1.75} aria-hidden="true" />

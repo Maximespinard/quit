@@ -1,6 +1,7 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, Navigate } from '@tanstack/react-router'
 import { ChevronLeft } from 'lucide-react'
 import { SettingsScreen } from '@/features/setup/components/SettingsScreen'
+import { latestQuitMoment } from '@/shared/domain/facts/quit-moment'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
 import { AppShell } from '@/shared/ui/app-shell'
 import { buttonVariants } from '@/shared/ui/base/button'
@@ -37,6 +38,9 @@ function SettingsPage() {
         <p role="alert" className="text-alert text-body">
           {strings.journal.error}
         </p>
+      ) : latestQuitMoment(state.journal) === null ? (
+        // No "not yet quit" state: before first launch, settings would start a journey half-set.
+        <Navigate to="/" search={keepSearch} replace />
       ) : (
         <SettingsScreen journal={state.journal} now={now} onSaved={commit} />
       )}

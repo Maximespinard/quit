@@ -111,8 +111,9 @@ export const strings = {
       label: 'Cigarettes par jour, avant',
     },
     protocol: {
-      label: 'Protocole',
       open: 'Modifier le protocole',
+      /** The taper at a glance: `21 mg → 14 mg → 7 mg`. */
+      doses: (doses: readonly string[]) => doses.map((dose) => `${dose}\u00a0mg`).join(' → '),
     },
   },
   money: {

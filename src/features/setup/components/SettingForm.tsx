@@ -8,7 +8,7 @@ type SettingFormProps = {
   /** Whether the field differs from what is in force: saving the same value is no action. */
   changed: boolean
   saved: boolean
-  onSubmit: () => void
+  onSubmit: () => Promise<void>
   children: ReactNode
 }
 
@@ -20,7 +20,7 @@ export function SettingForm({ label, changed, saved, onSubmit, children }: Setti
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    onSubmit()
+    void onSubmit()
   }
 
   return (

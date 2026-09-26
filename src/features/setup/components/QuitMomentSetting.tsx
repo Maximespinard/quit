@@ -14,7 +14,8 @@ type QuitMomentSettingProps = {
   journal: Journal
   /** Injected clock: the setting never reads the system time itself. */
   now: number
-  onSaved: (journal: Journal) => void
+  /** Resolves once the journal is stored: only then is the save confirmed. */
+  onSaved: (journal: Journal) => Promise<void>
 }
 
 type Status =
@@ -42,7 +43,7 @@ export function QuitMomentSetting({ journal, now, onSaved }: QuitMomentSettingPr
         ? refusalText(status.refusal)
         : null
 
-  const save = () => {
+  const save = async () => {
     // The field only shows minutes: left untouched, it keeps the moment to the millisecond.
     const at =
       quitMoment !== null && value === toDatetimeLocal(quitMoment)
@@ -58,7 +59,7 @@ export function QuitMomentSetting({ journal, now, onSaved }: QuitMomentSettingPr
       setStatus({ kind: 'refused', refusal })
       return
     }
-    onSaved(result.journal)
+    await onSaved(result.journal)
     setStatus({ kind: 'saved' })
   }
 
