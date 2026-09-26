@@ -10,12 +10,14 @@ type StreakScreenProps = {
   brand: ReactNode
   /** The hero's top-right context, e.g. the current protocol step. */
   context?: ReactNode
+  /** The hero's top-right control, after the context (settings). */
+  action?: ReactNode
   /** Blocks under the hero, composed by the app layer. */
   children?: ReactNode
 }
 
 /** The home screen once a quit moment exists: the streak as elapsed time, live. */
-export function StreakScreen({ streak, brand, context, children }: StreakScreenProps) {
+export function StreakScreen({ streak, brand, context, action, children }: StreakScreenProps) {
   const duration = splitDuration(streak.elapsedMs)
 
   return (
@@ -26,6 +28,7 @@ export function StreakScreen({ streak, brand, context, children }: StreakScreenP
         regionLabel={strings.streak.region}
         brand={brand}
         context={context}
+        action={action}
       />
       {children ? <div className="flex flex-col gap-5 px-safe pt-5 pb-4">{children}</div> : null}
     </div>

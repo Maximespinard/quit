@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test'
-import { expectStreak, sandboxAt, streakRegion } from './sandbox'
+import { expectStreak, sandboxAt, startNow, streakRegion } from './sandbox'
 
 const NOW = Date.UTC(2026, 0, 1, 12, 0, 0)
 const DAY_MS = 24 * 60 * 60 * 1000
@@ -19,7 +19,7 @@ test('the panel is unreachable without the debug parameter', async ({ page }) =>
 
 test('the sandbox clock moves by an hour and a day, and the streak follows', async ({ page }) => {
   await page.goto(sandboxAt(NOW))
-  await tap(page, 'Maintenant')
+  await startNow(page)
   await marker(page).click()
 
   await tap(page, '+1 h')
@@ -43,7 +43,7 @@ test('the sandbox clock moves by an hour and a day, and the streak follows', asy
 
 test('wiping the sandbox returns it to an empty journal', async ({ page }) => {
   await page.goto(sandboxAt(NOW))
-  await tap(page, 'Maintenant')
+  await startNow(page)
   await expectStreak(page, 0, '00:00:00')
 
   await marker(page).click()
@@ -55,13 +55,13 @@ test('wiping the sandbox returns it to an empty journal', async ({ page }) => {
 
 test('a sandbox session never reads nor writes the real journal', async ({ page }) => {
   await page.goto('/')
-  await tap(page, 'Maintenant')
+  await startNow(page)
   await expectStreak(page, 0, '00:00:\\d\\d')
 
   // The real quit moment is not read: the sandbox starts empty.
   await page.goto(sandboxAt(NOW))
   await expect(marker(page)).toBeVisible()
-  await tap(page, 'Maintenant')
+  await startNow(page)
   await marker(page).click()
   await tap(page, '+1 j')
   await expectStreak(page, 1, '00:00:00')
@@ -75,7 +75,7 @@ test('a sandbox session never reads nor writes the real journal', async ({ page 
 // The installed PWA has no address bar: the sandbox opens and closes from inside the app.
 test('a long press on the brand opens the sandbox, and the panel leaves it', async ({ page }) => {
   await page.goto('/')
-  await tap(page, 'Maintenant')
+  await startNow(page)
   await expectStreak(page, 0, '00:00:\\d\\d')
 
   await page.getByRole('heading', { name: 'quit' }).getByText('quit').hover()

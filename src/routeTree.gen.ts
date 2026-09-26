@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DesignRouteImport } from './routes/design'
 import { Route as LapseRouteImport } from './routes/lapse'
 import { Route as ProtocolRouteImport } from './routes/protocol'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as CravingPastRouteImport } from './routes/craving/past'
 import { Route as CravingTimerRouteImport } from './routes/craving/timer'
 import { Route as PatchNewRouteImport } from './routes/patch/new'
@@ -37,6 +38,11 @@ const ProtocolRoute = ProtocolRouteImport.update({
   path: '/protocol',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CravingPastRoute = CravingPastRouteImport.update({
   id: '/craving/past',
   path: '/craving/past',
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/design': typeof DesignRoute
   '/lapse': typeof LapseRoute
   '/protocol': typeof ProtocolRoute
+  '/settings': typeof SettingsRoute
   '/craving/past': typeof CravingPastRoute
   '/craving/timer': typeof CravingTimerRoute
   '/patch/new': typeof PatchNewRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/design': typeof DesignRoute
   '/lapse': typeof LapseRoute
   '/protocol': typeof ProtocolRoute
+  '/settings': typeof SettingsRoute
   '/craving/past': typeof CravingPastRoute
   '/craving/timer': typeof CravingTimerRoute
   '/patch/new': typeof PatchNewRoute
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/design': typeof DesignRoute
   '/lapse': typeof LapseRoute
   '/protocol': typeof ProtocolRoute
+  '/settings': typeof SettingsRoute
   '/craving/past': typeof CravingPastRoute
   '/craving/timer': typeof CravingTimerRoute
   '/patch/new': typeof PatchNewRoute
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
     | '/design'
     | '/lapse'
     | '/protocol'
+    | '/settings'
     | '/craving/past'
     | '/craving/timer'
     | '/patch/new'
@@ -97,6 +107,7 @@ export interface FileRouteTypes {
     | '/design'
     | '/lapse'
     | '/protocol'
+    | '/settings'
     | '/craving/past'
     | '/craving/timer'
     | '/patch/new'
@@ -106,6 +117,7 @@ export interface FileRouteTypes {
     | '/design'
     | '/lapse'
     | '/protocol'
+    | '/settings'
     | '/craving/past'
     | '/craving/timer'
     | '/patch/new'
@@ -116,6 +128,7 @@ export interface RootRouteChildren {
   DesignRoute: typeof DesignRoute
   LapseRoute: typeof LapseRoute
   ProtocolRoute: typeof ProtocolRoute
+  SettingsRoute: typeof SettingsRoute
   CravingPastRoute: typeof CravingPastRoute
   CravingTimerRoute: typeof CravingTimerRoute
   PatchNewRoute: typeof PatchNewRoute
@@ -151,6 +164,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtocolRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/craving/past': {
       id: '/craving/past'
       path: '/craving/past'
@@ -180,6 +200,7 @@ const rootRouteChildren: RootRouteChildren = {
   DesignRoute: DesignRoute,
   LapseRoute: LapseRoute,
   ProtocolRoute: ProtocolRoute,
+  SettingsRoute: SettingsRoute,
   CravingPastRoute: CravingPastRoute,
   CravingTimerRoute: CravingTimerRoute,
   PatchNewRoute: PatchNewRoute,

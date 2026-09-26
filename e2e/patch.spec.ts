@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test'
-import { expectStreak, sandboxAt } from './sandbox'
+import { expectStreak, sandboxAt, startNow } from './sandbox'
 
 // Times on screen are local: the timezone is pinned so the times below are fixed.
 test.use({ timezoneId: 'Europe/Paris' })
@@ -20,7 +20,7 @@ const shiftClock = async (page: Page, shift: string) => {
 /** A sandbox with a quit moment, its clock stopped on `NOW`. */
 const homeWithStreak = async (page: Page) => {
   await page.goto(sandboxAt(NOW))
-  await tap(page, 'Maintenant')
+  await startNow(page)
   await expectStreak(page, 0, '00:00:00')
 }
 
@@ -89,7 +89,7 @@ test('a patch before the quit moment or in the future is refused', async ({ page
 test('the form sent untouched logs a patch seconds after the quit moment', async ({ page }) => {
   // The quit moment carries seconds the minute-precision date field cannot show.
   await page.goto(sandboxAt(NOW + 37_000))
-  await tap(page, 'Maintenant')
+  await startNow(page)
 
   await page.getByRole('link', { name: 'Autre dose ou autre date' }).click()
   await tap(page, 'Enregistrer le patch')

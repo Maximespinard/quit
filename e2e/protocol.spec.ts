@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test'
-import { sandboxAt, streakRegion } from './sandbox'
+import { sandboxAt, startNow, streakRegion } from './sandbox'
 
 const NOW = Date.UTC(2026, 0, 1, 12, 0, 0)
 
@@ -13,7 +13,7 @@ async function openEditor(page: Page) {
 
 test('first launch lands on the default protocol, untouched', async ({ page }) => {
   await page.goto(sandboxAt(NOW))
-  await page.getByRole('button', { name: 'Maintenant' }).click()
+  await startNow(page)
 
   await expect(streakRegion(page)).toContainText('Étape 1 · 21 mg')
   await expect(protocolSummary(page)).toContainText('Étape 1 / 3')
@@ -23,7 +23,7 @@ test('first launch lands on the default protocol, untouched', async ({ page }) =
 
 test('editing a step shows on the home screen, in the same sandbox', async ({ page }) => {
   await page.goto(sandboxAt(NOW))
-  await page.getByRole('button', { name: 'Maintenant' }).click()
+  await startNow(page)
   await openEditor(page)
 
   await step(page, 1).getByLabel('Dose (mg)').fill('25')
@@ -41,7 +41,7 @@ test('editing a step shows on the home screen, in the same sandbox', async ({ pa
 
 test('steps can be added, reordered and removed, never down to zero', async ({ page }) => {
   await page.goto(sandboxAt(NOW))
-  await page.getByRole('button', { name: 'Maintenant' }).click()
+  await startNow(page)
   await openEditor(page)
 
   await page.getByRole('button', { name: 'Ajouter une étape' }).click()
@@ -61,7 +61,7 @@ test('steps can be added, reordered and removed, never down to zero', async ({ p
 
 test('a step without a dose is refused and nothing is saved', async ({ page }) => {
   await page.goto(sandboxAt(NOW))
-  await page.getByRole('button', { name: 'Maintenant' }).click()
+  await startNow(page)
   await openEditor(page)
 
   await step(page, 2).getByLabel('Dose (mg)').fill('')
@@ -79,7 +79,7 @@ test('a step without a dose is refused and nothing is saved', async ({ page }) =
 // Persistence is the real journal's job: real IndexedDB, real clock.
 test('the protocol survives a reload', async ({ page }) => {
   await page.goto('/')
-  await page.getByRole('button', { name: 'Maintenant' }).click()
+  await startNow(page)
   await openEditor(page)
 
   await step(page, 1).getByLabel('Durée (jours)').fill('35')
