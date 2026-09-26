@@ -68,3 +68,37 @@ it('says so when the date is empty instead of doing nothing', async () => {
   expect(screen.getByRole('alert')).toHaveTextContent(copy.past.invalid)
   expect(onRecorded).not.toHaveBeenCalled()
 })
+
+describe('editing a craving', () => {
+  const initial = {
+    at: new Date(2026, 8, 22, 7, 45, 30).getTime(),
+    intensity: 2 as const,
+    heldToEnd: true,
+    tags: ['coffee', 'Voiture'],
+  }
+
+  it('starts from the craving and keeps its instant and its held mark when untouched', async () => {
+    const onRecorded = vi.fn()
+    render(
+      <PastCravingForm
+        journal={emptyJournal}
+        now={NOW}
+        initial={initial}
+        onRecorded={onRecorded}
+      />,
+    )
+
+    expect(screen.getByRole('heading', { name: copy.past.edit.title })).toBeVisible()
+    expect(screen.getByLabelText(copy.past.dateLabel)).toHaveValue('2026-09-22T07:45')
+    expect(screen.getByRole('button', { name: '2' })).toHaveAttribute('aria-pressed', 'true')
+    // Its own typed tag is offered, pressed, though no other craving carries it.
+    expect(screen.getByRole('button', { name: 'Voiture' })).toHaveAttribute('aria-pressed', 'true')
+    await userEvent.click(screen.getByRole('button', { name: '3' }))
+    await userEvent.click(screen.getByRole('button', { name: copy.intensity.submit }))
+
+    expect(onRecorded).toHaveBeenCalledWith({
+      ...emptyJournal,
+      facts: [{ type: 'craving', ...initial, intensity: 3 }],
+    })
+  })
+})

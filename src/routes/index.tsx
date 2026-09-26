@@ -101,6 +101,13 @@ function HomePage() {
               <Link to="/lapse" search={appSearch} className={buttonVariants({ variant: 'ghost' })}>
                 {strings.lapse.declare}
               </Link>
+              <Link
+                to="/history"
+                search={appSearch}
+                className={buttonVariants({ variant: 'ghost' })}
+              >
+                {strings.history.open}
+              </Link>
             </div>
             <CravingLauncher now={now} />
           </div>

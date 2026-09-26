@@ -1,5 +1,6 @@
 import { type FormEvent, useId, useState } from 'react'
 import {
+  type PatchApplicationInput,
   type RecordPatchApplicationResult,
   recordPatchApplication,
 } from '@/shared/domain/facts/patch-application'
@@ -24,6 +25,8 @@ type PatchApplicationFormProps = {
   position: ProtocolPosition
   /** Injected clock: the form never reads the system time itself. */
   now: number
+  /** The application being edited, the journal then holding everything but it; absent to log one. */
+  initial?: PatchApplicationInput
   onRecorded: (journal: Journal) => void
 }
 
@@ -32,16 +35,19 @@ export function PatchApplicationForm({
   journal,
   position,
   now,
+  initial,
   onRecorded,
 }: PatchApplicationFormProps) {
   const id = useId()
   const errorId = `${id}-error`
   // The input shows whole minutes; left untouched, the date means this exact instant, so a
-  // quit moment set with "Maintenant" seconds ago is not refused as later than it.
-  const [openedAt] = useState(now)
-  const [dose, setDose] = useState(() =>
-    position.status === 'running' ? toDecimalText(position.step.doseMg) : '',
-  )
+  // quit moment set with "Maintenant" seconds ago is not refused as later than it. Editing,
+  // it is the application's own instant.
+  const [openedAt] = useState(initial?.at ?? now)
+  const [dose, setDose] = useState(() => {
+    if (initial) return toDecimalText(initial.doseMg)
+    return position.status === 'running' ? toDecimalText(position.step.doseMg) : ''
+  })
   const [date, setDate] = useState(() => toDatetimeLocal(openedAt))
   const [error, setError] = useState<FormError | null>(null)
 
@@ -63,8 +69,8 @@ export function PatchApplicationForm({
   return (
     <section className="flex flex-col gap-6 pt-6">
       <div className="flex flex-col gap-2">
-        <h2 className="text-title">{copy.title}</h2>
-        <p className="text-body text-ink-soft">{copy.lead}</p>
+        <h2 className="text-title">{initial ? copy.edit.title : copy.title}</h2>
+        <p className="text-body text-ink-soft">{initial ? copy.edit.lead : copy.lead}</p>
       </div>
 
       <form noValidate onSubmit={submit} className="flex flex-col gap-4">
@@ -109,7 +115,7 @@ export function PatchApplicationForm({
           </p>
         ) : null}
         <Button type="submit" size="lg">
-          {copy.submit}
+          {initial ? copy.edit.submit : copy.submit}
         </Button>
       </form>
     </section>

@@ -16,6 +16,8 @@ import { Route as ProtocolRouteImport } from './routes/protocol'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as CravingPastRouteImport } from './routes/craving/past'
 import { Route as CravingTimerRouteImport } from './routes/craving/timer'
+import { Route as HistoryIndexRouteImport } from './routes/history/index'
+import { Route as HistoryPositionRouteImport } from './routes/history/$position'
 import { Route as PatchNewRouteImport } from './routes/patch/new'
 
 const IndexRoute = IndexRouteImport.update({
@@ -53,6 +55,16 @@ const CravingTimerRoute = CravingTimerRouteImport.update({
   path: '/craving/timer',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HistoryIndexRoute = HistoryIndexRouteImport.update({
+  id: '/history/',
+  path: '/history/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoryPositionRoute = HistoryPositionRouteImport.update({
+  id: '/history/$position',
+  path: '/history/$position',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PatchNewRoute = PatchNewRouteImport.update({
   id: '/patch/new',
   path: '/patch/new',
@@ -67,7 +79,9 @@ export interface FileRoutesByFullPath {
   '/settings': typeof SettingsRoute
   '/craving/past': typeof CravingPastRoute
   '/craving/timer': typeof CravingTimerRoute
+  '/history/$position': typeof HistoryPositionRoute
   '/patch/new': typeof PatchNewRoute
+  '/history/': typeof HistoryIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -77,7 +91,9 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsRoute
   '/craving/past': typeof CravingPastRoute
   '/craving/timer': typeof CravingTimerRoute
+  '/history/$position': typeof HistoryPositionRoute
   '/patch/new': typeof PatchNewRoute
+  '/history': typeof HistoryIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -88,7 +104,9 @@ export interface FileRoutesById {
   '/settings': typeof SettingsRoute
   '/craving/past': typeof CravingPastRoute
   '/craving/timer': typeof CravingTimerRoute
+  '/history/$position': typeof HistoryPositionRoute
   '/patch/new': typeof PatchNewRoute
+  '/history/': typeof HistoryIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -100,7 +118,9 @@ export interface FileRouteTypes {
     | '/settings'
     | '/craving/past'
     | '/craving/timer'
+    | '/history/$position'
     | '/patch/new'
+    | '/history/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -110,7 +130,9 @@ export interface FileRouteTypes {
     | '/settings'
     | '/craving/past'
     | '/craving/timer'
+    | '/history/$position'
     | '/patch/new'
+    | '/history'
   id:
     | '__root__'
     | '/'
@@ -120,7 +142,9 @@ export interface FileRouteTypes {
     | '/settings'
     | '/craving/past'
     | '/craving/timer'
+    | '/history/$position'
     | '/patch/new'
+    | '/history/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -131,7 +155,9 @@ export interface RootRouteChildren {
   SettingsRoute: typeof SettingsRoute
   CravingPastRoute: typeof CravingPastRoute
   CravingTimerRoute: typeof CravingTimerRoute
+  HistoryPositionRoute: typeof HistoryPositionRoute
   PatchNewRoute: typeof PatchNewRoute
+  HistoryIndexRoute: typeof HistoryIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -185,6 +211,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CravingTimerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/history/': {
+      id: '/history/'
+      path: '/history'
+      fullPath: '/history/'
+      preLoaderRoute: typeof HistoryIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/history/$position': {
+      id: '/history/$position'
+      path: '/history/$position'
+      fullPath: '/history/$position'
+      preLoaderRoute: typeof HistoryPositionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/patch/new': {
       id: '/patch/new'
       path: '/patch/new'
@@ -203,7 +243,9 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsRoute: SettingsRoute,
   CravingPastRoute: CravingPastRoute,
   CravingTimerRoute: CravingTimerRoute,
+  HistoryPositionRoute: HistoryPositionRoute,
   PatchNewRoute: PatchNewRoute,
+  HistoryIndexRoute: HistoryIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
