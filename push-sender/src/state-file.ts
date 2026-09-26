@@ -1,4 +1,4 @@
-import { mkdir, readFile, rename, writeFile } from 'node:fs/promises'
+import { mkdir, open, readFile, rename } from 'node:fs/promises'
 import { dirname } from 'node:path'
 import type { State } from './types.ts'
 import { parseState } from './validation.ts'
@@ -21,7 +21,14 @@ export function createStateFile(path: string): StateFile {
   async function write(state: State) {
     await mkdir(dirname(path), { recursive: true })
     const temporary = `${path}.tmp`
-    await writeFile(temporary, JSON.stringify(state))
+    const file = await open(temporary, 'w')
+    try {
+      await file.writeFile(JSON.stringify(state))
+      // On disk before the rename, or a power cut could leave the renamed file empty.
+      await file.sync()
+    } finally {
+      await file.close()
+    }
     await rename(temporary, path)
   }
 
@@ -35,7 +42,12 @@ export function createStateFile(path: string): StateFile {
         throw error
       }
       // A corrupted file stops the service rather than silently dropping the subscription.
-      const state = parseState(JSON.parse(text))
+      let state: State | null = null
+      try {
+        state = parseState(JSON.parse(text))
+      } catch {
+        // Not JSON: reported below with the same message as a JSON that is not a state.
+      }
       if (!state) throw new Error(`State file ${path} is not a valid push sender state`)
       return state
     },

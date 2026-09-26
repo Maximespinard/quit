@@ -13,7 +13,7 @@ import { toPayload } from './validation.ts'
  * An entry found due later than this (the service was down) is dropped rather than sent: a
  * reminder hours late is wrong, and a burst of stale ones on restart is worse.
  */
-export const MAX_LATENESS_MS = 60 * 60_000
+const MAX_LATENESS_MS = 60 * 60_000
 
 export type SendNowResult = SendOutcome['status'] | 'no-subscription'
 

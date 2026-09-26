@@ -14,6 +14,6 @@ RUN mkdir /data && chown node:node /data
 USER node
 VOLUME /data
 
-ENV PORT=8080 DATA_FILE=/data/state.json
+# PORT and DATA_FILE default to 8080 and /data/state.json (src/config.ts).
 EXPOSE 8080
 CMD ["node", "src/main.ts"]

@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { createApp } from './http.ts'
 import { createSender } from './sender.ts'
 import { createStateFile } from './state-file.ts'
-import type { PushSubscription, SendOutcome, Transport } from './types.ts'
+import type { Notification, PushSubscription, SendOutcome, Transport } from './types.ts'
 
 const SECRET = 'a-shared-secret-of-at-least-32-characters'
 const T0 = Date.parse('2026-10-01T08:00:00Z')
@@ -26,7 +26,7 @@ const at = (ms: number) => new Date(ms).toISOString()
 
 interface Sent {
   endpoint: string
-  payload: unknown
+  payload: Notification
 }
 
 const dirs: string[] = []
@@ -102,7 +102,7 @@ const notification = (sendAt: number, title: string) => ({
   screen: '/',
 })
 
-const titles = (sent: Sent[]) => sent.map((s) => (s.payload as { title: string }).title)
+const titles = (sent: Sent[]) => sent.map((s) => s.payload.title)
 
 describe('shared secret', () => {
   it.each([
@@ -110,8 +110,9 @@ describe('shared secret', () => {
     ['a wrong secret', 'not-the-secret-not-the-secret-not-the-secret'],
   ])('rejects a request with %s and changes nothing', async (_, secret) => {
     const push = await setup()
+    await push.registerSubscription(PHONE)
 
-    const register = await push.request('PUT', '/subscription', PHONE, secret)
+    const register = await push.request('PUT', '/subscription', NEW_PHONE, secret)
     const schedule = await push.request(
       'PUT',
       '/schedule',
@@ -121,9 +122,10 @@ describe('shared secret', () => {
     const test = await push.request('POST', '/test', { title: 'T', body: 'B', screen: '/' }, secret)
 
     expect([register.status, schedule.status, test.status]).toEqual([401, 401, 401])
-    await push.registerSubscription(PHONE)
     await push.tickAt(T0 + 2 * MINUTE)
     expect(push.sent).toEqual([])
+    await push.request('POST', '/test', { title: 'T', body: 'B', screen: '/' })
+    expect(push.sent.map((s) => s.endpoint)).toEqual([PHONE.endpoint])
   })
 
   it('rejects an unknown route without the secret', async () => {
