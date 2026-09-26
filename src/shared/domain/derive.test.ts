@@ -3,6 +3,7 @@ import { recordLapse } from './facts/lapse'
 import { recordPatchApplication } from './facts/patch-application'
 import { decodeJournal, emptyJournal, type Journal } from './journal'
 import { defaultProtocol, type Protocol, setProtocol } from './protocol'
+import { type ScenarioId, scenarioById } from './scenarios'
 
 const MINUTE = 60_000
 const HOUR = 60 * MINUTE
@@ -95,7 +96,22 @@ describe('derive — protocol position', () => {
       step: { doseMg: 21, durationDays: 28 },
       dayInStep: 1,
       daysLeft: 28,
+      endsAt: NOW + 28 * DAY,
       nextStep: { doseMg: 14, durationDays: 14 },
+    })
+  })
+
+  it('ends the running step where the next one, or the end of the protocol, begins', () => {
+    const quitMoment = NOW - (30 * DAY + 5 * HOUR)
+
+    expect(positionAt(quitMoment, NOW)).toMatchObject({
+      stepNumber: 2,
+      endsAt: quitMoment + 42 * DAY,
+    })
+    expect(positionAt(NOW - 45 * DAY, NOW)).toMatchObject({ stepNumber: 3, endsAt: NOW + 4 * DAY })
+    expect(positionAt(NOW + HOUR, NOW)).toMatchObject({
+      stepNumber: 1,
+      endsAt: NOW + HOUR + 28 * DAY,
     })
   })
 
@@ -638,5 +654,73 @@ describe('derive — smoke-free days', () => {
     expect(smokeFreeDays(quitMoment, local(10, 26) - 1)).toBe(1)
     expect(smokeFreeDays(quitMoment, local(10, 26))).toBe(2)
     expect(smokeFreeDays(quitMoment, local(10, 27, 10), [local(10, 25, 23, 30)])).toBe(2)
+  })
+})
+
+// The scenarios are one source: the debug panel loads what these expectations pin down.
+describe('derive — scenarios', () => {
+  const derived = (id: ScenarioId) => {
+    const scenario = scenarioById(id)
+    return derive(scenario.journal, scenario.now)
+  }
+
+  it('day 3, mid-craving: the first step, today’s patch on, one smoke-free day', () => {
+    expect(derived('day-3-craving')).toMatchObject({
+      streak: { elapsedMs: 2 * DAY + 7 * HOUR + 30 * MINUTE },
+      smokeFreeDays: 1,
+      lastCigarette: null,
+      protocol: { stepNumber: 1, dayInStep: 3, daysLeft: 26 },
+      patch: { status: 'logged', doseMg: 21 },
+    })
+  })
+
+  it('the eve of a step-down: the last day of the first step', () => {
+    const scenario = scenarioById('step-down-eve')
+
+    expect(derive(scenario.journal, scenario.now)).toMatchObject({
+      streak: { elapsedMs: 27 * DAY + 11 * HOUR },
+      smokeFreeDays: 26,
+      protocol: {
+        stepNumber: 1,
+        dayInStep: 28,
+        daysLeft: 1,
+        endsAt: scenario.now + 13 * HOUR,
+        nextStep: { doseMg: 14 },
+      },
+      patch: { status: 'logged', doseMg: 21 },
+    })
+  })
+
+  it('day 29: the first day of the second step, its patch still to put on', () => {
+    expect(derived('day-29')).toMatchObject({
+      streak: { elapsedMs: 28 * DAY + HOUR + 15 * MINUTE },
+      smokeFreeDays: 27,
+      protocol: { stepNumber: 2, dayInStep: 1, step: { doseMg: 14 } },
+      patch: { status: 'due', doseMg: 14 },
+    })
+  })
+
+  it('day 45 with a lapse yesterday: a slip, the streak running, the day lost', () => {
+    expect(derived('day-45-lapse')).toMatchObject({
+      streak: { elapsedMs: 44 * DAY + 2 * HOUR },
+      personalBest: null,
+      lastCigarette: { elapsedMs: 12 * HOUR + 20 * MINUTE },
+      lapseDaysInARow: 1,
+      relapses: [],
+      cigarettesSmoked: 1,
+      smokeFreeDays: 42,
+      protocol: { stepNumber: 2, dayInStep: 17, daysLeft: 12 },
+      patch: { status: 'logged', doseMg: 14 },
+    })
+  })
+
+  it('protocol finished, patch-free for a week: nothing more to put on, the streak goes on', () => {
+    expect(derived('protocol-over')).toMatchObject({
+      streak: { elapsedMs: 91 * DAY + 3 * HOUR },
+      smokeFreeDays: 90,
+      lastCigarette: null,
+      protocol: { status: 'over' },
+      patch: { status: 'over' },
+    })
   })
 })
