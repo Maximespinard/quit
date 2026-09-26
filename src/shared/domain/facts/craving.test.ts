@@ -53,7 +53,7 @@ describe('recordCraving', () => {
   })
 
   it('keeps the protocol already set when recording a craving', () => {
-    const journal: Journal = { facts: [], protocol: [{ doseMg: 14, durationDays: 21 }] }
+    const journal: Journal = { ...emptyJournal, protocol: [{ doseMg: 14, durationDays: 21 }] }
     const at = NOW - MINUTE
 
     const result = recordCraving(journal, { at, intensity: 2, heldToEnd: false, tags: [] }, NOW)

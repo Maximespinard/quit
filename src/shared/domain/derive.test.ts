@@ -13,6 +13,8 @@ const NOW = Date.UTC(2026, 8, 22, 10, 0, 0)
 const journalWithQuitMoment = (at: number, protocol: Protocol = defaultProtocol): Journal => ({
   facts: [{ type: 'quit-moment', at }],
   protocol,
+  weeklySpendCents: null,
+  baselineSmokesPerDay: null,
 })
 
 describe('derive', () => {
@@ -52,6 +54,8 @@ describe('derive', () => {
     const corrected = NOW - 2 * DAY
     const journal: Journal = {
       protocol: defaultProtocol,
+      weeklySpendCents: null,
+      baselineSmokesPerDay: null,
       facts: [
         { type: 'quit-moment', at: first },
         { type: 'quit-moment', at: corrected },
@@ -184,10 +188,8 @@ describe('derive — the patch application of the protocol day', () => {
   const QUIT = local(20, 18)
   const applied = (at: number, doseMg = 21) => ({ type: 'patch-application', at, doseMg }) as const
   const patchAt = (now: number, ...applications: ReturnType<typeof applied>[]) =>
-    derive(
-      { facts: [{ type: 'quit-moment', at: QUIT }, ...applications], protocol: defaultProtocol },
-      now,
-    ).patch
+    derive({ ...emptyJournal, facts: [{ type: 'quit-moment', at: QUIT }, ...applications] }, now)
+      .patch
 
   it('is due with the current step’s dose while nothing is logged this protocol day', () => {
     expect(patchAt(local(22, 9))).toEqual({ status: 'due', doseMg: 21 })
@@ -224,6 +226,8 @@ describe('derive — the patch application of the protocol day', () => {
     const journal = {
       facts: [{ type: 'quit-moment', at: QUIT } as const],
       protocol: defaultProtocol,
+      weeklySpendCents: null,
+      baselineSmokesPerDay: null,
     }
     const now = local(22, 10)
     const backdated = recordPatchApplication(journal, { at: local(21, 20), doseMg: 21 }, now)
@@ -268,6 +272,8 @@ describe('derive — the patch application of the protocol day', () => {
         { type: 'quit-moment', at: local(22, 12) } as const,
       ],
       protocol: defaultProtocol,
+      weeklySpendCents: null,
+      baselineSmokesPerDay: null,
     }
 
     expect(derive(journal, local(22, 20)).patch).toEqual({ status: 'due', doseMg: 21 })
@@ -303,6 +309,8 @@ const local = (month: number, day: number, hour = 0, minute = 0, year = 2026) =>
 
 const journalOf = (quitMoment: number, lapses: readonly number[] = []): Journal => ({
   protocol: defaultProtocol,
+  weeklySpendCents: null,
+  baselineSmokesPerDay: null,
   facts: [
     { type: 'quit-moment', at: quitMoment },
     ...lapses.map((at) => ({ type: 'lapse' as const, at, count: 1 })),
@@ -342,6 +350,8 @@ describe('derive — a slip', () => {
   it('ignores a lapse before the quit moment, left behind by a corrected quit moment', () => {
     const journal: Journal = {
       protocol: defaultProtocol,
+      weeklySpendCents: null,
+      baselineSmokesPerDay: null,
       facts: [
         { type: 'quit-moment', at: NOW - 10 * DAY },
         { type: 'lapse', at: NOW - 8 * DAY, count: 1 },
@@ -491,6 +501,8 @@ describe('derive — cigarettes smoked', () => {
   it('adds up every lapse’s cigarettes', () => {
     const journal: Journal = {
       protocol: defaultProtocol,
+      weeklySpendCents: null,
+      baselineSmokesPerDay: null,
       facts: [
         { type: 'quit-moment', at: QUIT },
         { type: 'lapse', at: local(1, 5, 10), count: 3 },

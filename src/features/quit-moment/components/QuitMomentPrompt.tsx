@@ -23,7 +23,8 @@ export function QuitMomentPrompt({ journal, now, onRecorded }: QuitMomentPromptP
   const record = (at: number) => {
     const result = recordQuitMoment(journal, at, now)
     if (result.ok) onRecorded(result.journal)
-    else setError(result.reason)
+    // First launch has no fact yet: only the future can be refused.
+    else setError('future')
   }
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
