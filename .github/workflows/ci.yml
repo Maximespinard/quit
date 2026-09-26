@@ -60,6 +60,24 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
+  push-sender:
+    name: push sender (lint · typecheck · test · image)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: push-sender
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: push-sender/package-lock.json
+      - run: npm ci
+      - run: npm run verify
+      # Publishing belongs to the deploy; here the image only has to build.
+      - run: docker build -t quit-push-sender .
+
   secret-scan:
     name: leak scan
     runs-on: ubuntu-latest
