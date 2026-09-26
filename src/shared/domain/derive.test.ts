@@ -660,8 +660,8 @@ describe('derive — smoke-free days', () => {
 // The scenarios are one source: the debug panel loads what these expectations pin down.
 describe('derive — scenarios', () => {
   const derived = (id: ScenarioId) => {
-    const scenario = scenarioById(id)
-    return derive(scenario.journal, scenario.now)
+    const { journal, now } = scenarioById(id)
+    return { now, ...derive(journal, now) }
   }
 
   it('day 3, mid-craving: the first step, today’s patch on, one smoke-free day', () => {
@@ -675,16 +675,16 @@ describe('derive — scenarios', () => {
   })
 
   it('the eve of a step-down: the last day of the first step', () => {
-    const scenario = scenarioById('step-down-eve')
+    const { now, ...state } = derived('step-down-eve')
 
-    expect(derive(scenario.journal, scenario.now)).toMatchObject({
+    expect(state).toMatchObject({
       streak: { elapsedMs: 27 * DAY + 11 * HOUR },
       smokeFreeDays: 26,
       protocol: {
         stepNumber: 1,
         dayInStep: 28,
         daysLeft: 1,
-        endsAt: scenario.now + 13 * HOUR,
+        endsAt: now + 13 * HOUR,
         nextStep: { doseMg: 14 },
       },
       patch: { status: 'logged', doseMg: 21 },

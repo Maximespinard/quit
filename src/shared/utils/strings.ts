@@ -231,7 +231,7 @@ export const strings = {
     facts: (count: number) => (count <= 1 ? `${count} fait` : `${count} faits`),
     scenarios: 'Scénarios',
     scenario: {
-      'day-3-craving': 'Jour 3, en pleine envie',
+      'day-3-craving': 'Jour 3, envie juste notée',
       'step-down-eve': 'Veille de l’étape 2',
       'day-29': 'Jour 29, étape 2',
       'day-45-lapse': 'Jour 45, un écart hier',

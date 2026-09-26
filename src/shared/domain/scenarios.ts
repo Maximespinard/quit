@@ -12,8 +12,8 @@ import { defaultProtocol, type Protocol } from './protocol'
  * debug panel loads them, and demo mode will seed itself from one. Nothing here grants a
  * derived value (ADR-0002): a level or a badge is only ever reached through the facts below.
  *
- * Adding a scenario is one more `scenario(...)` entry in `scenarios` plus its name in
- * `strings.debug.scenario` (the type checker asks for it).
+ * Adding a scenario is one more `scenario(...)` entry in `scenarios`; the type checker then
+ * asks for its name in `strings.debug.scenario`.
  */
 export type Scenario = {
   readonly id: ScenarioId
@@ -68,6 +68,14 @@ const journalOf = (...facts: readonly (Fact | readonly Fact[])[]): Journal => {
   return { protocol: defaultProtocol, facts: [quitMoment, ...facts.flat()].sort(byInstant) }
 }
 
+/** The cravings of the first month, shared by every scenario that runs past it. */
+const firstMonthCravings = [
+  craving(sinceQuit(3, 1), 3, true, ['coffee']),
+  craving(sinceQuit(7, 9), 2, true, ['stress']),
+  craving(sinceQuit(12, 4, 30), 1, true),
+  craving(sinceQuit(20, 11), 2, false, ['evening-out']),
+]
+
 const scenario = <Id extends string>(id: Id, now: number, journal: Journal) => ({
   id,
   now,
@@ -75,8 +83,8 @@ const scenario = <Id extends string>(id: Id, now: number, journal: Journal) => (
 })
 
 export const scenarios = [
-  // Wednesday 6 May, 16:30. A strong craving logged three minutes ago: the running timer
-  // lives in the url, not in the journal, so the spell shows through its facts.
+  // Wednesday 6 May, 16:30. A strong craving logged three minutes ago — the nearest a journal
+  // gets to "mid-craving": the running timer lives in the url, not in the journal.
   scenario(
     'day-3-craving',
     sinceQuit(2, 7, 30),
@@ -92,22 +100,13 @@ export const scenarios = [
   scenario(
     'step-down-eve',
     sinceQuit(27, 11),
-    journalOf(dailyPatches(defaultProtocol, 28), [
-      craving(sinceQuit(3, 1), 3, true, ['coffee']),
-      craving(sinceQuit(7, 9), 2, true, ['stress']),
-      craving(sinceQuit(12, 4, 30), 1, true),
-      craving(sinceQuit(20, 11), 2, false, ['evening-out']),
-    ]),
+    journalOf(dailyPatches(defaultProtocol, 28), firstMonthCravings),
   ),
   // Monday 1 June, 10:15: the first day of the 14 mg step, its patch not yet put on.
   scenario(
     'day-29',
     sinceQuit(28, 1, 15),
-    journalOf(dailyPatches(defaultProtocol, 28), [
-      craving(sinceQuit(3, 1), 3, true, ['coffee']),
-      craving(sinceQuit(7, 9), 2, true, ['stress']),
-      craving(sinceQuit(12, 4, 30), 1, true),
-      craving(sinceQuit(20, 11), 2, false, ['evening-out']),
+    journalOf(dailyPatches(defaultProtocol, 28), firstMonthCravings, [
       craving(sinceQuit(26, 3), 1, true, ['meal']),
     ]),
   ),
@@ -115,9 +114,7 @@ export const scenarios = [
   scenario(
     'day-45-lapse',
     sinceQuit(44, 2),
-    journalOf(dailyPatches(defaultProtocol, 45), [
-      craving(sinceQuit(3, 1), 3, true, ['coffee']),
-      craving(sinceQuit(12, 4, 30), 1, true),
+    journalOf(dailyPatches(defaultProtocol, 45), firstMonthCravings, [
       craving(sinceQuit(29, 10), 2, true, ['stress']),
       craving(sinceQuit(43, 13, 30), 3, false, ['evening-out']),
       lapse(sinceQuit(43, 13, 40)),
@@ -127,8 +124,7 @@ export const scenarios = [
   scenario(
     'protocol-over',
     sinceQuit(91, 3),
-    journalOf(dailyPatches(defaultProtocol, 84), [
-      craving(sinceQuit(3, 1), 3, true, ['coffee']),
+    journalOf(dailyPatches(defaultProtocol, 84), firstMonthCravings, [
       craving(sinceQuit(29, 10), 2, true, ['stress']),
       craving(sinceQuit(60, 8), 1, true, ['boredom']),
     ]),

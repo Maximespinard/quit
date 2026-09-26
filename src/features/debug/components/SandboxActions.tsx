@@ -8,6 +8,12 @@ import { strings } from '@/shared/utils/strings'
 
 const copy = strings.debug
 
+/** What an injected fact holds, beyond its instant: a middling craving held to the end, one cigarette. */
+const INJECTED_CRAVING = { intensity: 2, heldToEnd: true, tags: [] } as const
+const INJECTED_LAPSE = { count: 1 } as const
+
+type RecordResult = { readonly ok: true; readonly journal: Journal } | { readonly ok: false }
+
 type SandboxActionsProps = {
   journal: Journal
   now: number
@@ -22,30 +28,25 @@ type SandboxActionsProps = {
  */
 export function SandboxActions({ journal, now, commit, sandbox }: SandboxActionsProps) {
   const derived = derive(journal, now)
-  const position = derived.protocol
+  const running = derived.protocol?.status === 'running' ? derived.protocol : null
   const canInject = derived.quitMoment !== null
 
-  const injectCraving = () => {
-    const result = recordCraving(journal, { at: now, intensity: 2, heldToEnd: true, tags: [] }, now)
+  const inject = (result: RecordResult) => {
     if (result.ok) void commit(result.journal)
   }
-  const injectLapse = () => {
-    const result = recordLapse(journal, { at: now, count: 1 }, now)
-    if (result.ok) void commit(result.journal)
-  }
+  const injectCraving = () => inject(recordCraving(journal, { at: now, ...INJECTED_CRAVING }, now))
+  const injectLapse = () => inject(recordLapse(journal, { at: now, ...INJECTED_LAPSE }, now))
 
   return (
     <>
       <Button
         variant="secondary"
-        disabled={position === null || position.status === 'over'}
+        disabled={running === null}
         onClick={() => {
-          if (position?.status === 'running') sandbox.stopClockAt(position.endsAt)
+          if (running !== null) sandbox.stopClockAt(running.endsAt)
         }}
       >
-        {position?.status === 'running' && position.nextStep === null
-          ? copy.jumpToEnd
-          : copy.jumpToNextStep}
+        {running?.nextStep === null ? copy.jumpToEnd : copy.jumpToNextStep}
       </Button>
       <fieldset>
         <legend className="mb-2 text-ink-soft text-label">{copy.inject}</legend>
