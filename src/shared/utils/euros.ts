@@ -16,8 +16,3 @@ export function fromEuroText(text: string): number | null {
 /** Cents as a French text field holds them: `35,50`, or `42` for whole euros. */
 export const toEuroText = (cents: number) =>
   cents % 100 === 0 ? String(cents / 100) : (cents / 100).toFixed(2).replace('.', ',')
-
-const euroFormat = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' })
-
-/** Cents as French copy shows them: `35,50 €`. The only place cents become euros. */
-export const formatEuros = (cents: number) => euroFormat.format(cents / 100)

@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { startJourney } from '@/shared/domain/first-launch'
 import type { Journal } from '@/shared/domain/journal'
 import { Button } from '@/shared/ui/base/button'
+import { cn } from '@/shared/utils/cn'
 import { strings } from '@/shared/utils/strings'
 import { baselineInput, spendInput } from '../utils/value-inputs'
 import { ProtocolStep } from './ProtocolStep'
@@ -23,6 +24,7 @@ type Answers = {
 }
 
 const STEP_COUNT = 4
+const STEPS = [1, 2, 3, 4] as const
 const copy = strings.firstLaunch
 
 /**
@@ -57,7 +59,7 @@ export function FirstLaunch({ journal, now, onStarted }: FirstLaunchProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex min-h-11 items-center gap-2">
+      <div className="flex min-h-11 items-center gap-3">
         {step > 1 ? (
           <Button
             variant="ghost"
@@ -68,8 +70,23 @@ export function FirstLaunch({ journal, now, onStarted }: FirstLaunchProps) {
           >
             <ChevronLeft strokeWidth={1.75} aria-hidden="true" />
           </Button>
-        ) : null}
-        <p className="text-ink-soft text-label">{copy.progress(step, STEP_COUNT)}</p>
+        ) : (
+          // Holds the chevron's place: the rail must not jump when it appears.
+          <span aria-hidden="true" className="-ml-3 size-11 shrink-0" />
+        )}
+        {/* Crans, like the multiplier: answered in ink, current in steel, ahead as a filet. */}
+        <div aria-hidden="true" className="flex flex-1 gap-1.5">
+          {STEPS.map((number) => (
+            <span
+              key={number}
+              className={cn(
+                'h-1.5 flex-1 rounded-full transition-colors duration-240 ease-out-expo motion-reduce:transition-none',
+                number < step ? 'bg-ink' : number === step ? 'bg-reached' : 'bg-line',
+              )}
+            />
+          ))}
+        </div>
+        <p className="text-ink-soft text-label tabular-nums">{copy.progress(step, STEP_COUNT)}</p>
       </div>
 
       {step === 1 ? (

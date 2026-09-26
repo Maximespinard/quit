@@ -8,6 +8,7 @@ type ValueFieldProps = {
   input: ValueInput
   value: string
   onChange: (value: string) => void
+  placeholder?: string
   /** Id of the alert that describes the refusal, when there is one. */
   errorId: string | null
 }
@@ -20,6 +21,7 @@ export function ValueField({
   input,
   value,
   onChange,
+  placeholder,
   errorId,
 }: ValueFieldProps) {
   return (
@@ -34,10 +36,11 @@ export function ValueField({
           inputMode={input.inputMode}
           autoComplete="off"
           value={value}
+          placeholder={placeholder}
           onChange={(event) => onChange(event.target.value)}
           aria-invalid={errorId !== null}
           aria-describedby={errorId ?? undefined}
-          className="h-12 w-full rounded-control border border-line bg-white px-4 pr-10 font-medium text-cta text-ink tabular-nums"
+          className="h-12 w-full rounded-control border border-line bg-white px-4 pr-10 font-medium text-cta text-ink tabular-nums placeholder:font-normal placeholder:text-ink-soft"
         />
         {input.suffix !== undefined ? (
           <span

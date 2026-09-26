@@ -1,4 +1,4 @@
-import { formatEuros, fromEuroText, toEuroText } from './euros'
+import { fromEuroText, toEuroText } from './euros'
 
 describe('fromEuroText', () => {
   it.each([
@@ -19,13 +19,9 @@ describe('fromEuroText', () => {
   })
 })
 
-describe('euros as the display layer shows them', () => {
+describe('toEuroText', () => {
   it('writes cents back into a text field', () => {
     expect(toEuroText(3_550)).toBe('35,50')
     expect(toEuroText(4_200)).toBe('42')
-  })
-
-  it('formats cents as French euros', () => {
-    expect(formatEuros(3_550).replace(/\s/g, ' ')).toBe('35,50 €')
   })
 })

@@ -3,7 +3,6 @@ import { ChevronRight } from 'lucide-react'
 import type { Journal } from '@/shared/domain/journal'
 import { setBaselineSmokesPerDay, setWeeklySpend } from '@/shared/domain/journal-settings'
 import { keepSearch } from '@/shared/utils/app-search'
-import { formatEuros } from '@/shared/utils/euros'
 import { formatDose } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
 import { baselineInput, spendInput } from '../utils/value-inputs'
@@ -31,7 +30,6 @@ export function SettingsScreen({ journal, now, onSaved }: SettingsScreenProps) {
         label={copy.spend.label}
         input={spendInput}
         value={journal.weeklySpendCents}
-        describe={formatEuros}
         apply={(cents) => okOrNull(setWeeklySpend(journal, cents))}
         onSaved={onSaved}
       />
@@ -39,7 +37,6 @@ export function SettingsScreen({ journal, now, onSaved }: SettingsScreenProps) {
         label={copy.baseline.label}
         input={baselineInput}
         value={journal.baselineSmokesPerDay}
-        describe={String}
         apply={(perDay) => okOrNull(setBaselineSmokesPerDay(journal, perDay))}
         onSaved={onSaved}
       />

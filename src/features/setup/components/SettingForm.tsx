@@ -5,8 +5,8 @@ import { strings } from '@/shared/utils/strings'
 
 type SettingFormProps = {
   label: string
-  /** The value in force, as a sentence; `null` when it was never set. */
-  current: string | null
+  /** Whether the field differs from what is in force: saving the same value is no action. */
+  changed: boolean
   saved: boolean
   onSubmit: () => void
   children: ReactNode
@@ -14,8 +14,8 @@ type SettingFormProps = {
 
 const copy = strings.settings
 
-/** One setting as its own small form: what is in force, the field, save, and a quiet confirmation. */
-export function SettingForm({ label, current, saved, onSubmit, children }: SettingFormProps) {
+/** One setting as its own small form: the field holds what is in force; save wakes on a change. */
+export function SettingForm({ label, changed, saved, onSubmit, children }: SettingFormProps) {
   const titleId = useId()
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
@@ -28,17 +28,14 @@ export function SettingForm({ label, current, saved, onSubmit, children }: Setti
       noValidate
       aria-labelledby={titleId}
       onSubmit={submit}
-      className="flex flex-col gap-3 rounded-card bg-surface p-4"
+      className="flex flex-col gap-2.5 rounded-card bg-surface p-4"
     >
-      <div className="flex flex-col gap-1">
-        <h3 id={titleId} className="font-semibold text-body">
-          {label}
-        </h3>
-        <p className="text-ink-dim text-label">{current ?? copy.unset}</p>
-      </div>
+      <h3 id={titleId} className="font-semibold text-body">
+        {label}
+      </h3>
       {children}
       <div className="flex items-center gap-3">
-        <Button type="submit" variant="outline" className="active:bg-surface-locked">
+        <Button type="submit" size="sm" disabled={!changed}>
           {copy.save}
         </Button>
         <p role="status" className="text-ink-soft text-label">

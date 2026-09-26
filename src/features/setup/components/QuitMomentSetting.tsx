@@ -65,11 +65,7 @@ export function QuitMomentSetting({ journal, now, onSaved }: QuitMomentSettingPr
   return (
     <SettingForm
       label={strings.settings.quitMoment.label}
-      current={
-        quitMoment === null
-          ? null
-          : strings.settings.quitMoment.current(formatDate(quitMoment), formatTime(quitMoment))
-      }
+      changed={quitMoment === null || value !== toDatetimeLocal(quitMoment)}
       saved={status.kind === 'saved'}
       onSubmit={save}
     >

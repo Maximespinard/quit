@@ -21,7 +21,7 @@ test('first launch, then the weekly spend edited in settings', async ({ page }) 
   await expectStreak(page, 0, '00:00:00')
   await openSettings(page)
 
-  await expect(spendSetting(page)).toContainText('35,00 €')
+  await expect(spendSetting(page).getByRole('textbox')).toHaveValue('35')
   await spendSetting(page).getByRole('textbox').fill('-5')
   await spendSetting(page).getByRole('button', { name: 'Enregistrer' }).click()
   await expect(spendSetting(page).getByRole('alert')).toHaveText(
@@ -31,13 +31,12 @@ test('first launch, then the weekly spend edited in settings', async ({ page }) 
   await spendSetting(page).getByRole('textbox').fill('48,90')
   await spendSetting(page).getByRole('button', { name: 'Enregistrer' }).click()
   await expect(spendSetting(page).getByRole('status')).toHaveText('Enregistré.')
-  await expect(spendSetting(page)).toContainText('48,90 €')
 
   // Still the sandbox, and the new value is the journal's, not the form's.
   await page.getByRole('link', { name: 'Retour' }).click()
   await expect(page).toHaveURL(new RegExp(`debug=true.*clock=${NOW}`))
   await openSettings(page)
-  await expect(spendSetting(page)).toContainText('48,90 €')
+  await expect(spendSetting(page).getByRole('textbox')).toHaveValue('48,90')
 })
 
 test('the quit moment moves earlier, and the streak follows at once', async ({ page }) => {

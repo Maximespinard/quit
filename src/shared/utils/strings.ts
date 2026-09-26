@@ -102,7 +102,6 @@ export const strings = {
     unset: 'À renseigner',
     quitMoment: {
       label: 'Moment de l’arrêt',
-      current: (date: string, time: string) => `Le ${date} à ${time}`,
     },
     spend: {
       label: 'Dépense en tabac par semaine',

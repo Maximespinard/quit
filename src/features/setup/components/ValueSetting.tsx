@@ -1,5 +1,6 @@
 import { useId, useState } from 'react'
 import type { Journal } from '@/shared/domain/journal'
+import { strings } from '@/shared/utils/strings'
 import type { ValueInput } from '../utils/value-inputs'
 import { SettingForm } from './SettingForm'
 import { ValueField } from './ValueField'
@@ -9,18 +10,17 @@ type ValueSettingProps = {
   input: ValueInput
   /** The value in force, `null` when first launch predates the setting. */
   value: number | null
-  /** How the value in force reads as a sentence. */
-  describe: (value: number) => string
   /** The journal with the new value, or `null` when the domain refuses it. */
   apply: (value: number) => Journal | null
   onSaved: (journal: Journal) => void
 }
 
 /** A numeric setting edited in place; nothing changes until a valid value is saved. */
-export function ValueSetting({ label, input, value, describe, apply, onSaved }: ValueSettingProps) {
+export function ValueSetting({ label, input, value, apply, onSaved }: ValueSettingProps) {
   const inputId = useId()
   const errorId = useId()
-  const [text, setText] = useState(() => (value === null ? '' : input.toText(value)))
+  const inForce = value === null ? '' : input.toText(value)
+  const [text, setText] = useState(inForce)
   const [status, setStatus] = useState<'editing' | 'saved' | 'refused'>('editing')
 
   const save = () => {
@@ -36,7 +36,7 @@ export function ValueSetting({ label, input, value, describe, apply, onSaved }: 
   return (
     <SettingForm
       label={label}
-      current={value === null ? null : describe(value)}
+      changed={text !== inForce}
       saved={status === 'saved'}
       onSubmit={save}
     >
@@ -46,6 +46,7 @@ export function ValueSetting({ label, input, value, describe, apply, onSaved }: 
         hideLabel
         input={input}
         value={text}
+        placeholder={strings.settings.unset}
         onChange={(next) => {
           setText(next)
           setStatus('editing')
