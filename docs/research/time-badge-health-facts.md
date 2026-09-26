@@ -9,6 +9,11 @@ French wording below attributes or hedges each fact ("selon l'OMS", "en généra
 indiquent"). One point applies to every badge: the user is on a nicotine patch, so any claim
 about nicotine leaving the body is false for them and is excluded.
 
+The sources time every fact from the last cigarette smoked. Time badges key on the streak
+(`CONTEXT.md`), which a slip does not restart, so after a slip the two clocks diverge. Badges
+are permanent and the copy reports what sources say, not the user's current state, so the badge
+keeps its fact; nothing in this document should drive a timer off the last cigarette.
+
 ## Sources
 
 Every quote below was read at its URL on the retrieval date. Where a publisher blocked the
