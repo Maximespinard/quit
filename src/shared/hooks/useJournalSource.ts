@@ -1,10 +1,19 @@
 import { createContext, useContext } from 'react'
 import type { Journal } from '@/shared/domain/journal'
+import type { Scenario, ScenarioId } from '@/shared/domain/scenarios'
 import type { JournalState } from './useJournal'
 
-/** What the debug panel may do: move time and wipe facts — never grant a derived value (ADR-0002). */
+/**
+ * What the debug panel may do: move time, replace the sandbox journal with a scenario's and
+ * wipe it — never grant a derived value (ADR-0002).
+ */
 export type SandboxControls = {
+  /** The scenario loaded last, until the sandbox is wiped; the facts and the clock may have moved since. */
+  readonly scenario: ScenarioId | null
+  /** Replaces the sandbox journal and stops its clock on the scenario's. */
+  readonly loadScenario: (scenario: Scenario) => Promise<void>
   readonly shiftClock: (byMs: number) => void
+  readonly stopClockAt: (at: number) => void
   readonly resetClock: () => void
   readonly wipe: () => Promise<void>
 }

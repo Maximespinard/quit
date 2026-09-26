@@ -62,6 +62,10 @@ never a synonym it lists under _Avoid_.
 
 **Money** — integer cents everywhere (storage, domain, props, tests). Only the display layer divides.
 
+**Scenarios** — `src/shared/domain/scenarios.ts`: one `scenario(id, now, journal)` entry each, its
+French name in `strings.debug.scenario`; derivation tests, the debug panel (`?debug=true&scenario=<id>`)
+and demo mode all read that one list.
+
 **Routes** — `createFileRoute` + component in the same file, zero domain logic (it lives in the feature).
 
 **Composants** — ≤ ~220 lines, else split; no inline schema/type/constant; explicit loading/error/empty states.
