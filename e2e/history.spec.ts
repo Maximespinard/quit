@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test'
-import { expectStreak, sandboxAt } from './sandbox'
+import { expectStreak, sandboxAt, startNow } from './sandbox'
 
 // Times on screen are local: the timezone is pinned so the times below are fixed.
 test.use({ timezoneId: 'Europe/Paris' })
@@ -22,7 +22,7 @@ const shiftClock = async (page: Page, shift: string, times = 1) => {
 /** A sandbox whose quit moment is `NOW`, its clock then moved `days` on. */
 const daysIn = async (page: Page, days: number) => {
   await page.goto(sandboxAt(NOW))
-  await tap(page, 'Maintenant')
+  await startNow(page)
   if (days > 0) await shiftClock(page, '+1 j', days)
 }
 
