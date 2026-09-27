@@ -13,6 +13,8 @@ export type ProtocolPosition =
       readonly dayInStep: number
       /** Days until the next step (or the end) begins, today included: 1 on the step's last day. */
       readonly daysLeft: number
+      /** The instant the step ends: the next one, or the end of the protocol, begins there. */
+      readonly endsAt: number
       readonly nextStep: Step | null
     }
   | { readonly status: 'over' }
@@ -45,6 +47,7 @@ export function protocolPosition(
         step,
         dayInStep: dayIndex - stepStart + 1,
         daysLeft: stepEnd - dayIndex,
+        endsAt: quitMoment + stepEnd * DAY_MS,
         nextStep: protocol[index + 1] ?? null,
       }
     }

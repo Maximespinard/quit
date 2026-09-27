@@ -14,17 +14,21 @@ import {
 import { strings } from '@/shared/utils/strings'
 import { clockShifts } from '../utils/clock-shifts'
 import { formatClock } from '../utils/format-clock'
+import { SandboxActions } from './SandboxActions'
+import { ScenarioPicker } from './ScenarioPicker'
 
 /**
  * The sandbox marker, always on screen while the sandbox is active, opening the debug panel.
  * Renders nothing on the real journal.
- * The panel only moves time and wipes facts: nothing here grants a derived value (ADR-0002).
+ * The panel moves time, loads scenarios, injects facts and wipes them: nothing here grants a
+ * derived value (ADR-0002) — a state is only reached through a journal and a clock.
  */
 export function DebugPanel() {
-  const { now, sandbox } = useJournalSource()
+  const { state, commit, now, sandbox } = useJournalSource()
   const navigate = useNavigate()
   if (sandbox === null) return null
   const copy = strings.debug
+  const journal = state.status === 'ready' ? state.journal : null
 
   return (
     // Not modal: the streak behind stays live and readable while the clock moves.
@@ -37,7 +41,7 @@ export function DebugPanel() {
           </DrawerTrigger>
         </div>
       </div>
-      {/* Kept short so the hero's clock stays in view above it. */}
+      {/* The clock controls come first so the hero's clock stays in view above them; the rest scrolls. */}
       <DrawerContent className="mx-auto w-full max-w-md">
         <DrawerHeader className="flex-row items-start justify-between gap-3 pr-2">
           <div className="flex flex-col gap-1 pt-2">
@@ -48,14 +52,21 @@ export function DebugPanel() {
             <X aria-hidden="true" />
           </DrawerClose>
         </DrawerHeader>
-        <div className="flex flex-col gap-3 px-5 pt-4 pb-safe-4">
-          {/* Not an <output>: a live region would read the running clock out every second. */}
-          <time
-            dateTime={new Date(now).toISOString()}
-            className="font-semibold text-body tabular-nums"
-          >
-            {formatClock(now)}
-          </time>
+        <div className="flex min-h-0 flex-col gap-3 overflow-y-auto px-5 pt-4 pb-safe-4">
+          <div className="flex items-baseline justify-between gap-3">
+            {/* Not an <output>: a live region would read the running clock out every second. */}
+            <time
+              dateTime={new Date(now).toISOString()}
+              className="font-semibold text-body tabular-nums"
+            >
+              {formatClock(now)}
+            </time>
+            {journal === null ? null : (
+              <span className="text-ink-soft text-label tabular-nums">
+                {copy.facts(journal.facts.length)}
+              </span>
+            )}
+          </div>
           <fieldset>
             <legend className="sr-only">{copy.shifts}</legend>
             <div className="grid grid-cols-4 gap-2">
@@ -74,6 +85,10 @@ export function DebugPanel() {
           <Button variant="outline" onClick={sandbox.resetClock}>
             {copy.realTime}
           </Button>
+          {journal === null ? null : (
+            <SandboxActions journal={journal} now={now} commit={commit} sandbox={sandbox} />
+          )}
+          <ScenarioPicker sandbox={sandbox} />
           <div className="grid grid-cols-2 gap-2 pt-2">
             <Button variant="destructive" onClick={() => void sandbox.wipe()}>
               {copy.wipe}

@@ -1,3 +1,5 @@
+import type { ScenarioId } from '@/shared/domain/scenarios'
+
 export const strings = {
   app: { name: 'quit' },
   nav: {
@@ -268,6 +270,21 @@ export const strings = {
     hourForward: '+1 h',
     dayForward: '+1 j',
     realTime: 'Revenir à l’heure réelle',
+    /** How many facts the sandbox journal holds: the one trace an injected craving leaves. */
+    facts: (count: number) => (count <= 1 ? `${count} fait` : `${count} faits`),
+    scenarios: 'Scénarios',
+    scenario: {
+      'day-3-craving': 'Jour 3, envie juste notée',
+      'step-down-eve': 'Veille de l’étape 2',
+      'day-29': 'Jour 29, étape 2',
+      'day-45-lapse': 'Jour 45, un écart hier',
+      'protocol-over': 'Protocole fini, une semaine sans patch',
+    } satisfies Record<ScenarioId, string>,
+    inject: 'Injecter à l’heure du bac à sable',
+    injectCraving: 'Injecter une envie',
+    injectLapse: 'Injecter un écart',
+    jumpToNextStep: 'Sauter à l’étape suivante',
+    jumpToEnd: 'Sauter à la fin du protocole',
     wipe: 'Vider',
     leave: 'Sortir',
     close: 'Fermer',

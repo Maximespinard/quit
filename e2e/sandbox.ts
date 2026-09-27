@@ -35,3 +35,6 @@ export const localInput = (page: Page, at: number) =>
     const pad = (n: number) => String(n).padStart(2, '0')
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
   }, at)
+
+/** The home screen in a sandbox seeded from a scenario, its clock stopped on the scenario's. */
+export const sandboxWith = (scenario: string) => `/?debug=true&scenario=${scenario}`
