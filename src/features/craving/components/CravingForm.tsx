@@ -1,5 +1,9 @@
 import { type FormEvent, type ReactNode, useId, useState } from 'react'
-import { CRAVING_INTENSITIES, type CravingIntensity } from '@/shared/domain/facts/craving'
+import {
+  CRAVING_INTENSITIES,
+  type CravingInput,
+  type CravingIntensity,
+} from '@/shared/domain/facts/craving'
 import { Button } from '@/shared/ui/base/button'
 import { ToggleGroup, ToggleGroupItem } from '@/shared/ui/base/toggle-group'
 import { strings } from '@/shared/utils/strings'
@@ -9,6 +13,8 @@ import { CravingTagPicker } from './CravingTagPicker'
 type CravingFormProps = {
   /** The tags to offer once the intensity is picked. */
   tagOptions: readonly CravingTagOption[]
+  /** The craving being edited: its intensity and tags start picked. */
+  initial?: Pick<CravingInput, 'intensity' | 'tags'> | undefined
   /** Returns whether the craving was recorded: once it is, the form locks against a second tap. */
   onSubmit: (intensity: CravingIntensity, tags: readonly string[]) => boolean
   /** Extra fields shown above the intensity, e.g. the backdated moment. */
@@ -19,10 +25,10 @@ type CravingFormProps = {
  * Rates a craving 1–3, then offers its tags, and submits it. No intensity is preselected: the
  * user picks one. Tags appear only once it is picked, and submitting without any is fine.
  */
-export function CravingForm({ tagOptions, onSubmit, children }: CravingFormProps) {
+export function CravingForm({ tagOptions, initial, onSubmit, children }: CravingFormProps) {
   const hintId = useId()
-  const [intensity, setIntensity] = useState<CravingIntensity | null>(null)
-  const [tags, setTags] = useState<readonly string[]>([])
+  const [intensity, setIntensity] = useState<CravingIntensity | null>(initial?.intensity ?? null)
+  const [tags, setTags] = useState<readonly string[]>(initial?.tags ?? [])
   const [pending, setPending] = useState<string | null>(null)
   const [recorded, setRecorded] = useState(false)
   const copy = strings.craving.intensity

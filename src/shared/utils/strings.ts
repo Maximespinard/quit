@@ -56,6 +56,10 @@ export const strings = {
       future: 'Ce moment n’est pas encore arrivé.',
       invalid: 'Indique une date et une heure complètes.',
       cancel: 'Annuler',
+      edit: {
+        title: 'Modifier l’envie',
+        lead: 'Son heure, sa force, sa situation.',
+      },
     },
   },
   journal: {
@@ -146,6 +150,10 @@ export const strings = {
       'Trois jours de suite avec un écart : le streak repartira du dernier écart de la série. Tes jours sans fumer et le protocole restent.',
     confirm: 'Oui, noter',
     cancel: 'Annuler',
+    edit: {
+      title: 'Modifier la cigarette',
+      confirm: 'Enregistrer',
+    },
     future: 'Ce moment n’est pas encore arrivé.',
     'before-quit-moment': 'C’est avant ton arrêt : rien à noter.',
     'invalid-count': 'Indique au moins une cigarette.',
@@ -163,6 +171,36 @@ export const strings = {
       days <= 1
         ? 'Un jour avec un écart. Trois jours de suite font une rechute.'
         : 'Deux jours de suite avec un écart. Un troisième ferait une rechute.',
+  },
+
+  history: {
+    title: 'Historique',
+    open: 'Historique',
+    lead: 'Du plus récent au plus ancien. Touche une ligne pour la modifier ou la supprimer.',
+    empty:
+      'Rien de noté pour l’instant. Tes patchs, tes envies et tes cigarettes apparaîtront ici.',
+    today: 'Aujourd’hui',
+    yesterday: 'Hier',
+    back: 'Retour',
+    edited: 'Modifié.',
+    deleted: 'Supprimé.',
+    missing: 'Ce fait n’est plus dans le journal.',
+    delete: 'Supprimer',
+    confirmLapseDelete: {
+      title: 'Supprimer cette cigarette ?',
+      body: 'Le streak, les jours sans fumer et les rechutes sont recalculés sans elle.',
+      confirm: 'Oui, supprimer',
+      cancel: 'Garder',
+    },
+    facts: {
+      patch: 'Patch posé',
+      craving: 'Envie',
+      cravingHeld: 'Envie tenue jusqu’au bout',
+      lapse: 'J’ai fumé',
+      dose: (doseMg: string) => `${doseMg}\u00a0mg`,
+      intensity: (level: number) => `Intensité ${level}`,
+      cigarettes: (count: number) => (count <= 1 ? `${count} cigarette` : `${count} cigarettes`),
+    },
   },
 
   protocol: {
@@ -213,6 +251,11 @@ export const strings = {
       'before-quit-moment': 'C’est avant ton arrêt : le protocole n’avait pas commencé.',
       'invalid-dose': 'Indique une dose en mg, plus grande que zéro.',
       invalid: 'Indique une date et une heure complètes.',
+      edit: {
+        title: 'Modifier le patch',
+        lead: 'Son heure ou sa dose. Le protocole ne change pas.',
+        submit: 'Enregistrer',
+      },
     },
   },
   debug: {

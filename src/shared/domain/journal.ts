@@ -34,3 +34,13 @@ export function decodeJournal(raw: unknown): Journal {
     baselineSmokesPerDay: validOrNull(baselineSmokesPerDay, isValidBaseline),
   }
 }
+
+/**
+ * The journal without the fact at `index`; unchanged when no fact sits there. Editing a fact
+ * is removing it, then recording the new version through its own module: the same rules
+ * as at creation, by construction.
+ */
+export function removeFact(journal: Journal, index: number): Journal {
+  if (!Number.isInteger(index) || index < 0 || index >= journal.facts.length) return journal
+  return { ...journal, facts: journal.facts.toSpliced(index, 1) }
+}

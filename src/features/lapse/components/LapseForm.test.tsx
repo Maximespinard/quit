@@ -123,3 +123,34 @@ describe('the relapse a lapse would trigger', () => {
     expect(screen.queryByText(copy.relapseTitle)).toBeNull()
   })
 })
+
+describe('editing a lapse', () => {
+  const initial = { at: new Date(2026, 8, 21, 22, 15, 42).getTime(), count: 3 }
+
+  it('starts from the lapse and, left untouched, keeps its exact instant', async () => {
+    const onRecorded = vi.fn()
+    render(<LapseForm journal={journal} now={NOW} initial={initial} onRecorded={onRecorded} />)
+
+    expect(screen.getByLabelText(copy.dateLabel)).toHaveValue('2026-09-21T22:15')
+    await userEvent.click(screen.getByRole('button', { name: copy.fewer }))
+    await userEvent.click(screen.getByRole('button', { name: copy.edit.confirm }))
+
+    expect(onRecorded).toHaveBeenCalledWith({
+      ...journal,
+      facts: [...journal.facts, { type: 'lapse', at: initial.at, count: 2 }],
+    })
+  })
+
+  it('refuses a new time before the quit moment, as at creation', async () => {
+    const onRecorded = vi.fn()
+    render(<LapseForm journal={journal} now={NOW} initial={initial} onRecorded={onRecorded} />)
+
+    const input = screen.getByLabelText(copy.dateLabel)
+    await userEvent.clear(input)
+    await userEvent.type(input, '2026-09-19T23:00')
+    await userEvent.click(screen.getByRole('button', { name: copy.edit.confirm }))
+
+    expect(screen.getByRole('alert')).toHaveTextContent(copy['before-quit-moment'])
+    expect(onRecorded).not.toHaveBeenCalled()
+  })
+})

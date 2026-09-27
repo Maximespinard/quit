@@ -28,6 +28,10 @@ declare module '@tanstack/react-router' {
     patchRecorded?: boolean
     /** Set by the navigation that follows a declared lapse: the home screen confirms it. */
     lapseRecorded?: boolean
+    /** Set by the navigation that follows an edited fact: the history confirms it. */
+    factEdited?: boolean
+    /** Set by the navigation that follows a deleted fact: the history confirms it. */
+    factDeleted?: boolean
   }
 }
 
