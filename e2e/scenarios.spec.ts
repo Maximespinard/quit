@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test'
-import { expectStreak, sandboxAt, sandboxWith } from './sandbox'
+import { expectStreak, sandboxAt, sandboxWith, startNow } from './sandbox'
 
 const NOW = Date.UTC(2026, 0, 1, 12, 0, 0)
 
@@ -26,7 +26,7 @@ test('the panel loads a scenario, marks it current, and the real journal is unto
   page,
 }) => {
   await page.goto('/')
-  await tap(page, 'Maintenant')
+  await startNow(page)
   await expectStreak(page, 0, '00:00:\\d\\d')
 
   await page.goto(sandboxAt(NOW))

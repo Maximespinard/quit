@@ -62,10 +62,18 @@ const lapse = (at: number, count = 1): LapseFact => ({ type: 'lapse', at, count 
 
 const byInstant = (a: Fact, b: Fact) => a.at - b.at
 
-/** A journal on the default protocol, its facts sorted into the order they happened. */
+/**
+ * A journal on the default protocol, first launch done (35 € a week, 15 a day), its facts
+ * sorted into the order they happened.
+ */
 const journalOf = (...facts: readonly (Fact | readonly Fact[])[]): Journal => {
   const quitMoment: Fact = { type: 'quit-moment', at: QUIT }
-  return { protocol: defaultProtocol, facts: [quitMoment, ...facts.flat()].sort(byInstant) }
+  return {
+    protocol: defaultProtocol,
+    weeklySpendCents: 3500,
+    baselineSmokesPerDay: 15,
+    facts: [quitMoment, ...facts.flat()].sort(byInstant),
+  }
 }
 
 /** The cravings of the first month, shared by every scenario that runs past it. */
