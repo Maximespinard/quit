@@ -1,11 +1,12 @@
 import { createFileRoute, Link, useLocation } from '@tanstack/react-router'
+import { Settings } from 'lucide-react'
 import { CravingLauncher } from '@/features/craving/components/CravingLauncher'
 import { SandboxEntry } from '@/features/debug/components/SandboxEntry'
 import { SlipNote } from '@/features/lapse/components/SlipNote'
 import { DayPatchCard } from '@/features/patch/components/DayPatchCard'
 import { ProtocolSummary } from '@/features/protocol/components/ProtocolSummary'
 import { protocolContext } from '@/features/protocol/utils/protocol-context'
-import { QuitMomentPrompt } from '@/features/quit-moment/components/QuitMomentPrompt'
+import { FirstLaunch } from '@/features/setup/components/FirstLaunch'
 import { StreakScreen } from '@/features/streak/components/StreakScreen'
 import { StreakTotals } from '@/features/streak/components/StreakTotals'
 import { derive } from '@/shared/domain/derive'
@@ -35,7 +36,7 @@ function HomePage() {
         if (derived.streak === null) {
           return (
             <AppShell brand={brand}>
-              <QuitMomentPrompt journal={journal} now={now} onRecorded={commit} />
+              <FirstLaunch journal={journal} now={now} onStarted={commit} />
             </AppShell>
           )
         }
@@ -46,6 +47,16 @@ function HomePage() {
               streak={derived.streak}
               brand={brand}
               context={protocolContext(derived.protocol)}
+              action={
+                <Link
+                  to="/settings"
+                  search={appSearch}
+                  aria-label={strings.nav.settings}
+                  className="grid size-11 place-items-center rounded-control text-on-ink active:bg-on-ink/15"
+                >
+                  <Settings className="size-5" strokeWidth={1.75} aria-hidden="true" />
+                </Link>
+              }
             >
               {/* The slip note reads as the totals' footnote: grouped tight under the card. */}
               <div className="flex flex-col gap-3">

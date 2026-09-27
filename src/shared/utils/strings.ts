@@ -71,6 +71,56 @@ export const strings = {
     submit: 'C’est depuis là',
     future: 'Ce moment n’est pas encore arrivé.',
     invalid: 'Indique une date et une heure complètes.',
+    /** The earliest fact the new moment would leave before it, as a date and a time. */
+    'after-facts': (date: string, time: string) =>
+      `Tu as déjà noté quelque chose le ${date} à ${time}. Ton arrêt ne peut pas venir après.`,
+  },
+  firstLaunch: {
+    progress: (step: number, count: number) => `Étape ${step} sur ${count}`,
+    back: 'Retour',
+    next: 'Continuer',
+    spend: {
+      title: 'Combien tu dépensais en tabac par semaine ?',
+      lead: 'Pour compter l’argent que tu gardes.',
+    },
+    baseline: {
+      title: 'Combien de cigarettes par jour ?',
+      lead: 'Avant d’arrêter, en moyenne. Pour compter celles que tu ne fumes plus.',
+    },
+    protocol: {
+      title: 'Ton protocole de patchs',
+      lead: 'Un point de départ courant. Tu pourras le changer quand tu veux dans les réglages.',
+      step: (doseMg: string, days: number) => `${doseMg} mg · ${days} jours`,
+      start: 'C’est parti',
+    },
+  },
+  settings: {
+    title: 'Réglages',
+    back: 'Retour',
+    save: 'Enregistrer',
+    saved: 'Enregistré.',
+    unset: 'À renseigner',
+    quitMoment: {
+      label: 'Moment de l’arrêt',
+    },
+    spend: {
+      label: 'Dépense en tabac par semaine',
+      suffix: '€',
+    },
+    baseline: {
+      label: 'Cigarettes par jour, avant',
+    },
+    protocol: {
+      open: 'Modifier le protocole',
+      /** The taper at a glance: `21 mg → 14 mg → 7 mg`. */
+      doses: (doses: readonly string[]) => doses.map((dose) => `${dose}\u00a0mg`).join(' → '),
+    },
+  },
+  money: {
+    'invalid-spend': 'Indique un montant en euros, plus grand que zéro.',
+  },
+  baseline: {
+    'invalid-baseline': 'Indique un nombre entier de cigarettes, au moins une.',
   },
   streak: {
     region: 'Streak',

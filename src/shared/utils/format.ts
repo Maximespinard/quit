@@ -9,3 +9,7 @@ export function formatTime(ms: number): string {
   const date = new Date(ms)
   return `${twoDigits(date.getHours())}:${twoDigits(date.getMinutes())}`
 }
+
+/** A local calendar date as French copy shows it: `12 septembre 2026`. */
+export const formatDate = (ms: number) =>
+  new Date(ms).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })

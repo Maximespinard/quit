@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test'
-import { expectStreak, streakRegion } from './sandbox'
+import { expectStreak, startNow, streakRegion } from './sandbox'
 
 /** Resolves once the service worker has precached the app and controls the page. */
 const waitForServiceWorker = (page: Page) =>
@@ -19,7 +19,7 @@ test('after one online load, the app launches and works offline', async ({ page,
   await context.setOffline(true)
   await page.reload()
 
-  await page.getByRole('button', { name: 'Maintenant' }).click()
+  await startNow(page)
   await expectStreak(page, 0, '00:00:\\d\\d')
 
   await page.reload()

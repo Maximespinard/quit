@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test'
-import { expectStreak, sandboxAt } from './sandbox'
+import { expectStreak, sandboxAt, startNow } from './sandbox'
 
 const NOW = Date.UTC(2026, 0, 1, 12, 0, 0)
 
@@ -15,7 +15,7 @@ const rateAndRecord = async (page: Page, intensity: string) => {
 /** A sandbox with a quit moment, its clock stopped on `NOW`. */
 const homeWithStreak = async (page: Page) => {
   await page.goto(sandboxAt(NOW))
-  await tap(page, 'Maintenant')
+  await startNow(page)
   await expectStreak(page, 0, '00:00:00')
 }
 
@@ -63,7 +63,7 @@ test('a past craving is logged without the timer', async ({ page }) => {
 // Real clock: the remaining time derives from the start in the url, not from a running timer.
 test('a reload mid-timer keeps counting from the start instant', async ({ page }) => {
   await page.goto('/')
-  await tap(page, 'Maintenant')
+  await startNow(page)
   await tap(page, 'Envie')
   await expect(timer(page)).toBeVisible()
 
@@ -97,7 +97,7 @@ test('a craving is tagged, and the typed tag is offered again on the next one', 
   page,
 }) => {
   await page.goto('/')
-  await tap(page, 'Maintenant')
+  await startNow(page)
 
   await tap(page, 'Envie')
   await tap(page, 'Arrêter')

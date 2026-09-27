@@ -7,6 +7,8 @@ const jan = (day: number, hour = 10) => new Date(2026, 0, day, hour).getTime()
 
 const journalOf = (lapses: readonly number[]): Journal => ({
   protocol: defaultProtocol,
+  weeklySpendCents: null,
+  baselineSmokesPerDay: null,
   facts: [
     { type: 'quit-moment', at: jan(1, 20) },
     ...lapses.map((at) => ({ type: 'lapse' as const, at, count: 1 })),

@@ -21,7 +21,7 @@ describe('setProtocol', () => {
 
     expect(setProtocol(journal, steps)).toEqual({
       ok: true,
-      journal: { facts: journal.facts, protocol: steps },
+      journal: { ...journal, protocol: steps },
     })
   })
 

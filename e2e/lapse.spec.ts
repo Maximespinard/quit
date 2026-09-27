@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test'
-import { expectStreak, sandboxAt } from './sandbox'
+import { expectStreak, sandboxAt, startNow } from './sandbox'
 
 const NOW = Date.UTC(2026, 0, 1, 12, 0, 0)
 const HOUR = 60 * 60_000
@@ -19,7 +19,7 @@ const daysLater = async (page: Page, days: number) => {
 /** A sandbox whose quit moment is `NOW`, its clock then moved `days` on. */
 const daysIn = async (page: Page, days: number) => {
   await page.goto(sandboxAt(NOW))
-  await tap(page, 'Maintenant')
+  await startNow(page)
   await daysLater(page, days)
   await expectStreak(page, days, '00:00:00')
 }

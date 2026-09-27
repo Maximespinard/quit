@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test'
-import { streakRegion } from './sandbox'
+import { startNow, streakRegion } from './sandbox'
 
 // Proves the harness: the real bundle serves and the shell renders.
 test('the app loads and shows its shell', async ({ page }) => {
@@ -16,7 +16,7 @@ test('neither the first-launch screen nor the streak scrolls sideways', async ({
   await expect(page.getByRole('button', { name: 'Maintenant' })).toBeVisible()
   expect(await sidewaysOverflow(page)).toBe(0)
 
-  await page.getByRole('button', { name: 'Maintenant' }).click()
+  await startNow(page)
   await expect(streakRegion(page)).toBeVisible()
   expect(await sidewaysOverflow(page)).toBe(0)
 })
