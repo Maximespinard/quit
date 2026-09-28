@@ -13,6 +13,7 @@ import { cn } from '@/shared/utils/cn'
 import { formatDose, formatTime } from '@/shared/utils/format'
 import { isSameLocalDay } from '@/shared/utils/local-day'
 import { strings } from '@/shared/utils/strings'
+import { applicationAt, chosenSite, type SiteChoice, untouched } from '../utils/site-choice'
 import { SitePicker } from './SitePicker'
 
 const copy = strings.patch
@@ -45,14 +46,13 @@ export function DayPatchCard({
   // Reachable in the sandbox only: a clock moved before the quit moment refuses the tap.
   const [refusal, setRefusal] = useState<Refusal | null>(null)
   // Untouched, the site follows the suggestion, which moves on once a patch is logged.
-  const [picked, setPicked] = useState<{ readonly site: ApplicationSite | null } | null>(null)
-  const site = picked === null ? suggestedSite : picked.site
+  const [choice, setChoice] = useState<SiteChoice>(untouched)
+  const site = chosenSite(choice, suggestedSite)
 
   const applyNow = (doseMg: number) => {
-    const application = { at: now, doseMg, ...(site === null ? {} : { site }) }
-    const result = recordPatchApplication(journal, application, now)
+    const result = recordPatchApplication(journal, applicationAt(now, doseMg, site), now)
     if (result.ok) {
-      setPicked(null)
+      setChoice(untouched)
       onRecorded(result.journal)
     } else setRefusal(result.reason)
   }
@@ -88,7 +88,7 @@ export function DayPatchCard({
             <p className="font-semibold text-body">{copy.due}</p>
             <SitePicker
               value={site}
-              onValueChange={(next) => setPicked({ site: next })}
+              onValueChange={(next) => setChoice({ kind: 'picked', site: next })}
               onSurface
             />
             <Button size="lg" onClick={() => applyNow(patch.doseMg)}>

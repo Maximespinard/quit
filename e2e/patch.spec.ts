@@ -61,6 +61,8 @@ test('two days in a row, the second suggested site differs from the first', asyn
 
   await shiftClock(page, '+1 j')
   await expect(pressedSite(page)).toHaveText('Bras droit')
+  await tap(page, /^Poser le patch · 21\smg$/)
+  await expect(patchCard(page)).toContainText(/aujourd’hui · 21\smg · Bras droit/)
 })
 
 test('the site is switched in one tap, or left out', async ({ page }) => {

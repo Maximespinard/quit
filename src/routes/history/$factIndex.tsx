@@ -39,12 +39,11 @@ function editForm(fact: HistoryFact, { rest, journal, now, onSaved }: EditContex
     case 'craving':
       return <PastCravingForm journal={rest} now={now} initial={fact} onRecorded={onSaved} />
     case 'patch-application': {
-      const { protocol, suggestedSite } = derive(journal, now)
-      return protocol === null || suggestedSite === null ? null : (
+      const { protocol } = derive(journal, now)
+      return protocol === null ? null : (
         <PatchApplicationForm
           journal={rest}
           position={protocol}
-          suggestedSite={suggestedSite}
           now={now}
           initial={fact}
           onRecorded={onSaved}

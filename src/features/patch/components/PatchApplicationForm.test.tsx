@@ -15,13 +15,12 @@ const initial = { at: new Date(2026, 8, 21, 23, 40, 12).getTime(), doseMg: 10.5 
 
 const sites = strings.patch.sites
 
-const renderForm = (initialApplication?: PatchApplicationInput) => {
+const renderForm = (initialApplication?: PatchApplicationInput, withFacts = journal) => {
   const onRecorded = vi.fn()
   render(
     <PatchApplicationForm
-      journal={journal}
+      journal={withFacts}
       position={position}
-      suggestedSite="chest-left"
       now={NOW}
       {...(initialApplication ? { initial: initialApplication } : {})}
       onRecorded={onRecorded}
@@ -35,9 +34,9 @@ const site = (name: string) => screen.getByRole('button', { name })
 it('logs a patch application at the suggested site unless another or none is pressed', async () => {
   const onRecorded = renderForm()
 
-  expect(site(sites['chest-left'])).toHaveAttribute('aria-pressed', 'true')
+  expect(site(sites['arm-left'])).toHaveAttribute('aria-pressed', 'true')
   await userEvent.click(site(sites['hip-right']))
-  expect(site(sites['chest-left'])).toHaveAttribute('aria-pressed', 'false')
+  expect(site(sites['arm-left'])).toHaveAttribute('aria-pressed', 'false')
   await userEvent.click(screen.getByRole('button', { name: copy.submit }))
 
   expect(onRecorded).toHaveBeenLastCalledWith({
@@ -52,7 +51,7 @@ it('logs a patch application at the suggested site unless another or none is pre
 it('logs a patch application without a site once the pressed one is pressed again', async () => {
   const onRecorded = renderForm()
 
-  await userEvent.click(site(sites['chest-left']))
+  await userEvent.click(site(sites['arm-left']))
   await userEvent.click(screen.getByRole('button', { name: copy.submit }))
 
   expect(onRecorded).toHaveBeenLastCalledWith({
@@ -61,11 +60,54 @@ it('logs a patch application without a site once the pressed one is pressed agai
   })
 })
 
+it('suggests the site for the date entered when catching up a day', async () => {
+  const withSites: Journal = {
+    ...journal,
+    facts: [
+      ...journal.facts,
+      {
+        type: 'patch-application',
+        at: new Date(2026, 8, 20, 9, 0).getTime(),
+        doseMg: 21,
+        site: 'arm-right',
+      },
+      {
+        type: 'patch-application',
+        at: new Date(2026, 8, 22, 9, 0).getTime(),
+        doseMg: 21,
+        site: 'hip-left',
+      },
+    ],
+  }
+  const onRecorded = renderForm(undefined, withSites)
+  expect(site(sites['hip-right'])).toHaveAttribute('aria-pressed', 'true')
+
+  // The day between the two: the site after the 20th's, not after the 22nd's.
+  const date = screen.getByLabelText(copy.dateLabel)
+  await userEvent.clear(date)
+  await userEvent.type(date, '2026-09-21T09:00')
+  expect(site(sites['chest-left'])).toHaveAttribute('aria-pressed', 'true')
+  await userEvent.click(screen.getByRole('button', { name: copy.submit }))
+
+  expect(onRecorded).toHaveBeenLastCalledWith({
+    ...withSites,
+    facts: [
+      ...withSites.facts,
+      {
+        type: 'patch-application',
+        at: new Date(2026, 8, 21, 9, 0).getTime(),
+        doseMg: 21,
+        site: 'chest-left',
+      },
+    ],
+  })
+})
+
 it('edits a patch application from its own site, not the suggested one', async () => {
   const onRecorded = renderForm({ ...initial, site: 'arm-right' })
 
   expect(site(sites['arm-right'])).toHaveAttribute('aria-pressed', 'true')
-  expect(site(sites['chest-left'])).toHaveAttribute('aria-pressed', 'false')
+  expect(site(sites['arm-left'])).toHaveAttribute('aria-pressed', 'false')
   await userEvent.click(screen.getByRole('button', { name: copy.edit.submit }))
 
   expect(onRecorded).toHaveBeenCalledWith({
