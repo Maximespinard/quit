@@ -7,6 +7,7 @@ export type FactDescription = { readonly title: string; readonly detail: string 
 
 const copy = strings.history.facts
 const defaultTags: Readonly<Record<string, string>> = strings.craving.tags.defaults
+const sites = strings.patch.sites
 
 /**
  * One case per fact type: the list itself never changes, and a type added to the journal
@@ -14,8 +15,13 @@ const defaultTags: Readonly<Record<string, string>> = strings.craving.tags.defau
  */
 export function describeFact(fact: HistoryFact): FactDescription {
   switch (fact.type) {
-    case 'patch-application':
-      return { title: copy.patch, detail: copy.dose(formatDose(fact.doseMg)) }
+    case 'patch-application': {
+      const dose = copy.dose(formatDose(fact.doseMg))
+      return {
+        title: copy.patch,
+        detail: fact.site === undefined ? dose : `${dose} · ${sites[fact.site]}`,
+      }
+    }
     case 'craving': {
       const tags = fact.tags.map((tag) => defaultTags[tag] ?? tag).join(', ')
       const intensity = copy.intensity(fact.intensity)

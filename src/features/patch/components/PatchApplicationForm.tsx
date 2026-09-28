@@ -1,4 +1,5 @@
 import { type FormEvent, useId, useState } from 'react'
+import type { ApplicationSite } from '@/shared/domain/application-site'
 import {
   type PatchApplicationInput,
   type RecordPatchApplicationResult,
@@ -10,6 +11,7 @@ import { Button } from '@/shared/ui/base/button'
 import { fromDatetimeLocal, toDatetimeLocal } from '@/shared/utils/datetime-local'
 import { fromDecimalText, toDecimalText } from '@/shared/utils/decimal-text'
 import { strings } from '@/shared/utils/strings'
+import { SitePicker } from './SitePicker'
 
 const copy = strings.patch.form
 
@@ -23,6 +25,8 @@ type PatchApplicationFormProps = {
   journal: Journal
   /** Where the taper stands: the running step's dose is prefilled. */
   position: ProtocolPosition
+  /** Pressed when logging one; editing, the application's own site is. */
+  suggestedSite: ApplicationSite
   /** Injected clock: the form never reads the system time itself. */
   now: number
   /** The application being edited, the journal then holding everything but it; absent to log one. */
@@ -34,6 +38,7 @@ type PatchApplicationFormProps = {
 export function PatchApplicationForm({
   journal,
   position,
+  suggestedSite,
   now,
   initial,
   onRecorded,
@@ -49,6 +54,7 @@ export function PatchApplicationForm({
     return position.status === 'running' ? toDecimalText(position.step.doseMg) : ''
   })
   const [date, setDate] = useState(() => toDatetimeLocal(openedAt))
+  const [site, setSite] = useState(() => (initial ? (initial.site ?? null) : suggestedSite))
   const [error, setError] = useState<FormError | null>(null)
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
@@ -58,7 +64,8 @@ export function PatchApplicationForm({
       setError('invalid')
       return
     }
-    const result = recordPatchApplication(journal, { at, doseMg: fromDecimalText(dose) }, now)
+    const application = { at, doseMg: fromDecimalText(dose), ...(site === null ? {} : { site }) }
+    const result = recordPatchApplication(journal, application, now)
     if (result.ok) onRecorded(result.journal)
     else setError(result.reason)
   }
@@ -109,6 +116,7 @@ export function PatchApplicationForm({
             className={fieldClass}
           />
         </div>
+        <SitePicker value={site} onValueChange={setSite} />
         {error !== null ? (
           <p id={errorId} role="alert" className="text-alert text-label">
             {copy[error]}

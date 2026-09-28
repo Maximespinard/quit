@@ -21,13 +21,14 @@ function PatchApplicationPage() {
   return (
     <ReadyJournal state={state}>
       {(journal) => {
-        const { protocol } = derive(journal, now)
+        const { protocol, suggestedSite } = derive(journal, now)
         return (
           <AppShell>
-            {protocol === null ? null : (
+            {protocol === null || suggestedSite === null ? null : (
               <PatchApplicationForm
                 journal={journal}
                 position={protocol}
+                suggestedSite={suggestedSite}
                 now={now}
                 onRecorded={recorded}
               />
