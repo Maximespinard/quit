@@ -58,6 +58,9 @@ describe('setProtocol', () => {
 })
 
 describe('isSameProtocol', () => {
+  const first = { doseMg: 21, durationDays: 28 }
+  const last = { doseMg: 7, durationDays: 28 }
+
   it('holds for the protocol in force, even with a blank or padded brand', () => {
     const inForce = [
       { doseMg: 21, durationDays: 28 },
@@ -71,9 +74,6 @@ describe('isSameProtocol', () => {
       ]),
     ).toBe(true)
   })
-
-  const first = { doseMg: 21, durationDays: 28 }
-  const last = { doseMg: 7, durationDays: 28 }
 
   it.each([
     ['a dose', [{ ...first, doseMg: 14 }, last]],

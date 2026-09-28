@@ -37,6 +37,8 @@ export function ProtocolEditor({ journal, onSaved }: ProtocolEditorProps) {
   const [refused, setRefused] = useState<Refusal | null>(null)
   const steps = drafts.map(stepFrom)
   const changed = !isSameProtocol(journal.protocol, steps)
+  // Back to the protocol in force: nothing left to refuse, so the refusal goes too.
+  if (!changed && refused !== null) setRefused(null)
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()

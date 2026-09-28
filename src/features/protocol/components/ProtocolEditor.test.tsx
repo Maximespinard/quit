@@ -57,6 +57,21 @@ it('wakes save on a removed step', async () => {
   expect(save()).toBeEnabled()
 })
 
+it('drops a refusal once the protocol in force is back', async () => {
+  const onSaved = renderEditor()
+  const dose = within(step(2)).getByLabelText(copy.doseLabel)
+
+  await userEvent.clear(dose)
+  await userEvent.click(save())
+  expect(screen.getByRole('alert')).toHaveTextContent(copy.invalid)
+
+  await userEvent.type(dose, '14')
+  expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+  expect(dose).not.toHaveAttribute('aria-invalid', 'true')
+  expect(save()).toBeDisabled()
+  expect(onSaved).not.toHaveBeenCalled()
+})
+
 it('saves a changed protocol', async () => {
   const onSaved = renderEditor()
 
