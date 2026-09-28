@@ -86,7 +86,11 @@ export function DayPatchCard({
         ) : (
           <>
             <p className="font-semibold text-body">{copy.due}</p>
-            <SitePicker value={site} onValueChange={(next) => setPicked({ site: next })} />
+            <SitePicker
+              value={site}
+              onValueChange={(next) => setPicked({ site: next })}
+              onSurface
+            />
             <Button size="lg" onClick={() => applyNow(patch.doseMg)}>
               {copy.apply(formatDose(patch.doseMg))}
             </Button>
