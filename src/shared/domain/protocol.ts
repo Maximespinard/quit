@@ -60,9 +60,13 @@ function decodeStep(raw: unknown): Step | null {
   return isValidStep(step) ? step : null
 }
 
-/** Rebuilds a stored protocol; anything missing or malformed yields the default protocol. */
-export function decodeProtocol(raw: unknown): Protocol {
-  if (!Array.isArray(raw) || raw.length === 0) return defaultProtocol
+/** Rebuilds a protocol only if every step is valid, else `null`: an import refuses what storage forgives. */
+export function decodeStrictProtocol(raw: unknown): Protocol | null {
+  if (!Array.isArray(raw) || raw.length === 0) return null
   const steps = raw.map(decodeStep)
-  return steps.every((step) => step !== null) ? steps : defaultProtocol
+  return steps.every((step) => step !== null) ? steps : null
 }
+
+/** Rebuilds a stored protocol; anything missing or malformed yields the default protocol. */
+export const decodeProtocol = (raw: unknown): Protocol =>
+  decodeStrictProtocol(raw) ?? defaultProtocol

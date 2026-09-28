@@ -1,5 +1,7 @@
 import { createFileRoute, Link, useLocation } from '@tanstack/react-router'
 import { Settings } from 'lucide-react'
+import { BackupReminder } from '@/features/backup/components/BackupReminder'
+import { ImportJournal } from '@/features/backup/components/ImportJournal'
 import { CravingLauncher } from '@/features/craving/components/CravingLauncher'
 import { SandboxEntry } from '@/features/debug/components/SandboxEntry'
 import { SlipNote } from '@/features/lapse/components/SlipNote'
@@ -11,6 +13,7 @@ import { StreakScreen } from '@/features/streak/components/StreakScreen'
 import { StreakTotals } from '@/features/streak/components/StreakTotals'
 import { derive } from '@/shared/domain/derive'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
+import { useRecordedThenHome } from '@/shared/hooks/useRecordedThenHome'
 import { AppShell } from '@/shared/ui/app-shell'
 import { buttonVariants } from '@/shared/ui/base/button'
 import { ReadyJournal } from '@/shared/ui/ReadyJournal'
@@ -24,7 +27,8 @@ export const Route = createFileRoute('/')({
 function HomePage() {
   const { state, commit, now } = useJournalSource()
   const appSearch = validateAppSearch(Route.useSearch())
-  const { cravingRecorded, patchRecorded, lapseRecorded } = useLocation({
+  const imported = useRecordedThenHome(appSearch, 'journalImported')
+  const { cravingRecorded, patchRecorded, lapseRecorded, journalImported } = useLocation({
     select: (location) => location.state,
   })
   const brand = <SandboxEntry>{strings.app.name}</SandboxEntry>
@@ -36,7 +40,19 @@ function HomePage() {
         if (derived.streak === null) {
           return (
             <AppShell brand={brand}>
-              <FirstLaunch journal={journal} now={now} onStarted={commit} />
+              <FirstLaunch
+                journal={journal}
+                now={now}
+                onStarted={commit}
+                restore={
+                  <ImportJournal
+                    journal={journal}
+                    label={strings.backup.restore}
+                    variant="ghost"
+                    onImported={imported}
+                  />
+                }
+              />
             </AppShell>
           )
         }
@@ -69,6 +85,8 @@ function HomePage() {
                   lapseDaysInARow={derived.lapseDaysInARow}
                 />
               </div>
+              {/* Under the totals, never above: the acquired figures keep their place under the hero. */}
+              <BackupReminder journal={journal} quitMoment={derived.quitMoment} />
               {derived.patch.status === 'over' ? null : (
                 <DayPatchCard
                   journal={journal}
@@ -84,6 +102,11 @@ function HomePage() {
               {cravingRecorded === true ? (
                 <p role="status" className="text-body text-ink-soft">
                   {strings.craving.recorded}
+                </p>
+              ) : null}
+              {journalImported === true ? (
+                <p role="status" className="text-body text-ink-soft">
+                  {strings.backup.imported}
                 </p>
               ) : null}
               {lapseRecorded === true ? (

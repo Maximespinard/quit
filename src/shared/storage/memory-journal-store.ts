@@ -1,16 +1,17 @@
 import { emptyJournal, type Journal } from '@/shared/domain/journal'
-import type { JournalStore } from './journal-store'
+import type { JournalStore, Store } from './journal-store'
 
-/**
- * A journal held in memory only: it starts from `initial` (empty by default) and is gone on
- * reload. Never touches the device.
- */
-export function createMemoryJournalStore(initial: Journal = emptyJournal): JournalStore {
+/** A value held in memory only: it starts from `initial` and is gone on reload. Never touches the device. */
+export function createMemoryStore<T>(initial: T): Store<T> {
   let current = initial
   return {
     load: async () => current,
-    save: async (journal) => {
-      current = journal
+    save: async (value) => {
+      current = value
     },
   }
 }
+
+/** A journal held in memory only, empty by default. */
+export const createMemoryJournalStore = (initial: Journal = emptyJournal): JournalStore =>
+  createMemoryStore(initial)

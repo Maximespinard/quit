@@ -1,6 +1,7 @@
 import { createContext, useContext } from 'react'
 import type { Journal } from '@/shared/domain/journal'
 import type { Scenario, ScenarioId } from '@/shared/domain/scenarios'
+import type { BackupSource } from './useBackupRecord'
 import type { JournalState } from './useJournal'
 
 /**
@@ -24,6 +25,8 @@ export type JournalSource = {
   readonly commit: (journal: Journal) => Promise<void>
   /** The one `now` everything derives from: real time, or the sandbox clock. */
   readonly now: number
+  /** When this source's journal was last exported: the sandbox keeps its own, in memory. */
+  readonly backup: BackupSource
   /** Present only while the sandbox is active. */
   readonly sandbox: SandboxControls | null
 }
