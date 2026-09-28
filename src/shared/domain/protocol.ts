@@ -48,6 +48,20 @@ export function setProtocol(journal: Journal, steps: readonly Step[]): SetProtoc
   return { ok: true, journal: { ...journal, protocol: steps.map(normaliseStep) } }
 }
 
+/** Whether saving `steps` would store `protocol` again: same steps, in the same order, as stored. */
+export function isSameProtocol(protocol: Protocol, steps: readonly Step[]): boolean {
+  if (steps.length !== protocol.length) return false
+  return steps.map(normaliseStep).every((step, index) => {
+    const current = protocol[index]
+    return (
+      current !== undefined &&
+      step.doseMg === current.doseMg &&
+      step.durationDays === current.durationDays &&
+      step.brand === current.brand
+    )
+  })
+}
+
 function decodeStep(raw: unknown): Step | null {
   if (typeof raw !== 'object' || raw === null) return null
   const { doseMg, durationDays, brand } = raw as Record<string, unknown>

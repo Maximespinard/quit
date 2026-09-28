@@ -2,6 +2,7 @@ import { Plus } from 'lucide-react'
 import { type FormEvent, useId, useState } from 'react'
 import type { Journal } from '@/shared/domain/journal'
 import {
+  isSameProtocol,
   isValidDose,
   isValidDuration,
   type SetProtocolResult,
@@ -35,6 +36,7 @@ export function ProtocolEditor({ journal, onSaved }: ProtocolEditorProps) {
   const { drafts, update, add, remove, move } = useStepDrafts(journal.protocol)
   const [refused, setRefused] = useState<Refusal | null>(null)
   const steps = drafts.map(stepFrom)
+  const changed = !isSameProtocol(journal.protocol, steps)
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -77,7 +79,7 @@ export function ProtocolEditor({ journal, onSaved }: ProtocolEditorProps) {
         </p>
       ) : null}
 
-      <Button type="submit" size="lg">
+      <Button type="submit" size="lg" disabled={!changed}>
         {copy.save}
       </Button>
     </form>

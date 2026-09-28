@@ -1,5 +1,5 @@
 import { emptyJournal } from './journal'
-import { decodeProtocol, defaultProtocol, setProtocol } from './protocol'
+import { decodeProtocol, defaultProtocol, isSameProtocol, setProtocol } from './protocol'
 
 describe('defaultProtocol', () => {
   it('tapers 21, 14 then 7 mg', () => {
@@ -54,6 +54,37 @@ describe('setProtocol', () => {
       { doseMg: 21, durationDays: 28 },
       { doseMg: 14, durationDays: 14, brand: 'Niquitin' },
     ])
+  })
+})
+
+describe('isSameProtocol', () => {
+  it('holds for the protocol in force, even with a blank or padded brand', () => {
+    const inForce = [
+      { doseMg: 21, durationDays: 28 },
+      { doseMg: 14, durationDays: 28, brand: 'Niquitin' },
+    ]
+
+    expect(
+      isSameProtocol(inForce, [
+        { doseMg: 21, durationDays: 28, brand: '  ' },
+        { doseMg: 14, durationDays: 28, brand: ' Niquitin ' },
+      ]),
+    ).toBe(true)
+  })
+
+  const first = { doseMg: 21, durationDays: 28 }
+  const last = { doseMg: 7, durationDays: 28 }
+
+  it.each([
+    ['a dose', [{ ...first, doseMg: 14 }, last]],
+    ['a duration', [{ ...first, durationDays: 21 }, last]],
+    ['a brand', [{ ...first, brand: 'Nicopatch' }, last]],
+    ['the order', [last, first]],
+    ['an added step', [first, last, last]],
+    ['a removed step', [first]],
+    ['an unreadable dose', [{ ...first, doseMg: Number.NaN }, last]],
+  ])('breaks on %s', (_, steps) => {
+    expect(isSameProtocol([first, last], steps)).toBe(false)
   })
 })
 
