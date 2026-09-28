@@ -1,4 +1,5 @@
 import { type FormEvent, useId, useState } from 'react'
+import type { GoalProgress } from '@/shared/domain/derive'
 import { GOAL_LABEL_MAX_LENGTH, type SetGoalResult, setGoal } from '@/shared/domain/goal'
 import type { Journal } from '@/shared/domain/journal'
 import { Button } from '@/shared/ui/base/button'
@@ -9,10 +10,8 @@ type GoalFormProps = {
   journal: Journal
   /** Injected clock: replacing a goal reached starts the next one from here. */
   now: number
-  /** The goal in force, when it is still to reach: the form edits it. Absent, it starts blank. */
-  initial?: { readonly label: string; readonly priceCents: number }
-  /** Whether the goal in force is reached: the next one then starts again from zero. */
-  replacesReached: boolean
+  /** The goal in force: one still to reach is edited, one reached is replaced from blank. */
+  goal: GoalProgress | null
   onSaved: (journal: Journal) => void
 }
 
@@ -24,12 +23,14 @@ const fieldClass =
   'h-12 w-full rounded-control border border-line bg-white px-4 font-medium text-cta text-ink placeholder:font-normal placeholder:text-ink-soft'
 
 /** Names the one thing to save for and its price. */
-export function GoalForm({ journal, now, initial, replacesReached, onSaved }: GoalFormProps) {
+export function GoalForm({ journal, now, goal, onSaved }: GoalFormProps) {
+  const replacesReached = goal?.reached === true
+  const initial = goal === null || replacesReached ? null : goal
   const labelId = useId()
   const priceId = useId()
   const errorId = useId()
   const [label, setLabel] = useState(initial?.label ?? '')
-  const [price, setPrice] = useState(initial === undefined ? '' : toEuroText(initial.priceCents))
+  const [price, setPrice] = useState(initial === null ? '' : toEuroText(initial.priceCents))
   const [refusal, setRefusal] = useState<Refusal | null>(null)
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
@@ -90,13 +91,15 @@ export function GoalForm({ journal, now, initial, replacesReached, onSaved }: Go
               aria-hidden="true"
               className="pointer-events-none absolute inset-y-0 right-4 flex items-center font-medium text-cta text-ink-soft"
             >
-              {strings.settings.spend.suffix}
+              {copy.suffix}
             </span>
           </div>
         </div>
         {refusal !== null ? (
           <p id={errorId} role="alert" className="text-alert text-label">
-            {copy[refusal]}
+            {refusal === 'invalid-label'
+              ? copy['invalid-label'](GOAL_LABEL_MAX_LENGTH)
+              : copy['invalid-price']}
           </p>
         ) : null}
         <Button type="submit" size="lg">

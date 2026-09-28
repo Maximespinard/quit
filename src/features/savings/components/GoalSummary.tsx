@@ -33,6 +33,8 @@ export function GoalSummary({ journal, goal, onCelebrated }: GoalSummaryProps) {
   const celebrating = useGoalCelebration(journal, goal, onCelebrated)
   const percent =
     goal === null ? 0 : Math.min(100, Math.floor((goal.savedCents * 100) / goal.priceCents))
+  const progress =
+    goal === null ? '' : copy.progress(formatEuros(goal.savedCents), formatEuros(goal.priceCents))
 
   return (
     <section aria-labelledby={titleId} className="flex flex-col gap-2.5">
@@ -71,9 +73,7 @@ export function GoalSummary({ journal, goal, onCelebrated }: GoalSummaryProps) {
           <div className="flex items-start justify-between gap-3">
             <div className="flex min-w-0 flex-col gap-1">
               <p className="truncate font-semibold text-body">{goal.label}</p>
-              <p className="text-ink-dim text-label">
-                {copy.progress(formatEuros(goal.savedCents), formatEuros(goal.priceCents))}
-              </p>
+              <p className="text-ink-dim text-label">{progress}</p>
             </div>
             <Link to="/goal" search={keepSearch} className={cardAction}>
               {copy.edit}
@@ -83,7 +83,7 @@ export function GoalSummary({ journal, goal, onCelebrated }: GoalSummaryProps) {
             label={copy.barLabel(goal.label)}
             value={goal.savedCents}
             max={goal.priceCents}
-            valueText={copy.progress(formatEuros(goal.savedCents), formatEuros(goal.priceCents))}
+            valueText={progress}
           />
         </div>
       )}

@@ -126,6 +126,28 @@ describe('markGoalCelebrated', () => {
   })
 })
 
+describe('derive, goal reached then a lapse', () => {
+  // Reached on day 24 exactly: 120 € at 5 € a day. Three cigarettes cost 1 €.
+  const reachedThenLapsed = (seen: boolean): Journal => {
+    const set = withGoal(quitDaysAgo(24), 'Un casque', 12_000)
+    const journal = seen ? markGoalCelebrated(set) : set
+    return { ...journal, facts: [...journal.facts, { type: 'lapse', at: NOW - DAY_MS, count: 3 }] }
+  }
+
+  it('stays reached once its celebration was seen: the money went on it', () => {
+    expect(derive(reachedThenLapsed(true), NOW).goal).toMatchObject({
+      savedCents: 11_900,
+      reached: true,
+    })
+    // So the next goal starts from zero, as after any goal reached.
+    expect(withGoal(reachedThenLapsed(true), 'Un vélo', 40_000).goal?.countsFrom).toBe(NOW)
+  })
+
+  it('is not reached while nobody saw it reached', () => {
+    expect(derive(reachedThenLapsed(false), NOW).goal).toMatchObject({ reached: false })
+  })
+})
+
 describe('decodeJournal, goal', () => {
   it('reads back a stored goal', () => {
     const goal = { label: 'Un vélo', priceCents: 40_000, countsFrom: NOW, celebrated: true }

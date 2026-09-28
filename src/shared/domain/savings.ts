@@ -10,6 +10,7 @@ export type GoalProgress = {
   readonly priceCents: number
   /** Money saved since the goal started counting, never below zero; may pass the price. */
   readonly savedCents: number
+  /** The price met, or met once and celebrated: then it stays reached. */
   readonly reached: boolean
   /** Whether the celebration of the goal reached was already seen. */
   readonly celebrated: boolean
@@ -82,7 +83,8 @@ export function goalProgress(
     label: goal.label,
     priceCents: goal.priceCents,
     savedCents,
-    reached: savedCents >= goal.priceCents,
+    // Once seen reached, it stays so: the money went on it, whatever a later edit subtracts.
+    reached: goal.celebrated || savedCents >= goal.priceCents,
     celebrated: goal.celebrated,
   }
 }

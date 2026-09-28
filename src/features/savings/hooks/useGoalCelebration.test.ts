@@ -47,6 +47,19 @@ describe('useGoalCelebration', () => {
     expect(onCelebrated).toHaveBeenCalledTimes(1)
   })
 
+  it('stores the celebration once while the store has not answered yet', () => {
+    const onCelebrated = vi.fn(() => Promise.resolve())
+    const { rerender } = renderHook(
+      ({ current }) => useGoalCelebration(current, progress(true, false), onCelebrated),
+      { initialProps: { current: journal } },
+    )
+
+    // The clock ticks and another journal comes by, still reading the goal unseen.
+    rerender({ current: { ...journal } })
+
+    expect(onCelebrated).toHaveBeenCalledTimes(1)
+  })
+
   it('never celebrates again once seen', () => {
     const onCelebrated = vi.fn(() => Promise.resolve())
 

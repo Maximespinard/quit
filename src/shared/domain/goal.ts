@@ -12,7 +12,10 @@ export type Goal = {
    * replaced a goal reached — that money went on the previous one.
    */
   readonly countsFrom: number | null
-  /** Set once the celebration of the goal reached has been seen: it plays only once. */
+  /**
+   * Set once the celebration of the goal reached has been seen: it plays only once, and the
+   * goal stays reached from then on.
+   */
   readonly celebrated: boolean
 }
 

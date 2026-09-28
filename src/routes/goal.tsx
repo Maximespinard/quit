@@ -24,18 +24,11 @@ function GoalPage() {
     <ReadyJournal state={state}>
       {(journal) => {
         const derived = derive(journal, now)
-        // No goal before first launch: there is no money saved to measure it against.
-        if (derived.quitMoment === null) return <Navigate to="/" search={appSearch} replace />
-        const reached = derived.goal?.reached === true
+        // No money saved yet (no quit moment, or its settings unset): nothing to measure a goal against.
+        if (derived.moneySavedCents === null) return <Navigate to="/" search={appSearch} replace />
         return (
           <AppShell>
-            <GoalForm
-              journal={journal}
-              now={now}
-              {...(journal.goal !== null && !reached ? { initial: journal.goal } : {})}
-              replacesReached={reached}
-              onSaved={saved}
-            />
+            <GoalForm journal={journal} now={now} goal={derived.goal} onSaved={saved} />
             <Link
               to="/"
               search={appSearch}
