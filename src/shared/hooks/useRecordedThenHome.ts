@@ -3,7 +3,7 @@ import type { Journal } from '@/shared/domain/journal'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
 import { type AppSearch, validateAppSearch } from '@/shared/utils/app-search'
 
-/** The history flags a screen sets to have home confirm what it just recorded. */
+/** The history flags a screen sets to have home confirm what it just recorded or imported. */
 export type RecordedNotice =
   | 'cravingRecorded'
   | 'patchRecorded'
@@ -11,7 +11,7 @@ export type RecordedNotice =
   | 'journalImported'
 
 /**
- * Commits the journal holding a newly recorded fact, then returns home, where `notice`
+ * Commits the journal holding a newly recorded fact (or an imported journal), then returns home, where `notice`
  * confirms it. The entry is replaced: back never reopens a finished timer or form.
  */
 export function useRecordedThenHome(

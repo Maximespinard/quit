@@ -21,9 +21,8 @@ const copy = strings.backup
 export function BackupSection({ journal, onImported }: BackupSectionProps) {
   const titleId = useId()
   const { backup, sandbox } = useJournalSource()
-  const { status, exportJournal } = useJournalExport()
+  const { status, exportFile } = useJournalExport()
   const inSandbox = sandbox !== null
-  const lastBackupAt = backup.record?.lastBackupAt ?? null
 
   return (
     <section aria-labelledby={titleId} className="flex flex-col gap-3 rounded-card bg-surface p-4">
@@ -33,11 +32,16 @@ export function BackupSection({ journal, onImported }: BackupSectionProps) {
         </h3>
         <p className="text-body text-ink-dim">{inSandbox ? copy.sandboxLead : copy.lead}</p>
       </div>
-      <p className="text-ink-dim text-label">
-        {lastBackupAt === null ? copy.never : copy.last(formatDate(lastBackupAt))}
-      </p>
+      {/* Nothing while the record loads, or when it cannot be read: never a false "no backup". */}
+      {backup.record === null ? null : (
+        <p className="text-ink-dim text-label">
+          {backup.record.lastBackupAt === null
+            ? copy.never
+            : copy.last(formatDate(backup.record.lastBackupAt))}
+        </p>
+      )}
       <div className="flex flex-col gap-2">
-        <Button size="lg" onClick={() => void exportJournal(journal)}>
+        <Button size="lg" onClick={() => void exportFile(journal)}>
           {inSandbox ? copy.exportSandbox : copy.export}
         </Button>
         <p role="status" className="text-ink-dim text-label empty:hidden">

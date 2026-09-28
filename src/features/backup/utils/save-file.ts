@@ -2,11 +2,10 @@ import { twoDigits } from '@/shared/utils/format'
 
 export type SaveOutcome = 'saved' | 'cancelled' | 'failed'
 
-/** `quit-journal-2026-09-28.json`; the sandbox's own file says so in its name. */
-export function journalFileName(now: number, sandbox: boolean): string {
+/** The local day as a file name carries it, sortable: `2026-09-28`. */
+export function fileDay(now: number): string {
   const d = new Date(now)
-  const day = `${d.getFullYear()}-${twoDigits(d.getMonth() + 1)}-${twoDigits(d.getDate())}`
-  return `quit-${sandbox ? 'bac-a-sable' : 'journal'}-${day}.json`
+  return `${d.getFullYear()}-${twoDigits(d.getMonth() + 1)}-${twoDigits(d.getDate())}`
 }
 
 function download(file: File) {

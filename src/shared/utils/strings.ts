@@ -136,6 +136,9 @@ export const strings = {
     exportFailed: 'L’export n’a pas abouti. Réessaie.',
     import: 'Importer une sauvegarde',
     importSandbox: 'Importer dans le bac à sable',
+    /** The exported file's name, ASCII only: it travels through the share sheet and Files. */
+    fileName: (day: string, sandbox: boolean) =>
+      `quit-${sandbox ? 'bac-a-sable' : 'journal'}-${day}.json`,
     /** First launch: a new phone, or a wiped one, starts from a file instead. */
     restore: 'Restaurer une sauvegarde',
     imported: 'Journal restauré.',
@@ -153,6 +156,8 @@ export const strings = {
       'not-an-export': 'Ce fichier n’est pas une sauvegarde de quit.',
       'unsupported-version':
         'Cette sauvegarde vient d’une version de l’app que celle-ci ne sait pas lire.',
+      'sandbox-file':
+        'Cette sauvegarde vient du bac à sable : elle ne remplacera pas ton vrai journal.',
       'unknown-fact-type': 'Cette sauvegarde contient des faits que cette version ne connaît pas.',
       'invalid-fact': 'Un des faits de cette sauvegarde est abîmé.',
       'invalid-settings': 'Les réglages de cette sauvegarde sont abîmés.',

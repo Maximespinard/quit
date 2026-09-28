@@ -21,7 +21,7 @@ type ImportJournalProps = {
   journal: Journal
   /** The button's words: import from settings, restore from first launch. */
   label: string
-  variant?: 'secondary' | 'outline' | 'ghost'
+  variant?: 'outline' | 'ghost'
   className?: string
   /** Commits the imported journal; the backup record is already updated. */
   onImported: (journal: Journal) => void
@@ -31,6 +31,8 @@ type ImportState =
   | { readonly step: 'idle' }
   | { readonly step: 'refused'; readonly reason: ImportRefusal }
   | { readonly step: 'confirming'; readonly journal: Journal; readonly exportedAt: number }
+  /** Once confirmed: a second tap must not replace the journal twice. */
+  | { readonly step: 'replacing' }
 
 const copy = strings.backup
 
@@ -51,6 +53,7 @@ export function ImportJournal({
   const [state, setState] = useState<ImportState>({ step: 'idle' })
 
   const replace = async (imported: Journal) => {
+    setState({ step: 'replacing' })
     // The journal now matches a file the user holds: that file is a backup.
     await backup.save(backedUpAt(now))
     onImported(imported)
@@ -62,7 +65,7 @@ export function ImportJournal({
     event.target.value = ''
     if (file === undefined) return
     const text = await file.text().catch(() => '')
-    const result = importJournal(text)
+    const result = importJournal(text, sandbox === null ? 'device' : 'sandbox')
     if (!result.ok) setState({ step: 'refused', reason: result.reason })
     else if (journal.facts.length === 0) await replace(result.journal)
     else setState({ step: 'confirming', journal: result.journal, exportedAt: result.exportedAt })
@@ -119,6 +122,7 @@ export function ImportJournal({
             <Button
               variant="destructive"
               size="lg"
+              disabled={state.step !== 'confirming'}
               onClick={() => {
                 if (state.step === 'confirming') void replace(state.journal)
               }}

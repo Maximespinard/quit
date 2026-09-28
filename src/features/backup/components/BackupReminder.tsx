@@ -19,7 +19,7 @@ const copy = strings.backup.reminder
  */
 export function BackupReminder({ journal, quitMoment }: BackupReminderProps) {
   const { now, backup } = useJournalSource()
-  const { exportJournal } = useJournalExport()
+  const { exportFile } = useJournalExport()
   const { record } = backup
   if (record === null || !isBackupDue(record, quitMoment, now)) return null
 
@@ -32,7 +32,7 @@ export function BackupReminder({ journal, quitMoment }: BackupReminderProps) {
     <section aria-label={copy.label} className="flex flex-col gap-3 rounded-card bg-surface p-4">
       <p className="text-body">{message}</p>
       <div className="flex gap-2">
-        <Button size="sm" onClick={() => void exportJournal(journal)}>
+        <Button size="sm" onClick={() => void exportFile(journal)}>
           {copy.export}
         </Button>
         <Button

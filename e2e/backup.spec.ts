@@ -145,6 +145,24 @@ test('the reminder shows when no export exists, hides for a few days, then comes
   await expect(reminder(page)).toHaveCount(0)
 })
 
+test('a sandbox export never replaces the real journal', async ({ page }) => {
+  await page.goto(sandboxWith('day-45-lapse'))
+  await openSettings(page)
+  const file = await exportFile(page, 'Exporter le bac à sable')
+
+  await page.goto('/')
+  await startNow(page)
+  await openSettings(page)
+  await importFile(page, 'Importer une sauvegarde', file.path)
+
+  await expect(backupSection(page).getByRole('alert')).toHaveText(
+    'Cette sauvegarde vient du bac à sable : elle ne remplacera pas ton vrai journal. Rien n’a changé.',
+  )
+  await expect(page.getByRole('dialog')).toHaveCount(0)
+  await page.getByRole('link', { name: 'Retour' }).click()
+  await expectStreak(page, 0, '00:\\d\\d:\\d\\d')
+})
+
 // The real journal: real IndexedDB wiped for real, as iOS may do to a rarely opened PWA.
 test('the real journal survives a storage wipe through its export', async ({ page }) => {
   await page.goto('/')

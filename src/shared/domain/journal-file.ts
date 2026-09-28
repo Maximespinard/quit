@@ -7,22 +7,30 @@ import { isValidBaseline, isValidWeeklySpend } from './journal-settings'
 import { decodeStrictProtocol } from './protocol'
 
 /**
- * The export file, the user's only backup (ADR-0001). A new fact type is read and checked
- * through its registry module; a change to the shape of the file itself bumps the version.
+ * The export file, the user's only backup (ADR-0001). A new fact type is read through its
+ * registry module, and brings its own checks here if it has more than its shape; a change
+ * to the shape of the file itself bumps the version.
  */
 const FORMAT = 'quit-journal'
 const VERSION = 1
+
+/** Which journal a file was exported from, or is imported into. */
+export type JournalOrigin = 'device' | 'sandbox'
+
+const isOrigin = (value: unknown): value is JournalOrigin =>
+  value === 'device' || value === 'sandbox'
 
 /**
  * The journal as one JSON file: facts and settings only, never a derived value (ADR-0002).
  * `now` stamps the file; money stays in integer cents.
  */
-export function exportJournal(journal: Journal, now: number): string {
+export function exportJournal(journal: Journal, now: number, origin: JournalOrigin): string {
   const { facts, protocol, weeklySpendCents, baselineSmokesPerDay } = journal
   return JSON.stringify({
     format: FORMAT,
     version: VERSION,
     exportedAt: now,
+    origin,
     journal: { facts, protocol, weeklySpendCents, baselineSmokesPerDay },
   })
 }
@@ -33,6 +41,8 @@ export type ImportRefusal =
   /** JSON, but not a journal export. */
   | 'not-an-export'
   | 'unsupported-version'
+  /** A sandbox export, over the real journal: a test must never replace the user's data. */
+  | 'sandbox-file'
   | 'unknown-fact-type'
   | 'invalid-fact'
   | 'invalid-settings'
@@ -42,6 +52,8 @@ export type ImportRefusal =
 export type ImportJournalResult =
   | { readonly ok: true; readonly journal: Journal; readonly exportedAt: number }
   | { readonly ok: false; readonly reason: ImportRefusal }
+
+const notAnExport = { ok: false, reason: 'not-an-export' } as const
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -85,20 +97,21 @@ function readJournal(raw: Record<string, unknown>): Journal | ImportRefusal {
 /**
  * Reads an export back, all or nothing: the first problem refuses the whole file, where
  * loading from storage would drop it. Nothing is written here; the caller replaces the
- * journal only on `ok`.
+ * `into` journal only on `ok`.
  */
-export function importJournal(text: string): ImportJournalResult {
+export function importJournal(text: string, into: JournalOrigin): ImportJournalResult {
   let raw: unknown
   try {
     raw = JSON.parse(text)
   } catch {
     return { ok: false, reason: 'unreadable' }
   }
-  if (!isRecord(raw) || raw.format !== FORMAT) return { ok: false, reason: 'not-an-export' }
+  if (!isRecord(raw) || raw.format !== FORMAT) return notAnExport
   if (raw.version !== VERSION) return { ok: false, reason: 'unsupported-version' }
-  const { exportedAt, journal: rawJournal } = raw
-  if (typeof exportedAt !== 'number' || !Number.isFinite(exportedAt) || !isRecord(rawJournal))
-    return { ok: false, reason: 'not-an-export' }
+  const { exportedAt, origin, journal: rawJournal } = raw
+  if (typeof exportedAt !== 'number' || !Number.isFinite(exportedAt)) return notAnExport
+  if (!isOrigin(origin) || !isRecord(rawJournal)) return notAnExport
+  if (origin === 'sandbox' && into === 'device') return { ok: false, reason: 'sandbox-file' }
 
   const journal = readJournal(rawJournal)
   return typeof journal === 'string'
