@@ -138,6 +138,38 @@ export const strings = {
     duration: (days: number, hours: string) => `${days}\u00a0j ${hours}\u00a0h`,
   },
 
+  savings: {
+    totals: 'Ce que tu gardes',
+    moneySaved: 'Argent économisé',
+    cigarettesNotSmoked: 'Cigarettes non fumées',
+    unset: 'Indique ta dépense en tabac et tes cigarettes par jour pour compter ce que tu gardes.',
+    openSettings: 'Ouvrir les réglages',
+  },
+  goal: {
+    title: 'Objectif',
+    none: 'Donne un nom et un prix à ce que tu veux t’offrir avec cet argent.',
+    choose: 'Choisir un objectif',
+    edit: 'Modifier',
+    /** Money saved towards the goal, against its price: `220,08 € sur 400 €`. */
+    progress: (saved: string, price: string) => `${saved} sur ${price}`,
+    percent: (percent: number) => `${percent}\u00a0%`,
+    barLabel: (label: string) => `Économies pour ${label}`,
+    reached: 'Atteint',
+    reachedLead: 'L’argent est là : tu peux te l’offrir.',
+    replace: 'Nouvel objectif',
+    form: {
+      title: 'Ton objectif',
+      lead: 'Une chose à t’offrir avec l’argent que tu ne mets plus dans le tabac.',
+      restart: 'Ton objectif est atteint : le suivant repart de zéro.',
+      label: 'Ce que tu veux t’offrir',
+      labelPlaceholder: 'Ex. un vélo',
+      price: 'Son prix',
+      submit: 'Enregistrer l’objectif',
+      cancel: 'Annuler',
+      'invalid-label': 'Donne-lui un nom, en 60 caractères au plus.',
+      'invalid-price': 'Indique un prix en euros, plus grand que zéro.',
+    },
+  },
   lapse: {
     declare: 'J’ai fumé',
     recorded: 'C’est noté.',

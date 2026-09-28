@@ -1,4 +1,4 @@
-import { fromEuroText, toEuroText } from './euros'
+import { formatEuros, fromEuroText, toEuroText } from './euros'
 
 describe('fromEuroText', () => {
   it.each([
@@ -23,5 +23,17 @@ describe('toEuroText', () => {
   it('writes cents back into a text field', () => {
     expect(toEuroText(3_550)).toBe('35,50')
     expect(toEuroText(4_200)).toBe('42')
+  })
+})
+
+describe('formatEuros', () => {
+  // French grouping and the space before the sign are narrow no-break spaces.
+  it.each([
+    [22_008, '220,08\u00a0€'],
+    [40_000, '400\u00a0€'],
+    [125_005, '1\u202f250,05\u00a0€'],
+    [7, '0,07\u00a0€'],
+  ])('shows %i cents as %j', (cents, text) => {
+    expect(formatEuros(cents)).toBe(text)
   })
 })

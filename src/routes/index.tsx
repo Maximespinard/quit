@@ -6,6 +6,8 @@ import { SlipNote } from '@/features/lapse/components/SlipNote'
 import { DayPatchCard } from '@/features/patch/components/DayPatchCard'
 import { ProtocolSummary } from '@/features/protocol/components/ProtocolSummary'
 import { protocolContext } from '@/features/protocol/utils/protocol-context'
+import { GoalSummary } from '@/features/savings/components/GoalSummary'
+import { SavingsTotals } from '@/features/savings/components/SavingsTotals'
 import { FirstLaunch } from '@/features/setup/components/FirstLaunch'
 import { StreakScreen } from '@/features/streak/components/StreakScreen'
 import { StreakTotals } from '@/features/streak/components/StreakTotals'
@@ -69,6 +71,10 @@ function HomePage() {
                   lapseDaysInARow={derived.lapseDaysInARow}
                 />
               </div>
+              <SavingsTotals
+                moneySavedCents={derived.moneySavedCents}
+                cigarettesNotSmoked={derived.cigarettesNotSmoked}
+              />
               {derived.patch.status === 'over' ? null : (
                 <DayPatchCard
                   journal={journal}
@@ -77,6 +83,10 @@ function HomePage() {
                   recorded={patchRecorded === true}
                   onRecorded={commit}
                 />
+              )}
+              {/* Without money saved there is nothing to measure a goal against. */}
+              {derived.moneySavedCents === null ? null : (
+                <GoalSummary journal={journal} goal={derived.goal} onCelebrated={commit} />
               )}
               <ProtocolSummary position={derived.protocol} />
             </StreakScreen>

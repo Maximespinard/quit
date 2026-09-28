@@ -1,7 +1,7 @@
 import { Settings } from 'lucide-react'
 import { BadgeCard } from '@/shared/ui/BadgeCard'
-import { LevelBar } from '@/shared/ui/LevelBar'
 import { MultiplierSteps } from '@/shared/ui/MultiplierSteps'
+import { ProgressBar } from '@/shared/ui/ProgressBar'
 import { StreakHero } from '@/shared/ui/StreakHero'
 import { formatDose } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
@@ -64,11 +64,7 @@ export function HomeSpecimen() {
           title={strings.level.title(level)}
           aside={strings.level.xp(xpIntoLevel, xpForLevel)}
         >
-          <LevelBar
-            label={strings.level.label(level)}
-            xpIntoLevel={xpIntoLevel}
-            xpForLevel={xpForLevel}
-          />
+          <ProgressBar label={strings.level.label(level)} value={xpIntoLevel} max={xpForLevel} />
         </SpecimenSection>
 
         <SpecimenSection

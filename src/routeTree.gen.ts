@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DesignRouteImport } from './routes/design'
+import { Route as GoalRouteImport } from './routes/goal'
 import { Route as LapseRouteImport } from './routes/lapse'
 import { Route as ProtocolRouteImport } from './routes/protocol'
 import { Route as SettingsRouteImport } from './routes/settings'
@@ -28,6 +29,11 @@ const IndexRoute = IndexRouteImport.update({
 const DesignRoute = DesignRouteImport.update({
   id: '/design',
   path: '/design',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GoalRoute = GoalRouteImport.update({
+  id: '/goal',
+  path: '/goal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LapseRoute = LapseRouteImport.update({
@@ -74,6 +80,7 @@ const PatchNewRoute = PatchNewRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/design': typeof DesignRoute
+  '/goal': typeof GoalRoute
   '/lapse': typeof LapseRoute
   '/protocol': typeof ProtocolRoute
   '/settings': typeof SettingsRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/design': typeof DesignRoute
+  '/goal': typeof GoalRoute
   '/lapse': typeof LapseRoute
   '/protocol': typeof ProtocolRoute
   '/settings': typeof SettingsRoute
@@ -99,6 +107,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/design': typeof DesignRoute
+  '/goal': typeof GoalRoute
   '/lapse': typeof LapseRoute
   '/protocol': typeof ProtocolRoute
   '/settings': typeof SettingsRoute
@@ -113,6 +122,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/design'
+    | '/goal'
     | '/lapse'
     | '/protocol'
     | '/settings'
@@ -125,6 +135,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/design'
+    | '/goal'
     | '/lapse'
     | '/protocol'
     | '/settings'
@@ -137,6 +148,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/design'
+    | '/goal'
     | '/lapse'
     | '/protocol'
     | '/settings'
@@ -150,6 +162,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DesignRoute: typeof DesignRoute
+  GoalRoute: typeof GoalRoute
   LapseRoute: typeof LapseRoute
   ProtocolRoute: typeof ProtocolRoute
   SettingsRoute: typeof SettingsRoute
@@ -174,6 +187,13 @@ declare module '@tanstack/react-router' {
       path: '/design'
       fullPath: '/design'
       preLoaderRoute: typeof DesignRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/goal': {
+      id: '/goal'
+      path: '/goal'
+      fullPath: '/goal'
+      preLoaderRoute: typeof GoalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lapse': {
@@ -238,6 +258,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DesignRoute: DesignRoute,
+  GoalRoute: GoalRoute,
   LapseRoute: LapseRoute,
   ProtocolRoute: ProtocolRoute,
   SettingsRoute: SettingsRoute,
