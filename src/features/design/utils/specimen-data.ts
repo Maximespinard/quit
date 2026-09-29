@@ -101,7 +101,21 @@ export const TYPE_TOKENS: readonly TypeToken[] = [
     className: 'text-display',
     px: '176 px',
     sample: '12',
-    role: 'Le chiffre du streak et le minuteur',
+    role: 'Le minuteur ; le streak, lui, prend 62 % de la largeur',
+  },
+  {
+    token: 'brand',
+    className: 'text-brand',
+    px: '21 px',
+    sample: 'quit',
+    role: 'La marque, en haut à gauche',
+  },
+  {
+    token: 'envie',
+    className: 'text-envie',
+    px: '23 px',
+    sample: 'Envie',
+    role: 'Le bouton Envie, seul',
   },
   {
     token: 'figure',
@@ -116,6 +130,13 @@ export const TYPE_TOKENS: readonly TypeToken[] = [
     px: '20 px',
     sample: 'Patch du jour',
     role: 'Titres de carte, de tiroir et de dialogue',
+  },
+  {
+    token: 'lead',
+    className: 'text-lead',
+    px: '18 px',
+    sample: 'jours de streak · 07:42:09',
+    role: 'La ligne sous le chiffre du streak',
   },
   {
     token: 'cta',

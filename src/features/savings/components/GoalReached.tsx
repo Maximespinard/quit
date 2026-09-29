@@ -15,17 +15,17 @@ type GoalReachedProps = {
 
 const copy = strings.goal
 
-/** The goal reached: its price met in full, the bar full, then the next one. */
+/** The goal reached, inside its card: its price met in full, the bar full, then the next one. */
 export function GoalReached({ goal, celebrating, action }: GoalReachedProps) {
   const counted = useCountUp(celebrating ? goal.priceCents : 0)
   const shown = celebrating ? counted : goal.priceCents
   const price = formatEuros(goal.priceCents)
 
   return (
-    <div className="flex flex-col gap-3 rounded-card bg-surface p-4">
+    <>
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 flex-col gap-1">
-          <p className="truncate font-medium text-body">{goal.label}</p>
+          <p className="truncate text-title">{goal.label}</p>
           <p className="text-figure tabular-nums">
             <span aria-hidden="true">{formatEuros(shown)}</span>
             <span className="sr-only">{price}</span>
@@ -40,6 +40,6 @@ export function GoalReached({ goal, celebrating, action }: GoalReachedProps) {
         valueText={copy.progress(price, price)}
       />
       <p className="text-body text-muted">{copy.reachedLead}</p>
-    </div>
+    </>
   )
 }

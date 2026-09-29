@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { useId, useState } from 'react'
+import { useState } from 'react'
 import type { ApplicationSite } from '@/shared/domain/application-site'
 import {
   type RecordPatchApplicationResult,
@@ -8,6 +8,7 @@ import {
 import type { Journal } from '@/shared/domain/journal'
 import type { ProtocolDayPatch } from '@/shared/domain/protocol-day-patch'
 import { Button, buttonVariants } from '@/shared/ui/base/button'
+import { Card } from '@/shared/ui/Card'
 import { keepSearch } from '@/shared/utils/app-search'
 import { cn } from '@/shared/utils/cn'
 import { formatDose, formatTime } from '@/shared/utils/format'
@@ -45,7 +46,6 @@ export function DayPatchCard({
   recorded,
   onRecorded,
 }: DayPatchCardProps) {
-  const titleId = useId()
   // Reachable in the sandbox only: a clock moved before the quit moment refuses the tap.
   const [refusal, setRefusal] = useState<Refusal | null>(null)
   // Untouched, the site follows the suggestion, which moves on once a patch is logged.
@@ -61,58 +61,53 @@ export function DayPatchCard({
   }
 
   return (
-    <section aria-labelledby={titleId} className="flex flex-col gap-2.5">
-      <div className="flex items-baseline justify-between text-label">
-        <h2 id={titleId} className="font-medium text-body text-ink">
-          {copy.title}
-        </h2>
-        {recorded ? (
+    <Card
+      title={copy.title}
+      aside={
+        recorded ? (
           <p role="status" className="text-muted">
             {copy.recorded}
           </p>
-        ) : null}
-      </div>
-
-      <div className="flex flex-col gap-3 rounded-card bg-surface p-4">
-        {patch.status === 'logged' ? (
-          // The protocol card's shape: the figure that changes, then its detail.
-          <p className="flex flex-col gap-1">
-            <span className="text-figure tabular-nums">{copy.logged(formatTime(patch.at))}</span>
-            <span className="text-muted text-label">
-              {copy.loggedDetail(
-                isSameLocalDay(patch.at, now),
-                formatDose(patch.doseMg),
-                patch.site === undefined ? null : copy.sites[patch.site],
-              )}
-            </span>
-          </p>
-        ) : (
-          <>
-            <p className="font-medium text-body">{copy.due}</p>
-            <SitePicker
-              value={site}
-              previous={previousSite}
-              onValueChange={(next) => setChoice({ kind: 'picked', site: next })}
-            />
-            <Button size="lg" onClick={() => applyNow(patch.doseMg)}>
-              {copy.apply(formatDose(patch.doseMg))}
-            </Button>
-            {refusal !== null ? (
-              <p role="alert" className="text-alert text-label">
-                {copy.form[refusal]}
-              </p>
-            ) : null}
-          </>
-        )}
-        <Link
-          to="/patch/new"
-          search={keepSearch}
-          // Text aligned with the card's edge and its bottom inset, the 44px target kept.
-          className={cn(buttonVariants({ variant: 'ghost' }), '-mb-3 -ml-4 self-start')}
-        >
-          {copy.other}
-        </Link>
-      </div>
-    </section>
+        ) : null
+      }
+    >
+      {patch.status === 'logged' ? (
+        // The figure that changes, then its detail.
+        <p className="flex flex-col gap-1">
+          <span className="text-figure tabular-nums">{copy.logged(formatTime(patch.at))}</span>
+          <span className="text-body text-muted">
+            {copy.loggedDetail(
+              isSameLocalDay(patch.at, now),
+              formatDose(patch.doseMg),
+              patch.site === undefined ? null : copy.sites[patch.site],
+            )}
+          </span>
+        </p>
+      ) : (
+        <>
+          <p className="text-title">{copy.due}</p>
+          <SitePicker
+            value={site}
+            previous={previousSite}
+            onValueChange={(next) => setChoice({ kind: 'picked', site: next })}
+          />
+          <Button size="lg" onClick={() => applyNow(patch.doseMg)}>
+            {copy.apply(formatDose(patch.doseMg))}
+          </Button>
+          {refusal !== null ? (
+            <p role="alert" className="text-alert text-label">
+              {copy.form[refusal]}
+            </p>
+          ) : null}
+        </>
+      )}
+      <Link
+        to="/patch/new"
+        search={keepSearch}
+        className={cn(buttonVariants({ variant: 'link' }), 'self-start')}
+      >
+        {copy.other}
+      </Link>
+    </Card>
   )
 }

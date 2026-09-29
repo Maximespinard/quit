@@ -19,6 +19,7 @@ import { useRecordedThenHome } from '@/shared/hooks/useRecordedThenHome'
 import { AppShell } from '@/shared/ui/app-shell'
 import { buttonVariants } from '@/shared/ui/base/button'
 import { ReadyJournal } from '@/shared/ui/ReadyJournal'
+import { RowLink } from '@/shared/ui/RowLink'
 import { validateAppSearch } from '@/shared/utils/app-search'
 import { strings } from '@/shared/utils/strings'
 
@@ -60,7 +61,7 @@ function HomePage() {
         }
         return (
           // The Fixed Pill Rule: the bottom clearance keeps content out from under `Envie`.
-          <div className="pb-28">
+          <div className="pb-32">
             <StreakScreen
               streak={derived.streak}
               brand={brand}
@@ -72,21 +73,19 @@ function HomePage() {
                   aria-label={strings.nav.settings}
                   className="grid size-11 place-items-center rounded-full text-ink active:bg-ghost"
                 >
-                  <Settings className="size-5" strokeWidth={1.75} aria-hidden="true" />
+                  <Settings className="size-5" strokeWidth={1.5} aria-hidden="true" />
                 </Link>
               }
             >
-              {/* The slip note reads as the totals' footnote: grouped tight under the card. */}
-              <div className="flex flex-col gap-3">
-                <StreakTotals
-                  smokeFreeDays={derived.smokeFreeDays}
-                  personalBest={derived.personalBest}
-                />
-                <SlipNote
-                  lastCigarette={derived.lastCigarette}
-                  lapseDaysInARow={derived.lapseDaysInARow}
-                />
-              </div>
+              <StreakTotals
+                smokeFreeDays={derived.smokeFreeDays}
+                personalBest={derived.personalBest}
+              />
+              {/* The slip note reads as the totals' footnote, aligned with the card's text. */}
+              <SlipNote
+                lastCigarette={derived.lastCigarette}
+                lapseDaysInARow={derived.lapseDaysInARow}
+              />
               <SavingsTotals
                 moneySavedCents={derived.moneySavedCents}
                 cigarettesNotSmoked={derived.cigarettesNotSmoked}
@@ -109,51 +108,43 @@ function HomePage() {
                 <GoalSummary journal={journal} goal={derived.goal} onCelebrated={commit} />
               )}
               <ProtocolSummary position={derived.protocol} />
-            </StreakScreen>
-            <div className="mx-auto flex max-w-md flex-col items-start gap-3 px-safe pt-5">
               {cravingRecorded === true ? (
-                <p role="status" className="text-body text-muted">
+                <p role="status" className="px-2 text-body text-muted">
                   {strings.craving.recorded}
                 </p>
               ) : null}
               {journalImported === true ? (
-                <p role="status" className="text-body text-muted">
+                <p role="status" className="px-2 text-body text-muted">
                   {strings.backup.imported}
                 </p>
               ) : null}
               {lapseRecorded === true ? (
-                <p role="status" className="text-body text-muted">
+                <p role="status" className="px-2 text-body text-muted">
                   {strings.lapse.recorded}
                 </p>
               ) : null}
               <Link
                 to="/craving/past"
                 search={appSearch}
-                className={buttonVariants({ variant: 'secondary' })}
+                className={buttonVariants({ variant: 'secondary', size: 'lg' })}
               >
                 {strings.craving.logPast}
               </Link>
-              <Link to="/lapse" search={appSearch} className={buttonVariants({ variant: 'ghost' })}>
-                {strings.lapse.declare}
-              </Link>
-              <Link to="/stats" search={appSearch} className={buttonVariants({ variant: 'ghost' })}>
-                {strings.stats.open}
-              </Link>
-              <Link
-                to="/calendar"
-                search={appSearch}
-                className={buttonVariants({ variant: 'ghost' })}
-              >
-                {strings.calendar.open}
-              </Link>
-              <Link
-                to="/history"
-                search={appSearch}
-                className={buttonVariants({ variant: 'ghost' })}
-              >
-                {strings.history.open}
-              </Link>
-            </div>
+              <div className="flex flex-col rounded-card bg-surface px-5 py-1">
+                <RowLink to="/lapse" search={appSearch}>
+                  {strings.lapse.declare}
+                </RowLink>
+                <RowLink to="/stats" search={appSearch}>
+                  {strings.stats.open}
+                </RowLink>
+                <RowLink to="/calendar" search={appSearch}>
+                  {strings.calendar.open}
+                </RowLink>
+                <RowLink to="/history" search={appSearch}>
+                  {strings.history.open}
+                </RowLink>
+              </div>
+            </StreakScreen>
             <CravingLauncher now={now} />
           </div>
         )

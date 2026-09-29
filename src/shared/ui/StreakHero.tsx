@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { countUpAt } from '@/shared/utils/count-up'
 import type { SplitDuration } from '@/shared/utils/duration'
 import { formatClock } from '@/shared/utils/format'
-import { HeroBackdrop } from './HeroBackdrop'
+import { streakFigureSize } from '@/shared/utils/streak-figure'
 
 type StreakHeroProps = {
   /** The streak, split into whole days and the hours, minutes and seconds past them. */
@@ -22,8 +22,10 @@ type StreakHeroProps = {
 }
 
 /**
- * The block that opens the home screen: one huge figure, one label row. During the
- * entrance the days and the clock count up together and land on the same step: one gesture.
+ * The block that opens the home screen: the top bar, one huge white figure, one label line.
+ * It sits on the haze its parent draws. During the entrance the days and the clock count up
+ * together and land on the same step: one gesture. The figure is sized to the hero's width
+ * (an `@container` ancestor), smaller from a third digit so it never runs past the insets.
  */
 export function StreakHero({
   duration,
@@ -37,32 +39,31 @@ export function StreakHero({
   const { days, hours, minutes, seconds } = duration
 
   return (
-    <section
-      aria-label={regionLabel}
-      className="relative isolate overflow-hidden rounded-b-hero bg-page px-safe pt-safe text-ink"
-    >
-      <HeroBackdrop />
-      <div className="relative flex min-h-14 items-center justify-between gap-3 pt-3">
-        <h1 className="font-semibold text-label">{brand}</h1>
-        <span className="flex items-center gap-2 text-label">
+    <section aria-label={regionLabel} className="px-safe pt-safe text-ink">
+      <div className="flex min-h-14 items-center justify-between gap-3 pt-2">
+        <h1 className="text-brand">{brand}</h1>
+        <span className="-mr-2.5 flex items-center gap-2 text-body">
           {context}
           {action}
         </span>
       </div>
-      <div className="relative flex flex-col items-center gap-1 pt-6 pb-9 text-center">
-        <p className="text-display text-white">
+      <div className="flex flex-col items-center gap-3 pt-16 text-center">
+        <p className="text-display text-white" style={{ fontSize: streakFigureSize(days) }}>
           <span className="sr-only">{days} </span>
           <span aria-hidden="true">{countUpAt(days, entrance)}</span>
         </p>
-        <span className="text-body">{daysLabel}</span>
-        <span className="mt-1 text-figure">
-          <span className="sr-only">{formatClock(hours, minutes, seconds)}</span>
-          <span aria-hidden="true">
-            {formatClock(
-              countUpAt(hours, entrance),
-              countUpAt(minutes, entrance),
-              countUpAt(seconds, entrance),
-            )}
+        <span className="text-lead">
+          {daysLabel}{' '}
+          <span className="text-muted">
+            <span className="sr-only">{formatClock(hours, minutes, seconds)}</span>
+            {/* The separator is drawn, not read: the label and the clock stay one phrase. */}
+            <span aria-hidden="true" className="before:content-['·_']">
+              {formatClock(
+                countUpAt(hours, entrance),
+                countUpAt(minutes, entrance),
+                countUpAt(seconds, entrance),
+              )}
+            </span>
           </span>
         </span>
       </div>

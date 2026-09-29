@@ -19,9 +19,9 @@ type SitePickerProps = {
 
 /**
  * The application site, one of the fixed list: one site pressed at most. Another site is one
- * tap; pressing the pressed one again leaves the site out. Two columns, left and right, one
- * row per body area. The previous site stays in its place, greyed and named as such: it is
- * `aria-disabled` rather than `disabled`, so it keeps its focus and its description.
+ * tap; pressing the pressed one again leaves the site out. Ghost pills that wrap, in the list's
+ * left-then-right order. The previous site stays in its place, struck through and described as
+ * such: it is `aria-disabled` rather than `disabled`, so it keeps its focus and its description.
  */
 export function SitePicker({ value, onValueChange, previous }: SitePickerProps) {
   const labelId = useId()
@@ -36,15 +36,19 @@ export function SitePicker({ value, onValueChange, previous }: SitePickerProps) 
   }
 
   return (
-    <div className="flex flex-col gap-2">
-      <span id={labelId} className="text-label">
-        {copy.site.label}
-      </span>
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-1">
+        <span id={labelId} className="text-body">
+          {copy.site.label}
+        </span>
+        <p id={hintId} className="text-label text-muted">
+          {copy.site.hint}
+        </p>
+      </div>
       <ToggleGroup
         aria-labelledby={labelId}
         aria-describedby={hintId}
-        variant="outline"
-        className="grid w-full grid-cols-2"
+        className="w-full flex-wrap"
         value={value === null ? [] : [value]}
         onValueChange={change}
       >
@@ -55,24 +59,25 @@ export function SitePicker({ value, onValueChange, previous }: SitePickerProps) 
               value={site}
               aria-disabled
               aria-describedby={previousId}
-              // Disabled fill: `ghost` / `muted`, no outline, no pointer.
-              className="pointer-events-none h-11 w-full flex-col gap-0 border-transparent bg-ghost text-muted"
+              // Barred: struck through and dimmed, no pointer; the description says why.
+              className="pointer-events-none h-11 font-normal text-ink/35 line-through decoration-ink/25"
             >
               {copy.sites[site]}
-              <span id={previousId} aria-hidden className="font-medium text-detail">
+              <span id={previousId} aria-hidden className="sr-only">
                 {copy.site.previous}
               </span>
             </ToggleGroupItem>
           ) : (
-            <ToggleGroupItem key={site} value={site} className="h-11 w-full text-muted">
+            <ToggleGroupItem
+              key={site}
+              value={site}
+              className="h-11 font-normal data-pressed:font-medium"
+            >
               {copy.sites[site]}
             </ToggleGroupItem>
           ),
         )}
       </ToggleGroup>
-      <p id={hintId} className="text-label text-muted">
-        {copy.site.hint}
-      </p>
     </div>
   )
 }

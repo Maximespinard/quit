@@ -531,6 +531,7 @@ export const strings = {
       secondary: 'Plus tard',
       ghost: 'Annuler',
       destructive: 'Supprimer ce fait',
+      link: 'Autre dose ou autre date',
       disabled: 'Indisponible',
     },
     switchLabel: 'Rappel du patch',
