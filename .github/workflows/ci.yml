@@ -5,10 +5,11 @@ on:
   push:
     branches: [main]
 
-# A new push to a branch makes the previous run pointless.
+# A new push to a branch makes the previous run pointless; on main every run publishes its
+# commit's image, so none is cancelled.
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 permissions:
   contents: read
@@ -30,7 +31,7 @@ jobs:
       - run: npm run verify
 
   e2e:
-    name: e2e (Playwright · WebKit iPhone)
+    name: e2e (Playwright · WebKit iPhone · preview build, then the image)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -54,6 +55,28 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit == 'true'
       - run: npm run build
       - run: npm run test:e2e
+      # The release image, loaded into the runner's Docker and never pushed here: publishing is
+      # its own job, on main only.
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/build-push-action@v7
+        with:
+          context: .
+          load: true
+          tags: quit:ci
+          cache-from: type=gha,scope=image
+          cache-to: type=gha,scope=image,mode=max
+      - name: Run the image
+        run: |
+          docker run -d --name quit -p 8080:8080 -v quit-data:/data quit:ci
+          curl --retry 20 --retry-connrefused --retry-delay 1 -fsS http://127.0.0.1:8080/api/health
+          test "$(docker exec quit id -u)" != 0
+      # The shell and the offline launch, served by the server with its headers and CSP on.
+      - run: npm run test:e2e -- smoke.spec.ts offline.spec.ts
+        env:
+          E2E_BASE_URL: http://127.0.0.1:8080
+      - name: Server logs on failure
+        if: failure()
+        run: docker logs quit || true
       - name: Upload report on failure
         if: failure()
         uses: actions/upload-artifact@v4
@@ -70,6 +93,35 @@ jobs:
       # Its lint, typecheck and tests run in verify; publishing belongs to the deploy. Here the
       # image only has to build, from the root: the workspaces share one lockfile.
       - run: docker build -f push-sender/Dockerfile -t quit-push-sender .
+
+  publish:
+    name: publish (GHCR · sha and main tags)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [verify, e2e, secret-scan]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write # the job's own token pushes to GHCR: no stored secret
+    steps:
+      - uses: actions/checkout@v7
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+      # Image names are lowercase; the owner's login is not.
+      - name: Name the image
+        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_ENV"
+      # The same build as the one the e2e job ran against: every layer comes from its cache.
+      - uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:${{ github.sha }}
+            ${{ env.IMAGE }}:main
+          cache-from: type=gha,scope=image
 
   secret-scan:
     name: leak scan

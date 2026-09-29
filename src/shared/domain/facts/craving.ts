@@ -17,6 +17,7 @@ export function uniqueTags(tags: readonly string[]): readonly string[] {
   return [...byKey.values()]
 }
 
+/** A craving to record: a new one under a new id, a corrected one under its own. */
 export type CravingInput = Omit<CravingFact, 'type'>
 
 export type RecordCravingResult =

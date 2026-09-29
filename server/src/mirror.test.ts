@@ -148,14 +148,15 @@ describe('facts', () => {
     expect((await api.readMirror()).facts).toEqual([])
   })
 
-  it('stores a fact sent without an id under the path id', async () => {
+  it('answers 400 naming the id when the body carries none', async () => {
     const api = await linkedApi()
     const { id: _, ...withoutId } = quitMoment
 
     const response = await api.putRaw(`/api/facts/${factId(9)}`, withoutId)
 
-    expect(response.status).toBe(204)
-    expect((await api.readMirror()).facts).toEqual([{ ...quitMoment, id: factId(9) }])
+    const problem = await expectProblem(response, 400)
+    expect(problem.detail).toContain('id')
+    expect((await api.readMirror()).facts).toEqual([])
   })
 
   it('reads the contract defaults: a lapse without a count is one cigarette', async () => {

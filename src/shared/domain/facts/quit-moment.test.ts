@@ -1,4 +1,5 @@
-import { factId } from '@/shared/test/fact-ids'
+import { factIdSequence } from '@/shared/test/fact-ids'
+import { factId } from '@/shared/utils/fact-id'
 import { emptyJournal, type Journal } from '../journal'
 import { recordQuitMoment } from './quit-moment'
 
@@ -6,24 +7,24 @@ const MINUTE = 60_000
 const NOW = Date.UTC(2026, 8, 22, 10, 0, 0)
 
 describe('recordQuitMoment', () => {
-  it('records a quit moment set to now', () => {
-    expect(recordQuitMoment(emptyJournal, NOW, NOW)).toEqual({
+  it('records a quit moment set to now, under a new id', () => {
+    expect(recordQuitMoment(emptyJournal, NOW, NOW, factIdSequence())).toEqual({
       ok: true,
-      journal: { ...emptyJournal, facts: [{ type: 'quit-moment', at: NOW }] },
+      journal: { ...emptyJournal, facts: [{ type: 'quit-moment', id: factId(1), at: NOW }] },
     })
   })
 
   it('records a past quit moment', () => {
     const at = NOW - 90 * MINUTE
 
-    expect(recordQuitMoment(emptyJournal, at, NOW)).toEqual({
+    expect(recordQuitMoment(emptyJournal, at, NOW, factIdSequence())).toEqual({
       ok: true,
-      journal: { ...emptyJournal, facts: [{ type: 'quit-moment', at }] },
+      journal: { ...emptyJournal, facts: [{ type: 'quit-moment', id: factId(1), at }] },
     })
   })
 
   it('refuses a quit moment in the future', () => {
-    expect(recordQuitMoment(emptyJournal, NOW + MINUTE, NOW)).toEqual({
+    expect(recordQuitMoment(emptyJournal, NOW + MINUTE, NOW, factIdSequence())).toEqual({
       ok: false,
       reason: 'future',
     })
@@ -52,7 +53,7 @@ describe('recordQuitMoment, correcting an existing quit moment', () => {
   it('moves the quit moment earlier, as the same fact: its id kept, no second quit moment', () => {
     const at = quitMoment - 60 * MINUTE
 
-    expect(recordQuitMoment(journal, at, NOW)).toEqual({
+    expect(recordQuitMoment(journal, at, NOW, factIdSequence(90))).toEqual({
       ok: true,
       journal: {
         ...journal,
@@ -64,16 +65,19 @@ describe('recordQuitMoment, correcting an existing quit moment', () => {
   it('corrects the quit moment in force, leaving one recorded before it as it was', () => {
     const corrected: Journal = {
       ...journal,
-      facts: [{ type: 'quit-moment', at: quitMoment - 60 * MINUTE }, ...journal.facts],
+      facts: [
+        { type: 'quit-moment', id: factId(4), at: quitMoment - 60 * MINUTE },
+        ...journal.facts,
+      ],
     }
     const at = quitMoment - 30 * MINUTE
 
-    expect(recordQuitMoment(corrected, at, NOW)).toEqual({
+    expect(recordQuitMoment(corrected, at, NOW, factIdSequence(90))).toEqual({
       ok: true,
       journal: {
         ...corrected,
         facts: [
-          { type: 'quit-moment', at: quitMoment - 60 * MINUTE },
+          { type: 'quit-moment', id: factId(4), at: quitMoment - 60 * MINUTE },
           ...journal.facts.slice(1),
           { type: 'quit-moment', id: factId(1), at },
         ],
@@ -82,11 +86,11 @@ describe('recordQuitMoment, correcting an existing quit moment', () => {
   })
 
   it('moves the quit moment later, up to the earliest fact recorded', () => {
-    expect(recordQuitMoment(journal, firstCraving, NOW).ok).toBe(true)
+    expect(recordQuitMoment(journal, firstCraving, NOW, factIdSequence(90)).ok).toBe(true)
   })
 
   it('refuses a quit moment later than a fact already recorded, naming the earliest one', () => {
-    expect(recordQuitMoment(journal, firstCraving + MINUTE, NOW)).toEqual({
+    expect(recordQuitMoment(journal, firstCraving + MINUTE, NOW, factIdSequence(90))).toEqual({
       ok: false,
       reason: 'after-facts',
       earliestFact: firstCraving,

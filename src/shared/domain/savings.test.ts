@@ -1,4 +1,6 @@
+import { factIdSequence } from '@/shared/test/fact-ids'
 import { DAY_MS, HOUR_MS } from '@/shared/utils/duration'
+import { factId } from '@/shared/utils/fact-id'
 import { derive } from './derive'
 import { decodeJournal, emptyJournal, type Journal } from './journal'
 import { setBaselineSmokesPerDay, setWeeklySpend } from './journal-settings'
@@ -15,8 +17,13 @@ const journal = (
   weeklySpendCents: 3_500,
   baselineSmokesPerDay: 15,
   facts: [
-    { type: 'quit-moment', at: quitMoment },
-    ...lapses.map(([at, count]) => ({ type: 'lapse' as const, at, count })),
+    { type: 'quit-moment', id: factId(1), at: quitMoment },
+    ...lapses.map(([at, count], i) => ({
+      type: 'lapse' as const,
+      id: factId(100 + i),
+      at,
+      count,
+    })),
   ],
 })
 
@@ -52,12 +59,12 @@ describe('derive, money saved and cigarettes not smoked', () => {
       weeklySpendCents: 3_500,
       baselineSmokesPerDay: 15,
       facts: [
-        { type: 'quit-moment', at: NOW - DAY_MS },
-        { type: 'lapse', at: NOW - HOUR_MS },
+        { type: 'quit-moment', id: factId(1), at: NOW - DAY_MS },
+        { type: 'lapse', id: factId(2), at: NOW - HOUR_MS },
       ],
     }
 
-    expect(derive(decodeJournal(stored), NOW)).toMatchObject({
+    expect(derive(decodeJournal(stored, factIdSequence()), NOW)).toMatchObject({
       moneySavedCents: 466,
       cigarettesNotSmoked: 14,
     })

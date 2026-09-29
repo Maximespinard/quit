@@ -27,6 +27,9 @@ afterEach(async () => {
   for (const cleanup of cleanups.splice(0).reverse()) await cleanup()
 })
 
+/** Runs `cleanup` once the current test ends, after those registered later. */
+export const onCleanup = (cleanup: () => Promise<void>) => void cleanups.push(cleanup)
+
 export interface RequestOptions {
   key?: string | null
   /** Sent as is, with a JSON content type. */
@@ -36,14 +39,23 @@ export interface RequestOptions {
   forwardedFor?: string
 }
 
-export async function setup({ trustProxyHops = 0, now = () => T0 } = {}) {
+export async function setup({
+  trustProxyHops = 0,
+  now = () => T0,
+  appDir,
+}: {
+  trustProxyHops?: number
+  now?: () => Date
+  /** The built PWA to serve outside `/api`; none by default. */
+  appDir?: string
+} = {}) {
   const dir = await mkdtemp(join(tmpdir(), 'quit-server-'))
   cleanups.push(() => rm(dir, { recursive: true, force: true }))
   const database = openDatabase(dir)
   cleanups.push(async () => database.close())
   const logs: string[] = []
   const logger = createLogger('info', { write: (line: string) => void logs.push(line) })
-  const server = createApp({ database, logger, trustProxyHops, now }).listen(0, '127.0.0.1')
+  const server = createApp({ database, logger, trustProxyHops, now, appDir }).listen(0, '127.0.0.1')
   await new Promise((resolve) => server.once('listening', resolve))
   cleanups.push(() => new Promise((resolve) => server.close(() => resolve())))
   const { port } = server.address() as AddressInfo

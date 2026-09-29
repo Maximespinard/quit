@@ -39,3 +39,11 @@ export const localInput = (page: Page, at: number) =>
 
 /** The home screen in a sandbox seeded from a scenario, its clock stopped on the scenario's. */
 export const sandboxWith = (scenario: string) => `/?debug=true&scenario=${scenario}`
+
+/** Moves the sandbox clock by the debug panel's `shift` button, `times` times over. */
+export async function shiftClock(page: Page, shift: string, times = 1) {
+  const tap = (name: string) => page.getByRole('button', { name, exact: true }).click()
+  await tap('Bac à sable')
+  for (let i = 0; i < times; i += 1) await tap(shift)
+  await tap('Fermer')
+}

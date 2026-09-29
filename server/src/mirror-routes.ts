@@ -31,26 +31,26 @@ const parsePathId = (id: string) => factIdSchema.safeParse(id.toLowerCase())
 export function mirrorRoutes({ db, now }: { db: Db; now: () => Date }) {
   const router = Router()
 
-  router.put('/api/facts/:id', (req, res) => {
+  router.put('/facts/:id', (req, res) => {
     const id = parsePathId(req.params.id)
     if (!id.success) return sendProblem(res, 400, INVALID_PATH_ID)
     const fact = factSchema.safeParse(req.body)
     if (!fact.success) return sendProblem(res, 400, invalidBodyDetail('a fact', fact.error.issues))
-    if (fact.data.id !== undefined && fact.data.id.toLowerCase() !== id.data) {
+    if (fact.data.id.toLowerCase() !== id.data) {
       return sendProblem(res, 400, 'Invalid field: id, it differs from the path id.')
     }
     putFact(db, id.data, fact.data, now())
     res.status(204).end()
   })
 
-  router.delete('/api/facts/:id', (req, res) => {
+  router.delete('/facts/:id', (req, res) => {
     const id = parsePathId(req.params.id)
     if (!id.success) return sendProblem(res, 400, INVALID_PATH_ID)
     deleteFact(db, id.data)
     res.status(204).end()
   })
 
-  router.put('/api/settings', (req, res) => {
+  router.put('/settings', (req, res) => {
     const next = settingsSchema.safeParse(req.body)
     if (!next.success) {
       return sendProblem(res, 400, invalidBodyDetail('the settings', next.error.issues))
@@ -59,7 +59,7 @@ export function mirrorRoutes({ db, now }: { db: Db; now: () => Date }) {
     res.status(204).end()
   })
 
-  router.get('/api/mirror', (_req, res) => {
+  router.get('/mirror', (_req, res) => {
     res.json(readMirror(db))
   })
 

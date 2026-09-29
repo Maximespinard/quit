@@ -7,7 +7,10 @@ import { journalSchema } from './journal.ts'
  * `factSchema`; a change to the shape of the file itself bumps the version.
  */
 export const JOURNAL_FILE_FORMAT = 'quit-journal'
-/** 2 gives every fact its id; a version 1 file is still read, its facts getting ids once stored. */
+/**
+ * 2 gives every fact its id. A version 1 file is still read: the app gives its facts their ids
+ * before this schema checks them.
+ */
 export const JOURNAL_FILE_VERSION = 2
 const READABLE_VERSIONS = [1, JOURNAL_FILE_VERSION] as const
 
