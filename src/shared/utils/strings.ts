@@ -380,6 +380,7 @@ export const strings = {
       'day-29': 'Jour 29, étape 2',
       'day-45-lapse': 'Jour 45, un écart hier',
       'protocol-over': 'Protocole fini, une semaine sans patch',
+      'day-60-cravings': 'Jour 60, deux mois d’envies',
     } satisfies Record<ScenarioId, string>,
     inject: 'Injecter à l’heure du bac à sable',
     injectCraving: 'Injecter une envie',
