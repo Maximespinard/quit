@@ -51,7 +51,11 @@ export default defineConfig({
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },
-  server: { port: 3000 },
+  server: {
+    port: 3000,
+    // The API beside the app, as the server serves both in production; the preview inherits it.
+    proxy: { '/api': process.env.QUIT_API_URL ?? 'http://127.0.0.1:8080' },
+  },
   test: {
     environment: 'jsdom',
     globals: true,
