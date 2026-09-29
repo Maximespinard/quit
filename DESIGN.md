@@ -566,11 +566,17 @@ verrouillé → filet `line`, fond transparent, texte `ink-soft`. Ils entrent en
 
 ### Motion
 
-**Une seule signature : `useCountUp`.** Le chiffre du streak monte en **pas entiers** sur une
+**Une seule signature : le compteur par crans** (`countUpAt`, lu par `useCountUp` et
+`useLaunchEntrance`). Le chiffre du streak monte en **pas entiers** sur une
 cadence fixe, durée totale 240 ms, 12 pas maximum — une roue de compteur qui se pose, jamais
 une interpolation fluide image par image. La valeur réelle reste lisible pour les lecteurs
 d'écran (`sr-only`) pendant que le chiffre animé est `aria-hidden`. Sous
 `prefers-reduced-motion: reduce`, la cible est rendue dès le premier paint.
+
+Sur le héros de l'accueil, le compteur est l'entrée de l'app : il joue **une fois par lancement**
+(`useLaunchEntrance`), pas à chaque retour sur l'accueil. Les jours et l'horloge `hh:mm:ss`
+montent **ensemble**, sur les mêmes crans, et se posent au même cran : un seul geste de
+240 ms, jamais une cascade. Une fois posés, les chiffres suivent le temps sans rejouer.
 
 Le reste du vocabulaire est court et unique : `--ease-out-expo`
 (`cubic-bezier(0.16, 1, 0.3, 1)`) pour tout ; 150 ms pour un retour tactile, 200 ms pour un

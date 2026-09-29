@@ -1,8 +1,12 @@
 import type { ReactNode } from 'react'
 import type { Streak } from '@/shared/domain/derive'
+import { useLaunchEntrance } from '@/shared/hooks/useLaunchEntrance'
 import { StreakHero } from '@/shared/ui/StreakHero'
 import { splitDuration } from '@/shared/utils/duration'
 import { strings } from '@/shared/utils/strings'
+
+/** The hero counts up when the app is opened, not each time home is shown again. */
+const HOME_ENTRANCE = 'home-streak'
 
 type StreakScreenProps = {
   streak: Streak
@@ -19,6 +23,7 @@ type StreakScreenProps = {
 /** The home screen once a quit moment exists: the streak as elapsed time, live. */
 export function StreakScreen({ streak, brand, context, action, children }: StreakScreenProps) {
   const duration = splitDuration(streak.elapsedMs)
+  const entrance = useLaunchEntrance(HOME_ENTRANCE)
 
   return (
     <div className="mx-auto max-w-md">
@@ -29,6 +34,7 @@ export function StreakScreen({ streak, brand, context, action, children }: Strea
         brand={brand}
         context={context}
         action={action}
+        entrance={entrance}
       />
       {children ? <div className="flex flex-col gap-5 px-safe pt-5 pb-4">{children}</div> : null}
     </div>
