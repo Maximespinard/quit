@@ -1,5 +1,5 @@
 import { emptyJournal, type Journal } from '@/shared/domain/journal'
-import { factId } from '@/shared/test/fact-ids'
+import { factId } from '@/shared/utils/fact-id'
 import { historyDays, historyFact } from './history-days'
 
 const QUIT = new Date(2026, 0, 1, 9, 0).getTime()
@@ -70,15 +70,6 @@ it('puts the one recorded last first on a tie', () => {
   }
 
   expect(historyDays(tie)[0]?.items.map((item) => item.id)).toEqual([factId(2), factId(1)])
-})
-
-it('leaves out a fact without an id: nothing could open it', () => {
-  const unidentified: Journal = {
-    ...emptyJournal,
-    facts: [{ type: 'lapse', at: at(3, 10), count: 1 }],
-  }
-
-  expect(historyDays(unidentified)).toEqual([])
 })
 
 describe('historyFact', () => {

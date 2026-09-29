@@ -20,6 +20,13 @@ export function uuidv7(ms: number, random: Uint8Array): FactId {
   return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`
 }
 
+/**
+ * The `n`th fixed fact id: a valid UUIDv7, readable where a fact needs an id known in advance
+ * (scenarios, tests).
+ */
+export const factId = (n: number): FactId =>
+  `00000000-0000-7000-8000-${n.toString(16).padStart(12, '0')}`
+
 /** A new fact id, made now on the device. */
 export const newFactId = (): FactId =>
   uuidv7(Date.now(), crypto.getRandomValues(new Uint8Array(RANDOM_BYTES)))

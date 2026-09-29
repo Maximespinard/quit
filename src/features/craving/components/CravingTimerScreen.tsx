@@ -1,13 +1,15 @@
 import type { CravingIntensity } from '@quit/contract/facts'
 import { recordCraving } from '@/shared/domain/facts/craving'
 import type { Journal } from '@/shared/domain/journal'
+import { TopBar } from '@/shared/ui/TopBar'
+import { newFactId } from '@/shared/utils/fact-id'
 import { strings } from '@/shared/utils/strings'
 import { cravingTimer } from '../domain/craving-timer'
 import { tagOptions } from '../utils/tag-options'
 import { CravingForm } from './CravingForm'
+import { CravingHaze } from './CravingHaze'
 import { CravingHeld } from './CravingHeld'
 import { CravingTimerRunning } from './CravingTimerRunning'
-import { CravingTopBar } from './CravingTopBar'
 
 type CravingTimerScreenProps = {
   journal: Journal
@@ -44,34 +46,47 @@ export function CravingTimerScreen({
   }
 
   const record = (intensity: CravingIntensity, tags: readonly string[]) => {
-    const result = recordCraving(journal, { at: startedAt, intensity, heldToEnd, tags }, now)
+    const result = recordCraving(
+      journal,
+      { id: newFactId(), at: startedAt, intensity, heldToEnd, tags },
+      now,
+    )
     if (result.ok) onRecorded(result.journal)
     return result.ok
   }
 
   const outcome = heldToEnd ? strings.craving.held : strings.craving.stopped
-  const rating = (
-    <section className="flex flex-col gap-8 pt-6">
-      <div className="flex flex-col gap-2">
-        <h2 className="text-title">{outcome.title}</h2>
-        <p className="text-body text-muted">{outcome.lead}</p>
-      </div>
-      <CravingForm tagOptions={tagOptions(journal)} onSubmit={record} />
-    </section>
+  const heading = (
+    <div className="flex flex-col gap-2">
+      <h2 className="text-title">{outcome.title}</h2>
+      <p className="text-body text-muted">{outcome.lead}</p>
+    </div>
   )
+  const form = <CravingForm tagOptions={tagOptions(journal)} onSubmit={record} />
 
   if (!heldToEnd) {
     return (
-      <div className="mx-auto max-w-md px-safe pt-safe">
-        <CravingTopBar />
-        {rating}
+      <div className="mx-auto max-w-md">
+        <div className="relative isolate overflow-hidden px-safe pt-safe pb-8">
+          <CravingHaze still />
+          <div
+            aria-hidden="true"
+            className="absolute inset-x-0 bottom-0 -z-10 h-24 bg-linear-to-b from-transparent to-page"
+          />
+          <TopBar />
+          <div className="pt-16">{heading}</div>
+        </div>
+        <div className="px-safe">{form}</div>
       </div>
     )
   }
   return (
     <div className="mx-auto max-w-md">
       <CravingHeld />
-      <div className="px-safe">{rating}</div>
+      <section className="flex flex-col gap-8 px-safe pt-6">
+        {heading}
+        {form}
+      </section>
     </div>
   )
 }

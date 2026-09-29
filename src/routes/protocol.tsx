@@ -1,13 +1,11 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
-import { ChevronLeft } from 'lucide-react'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { ProtocolEditor } from '@/features/protocol/components/ProtocolEditor'
 import { derive } from '@/shared/domain/derive'
 import type { Journal } from '@/shared/domain/journal'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
 import { AppShell } from '@/shared/ui/app-shell'
-import { buttonVariants } from '@/shared/ui/base/button'
+import { BackLink, PageHeader } from '@/shared/ui/PageHeader'
 import { keepSearch } from '@/shared/utils/app-search'
-import { cn } from '@/shared/utils/cn'
 import { strings } from '@/shared/utils/strings'
 
 export const Route = createFileRoute('/protocol')({
@@ -26,18 +24,10 @@ function ProtocolPage() {
 
   return (
     <AppShell>
-      <div className="flex items-center gap-2">
-        <Link
-          to="/"
-          search={keepSearch}
-          aria-label={copy.back}
-          // Pulled into the gutter so the chevron, not its touch target, lines up with the text.
-          className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), '-ml-3')}
-        >
-          <ChevronLeft strokeWidth={1.75} aria-hidden="true" />
-        </Link>
-        <h2 className="text-title">{copy.title}</h2>
-      </div>
+      <PageHeader
+        title={copy.title}
+        back={<BackLink to="/" search={keepSearch} aria-label={copy.back} />}
+      />
 
       {state.status === 'loading' ? (
         <p className="text-body text-muted">{strings.journal.loading}</p>

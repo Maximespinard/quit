@@ -34,7 +34,7 @@ The same hook also rejects a commit whose staged changes match a regex in
 | `npm run dev` | Vite dev server on port 3000 |
 | `npm run verify` | lint + typecheck + tests + build, then every workspace's own verify — the gate before any commit |
 | `npm run test` | Vitest once (`test:watch` to watch) |
-| `npm run test:e2e` | Playwright smoke test (WebKit, iPhone) against the production preview build |
+| `npm run test:e2e` | Playwright suite (WebKit, iPhone) against the production preview build, or against `E2E_BASE_URL` when set |
 | `npm run build` | Production build (typecheck included) |
 | `npm run lint:fix` | Biome autofix + ESLint fix |
 
@@ -59,13 +59,28 @@ npm run db:generate -- --name <change>   # after editing src/schema.ts: writes t
 | `PORT` | `8080` | |
 | `LOG_LEVEL` | `info` | pino level; logs are JSON lines on stdout, never a body, a query nor a header |
 | `TRUST_PROXY` | `0` | Reverse proxies in front, e.g. `1` behind the tunnel, so the rate limit counts per client |
+| `APP_DIR` | — (API only) | The built PWA (`dist/`) to serve outside `/api` |
 
 A missing or invalid variable stops the start with a message naming it.
 
 `GET /api/health` is open: `200` while the database answers, `503` otherwise. Every other
-route requires `Authorization: Bearer <device key>`, else `401`. Errors are
+`/api` route requires `Authorization: Bearer <device key>`, else `401`. Errors are
 `application/problem+json`. Ten failed key checks from one address within 15 minutes, and
 that address gets `429` for every request until the window ends.
+
+### API
+
+The server holds the **mirror** of the device's journal (`docs/adr/0003`). Bodies are checked
+against the `@quit/contract` schemas, for shape only, never a domain rule: a `400` names the
+fields at fault. A fact id is the UUIDv7 the device gave it.
+
+| Route | Body | Answers |
+| --- | --- | --- |
+| `GET /api/health` | — | `200` database reachable, `503` otherwise |
+| `PUT /api/facts/:id` | one fact; its `id` equals the path's | `204` stored or replaced, a replay leaving one fact, `400`, `401` |
+| `DELETE /api/facts/:id` | — | `204`, also when already absent; `400` on an id that is not a UUIDv7 |
+| `PUT /api/settings` | the whole settings | `204` replaced, protocol steps included, `400`, `401` |
+| `GET /api/mirror` | — | `200` `{ facts, settings }`: the facts ordered by time, `settings` `null` until first sent |
 
 Issue the **device key** where the server runs, with the same `DATA_DIR`:
 
@@ -101,6 +116,24 @@ dropped, not sent. A subscription the push service answers `404`/`410` for is dr
 registers a new one. Other failures are logged, without the notification's text, and the entry
 is not retried. The subscription and the schedule live in the database, so they survive a
 restart.
+
+With `APP_DIR`, the server also serves the app: files under `assets/` (hashed names) are cached
+for a year as immutable; `index.html`, the service worker and the other files are revalidated on
+every load (`no-cache`); a GET for a path without an extension (a deep link) gets `index.html`.
+
+## Image
+
+One image holds the built app and the server that serves it (`Dockerfile`, built from the
+root). It runs as `node`, not root, with the database on the `/data` volume. CI builds it on
+every pull request and runs the smoke and offline e2e specs against the container; on `main`
+it publishes `ghcr.io/maximespinard/quit` tagged with the commit sha and `main`.
+
+```bash
+docker build -t quit .
+docker run --rm --name quit -p 8080:8080 -v quit-data:/data quit   # the app on http://localhost:8080
+docker exec quit node src/issue-device-key.ts   # the device key, same DATA_DIR
+E2E_BASE_URL=http://127.0.0.1:8080 npm run test:e2e -- smoke.spec.ts offline.spec.ts
+```
 
 ## Docs
 

@@ -18,6 +18,7 @@ import { useJournalSource } from '@/shared/hooks/useJournalSource'
 import { useRecordedThenHome } from '@/shared/hooks/useRecordedThenHome'
 import { AppShell } from '@/shared/ui/app-shell'
 import { buttonVariants } from '@/shared/ui/base/button'
+import { Card } from '@/shared/ui/Card'
 import { ReadyJournal } from '@/shared/ui/ReadyJournal'
 import { RowLink } from '@/shared/ui/RowLink'
 import { validateAppSearch } from '@/shared/utils/app-search'
@@ -42,7 +43,7 @@ function HomePage() {
         const derived = derive(journal, now)
         if (derived.streak === null) {
           return (
-            <AppShell brand={brand}>
+            <AppShell brand={brand} haze="hero">
               <FirstLaunch
                 journal={journal}
                 now={now}
@@ -130,7 +131,7 @@ function HomePage() {
               >
                 {strings.craving.logPast}
               </Link>
-              <div className="flex flex-col rounded-card bg-surface px-5 py-1">
+              <Card padding="rows" className="py-1">
                 <RowLink to="/lapse" search={appSearch}>
                   {strings.lapse.declare}
                 </RowLink>
@@ -143,7 +144,7 @@ function HomePage() {
                 <RowLink to="/history" search={appSearch}>
                   {strings.history.open}
                 </RowLink>
-              </div>
+              </Card>
             </StreakScreen>
             <CravingLauncher now={now} />
           </div>

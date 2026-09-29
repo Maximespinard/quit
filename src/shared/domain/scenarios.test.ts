@@ -1,3 +1,4 @@
+import { factIdSequence } from '@/shared/test/fact-ids'
 import { decodeJournal } from './journal'
 import { isScenarioId, scenarioById, scenarios } from './scenarios'
 
@@ -11,7 +12,7 @@ describe('scenarios', () => {
   it.each(scenarios.map((scenario) => [scenario.id, scenario] as const))(
     '%s holds only facts the journal decoder recognises',
     (_, scenario) => {
-      expect(decodeJournal(scenario.journal)).toEqual(scenario.journal)
+      expect(decodeJournal(scenario.journal, factIdSequence())).toEqual(scenario.journal)
     },
   )
 

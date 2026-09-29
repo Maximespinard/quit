@@ -1,3 +1,5 @@
+import { factIdSequence } from '@/shared/test/fact-ids'
+import { factId } from '@/shared/utils/fact-id'
 import { derive } from './derive'
 import { startJourney } from './first-launch'
 import { emptyJournal } from './journal'
@@ -14,12 +16,13 @@ describe('startJourney', () => {
       emptyJournal,
       { quitMoment, weeklySpendCents: 4_200, baselineSmokesPerDay: 12 },
       NOW,
+      factIdSequence(),
     )
 
     expect(result).toEqual({
       ok: true,
       journal: {
-        facts: [{ type: 'quit-moment', at: quitMoment }],
+        facts: [{ type: 'quit-moment', id: factId(1), at: quitMoment }],
         protocol: defaultProtocol,
         weeklySpendCents: 4_200,
         baselineSmokesPerDay: 12,
@@ -35,6 +38,7 @@ describe('startJourney', () => {
         emptyJournal,
         { quitMoment: NOW + MINUTE, weeklySpendCents: 4_200, baselineSmokesPerDay: 12 },
         NOW,
+        factIdSequence(),
       ),
     ).toEqual({ ok: false, reason: 'future' })
   })
@@ -45,6 +49,7 @@ describe('startJourney', () => {
         emptyJournal,
         { quitMoment: NOW, weeklySpendCents: -100, baselineSmokesPerDay: 12 },
         NOW,
+        factIdSequence(),
       ),
     ).toEqual({ ok: false, reason: 'invalid-spend' })
   })
@@ -55,6 +60,7 @@ describe('startJourney', () => {
         emptyJournal,
         { quitMoment: NOW, weeklySpendCents: 4_200, baselineSmokesPerDay: 0 },
         NOW,
+        factIdSequence(),
       ),
     ).toEqual({ ok: false, reason: 'invalid-baseline' })
   })

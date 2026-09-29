@@ -3,7 +3,10 @@ import { mkdtemp, rm } from 'node:fs/promises'
 import type { AddressInfo } from 'node:net'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
+import type { FactId } from '@quit/contract/facts'
+import { PROBLEM_CONTENT_TYPE, problemSchema } from '@quit/contract/problem'
 import { type PushNotification, pushNotificationSchema } from '@quit/contract/push'
+import { expect } from 'vitest'
 import { createApp } from './app.ts'
 import { openDatabase } from './database.ts'
 import { issueDeviceKey } from './device-keys.ts'
@@ -16,6 +19,10 @@ import { createPushSender, type SendOutcome, type Transport } from './push-sende
  */
 
 export const T0 = new Date('2026-10-01T08:00:00Z')
+
+/** The `n`th fixed fact id: a valid UUIDv7, readable in a failing test. */
+export const factId = (n: number): FactId =>
+  `00000000-0000-7000-8000-${n.toString(16).padStart(12, '0')}`
 
 export interface RequestOptions {
   key?: string | null
@@ -39,7 +46,17 @@ export async function closeTestApis() {
   for (const cleanup of cleanups.splice(0).reverse()) await cleanup()
 }
 
-export async function openTestApi({ trustProxyHops = 0 } = {}) {
+/** Runs `cleanup` with `closeTestApis`, after those registered later. */
+export const onCleanup = (cleanup: () => Promise<void>) => void cleanups.push(cleanup)
+
+export async function openTestApi({
+  trustProxyHops = 0,
+  appDir,
+}: {
+  trustProxyHops?: number
+  /** The built PWA to serve outside `/api`; none by default. */
+  appDir?: string
+} = {}) {
   const dir = await mkdtemp(join(tmpdir(), 'quit-server-'))
   cleanups.push(() => rm(dir, { recursive: true, force: true }))
   const clock = { now: T0.getTime() }
@@ -71,10 +88,14 @@ export async function openTestApi({ trustProxyHops = 0 } = {}) {
       now: () => new Date(clock.now),
       logger,
     })
-    const server = createApp({ database, logger, trustProxyHops, pushSender }).listen(
-      0,
-      '127.0.0.1',
-    )
+    const server = createApp({
+      database,
+      logger,
+      trustProxyHops,
+      appDir,
+      now: () => new Date(clock.now),
+      pushSender,
+    }).listen(0, '127.0.0.1')
     await once(server, 'listening')
     const { port } = server.address() as AddressInfo
     const stop = async () => {
@@ -122,3 +143,12 @@ export async function openTestApi({ trustProxyHops = 0 } = {}) {
 }
 
 export type TestApi = Awaited<ReturnType<typeof openTestApi>>
+
+/** Asserts a problem+json answer with this status, and returns the problem. */
+export async function expectProblem(response: Response, status: number) {
+  expect(response.status).toBe(status)
+  expect(response.headers.get('content-type')).toContain(PROBLEM_CONTENT_TYPE)
+  const problem = problemSchema.parse(await response.json())
+  expect(problem.status).toBe(status)
+  return problem
+}

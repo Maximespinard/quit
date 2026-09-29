@@ -1,0 +1,19 @@
+# Read by BuildKit for the root Dockerfile.
+# Allowlist: the context holds only what the image copies, never secrets.
+*
+!package.json
+!package-lock.json
+!tsconfig.json
+!tsconfig.app.json
+!tsconfig.node.json
+!vite.config.ts
+!index.html
+!public
+!src
+!contract/package.json
+!contract/src
+!server/package.json
+!server/src
+!server/drizzle
+**/*.test.ts
+**/*.test.tsx

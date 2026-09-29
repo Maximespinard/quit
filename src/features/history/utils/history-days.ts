@@ -15,14 +15,12 @@ const isHistoryFact = (fact: Fact): fact is HistoryFact => fact.type !== 'quit-m
 
 /**
  * The journal's facts newest first, grouped by local day. On a tie the one recorded last
- * comes first. Any fact type but the quit moment is listed, known or added later — as long
- * as it has an id to open it by, which every stored fact has (`withFactIds`).
+ * comes first. Any fact type but the quit moment is listed, known or added later, opened
+ * by its id.
  */
 export function historyDays(journal: Journal): readonly HistoryDay[] {
   const items = journal.facts
-    .flatMap((fact, index) =>
-      isHistoryFact(fact) && fact.id !== undefined ? [{ index, id: fact.id, fact }] : [],
-    )
+    .flatMap((fact, index) => (isHistoryFact(fact) ? [{ index, id: fact.id, fact }] : []))
     .sort((a, b) => b.fact.at - a.fact.at || b.index - a.index)
   const days: { day: number; items: HistoryItem[] }[] = []
   for (const { id, fact } of items) {

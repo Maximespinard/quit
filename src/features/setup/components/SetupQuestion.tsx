@@ -19,7 +19,8 @@ export function SetupQuestion({ title, lead, children, action }: SetupQuestionPr
         <h2 id={titleId} className="text-balance text-headline">
           {title}
         </h2>
-        <p className="text-body text-muted">{lead}</p>
+        {/* Ink, not muted: over the full haze only ink holds 4.5:1 at the glow's brightest pixel. */}
+        <p className="text-body text-ink">{lead}</p>
       </div>
       {children}
       <div className="mt-auto flex flex-col gap-3">{action}</div>

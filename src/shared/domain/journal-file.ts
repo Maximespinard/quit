@@ -1,4 +1,10 @@
-import { type Fact, factTypeSchema, LAPSE, PATCH_APPLICATION } from '@quit/contract/facts'
+import {
+  type Fact,
+  type FactId,
+  factTypeSchema,
+  LAPSE,
+  PATCH_APPLICATION,
+} from '@quit/contract/facts'
 import {
   JOURNAL_FILE_FORMAT,
   JOURNAL_FILE_VERSION,
@@ -7,7 +13,7 @@ import {
   journalFileSchema,
 } from '@quit/contract/journal-file'
 import { latestQuitMoment } from './facts/quit-moment'
-import type { Journal } from './journal'
+import { identifyFacts, type Journal } from './journal'
 
 /**
  * The export file, the user's only backup (ADR-0001). Its shape is the contract's
@@ -93,19 +99,30 @@ function domainRefusal(journal: Journal): ImportRefusal | null {
   return null
 }
 
+/** The file as read, its journal's facts identified before the schema checks them. */
+const withIdentifiedFacts = (raw: unknown, newId: () => FactId): unknown =>
+  typeof raw === 'object' && raw !== null && 'journal' in raw
+    ? { ...raw, journal: identifyFacts(raw.journal, newId) }
+    : raw
+
 /**
  * Reads an export back, all or nothing: the first problem refuses the whole file, where
- * loading from storage would drop it. Nothing is written here; the caller replaces the
- * `into` journal only on `ok`.
+ * loading from storage would drop it. A fact without an id (every fact of a version 1 file)
+ * gets one from `newId`. Nothing is written here; the caller replaces the `into` journal only
+ * on `ok`.
  */
-export function importJournal(text: string, into: JournalOrigin): ImportJournalResult {
+export function importJournal(
+  text: string,
+  into: JournalOrigin,
+  newId: () => FactId,
+): ImportJournalResult {
   let raw: unknown
   try {
     raw = JSON.parse(text)
   } catch {
     return { ok: false, reason: 'unreadable' }
   }
-  const file = journalFileSchema.safeParse(raw)
+  const file = journalFileSchema.safeParse(withIdentifiedFacts(raw, newId))
   const paths = file.success ? [] : file.error.issues.map((issue) => issue.path)
   const envelope = envelopeRefusal(paths)
   if (envelope !== null) return { ok: false, reason: envelope }

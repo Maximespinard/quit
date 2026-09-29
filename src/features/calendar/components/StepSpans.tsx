@@ -1,6 +1,6 @@
-import { useId } from 'react'
 import type { CalendarStep } from '@/shared/domain/patch-calendar'
 import type { ProtocolPosition } from '@/shared/domain/protocol-position'
+import { Card } from '@/shared/ui/Card'
 import { cn } from '@/shared/utils/cn'
 import { formatDose } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
@@ -15,17 +15,10 @@ type StepSpansProps = {
 
 /** Each step's span over the calendar, from its first patch day to its last. */
 export function StepSpans({ steps, position }: StepSpansProps) {
-  const titleId = useId()
   const current = position.status === 'running' ? position.stepNumber : null
 
   return (
-    <section
-      aria-labelledby={titleId}
-      className="flex flex-col gap-1.5 rounded-card bg-surface p-5"
-    >
-      <h3 id={titleId} className="text-label text-muted">
-        {copy.steps}
-      </h3>
+    <Card title={copy.steps} headingLevel={3} className="gap-1.5">
       <ol className="flex flex-col divide-y divide-line">
         {steps.map((span) => {
           const running = span.number === current
@@ -47,6 +40,6 @@ export function StepSpans({ steps, position }: StepSpansProps) {
           )
         })}
       </ol>
-    </section>
+    </Card>
   )
 }

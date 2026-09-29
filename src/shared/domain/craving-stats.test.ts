@@ -1,6 +1,7 @@
 import type { CravingFact, CravingIntensity } from '@quit/contract/facts'
 import type { Protocol } from '@quit/contract/settings'
 import { DAY_MS } from '@/shared/utils/duration'
+import { factId } from '@/shared/utils/fact-id'
 import { derive } from './derive'
 import { emptyJournal, type Journal } from './journal'
 import { scenarioById } from './scenarios'
@@ -10,11 +11,19 @@ const local = (month: number, day: number, hour = 0, minute = 0) =>
   new Date(2026, month - 1, day, hour, minute).getTime()
 
 const craving = (
+  id: number,
   at: number,
   intensity: CravingIntensity = 2,
   tags: readonly string[] = [],
   heldToEnd = true,
-): CravingFact => ({ type: 'craving', at, intensity, heldToEnd, tags })
+): CravingFact => ({
+  type: 'craving',
+  id: factId(id),
+  at,
+  intensity,
+  heldToEnd,
+  tags,
+})
 
 const journalOf = (
   quitMoment: number,
@@ -23,7 +32,7 @@ const journalOf = (
 ): Journal => ({
   ...emptyJournal,
   ...(protocol === undefined ? {} : { protocol }),
-  facts: [{ type: 'quit-moment', at: quitMoment }, ...cravings],
+  facts: [{ type: 'quit-moment', id: factId(1), at: quitMoment }, ...cravings],
 })
 
 const statsOf = (journal: Journal, now: number) => {
@@ -61,10 +70,10 @@ describe('derive, craving stats', () => {
   it('buckets cravings by local hour of day and names the riskiest one', () => {
     const stats = statsOf(
       journalOf(QUIT, [
-        craving(local(9, 1, 18, 5)),
-        craving(local(9, 2, 8, 10)),
-        craving(local(9, 3, 8, 50)),
-        craving(local(9, 4, 23, 59)),
+        craving(2, local(9, 1, 18, 5)),
+        craving(3, local(9, 2, 8, 10)),
+        craving(4, local(9, 3, 8, 50)),
+        craving(5, local(9, 4, 23, 59)),
       ]),
       NOW,
     )
@@ -76,7 +85,10 @@ describe('derive, craving stats', () => {
   })
 
   it('names the earliest hour when two hours tie', () => {
-    const stats = statsOf(journalOf(QUIT, [craving(local(9, 2, 21)), craving(local(9, 3, 7))]), NOW)
+    const stats = statsOf(
+      journalOf(QUIT, [craving(2, local(9, 2, 21)), craving(3, local(9, 3, 7))]),
+      NOW,
+    )
 
     expect(stats.riskiestHour).toBe(7)
   })
@@ -88,9 +100,9 @@ describe('derive, craving stats', () => {
     const secondHalfPast2 = firstHalfPast2 + 60 * 60_000
     const stats = statsOf(
       journalOf(quitMoment, [
-        craving(firstHalfPast2),
-        craving(secondHalfPast2),
-        craving(local(10, 26, 18)),
+        craving(2, firstHalfPast2),
+        craving(3, secondHalfPast2),
+        craving(4, local(10, 26, 18)),
       ]),
       local(10, 27, 12),
     )
@@ -105,9 +117,9 @@ describe('derive, craving stats', () => {
     const quitMoment = local(3, 27, 20)
     const stats = statsOf(
       journalOf(quitMoment, [
-        craving(local(3, 29, 3, 30), 3),
-        craving(local(3, 29, 23, 30), 1),
-        craving(local(3, 30, 0, 30), 2),
+        craving(2, local(3, 29, 3, 30), 3),
+        craving(3, local(3, 29, 23, 30), 1),
+        craving(4, local(3, 30, 0, 30), 2),
       ]),
       local(3, 30, 12),
     )
@@ -125,12 +137,12 @@ describe('derive, craving stats', () => {
   it('counts each tag once per craving, merged by case and spacing, spelled as last used', () => {
     const stats = statsOf(
       journalOf(QUIT, [
-        craving(local(9, 1, 10), 2, ['coffee', 'jeu  vidéo']),
-        craving(local(9, 2, 10), 2, ['Jeu vidéo']),
-        craving(local(9, 3, 10), 2, ['stress', 'coffee']),
-        craving(local(9, 4, 10), 2, ['coffee']),
-        craving(local(9, 4, 12), 2),
-        craving(local(9, 4, 14), 2),
+        craving(2, local(9, 1, 10), 2, ['coffee', 'jeu  vidéo']),
+        craving(3, local(9, 2, 10), 2, ['Jeu vidéo']),
+        craving(4, local(9, 3, 10), 2, ['stress', 'coffee']),
+        craving(5, local(9, 4, 10), 2, ['coffee']),
+        craving(6, local(9, 4, 12), 2),
+        craving(7, local(9, 4, 14), 2),
       ]),
       NOW,
     )
@@ -146,8 +158,8 @@ describe('derive, craving stats', () => {
   it('puts the most recently used tag first when two tags tie', () => {
     const stats = statsOf(
       journalOf(QUIT, [
-        craving(local(9, 1, 10), 2, ['meal']),
-        craving(local(9, 2, 10), 2, ['break']),
+        craving(2, local(9, 1, 10), 2, ['meal']),
+        craving(3, local(9, 2, 10), 2, ['break']),
       ]),
       NOW,
     )
@@ -158,9 +170,9 @@ describe('derive, craving stats', () => {
   it('counts cravings by intensity and those held to the end of the timer', () => {
     const stats = statsOf(
       journalOf(QUIT, [
-        craving(local(9, 1, 10), 3, [], true),
-        craving(local(9, 2, 10), 3, [], false),
-        craving(local(9, 3, 10), 1, [], true),
+        craving(2, local(9, 1, 10), 3, [], true),
+        craving(3, local(9, 2, 10), 3, [], false),
+        craving(4, local(9, 3, 10), 1, [], true),
       ]),
       NOW,
     )
@@ -171,9 +183,9 @@ describe('derive, craving stats', () => {
   it('averages the intensity of each day’s cravings, none on a day without', () => {
     const stats = statsOf(
       journalOf(QUIT, [
-        craving(local(9, 1, 10), 3),
-        craving(local(9, 1, 22), 2),
-        craving(local(9, 3, 10), 1),
+        craving(2, local(9, 1, 10), 3),
+        craving(3, local(9, 1, 22), 2),
+        craving(4, local(9, 3, 10), 1),
       ]),
       NOW,
     )
@@ -192,7 +204,11 @@ describe('derive, craving stats', () => {
   it('switches to weeks ending today past two weeks, the oldest cut at the quit day and shorter', () => {
     const now = local(9, 16, 20)
     const stats = statsOf(
-      journalOf(QUIT, [craving(local(9, 2, 10)), craving(local(9, 3, 10)), craving(local(9, 12))]),
+      journalOf(QUIT, [
+        craving(2, local(9, 2, 10)),
+        craving(3, local(9, 3, 10)),
+        craving(4, local(9, 12)),
+      ]),
       now,
     )
 
@@ -229,7 +245,7 @@ describe('derive, craving stats', () => {
 
   it('leaves out cravings the clock has not reached, as a moved sandbox clock can', () => {
     const stats = statsOf(
-      journalOf(QUIT, [craving(local(9, 2, 10)), craving(local(9, 4, 10))]),
+      journalOf(QUIT, [craving(2, local(9, 2, 10)), craving(3, local(9, 4, 10))]),
       local(9, 3, 12),
     )
 

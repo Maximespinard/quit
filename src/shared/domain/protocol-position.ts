@@ -23,8 +23,12 @@ export type ProtocolPosition =
  * Which 24 h block since the quit moment `now` falls in, 0 for the first: a protocol day.
  * `now` before the quit moment waits on day 0.
  */
-export const protocolDayIndex = (quitMoment: number, now: number) =>
+const protocolDayIndex = (quitMoment: number, now: number) =>
   Math.floor(Math.max(0, now - quitMoment) / DAY_MS)
+
+/** The instant the last step ends: the protocol runs whole protocol days from the quit moment. */
+export const plannedEnd = (protocol: Protocol, quitMoment: number) =>
+  quitMoment + protocol.reduce((days, step) => days + step.durationDays, 0) * DAY_MS
 
 /**
  * The protocol starts at the quit moment and runs in whole 24 h blocks from it; every patch

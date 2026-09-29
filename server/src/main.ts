@@ -27,6 +27,8 @@ const app = createApp({
   database,
   logger,
   trustProxyHops: config.trustProxyHops,
+  appDir: config.appDir,
+  now: () => new Date(),
   pushSender,
 })
 const server = app.listen(config.port, (error) => {

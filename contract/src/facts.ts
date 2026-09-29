@@ -4,7 +4,8 @@ import * as z from 'zod/mini'
  * The facts a journal holds, one schema per type; their types are inferred from here and
  * nowhere else. A schema checks shape only: rules such as "not before the quit moment" live
  * in the app's domain (ADR-0002). A new fact type is one schema here plus its entry in
- * `factTypeSchema` and in `factSchema`.
+ * `FACT_TYPES` and in `factSchema`, then its columns on the server: `server/src/schema.ts` (a new
+ * migration) and `server/src/mirror.ts`.
  */
 
 /** An instant, in ms since the epoch. `z.number()` already refuses NaN and infinities. */
@@ -12,8 +13,8 @@ export const instantSchema = z.number()
 
 /**
  * A fact's identity, a UUIDv7 generated on the device: a corrected fact keeps it, a deleted
- * one is removed by it (ADR-0003). Optional until every fact carries one; a fact stored or
- * exported before ids existed has none.
+ * one is removed by it (ADR-0003). Every fact carries one: a fact stored or exported before
+ * ids existed gets its id from the app as it is read, before these schemas check it.
  */
 export const factIdSchema = z.uuidv7()
 export type FactId = z.infer<typeof factIdSchema>
@@ -23,11 +24,13 @@ export const CRAVING = 'craving'
 export const PATCH_APPLICATION = 'patch-application'
 export const LAPSE = 'lapse'
 
-export const factTypeSchema = z.enum([QUIT_MOMENT, CRAVING, PATCH_APPLICATION, LAPSE])
+export const FACT_TYPES = [QUIT_MOMENT, CRAVING, PATCH_APPLICATION, LAPSE] as const
+export const factTypeSchema = z.enum(FACT_TYPES)
+export type FactType = z.infer<typeof factTypeSchema>
 
 /** The exact timestamp at which the user stopped smoking. */
 export const quitMomentSchema = z.readonly(
-  z.object({ type: z.literal(QUIT_MOMENT), id: z.optional(factIdSchema), at: instantSchema }),
+  z.object({ type: z.literal(QUIT_MOMENT), id: factIdSchema, at: instantSchema }),
 )
 export type QuitMomentFact = z.infer<typeof quitMomentSchema>
 
@@ -39,7 +42,7 @@ export type CravingIntensity = z.infer<typeof cravingIntensitySchema>
 export const cravingSchema = z.readonly(
   z.object({
     type: z.literal(CRAVING),
-    id: z.optional(factIdSchema),
+    id: factIdSchema,
     /** When the craving began: the timer's start, or a backdated moment. */
     at: instantSchema,
     intensity: cravingIntensitySchema,
@@ -76,7 +79,7 @@ export type ApplicationSite = z.infer<typeof applicationSiteSchema>
 export const patchApplicationSchema = z.readonly(
   z.object({
     type: z.literal(PATCH_APPLICATION),
-    id: z.optional(factIdSchema),
+    id: factIdSchema,
     at: instantSchema,
     doseMg: doseMgSchema,
     /** Where it went on; absent when the user logged it without one, or before sites existed. */
@@ -95,7 +98,7 @@ export const lapseCountSchema = z.int().check(z.minimum(1))
 export const lapseSchema = z.readonly(
   z.object({
     type: z.literal(LAPSE),
-    id: z.optional(factIdSchema),
+    id: factIdSchema,
     at: instantSchema,
     count: z._default(lapseCountSchema, 1),
   }),

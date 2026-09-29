@@ -1,3 +1,4 @@
+import { factId } from '@/shared/utils/fact-id'
 import type { Journal } from './journal'
 import { defaultProtocol } from './protocol'
 import { triggersRelapse } from './relapse'
@@ -11,8 +12,8 @@ const journalOf = (lapses: readonly number[]): Journal => ({
   baselineSmokesPerDay: null,
   goal: null,
   facts: [
-    { type: 'quit-moment', at: jan(1, 20) },
-    ...lapses.map((at) => ({ type: 'lapse' as const, at, count: 1 })),
+    { type: 'quit-moment', id: factId(1), at: jan(1, 20) },
+    ...lapses.map((at, i) => ({ type: 'lapse' as const, id: factId(100 + i), at, count: 1 })),
   ],
 })
 

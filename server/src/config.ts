@@ -10,6 +10,8 @@ export interface Config {
   logLevel: LogLevel
   /** Reverse proxies between the clients and the server; 0 when clients connect directly. */
   trustProxyHops: number
+  /** The built PWA to serve next to the API; the API alone when absent. */
+  appDir?: string
   /** Identifies this server to the push services. */
   vapid: VapidDetails
 }
@@ -66,7 +68,8 @@ export function readConfig(env: Record<string, string | undefined>): Config {
   if (problems.length > 0 || !logLevel) {
     throw new Error(`Invalid configuration: ${problems.join('; ')}`)
   }
-  return { port, dataDir, logLevel, trustProxyHops, vapid }
+  const appDir = env.APP_DIR ?? ''
+  return { port, dataDir, logLevel, trustProxyHops, vapid, ...(appDir ? { appDir } : {}) }
 }
 
 /** `readConfig` for an entry point: on invalid configuration, prints why and exits. */

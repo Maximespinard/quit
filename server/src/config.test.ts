@@ -31,6 +31,11 @@ describe('readConfig', () => {
     expect([config.port, config.logLevel, config.trustProxyHops]).toEqual([3001, 'warn', 1])
   })
 
+  it('takes the built app to serve when given, and nothing otherwise', () => {
+    expect(readConfig({ ...ENV, APP_DIR: '/app/dist' }).appDir).toBe('/app/dist')
+    expect(readConfig({ ...ENV, APP_DIR: '' })).not.toHaveProperty('appDir')
+  })
+
   it('names every invalid variable at once', () => {
     expect(() => readConfig({ PORT: '0', LOG_LEVEL: 'loud' })).toThrow(
       'Invalid configuration: DATA_DIR is missing; PORT must be an integer between 1 and ' +

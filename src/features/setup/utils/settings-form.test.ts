@@ -1,5 +1,7 @@
 import { latestQuitMoment } from '@/shared/domain/facts/quit-moment'
 import { emptyJournal, type Journal } from '@/shared/domain/journal'
+import { factIdSequence } from '@/shared/test/fact-ids'
+import { factId } from '@/shared/utils/fact-id'
 import { isChanged, saveSettings, settingsInForce } from './settings-form'
 
 // Seconds on purpose: the field only shows minutes, an untouched moment must keep them.
@@ -10,8 +12,8 @@ const NOW = new Date(2026, 0, 20, 12, 0).getTime()
 const journal: Journal = {
   ...emptyJournal,
   facts: [
-    { type: 'quit-moment', at: QUIT },
-    { type: 'craving', at: CRAVING, intensity: 2, heldToEnd: false, tags: [] },
+    { type: 'quit-moment', id: factId(1), at: QUIT },
+    { type: 'craving', id: factId(2), at: CRAVING, intensity: 2, heldToEnd: false, tags: [] },
   ],
   weeklySpendCents: 3500,
   baselineSmokesPerDay: 15,
@@ -45,7 +47,7 @@ describe('isChanged', () => {
 
 describe('saveSettings', () => {
   const save = (fields: Partial<typeof inForce>) =>
-    saveSettings(journal, inForce, { ...inForce, ...fields }, NOW)
+    saveSettings(journal, inForce, { ...inForce, ...fields }, NOW, factIdSequence(90))
 
   it('applies every changed setting in one journal', () => {
     const result = save({ quitMoment: '2026-01-05T09:00', spend: '48,90', baseline: '20' })

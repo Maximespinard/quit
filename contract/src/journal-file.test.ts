@@ -25,11 +25,18 @@ describe('journalFileSchema', () => {
     expect(journalFileSchema.parse(file)).toEqual(file)
   })
 
-  it('reads a version 1 file, written before facts had an id', () => {
-    const facts = [{ type: 'quit-moment', at: AT - 1_000 }]
-    const v1 = { ...file, version: 1, journal: { ...file.journal, facts } }
+  it('reads a version 1 file once the app has given its facts their ids', () => {
+    const v1 = { ...file, version: 1 }
 
     expect(journalFileSchema.parse(v1)).toEqual(v1)
+  })
+
+  it('refuses a fact without an id', () => {
+    const facts = [{ type: 'quit-moment', at: AT - 1_000 }]
+
+    expect(
+      journalFileSchema.safeParse({ ...file, journal: { ...file.journal, facts } }).success,
+    ).toBe(false)
   })
 
   it.each([
