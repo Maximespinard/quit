@@ -50,7 +50,7 @@ export function StreakHero({
         </span>
       </div>
       <div className="relative flex flex-col items-center gap-1 pt-6 pb-9 text-center">
-        <p className="text-display">
+        <p className="text-display text-white">
           <span className="sr-only">{days} </span>
           <span aria-hidden="true">{countUpAt(days, entrance)}</span>
         </p>

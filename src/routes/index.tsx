@@ -129,7 +129,7 @@ function HomePage() {
               <Link
                 to="/craving/past"
                 search={appSearch}
-                className={buttonVariants({ variant: 'outline' })}
+                className={buttonVariants({ variant: 'secondary' })}
               >
                 {strings.craving.logPast}
               </Link>

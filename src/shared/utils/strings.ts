@@ -524,11 +524,11 @@ export const strings = {
       fields: 'Champs',
       colors: 'Couleurs',
       type: 'Typographie',
+      radii: 'Rayons',
     },
     buttons: {
       primary: 'Poser le patch',
       secondary: 'Plus tard',
-      outline: 'Modifier',
       ghost: 'Annuler',
       destructive: 'Supprimer ce fait',
       disabled: 'Indisponible',

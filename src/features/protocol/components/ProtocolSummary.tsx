@@ -3,7 +3,6 @@ import { useId } from 'react'
 import type { ProtocolPosition } from '@/shared/domain/protocol-position'
 import { buttonVariants } from '@/shared/ui/base/button'
 import { keepSearch } from '@/shared/utils/app-search'
-import { cn } from '@/shared/utils/cn'
 import { formatDose } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
 
@@ -51,8 +50,7 @@ export function ProtocolSummary({ position }: { position: ProtocolPosition }) {
         <Link
           to="/protocol"
           search={keepSearch}
-          // On the surface card the outline's own press fill would not show.
-          className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'active:bg-ghost')}
+          className={buttonVariants({ variant: 'secondary', size: 'sm' })}
         >
           {copy.edit}
         </Link>

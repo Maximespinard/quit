@@ -1,4 +1,5 @@
 import type { SplitDuration } from '@/shared/utils/duration'
+import { strings } from '@/shared/utils/strings'
 
 /** Synthetic figures for the /design specimen. Nothing here is read from a journal. */
 
@@ -47,7 +48,12 @@ export const COLOR_TOKENS: readonly ColorToken[] = [
     role: 'Texte ; crème des boutons pleins, sélections et barres',
   },
   { token: 'muted', swatch: 'bg-muted', value: '#a3a3a3', role: 'Texte secondaire, partout' },
-  { token: 'white', swatch: 'bg-white', value: '#ffffff', role: 'Le chiffre clé, et lui seul' },
+  {
+    token: 'white',
+    swatch: 'bg-white',
+    value: '#ffffff',
+    role: 'Le chiffre clé : streak et minuteur',
+  },
   {
     token: 'line',
     swatch: 'bg-line',
@@ -95,7 +101,7 @@ export const TYPE_TOKENS: readonly TypeToken[] = [
     className: 'text-display',
     px: '176 px',
     sample: '12',
-    role: 'Le chiffre du streak, et lui seul',
+    role: 'Le chiffre du streak et le minuteur',
   },
   {
     token: 'figure',
@@ -147,3 +153,49 @@ export const TYPE_TOKENS: readonly TypeToken[] = [
     role: 'Libellés de la barre d’onglets',
   },
 ]
+
+export type RadiusToken = { token: string; className: string; value: string; role: string }
+
+export const RADIUS_TOKENS: readonly RadiusToken[] = [
+  {
+    token: 'hero',
+    className: 'rounded-hero',
+    value: '1.75rem',
+    role: 'Bord d’attaque des tiroirs',
+  },
+  { token: 'card', className: 'rounded-card', value: '0.75rem', role: 'Cartes, dialogues' },
+  { token: 'control', className: 'rounded-control', value: '0.625rem', role: 'Champs' },
+  {
+    token: 'step',
+    className: 'rounded-step',
+    value: '0.5rem',
+    role: 'Crans, pastilles de couleur',
+  },
+  { token: 'mark', className: 'rounded-mark', value: '0.25rem', role: 'Barres de graphique' },
+]
+
+const design = strings.design
+
+export const SPECIMEN_SWITCHES = [
+  { label: design.switchLabel, checked: true, disabled: false },
+  { label: design.switchOffLabel, checked: false, disabled: false },
+  { label: design.switchDisabledLabel, checked: false, disabled: true },
+] as const
+
+/** The text field empty, filled, refused with its alert, and disabled. */
+export const SPECIMEN_FIELDS = [
+  { id: 'empty', label: design.fields.label, placeholder: design.fields.placeholder },
+  { id: 'filled', label: design.fields.price, value: design.fields.priceValue },
+  {
+    id: 'invalid',
+    label: design.fields.invalid,
+    value: design.fields.invalidValue,
+    error: design.fields.error,
+  },
+  {
+    id: 'disabled',
+    label: design.fields.disabled,
+    value: design.fields.disabledValue,
+    disabled: true,
+  },
+] as const

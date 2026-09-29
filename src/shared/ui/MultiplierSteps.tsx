@@ -24,7 +24,7 @@ export function MultiplierSteps({ steps, current, label }: MultiplierStepsProps)
             className={cn(
               'grid h-10.5 place-items-center rounded-step border font-medium text-body motion-safe:animate-step-in',
               state === 'acquired' && 'border-ink bg-ink text-page',
-              state === 'current' && 'border-ink bg-transparent text-white',
+              state === 'current' && 'border-ink bg-transparent text-ink',
               state === 'locked' && 'border-transparent bg-ghost text-muted',
             )}
           >

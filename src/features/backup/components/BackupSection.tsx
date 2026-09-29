@@ -56,8 +56,6 @@ export function BackupSection({ journal, onImported }: BackupSectionProps) {
       <ImportJournal
         journal={journal}
         label={inSandbox ? copy.importSandbox : copy.import}
-        // On `surface`, the outline's default press colour would not show.
-        className="active:bg-ghost"
         onImported={onImported}
       />
     </section>

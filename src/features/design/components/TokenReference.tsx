@@ -1,10 +1,10 @@
 import { strings } from '@/shared/utils/strings'
-import { COLOR_TOKENS, TYPE_TOKENS } from '../utils/specimen-data'
+import { COLOR_TOKENS, RADIUS_TOKENS, TYPE_TOKENS } from '../utils/specimen-data'
 import { SpecimenSection } from './SpecimenSection'
 
 const t = strings.design
 
-/** Colour and type tokens, shown with the value and the role they own. */
+/** Colour, type and radius tokens, shown with the value and the role they own. */
 export function TokenReference() {
   return (
     <>
@@ -40,6 +40,24 @@ export function TokenReference() {
             </div>
           ))}
         </dl>
+      </SpecimenSection>
+
+      <SpecimenSection title={t.sections.radii}>
+        <ul className="flex flex-col divide-y divide-line">
+          {RADIUS_TOKENS.map((token) => (
+            <li key={token.token} className="flex items-center gap-3 py-2.5">
+              <span
+                aria-hidden="true"
+                className={`size-9 shrink-0 border border-ghost-line bg-ghost ${token.className}`}
+              />
+              <span className="flex min-w-0 flex-1 flex-col leading-tight">
+                <span className="font-medium text-body">{token.token}</span>
+                <span className="text-muted text-label">{token.role}</span>
+              </span>
+              <span className="text-muted text-label">{token.value}</span>
+            </li>
+          ))}
+        </ul>
       </SpecimenSection>
     </>
   )

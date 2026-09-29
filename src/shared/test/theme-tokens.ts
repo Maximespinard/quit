@@ -1,8 +1,10 @@
 import themeCss from '@/index.css?raw'
 
 /**
- * The names the `@theme` block declares under one namespace, e.g. `themeTokens('radius')` →
- * `['hero', 'card', …]`. Sub-properties (`--text-body--line-height`) and resets are skipped.
+ * The tokens the `@theme` block declares under one namespace, name → value, e.g.
+ * `themeTokens('radius')` → `hero → 1.75rem`, `card → 0.75rem`, … Sub-properties
+ * (`--text-body--line-height`) and resets are skipped. Test-only: it reads the app's own
+ * stylesheet, the one import from outside `shared/` this layer allows itself.
  */
 export function themeTokens(namespace: string): Map<string, string> {
   const theme = themeCss.slice(themeCss.indexOf('@theme'))

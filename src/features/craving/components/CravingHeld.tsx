@@ -22,7 +22,7 @@ export function CravingHeld() {
         <h1 className="font-medium text-label">{strings.app.name}</h1>
       </div>
       <div className="flex flex-col items-center gap-1 pt-6 pb-9 text-center">
-        <p className="text-display">
+        <p className="text-display text-white">
           <span className="sr-only">{TIMER_MINUTES} </span>
           <span aria-hidden="true">{shown}</span>
         </p>

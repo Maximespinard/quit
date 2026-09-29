@@ -79,7 +79,7 @@ export function DebugPanel() {
               ))}
             </div>
           </fieldset>
-          <Button variant="outline" onClick={sandbox.resetClock}>
+          <Button variant="secondary" onClick={sandbox.resetClock}>
             {copy.realTime}
           </Button>
           {journal === null ? null : (
@@ -90,7 +90,7 @@ export function DebugPanel() {
             <Button variant="destructive" onClick={() => void sandbox.wipe()}>
               {copy.wipe}
             </Button>
-            <Button variant="outline" onClick={() => void navigate({ to: '/', search: {} })}>
+            <Button variant="secondary" onClick={() => void navigate({ to: '/', search: {} })}>
               {copy.leave}
             </Button>
           </div>

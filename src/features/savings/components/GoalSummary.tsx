@@ -21,11 +21,7 @@ type GoalSummaryProps = {
 
 const copy = strings.goal
 
-// On the surface card the outline's own press fill would not show.
-const cardAction = cn(
-  buttonVariants({ variant: 'outline', size: 'sm' }),
-  'shrink-0 active:bg-ghost',
-)
+const cardAction = cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'shrink-0')
 
 /** Home screen block: the goal and the money saved towards it, or the way to set one. */
 export function GoalSummary({ journal, goal, onCelebrated }: GoalSummaryProps) {

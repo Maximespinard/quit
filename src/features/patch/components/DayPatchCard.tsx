@@ -107,12 +107,8 @@ export function DayPatchCard({
         <Link
           to="/patch/new"
           search={keepSearch}
-          // Text aligned with the card's edge and its bottom inset, the 44px target kept; on the
-          // surface the ghost's own press fill would not show.
-          className={cn(
-            buttonVariants({ variant: 'ghost' }),
-            '-mb-3 -ml-4 self-start active:bg-ghost',
-          )}
+          // Text aligned with the card's edge and its bottom inset, the 44px target kept.
+          className={cn(buttonVariants({ variant: 'ghost' }), '-mb-3 -ml-4 self-start')}
         >
           {copy.other}
         </Link>

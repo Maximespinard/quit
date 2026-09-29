@@ -13,7 +13,6 @@ const buttonVariants = cva(
       variant: {
         primary: 'bg-ink text-page active:bg-ink/85',
         secondary: 'border border-ghost-line bg-transparent text-ink active:bg-ghost',
-        outline: 'border border-ghost-line bg-transparent text-ink active:bg-ghost',
         ghost: 'bg-transparent text-ink active:bg-ghost',
         destructive: 'bg-alert/15 text-alert active:bg-alert/25',
       },

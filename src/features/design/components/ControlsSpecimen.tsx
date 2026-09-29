@@ -5,6 +5,7 @@ import { Switch } from '@/shared/ui/base/switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/base/tabs'
 import { ToggleGroup, ToggleGroupItem } from '@/shared/ui/base/toggle-group'
 import { strings } from '@/shared/utils/strings'
+import { SPECIMEN_SWITCHES } from '../utils/specimen-data'
 import { OverlaysSpecimen } from './OverlaysSpecimen'
 import { SpecimenSection } from './SpecimenSection'
 
@@ -21,7 +22,6 @@ export function ControlsSpecimen() {
         <div className="flex flex-wrap gap-2">
           <Button>{t.buttons.primary}</Button>
           <Button variant="secondary">{t.buttons.secondary}</Button>
-          <Button variant="outline">{t.buttons.outline}</Button>
           <Button variant="ghost">{t.buttons.ghost}</Button>
           <Button variant="destructive">{t.buttons.destructive}</Button>
           <Button disabled>{t.buttons.disabled}</Button>
@@ -47,11 +47,7 @@ export function ControlsSpecimen() {
         </div>
 
         <div className="flex flex-col divide-y divide-line">
-          {[
-            { label: t.switchLabel, checked: true, disabled: false },
-            { label: t.switchOffLabel, checked: false, disabled: false },
-            { label: t.switchDisabledLabel, checked: false, disabled: true },
-          ].map((row) => (
+          {SPECIMEN_SWITCHES.map((row) => (
             <div
               key={row.label}
               className="flex min-h-12 items-center justify-between gap-4 py-1 text-body"

@@ -6,7 +6,7 @@ type CravingButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'childre
   label: string
 }
 
-/** The permanent thumb control, 64px tall. Its look is the Envie ticket's; until then a cream pill. */
+/** The permanent thumb control: a 64px cream pill, the one fill nothing else shares at that size. */
 export function CravingButton({ label, className, type = 'button', ...rest }: CravingButtonProps) {
   return (
     <button

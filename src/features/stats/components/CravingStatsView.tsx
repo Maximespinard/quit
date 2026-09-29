@@ -33,7 +33,7 @@ export function CravingStatsView({ stats }: { stats: CravingStats }) {
         <Link
           to="/craving/past"
           search={keepSearch}
-          className={buttonVariants({ variant: 'outline' })}
+          className={buttonVariants({ variant: 'secondary' })}
         >
           {strings.craving.logPast}
         </Link>

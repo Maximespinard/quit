@@ -19,7 +19,7 @@ export function ScenarioPicker({ sandbox }: { sandbox: SandboxControls }) {
         return (
           <Button
             key={scenario.id}
-            variant={active ? 'secondary' : 'outline'}
+            variant={active ? 'primary' : 'secondary'}
             size="sm"
             className="justify-between"
             aria-current={active ? 'true' : undefined}

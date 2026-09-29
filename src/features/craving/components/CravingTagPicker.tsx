@@ -98,7 +98,7 @@ export function CravingTagPicker({
             onKeyDown={addOnEnter}
             className="flex-1"
           />
-          <Button type="button" variant="outline" size="lg" onClick={add}>
+          <Button type="button" variant="secondary" size="lg" onClick={add}>
             {copy.add}
           </Button>
         </div>

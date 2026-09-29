@@ -29,19 +29,14 @@ export function CravingTimerRunning({ remainingMs, onStop }: CravingTimerRunning
         <h1 className="font-medium text-label">{strings.app.name}</h1>
       </div>
       <div className="flex flex-1 flex-col items-center justify-center gap-7 text-center">
-        <p role="timer" aria-label={copy.remaining} className="text-display">
+        <p role="timer" aria-label={copy.remaining} className="text-display text-white">
           {formatCountdown(remainingMs)}
         </p>
         <MinuteSteps total={CRAVING_TIMER_MS / MINUTE_MS} held={heldMinutes} />
         <p className="max-w-64 text-body text-ink/85">{copy.lead}</p>
       </div>
       <div className="pt-6 pb-safe-4">
-        <Button
-          variant="outline"
-          size="lg"
-          className="w-full border-ghost-line text-ink active:bg-ghost"
-          onClick={onStop}
-        >
+        <Button variant="secondary" size="lg" className="w-full" onClick={onStop}>
           {copy.stop}
         </Button>
       </div>
