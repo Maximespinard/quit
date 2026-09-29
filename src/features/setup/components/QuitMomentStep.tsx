@@ -5,6 +5,7 @@ import { Button } from '@/shared/ui/base/button'
 import { Input } from '@/shared/ui/base/input'
 import { fromDatetimeLocal, toDatetimeLocal } from '@/shared/utils/datetime-local'
 import { strings } from '@/shared/utils/strings'
+import { SetupQuestion } from './SetupQuestion'
 
 type QuitMomentStepProps = {
   journal: Journal
@@ -38,18 +39,23 @@ export function QuitMomentStep({ journal, now, initial, onPicked }: QuitMomentSt
   }
 
   return (
-    <section className="flex flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <h2 className="text-title">{copy.title}</h2>
-        <p className="text-body text-muted">{copy.lead}</p>
-      </div>
-
-      <Button size="lg" onClick={() => pick(now)}>
-        {copy.now}
-      </Button>
-
-      <p className="text-center text-muted text-label">{copy.or}</p>
-
+    <SetupQuestion
+      title={copy.title}
+      lead={copy.lead}
+      action={
+        <>
+          {/* The other answer, by the field: "or" between two hairlines, then the one-tap one. */}
+          <div className="flex items-center gap-3 text-label text-muted">
+            <span aria-hidden="true" className="h-px flex-1 bg-line" />
+            <p>{copy.or}</p>
+            <span aria-hidden="true" className="h-px flex-1 bg-line" />
+          </div>
+          <Button size="lg" onClick={() => pick(now)}>
+            {copy.now}
+          </Button>
+        </>
+      }
+    >
       <form noValidate onSubmit={submit} className="flex flex-col gap-3">
         <label htmlFor={inputId} className="text-label">
           {copy.dateLabel}
@@ -75,6 +81,6 @@ export function QuitMomentStep({ journal, now, initial, onPicked }: QuitMomentSt
           {copy.submit}
         </Button>
       </form>
-    </section>
+    </SetupQuestion>
   )
 }

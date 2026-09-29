@@ -45,9 +45,14 @@ export const COLOR_TOKENS: readonly ColorToken[] = [
     token: 'ink',
     swatch: 'bg-ink',
     value: '#f7f4ef',
-    role: 'Texte ; crème des boutons pleins, sélections et barres',
+    role: 'Texte ; crème des boutons pleins et sélections',
   },
-  { token: 'muted', swatch: 'bg-muted', value: '#a3a3a3', role: 'Texte secondaire, partout' },
+  {
+    token: 'muted',
+    swatch: 'bg-muted',
+    value: '#a3a3a3',
+    role: 'Texte secondaire, repères d’étape des graphiques',
+  },
   {
     token: 'white',
     swatch: 'bg-white',
@@ -70,7 +75,7 @@ export const COLOR_TOKENS: readonly ColorToken[] = [
     token: 'ghost-line',
     swatch: 'bg-ghost-line',
     value: 'rgb(255 255 255 / 0.3)',
-    role: 'Filet du bouton fantôme',
+    role: 'Filet du bouton fantôme, ligne de base des graphiques',
   },
   {
     token: 'alert',
@@ -85,6 +90,12 @@ export const COLOR_TOKENS: readonly ColorToken[] = [
   { token: 'yellow', swatch: 'bg-yellow', value: '#f5d907', role: 'Dégradé d’Envie, et lui seul' },
   { token: 'moss', swatch: 'bg-moss', value: '#33402c', role: 'Halo du minuteur d’envie' },
   { token: 'bronze', swatch: 'bg-bronze', value: '#b88a4f', role: 'Halo du minuteur d’envie' },
+  {
+    token: 'series',
+    swatch: 'bg-series',
+    value: '#d08a2a',
+    role: 'Barres des graphiques — 6,3:1 sur carte, 3:1 estompées',
+  },
 ]
 
 export type TypeToken = {
@@ -101,7 +112,21 @@ export const TYPE_TOKENS: readonly TypeToken[] = [
     className: 'text-display',
     px: '176 px',
     sample: '12',
-    role: 'Le chiffre du streak et le minuteur',
+    role: 'Le minuteur ; le streak, lui, prend 62 % de la largeur',
+  },
+  {
+    token: 'brand',
+    className: 'text-brand',
+    px: '21 px',
+    sample: 'quit',
+    role: 'La marque, en haut à gauche',
+  },
+  {
+    token: 'craving',
+    className: 'text-craving',
+    px: '23 px',
+    sample: 'Envie',
+    role: 'Le bouton Envie, seul',
   },
   {
     token: 'figure',
@@ -111,11 +136,25 @@ export const TYPE_TOKENS: readonly TypeToken[] = [
     role: 'Temps, XP, argent : chiffres tabulaires',
   },
   {
+    token: 'headline',
+    className: 'text-headline',
+    px: '28 px',
+    sample: strings.quitMoment.title,
+    role: 'La question posée seule à l’écran, au premier lancement',
+  },
+  {
     token: 'title',
     className: 'text-title',
     px: '20 px',
     sample: 'Patch du jour',
     role: 'Titres de carte, de tiroir et de dialogue',
+  },
+  {
+    token: 'lead',
+    className: 'text-lead',
+    px: '18 px',
+    sample: 'jours de streak · 07 h 42',
+    role: 'La ligne sous le chiffre du streak',
   },
   {
     token: 'cta',

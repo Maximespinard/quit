@@ -21,7 +21,7 @@ const shiftClock = async (page: Page, shift: string) => {
 const homeWithStreak = async (page: Page) => {
   await page.goto(sandboxAt(NOW))
   await startNow(page)
-  await expectStreak(page, 0, '00:00:00')
+  await expectStreak(page, 0, '00 h 00')
 }
 
 test('one tap logs the patch; it holds past midnight, the next protocol day asks again', async ({
@@ -54,14 +54,15 @@ const barredSites = (page: Page) => siteGroup(page).locator('[aria-disabled="tru
 
 test('two days in a row, the second suggested site differs from the first', async ({ page }) => {
   await homeWithStreak(page)
-  await expect(pressedSite(page)).toHaveText('Bras gauche')
+  await expect(pressedSite(page)).toHaveAccessibleName('Bras gauche')
+  await expect(pressedSite(page)).toHaveAccessibleDescription('suggéré')
 
   // One tap still logs the patch, at the suggested site.
   await tap(page, /^Poser le patch · 21\smg$/)
   await expect(patchCard(page)).toContainText(/aujourd’hui · 21\smg · Bras gauche/)
 
   await shiftClock(page, '+1 j')
-  await expect(pressedSite(page)).toHaveText('Bras droit')
+  await expect(pressedSite(page)).toHaveAccessibleName('Bras droit')
   // Yesterday's site is greyed and named as such.
   await expect(barredSites(page)).toHaveCount(1)
   await expect(
@@ -80,11 +81,11 @@ test('the site is switched in one tap, or left out', async ({ page }) => {
 
   // The rotation goes on from the site switched to, which cannot be picked again.
   await shiftClock(page, '+1 j')
-  await expect(pressedSite(page)).toHaveText('Bras gauche')
+  await expect(pressedSite(page)).toHaveAccessibleName('Bras gauche')
   const previous = page.getByRole('button', { name: 'Hanche droite', exact: true })
   await expect(previous).toHaveAttribute('aria-disabled', 'true')
   await previous.click({ force: true })
-  await expect(pressedSite(page)).toHaveText('Bras gauche')
+  await expect(pressedSite(page)).toHaveAccessibleName('Bras gauche')
 
   // Pressed again, the suggested site is left out.
   await tap(page, 'Bras gauche')
@@ -94,7 +95,7 @@ test('the site is switched in one tap, or left out', async ({ page }) => {
 
   // A patch without a site leaves the rotation where it was, and bars no site.
   await shiftClock(page, '+1 j')
-  await expect(pressedSite(page)).toHaveText('Bras gauche')
+  await expect(pressedSite(page)).toHaveAccessibleName('Bras gauche')
   await expect(barredSites(page)).toHaveCount(0)
 })
 

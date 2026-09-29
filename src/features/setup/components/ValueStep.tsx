@@ -2,6 +2,7 @@ import { type FormEvent, useId, useState } from 'react'
 import { Button } from '@/shared/ui/base/button'
 import { strings } from '@/shared/utils/strings'
 import type { ValueInput } from '../utils/value-inputs'
+import { SetupQuestion } from './SetupQuestion'
 import { ValueField } from './ValueField'
 
 type ValueStepProps = {
@@ -28,33 +29,38 @@ export function ValueStep({ title, lead, input, initial, onDone }: ValueStepProp
   }
 
   return (
-    <section className="flex flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <h2 className="text-title">{title}</h2>
-        <p className="text-body text-muted">{lead}</p>
-      </div>
-      <form noValidate onSubmit={submit} className="flex flex-col gap-3">
-        <ValueField
-          id={inputId}
-          label={title}
-          hideLabel
-          input={input}
-          value={text}
-          onChange={(value) => {
-            setText(value)
-            setRefused(false)
-          }}
-          errorId={refused ? errorId : null}
-        />
-        {refused ? (
-          <p id={errorId} role="alert" className="text-alert text-label">
-            {input.invalid}
-          </p>
-        ) : null}
-        <Button type="submit" size="lg" className="mt-3">
-          {strings.firstLaunch.next}
-        </Button>
-      </form>
-    </section>
+    // The form spans the whole step: its submit sits down in the thumb zone, under the field.
+    <form noValidate onSubmit={submit} className="flex flex-1 flex-col">
+      <SetupQuestion
+        title={title}
+        lead={lead}
+        action={
+          <Button type="submit" size="lg">
+            {strings.firstLaunch.next}
+          </Button>
+        }
+      >
+        <div className="flex flex-col gap-3">
+          <ValueField
+            id={inputId}
+            label={title}
+            hideLabel
+            prominent
+            input={input}
+            value={text}
+            onChange={(value) => {
+              setText(value)
+              setRefused(false)
+            }}
+            errorId={refused ? errorId : null}
+          />
+          {refused ? (
+            <p id={errorId} role="alert" className="text-alert text-label">
+              {input.invalid}
+            </p>
+          ) : null}
+        </div>
+      </SetupQuestion>
+    </form>
   )
 }

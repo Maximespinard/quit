@@ -24,6 +24,7 @@ export function ControlsSpecimen() {
           <Button variant="secondary">{t.buttons.secondary}</Button>
           <Button variant="ghost">{t.buttons.ghost}</Button>
           <Button variant="destructive">{t.buttons.destructive}</Button>
+          <Button variant="link">{t.buttons.link}</Button>
           <Button disabled>{t.buttons.disabled}</Button>
         </div>
 

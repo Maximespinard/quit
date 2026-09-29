@@ -16,7 +16,7 @@ const rateAndRecord = async (page: Page, intensity: string) => {
 const homeWithStreak = async (page: Page) => {
   await page.goto(sandboxAt(NOW))
   await startNow(page)
-  await expectStreak(page, 0, '00:00:00')
+  await expectStreak(page, 0, '00 h 00')
 }
 
 test('a craving held to the end is celebrated, rated and recorded', async ({ page }) => {
@@ -36,7 +36,7 @@ test('a craving held to the end is celebrated, rated and recorded', async ({ pag
   await rateAndRecord(page, '3')
 
   await expect(recordedNotice(page)).toBeVisible()
-  await expectStreak(page, 0, '01:00:00')
+  await expectStreak(page, 0, '01 h 00')
 })
 
 test('a craving stopped early is still recorded, without the celebration', async ({ page }) => {
@@ -133,4 +133,29 @@ test('a craving is tagged, and the typed tag is offered again on the next one', 
   await tap(page, 'Enregistrer l’envie')
   await expect(recordedNotice(page)).toBeVisible()
   expect(await storedCravingTags(page)).toEqual([['coffee', 'Voiture'], [], ['Métro']])
+})
+
+/** The animation each blob of the timer haze plays, as the browser computed it. */
+const hazeAnimations = (page: Page) =>
+  page.evaluate(() =>
+    [...document.querySelectorAll('[data-haze] > *')].map(
+      (blob) => getComputedStyle(blob).animationName,
+    ),
+  )
+
+test('the timer haze drifts only when motion is allowed', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
+  await homeWithStreak(page)
+  await tap(page, 'Envie')
+  await expect(timer(page)).toBeVisible()
+
+  expect(await hazeAnimations(page)).toEqual([
+    'haze-drift-a',
+    'haze-drift-b',
+    'haze-drift-a',
+    'haze-drift-b',
+  ])
+
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  expect(await hazeAnimations(page)).toEqual(['none', 'none', 'none', 'none'])
 })

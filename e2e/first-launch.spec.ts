@@ -10,7 +10,7 @@ test('first launch sets the quit moment to now and the streak starts at zero', a
 
   await startNow(page)
 
-  await expectStreak(page, 0, '00:00:00')
+  await expectStreak(page, 0, '00 h 00')
   await expect(page.getByRole('button', { name: 'Maintenant' })).toHaveCount(0)
 })
 
@@ -24,7 +24,7 @@ test('the quit moment survives a reload', async ({ page }) => {
   await page.reload()
 
   // A second boundary may pass between the tap and the assertion.
-  await expectStreak(page, 0, '00:00:\\d\\d')
+  await expectStreak(page, 0, '00 h 00')
   await expect(page.getByRole('button', { name: 'Maintenant' })).toHaveCount(0)
 })
 
@@ -78,7 +78,7 @@ test('the full first launch: a backdated quit moment, the spend, the baseline, t
   await expect(protocol).toContainText('7 mg · 28 jours')
   await tap(page, 'C’est parti')
 
-  await expectStreak(page, 2, '03:00:00')
+  await expectStreak(page, 2, '03 h 00')
 })
 
 // Persistence is the real journal's job: real IndexedDB, real clock.

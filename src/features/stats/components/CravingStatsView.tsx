@@ -48,7 +48,7 @@ export function CravingStatsView({ stats }: { stats: CravingStats }) {
   ]
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-2.5">
       <StatsSummary stats={stats} />
       <StatsSection title={copy.byHour}>
         <ColumnChart
@@ -82,11 +82,15 @@ export function CravingStatsView({ stats }: { stats: CravingStats }) {
   )
 }
 
+/** One chart in its card, named in the card's muted label like the home's blocks. */
 function StatsSection({ title, children }: { title: string; children: ReactNode }) {
   const titleId = useId()
   return (
-    <section aria-labelledby={titleId} className="flex flex-col gap-2.5">
-      <h2 id={titleId} className="font-medium text-body">
+    <section
+      aria-labelledby={titleId}
+      className="flex flex-col gap-3.5 rounded-card bg-surface p-4"
+    >
+      <h2 id={titleId} className="text-label text-muted">
         {title}
       </h2>
       {children}

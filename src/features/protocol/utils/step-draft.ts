@@ -1,7 +1,11 @@
 import type { Step } from '@quit/contract/settings'
 import { fromDecimalText, toDecimalText } from '@/shared/utils/decimal-text'
 
-/** A step as the editor holds it: raw field text, with a stable id for list keys. */
+/**
+ * A step as the editor holds it: raw field text, with a stable id for list keys. A step in force
+ * keeps its index there as id (`draftsFrom`), which is how the editor finds its status; an added
+ * step takes an id past the protocol in force.
+ */
 export type StepDraft = {
   readonly id: number
   readonly dose: string

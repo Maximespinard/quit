@@ -27,28 +27,28 @@ test('the sandbox clock moves by an hour and a day, and the streak follows', asy
   )
 
   await tap(page, '+1 h')
-  await expectStreak(page, 0, '01:00:00')
+  await expectStreak(page, 0, '01 h 00')
   await tap(page, '+1 j')
-  await expectStreak(page, 1, '01:00:00')
+  await expectStreak(page, 1, '01 h 00')
   await tap(page, '−1 h')
-  await expectStreak(page, 1, '00:00:00')
+  await expectStreak(page, 1, '00 h 00')
   await tap(page, '−1 j')
-  await expectStreak(page, 0, '00:00:00')
+  await expectStreak(page, 0, '00 h 00')
 
   // Before the quit moment the streak waits at zero.
   await tap(page, '−1 h')
-  await expectStreak(page, 0, '00:00:00')
+  await expectStreak(page, 0, '00 h 00')
 
   // Back on real time, the streak counts from the stopped instant to today.
   await tap(page, 'Revenir à l’heure réelle')
   const days = Math.floor((Date.now() - NOW) / DAY_MS)
-  await expectStreak(page, days, '\\d\\d:\\d\\d:\\d\\d')
+  await expectStreak(page, days, '\\d\\d h \\d\\d')
 })
 
 test('wiping the sandbox returns it to an empty journal', async ({ page }) => {
   await page.goto(sandboxAt(NOW))
   await startNow(page)
-  await expectStreak(page, 0, '00:00:00')
+  await expectStreak(page, 0, '00 h 00')
 
   await marker(page).click()
   await tap(page, 'Vider')
@@ -60,7 +60,7 @@ test('wiping the sandbox returns it to an empty journal', async ({ page }) => {
 test('a sandbox session never reads nor writes the real journal', async ({ page }) => {
   await page.goto('/')
   await startNow(page)
-  await expectStreak(page, 0, '00:00:\\d\\d')
+  await expectStreak(page, 0, '00 h 00')
 
   // The real quit moment is not read: the sandbox starts empty.
   await page.goto(sandboxAt(NOW))
@@ -68,19 +68,19 @@ test('a sandbox session never reads nor writes the real journal', async ({ page 
   await startNow(page)
   await marker(page).click()
   await tap(page, '+1 j')
-  await expectStreak(page, 1, '00:00:00')
+  await expectStreak(page, 1, '00 h 00')
 
   // Nor written: back on the real journal, its quit moment is intact.
   await page.goto('/')
   await expect(marker(page)).toHaveCount(0)
-  await expectStreak(page, 0, '00:00:\\d\\d')
+  await expectStreak(page, 0, '00 h 00')
 })
 
 // The installed PWA has no address bar: the sandbox opens and closes from inside the app.
 test('a long press on the brand opens the sandbox, and the panel leaves it', async ({ page }) => {
   await page.goto('/')
   await startNow(page)
-  await expectStreak(page, 0, '00:00:\\d\\d')
+  await expectStreak(page, 0, '00 h 00')
 
   await page.getByRole('heading', { name: 'quit' }).getByText('quit').hover()
   await page.mouse.down()
@@ -94,7 +94,7 @@ test('a long press on the brand opens the sandbox, and the panel leaves it', asy
   await tap(page, 'Sortir')
 
   await expect(marker(page)).toHaveCount(0)
-  await expectStreak(page, 0, '00:00:\\d\\d')
+  await expectStreak(page, 0, '00 h 00')
 })
 
 test('a short tap on the brand does nothing', async ({ page }) => {

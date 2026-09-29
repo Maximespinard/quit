@@ -186,6 +186,8 @@ export const strings = {
     totals: 'Ce qui reste acquis',
     smokeFreeDays: 'Jours sans fumer',
     personalBest: 'Plus long streak',
+    /** The hours and minutes past the streak's whole days, padded: `07 h 42`. */
+    clock: (hours: string, minutes: string) => `${hours}\u00a0h\u00a0${minutes}`,
     /** A streak as whole days and the hours past them. */
     duration: (days: number, hours: string) => `${days}\u00a0j ${hours}\u00a0h`,
   },
@@ -415,6 +417,8 @@ export const strings = {
     back: 'Retour',
     lead: 'Chaque étape est un patch de 24\u00a0h. Tu peux tout changer, même en cours d’étape.',
     step: (number: number) => `Étape ${number}`,
+    /** Where a step of the protocol in force stands today; an upcoming step carries no mark. */
+    status: { current: 'En cours', past: 'Passée' },
     doseLabel: 'Dose (mg)',
     durationLabel: 'Durée (jours)',
     brandLabel: 'Marque (facultatif)',
@@ -442,6 +446,8 @@ export const strings = {
       hint: 'Facultatif · jamais deux fois de suite au même site',
       /** Under the previous patch application's site, which the next one may not take. */
       previous: 'la dernière fois',
+      /** Under the suggested site, pressed or not. */
+      suggested: 'suggéré',
     },
     sites: {
       'arm-left': 'Bras gauche',
@@ -531,6 +537,7 @@ export const strings = {
       secondary: 'Plus tard',
       ghost: 'Annuler',
       destructive: 'Supprimer ce fait',
+      link: 'Autre dose ou autre date',
       disabled: 'Indisponible',
     },
     switchLabel: 'Rappel du patch',

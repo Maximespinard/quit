@@ -1,5 +1,6 @@
 import { Settings } from 'lucide-react'
 import { BadgeCard } from '@/shared/ui/BadgeCard'
+import { HeroHaze } from '@/shared/ui/HeroHaze'
 import { MultiplierSteps } from '@/shared/ui/MultiplierSteps'
 import { ProgressBar } from '@/shared/ui/ProgressBar'
 import { StreakHero } from '@/shared/ui/StreakHero'
@@ -18,7 +19,7 @@ import { SpecimenSection } from './SpecimenSection'
 
 const MAX_MULTIPLIER = MULTIPLIER_STEPS[MULTIPLIER_STEPS.length - 1] ?? 1
 
-/** The home screen as the specimen's first viewport: hero, multiplier, level, badges. */
+/** The home screen as the specimen's first viewport: haze and hero, multiplier, level, badges. */
 export function HomeSpecimen() {
   const { duration, multiplier } = SPECIMEN_STREAK
   const { stepNumber, doseMg } = SPECIMEN_PROTOCOL
@@ -27,24 +28,28 @@ export function HomeSpecimen() {
 
   return (
     <>
-      <StreakHero
-        duration={duration}
-        daysLabel={strings.streak.days(duration.days)}
-        regionLabel={strings.streak.region}
-        brand={strings.app.name}
-        context={strings.protocol.context(stepNumber, formatDose(doseMg))}
-        action={
-          <button
-            type="button"
-            aria-label={strings.nav.settings}
-            className="grid size-11 place-items-center rounded-full text-ink active:bg-ghost"
-          >
-            <Settings className="size-5" strokeWidth={1.75} aria-hidden="true" />
-          </button>
-        }
-      />
+      {/* The home hero as it ships, the haze behind it. */}
+      <div className="relative isolate">
+        <HeroHaze />
+        <StreakHero
+          duration={duration}
+          daysLabel={strings.streak.days(duration.days)}
+          regionLabel={strings.streak.region}
+          brand={strings.app.name}
+          context={strings.protocol.context(stepNumber, formatDose(doseMg))}
+          action={
+            <button
+              type="button"
+              aria-label={strings.nav.settings}
+              className="grid size-11 place-items-center rounded-full text-ink active:bg-ghost"
+            >
+              <Settings className="size-5" strokeWidth={1.5} aria-hidden="true" />
+            </button>
+          }
+        />
+      </div>
 
-      <div className="flex flex-col gap-5 px-safe pt-5">
+      <div className="flex flex-col gap-5 px-safe pt-16">
         <SpecimenSection
           title={strings.multiplier.title(multiplier)}
           aside={

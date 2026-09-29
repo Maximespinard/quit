@@ -29,12 +29,15 @@ export function MonthCalendar({ days, now }: MonthCalendarProps) {
   const todayStart = localMidnight(now)
 
   return (
-    <section aria-labelledby={titleId} className="flex flex-col gap-2.5">
-      <div className="flex items-center justify-between">
-        <h3 id={titleId} className="font-medium text-body" aria-live="polite">
+    <section
+      aria-labelledby={titleId}
+      className="flex flex-col gap-2 rounded-card bg-surface px-2 pt-2 pb-5"
+    >
+      <div className="flex items-center justify-between pl-3">
+        <h3 id={titleId} className="text-title" aria-live="polite">
           {formatMonth(month.month)}
         </h3>
-        <div className="-mr-3 flex">
+        <div className="flex">
           <Button
             variant="ghost"
             size="icon"
@@ -85,7 +88,9 @@ export function MonthCalendar({ days, now }: MonthCalendarProps) {
         </tbody>
       </table>
 
-      <CalendarLegend />
+      <div className="mx-3 border-line border-t pt-4">
+        <CalendarLegend />
+      </div>
     </section>
   )
 }

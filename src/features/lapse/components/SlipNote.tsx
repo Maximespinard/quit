@@ -19,7 +19,7 @@ export function SlipNote({ lastCigarette, lapseDaysInARow }: SlipNoteProps) {
   const nearRelapse = lapseDaysInARow > 0 && lapseDaysInARow < RELAPSE_DAYS
 
   return (
-    <div className="flex flex-col gap-1 text-body text-muted">
+    <div className="flex flex-col gap-1 px-5 text-body text-muted">
       <p>{copy.lastCigarette(copy.ago(days, hours, minutes))}</p>
       {nearRelapse ? <p>{copy.lapseDays(lapseDaysInARow)}</p> : null}
     </div>

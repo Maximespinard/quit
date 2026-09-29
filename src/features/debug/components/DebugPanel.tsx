@@ -35,7 +35,10 @@ export function DebugPanel() {
     <Drawer showSwipeHandle modal={false}>
       <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40">
         <div className="mx-auto max-w-md px-safe pb-safe-4">
-          <DrawerTrigger className="pointer-events-auto inline-flex min-h-11 items-center gap-2 rounded-full bg-ink px-4 font-medium text-label text-page">
+          <DrawerTrigger
+            data-sandbox-marker
+            className="pointer-events-auto inline-flex min-h-11 items-center gap-2 rounded-full bg-ink px-4 font-medium text-label text-page"
+          >
             <FlaskConical aria-hidden="true" className="size-4" />
             {copy.marker}
           </DrawerTrigger>

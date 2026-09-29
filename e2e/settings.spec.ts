@@ -21,7 +21,7 @@ async function openSettings(page: Page) {
 test('first launch, then the weekly spend edited in settings', async ({ page }) => {
   await page.goto(sandboxAt(NOW))
   await startNow(page)
-  await expectStreak(page, 0, '00:00:00')
+  await expectStreak(page, 0, '00 h 00')
   await openSettings(page)
 
   // One save for the whole screen, asleep until a value changes.
@@ -36,7 +36,7 @@ test('first launch, then the weekly spend edited in settings', async ({ page }) 
   // Saved: home is the acknowledgement, and still the sandbox.
   await spendField(page).fill('48,90')
   await saveButton(page).click()
-  await expectStreak(page, 0, '00:00:00')
+  await expectStreak(page, 0, '00 h 00')
   await expect(page).toHaveURL(new RegExp(`debug=true.*clock=${NOW}`))
 
   // The new value is the journal's, not the form's.
@@ -52,7 +52,7 @@ test('the quit moment moves earlier, and the streak follows at once', async ({ p
   await quitMomentField(page).fill(await localInput(page, NOW - 3 * DAY))
   await saveButton(page).click()
 
-  await expectStreak(page, 3, '00:00:00')
+  await expectStreak(page, 3, '00 h 00')
 })
 
 test('the quit moment cannot move later than a fact already recorded', async ({ page }) => {
@@ -79,7 +79,7 @@ test('the quit moment cannot move later than a fact already recorded', async ({ 
   await expect(page.getByRole('alert')).toContainText('Ton arrêt ne peut pas venir après.')
   await expect(quitMomentField(page)).toHaveAttribute('aria-invalid', 'true')
   await page.getByRole('link', { name: 'Retour' }).click()
-  await expectStreak(page, 2, '00:00:00')
+  await expectStreak(page, 2, '00 h 00')
 })
 
 test('settings open the protocol editor', async ({ page }) => {

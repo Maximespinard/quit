@@ -1,24 +1,50 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { derive } from '@/shared/domain/derive'
 import { emptyJournal, type Journal } from '@/shared/domain/journal'
+import { DAY_MS } from '@/shared/utils/duration'
 import { strings } from '@/shared/utils/strings'
 import { ProtocolEditor } from './ProtocolEditor'
 
 const copy = strings.protocol
+const QUIT = Date.UTC(2026, 4, 4, 9, 0)
 const journal: Journal = {
   ...emptyJournal,
+  facts: [{ type: 'quit-moment', at: QUIT }],
   protocol: [
     { doseMg: 21, durationDays: 28, brand: 'Nicopatch' },
     { doseMg: 14, durationDays: 28 },
   ],
 }
+/** Protocol day 31: the second step is running, the first one is behind. */
+const NOW = QUIT + 30 * DAY_MS
 
 const renderEditor = (onSaved = vi.fn()) => {
-  render(<ProtocolEditor journal={journal} onSaved={onSaved} />)
+  render(
+    <ProtocolEditor journal={journal} position={derive(journal, NOW).protocol} onSaved={onSaved} />,
+  )
   return onSaved
 }
 const step = (number: number) => screen.getByRole('group', { name: copy.step(number) })
 const save = () => screen.getByRole('button', { name: copy.save })
+
+it('marks the running step and the ones behind it', () => {
+  renderEditor()
+
+  expect(step(1)).toHaveAccessibleDescription(copy.status.past)
+  expect(step(2)).toHaveAccessibleDescription(copy.status.current)
+})
+
+it('keeps the running mark on its step when the step moves, and none on an added step', async () => {
+  renderEditor()
+
+  await userEvent.click(screen.getByRole('button', { name: copy.moveUp(2) }))
+  await userEvent.click(screen.getByRole('button', { name: copy.add }))
+
+  expect(step(1)).toHaveAccessibleDescription(copy.status.current)
+  expect(step(2)).toHaveAccessibleDescription(copy.status.past)
+  expect(step(3)).not.toHaveAccessibleDescription()
+})
 
 it('keeps save disabled while the protocol in force is untouched', () => {
   renderEditor()

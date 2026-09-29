@@ -1,8 +1,8 @@
 import { Link } from '@tanstack/react-router'
-import { useId } from 'react'
 import type { GoalProgress } from '@/shared/domain/derive'
 import type { Journal } from '@/shared/domain/journal'
 import { buttonVariants } from '@/shared/ui/base/button'
+import { Card } from '@/shared/ui/Card'
 import { ProgressBar } from '@/shared/ui/ProgressBar'
 import { keepSearch } from '@/shared/utils/app-search'
 import { cn } from '@/shared/utils/cn'
@@ -21,11 +21,10 @@ type GoalSummaryProps = {
 
 const copy = strings.goal
 
-const cardAction = cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'shrink-0')
+const cardAction = cn(buttonVariants({ variant: 'secondary' }), 'shrink-0')
 
 /** Home screen block: the goal and the money saved towards it, or the way to set one. */
 export function GoalSummary({ journal, goal, onCelebrated }: GoalSummaryProps) {
-  const titleId = useId()
   const celebrating = useGoalCelebration(journal, goal, onCelebrated)
   const percent =
     goal === null ? 0 : Math.min(100, Math.floor((goal.savedCents * 100) / goal.priceCents))
@@ -33,22 +32,18 @@ export function GoalSummary({ journal, goal, onCelebrated }: GoalSummaryProps) {
     goal === null ? '' : copy.progress(formatEuros(goal.savedCents), formatEuros(goal.priceCents))
 
   return (
-    <section aria-labelledby={titleId} className="flex flex-col gap-2.5">
-      <div className="flex items-baseline justify-between text-label">
-        <h2 id={titleId} className="font-medium text-body text-ink">
-          {copy.title}
-        </h2>
-        {goal === null ? null : goal.reached ? (
+    <Card
+      title={copy.title}
+      aside={
+        goal?.reached ? (
           <span className={cn('text-muted', celebrating && 'motion-safe:animate-step-in')}>
             {copy.reached}
           </span>
-        ) : (
-          <span className="text-muted">{copy.percent(percent)}</span>
-        )}
-      </div>
-
+        ) : null
+      }
+    >
       {goal === null ? (
-        <div className="flex flex-col items-start gap-3 rounded-card bg-surface p-4">
+        <div className="flex flex-col items-start gap-3">
           <p className="text-body text-muted">{copy.none}</p>
           <Link to="/goal" search={keepSearch} className={cardAction}>
             {copy.choose}
@@ -65,15 +60,16 @@ export function GoalSummary({ journal, goal, onCelebrated }: GoalSummaryProps) {
           }
         />
       ) : (
-        <div className="flex flex-col gap-3 rounded-card bg-surface p-4">
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex min-w-0 flex-col gap-1">
-              <p className="truncate font-medium text-body">{goal.label}</p>
-              <p className="text-muted text-label">{progress}</p>
-            </div>
+        <>
+          <div className="flex items-center justify-between gap-3">
+            <p className="min-w-0 truncate text-title">{goal.label}</p>
             <Link to="/goal" search={keepSearch} className={cardAction}>
               {copy.edit}
             </Link>
+          </div>
+          <div className="flex items-baseline justify-between gap-3 text-body text-muted">
+            <span>{progress}</span>
+            <span>{copy.percent(percent)}</span>
           </div>
           <ProgressBar
             label={copy.barLabel(goal.label)}
@@ -81,8 +77,8 @@ export function GoalSummary({ journal, goal, onCelebrated }: GoalSummaryProps) {
             max={goal.priceCents}
             valueText={progress}
           />
-        </div>
+        </>
       )}
-    </section>
+    </Card>
   )
 }
