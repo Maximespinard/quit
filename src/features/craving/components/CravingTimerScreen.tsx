@@ -53,7 +53,7 @@ export function CravingTimerScreen({
     <section className="flex flex-col gap-8 pt-6">
       <div className="flex flex-col gap-2">
         <h2 className="text-title">{outcome.title}</h2>
-        <p className="text-body text-ink-soft">{outcome.lead}</p>
+        <p className="text-body text-muted">{outcome.lead}</p>
       </div>
       <CravingForm tagOptions={tagOptions(journal)} onSubmit={record} />
     </section>

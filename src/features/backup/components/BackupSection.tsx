@@ -27,14 +27,14 @@ export function BackupSection({ journal, onImported }: BackupSectionProps) {
   return (
     <section aria-labelledby={titleId} className="flex flex-col gap-3 rounded-card bg-surface p-4">
       <div className="flex flex-col gap-1">
-        <h3 id={titleId} className="font-semibold text-body">
+        <h3 id={titleId} className="font-medium text-body">
           {copy.title}
         </h3>
-        <p className="text-body text-ink-dim">{inSandbox ? copy.sandboxLead : copy.lead}</p>
+        <p className="text-body text-muted">{inSandbox ? copy.sandboxLead : copy.lead}</p>
       </div>
       {/* Nothing while the record loads, or when it cannot be read: never a false "no backup". */}
       {backup.record === null ? null : (
-        <p className="text-ink-dim text-label">
+        <p className="text-muted text-label">
           {backup.record.lastBackupAt === null
             ? copy.never
             : copy.last(formatDate(backup.record.lastBackupAt))}
@@ -44,7 +44,7 @@ export function BackupSection({ journal, onImported }: BackupSectionProps) {
         <Button size="lg" onClick={() => void exportFile(journal)}>
           {inSandbox ? copy.exportSandbox : copy.export}
         </Button>
-        <p role="status" className="text-ink-dim text-label empty:hidden">
+        <p role="status" className="text-muted text-label empty:hidden">
           {status === 'exported' ? copy.exported : null}
         </p>
         {status === 'failed' ? (
@@ -57,7 +57,7 @@ export function BackupSection({ journal, onImported }: BackupSectionProps) {
         journal={journal}
         label={inSandbox ? copy.importSandbox : copy.import}
         // On `surface`, the outline's default press colour would not show.
-        className="active:bg-surface-locked"
+        className="active:bg-ghost"
         onImported={onImported}
       />
     </section>

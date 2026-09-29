@@ -19,7 +19,7 @@ export function CountStepper({ value, onChange }: CountStepperProps) {
       <span id={labelId} className="text-label">
         {copy.countLabel}
       </span>
-      <div className="flex h-12 items-center rounded-control border border-line bg-white">
+      <div className="flex h-12 items-center rounded-control border border-line bg-ghost">
         <Button
           type="button"
           variant="ghost"

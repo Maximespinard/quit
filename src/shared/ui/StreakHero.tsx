@@ -22,7 +22,7 @@ type StreakHeroProps = {
 }
 
 /**
- * The navy block that opens the home screen: one huge figure, one label row. During the
+ * The block that opens the home screen: one huge figure, one label row. During the
  * entrance the days and the clock count up together and land on the same step: one gesture.
  */
 export function StreakHero({
@@ -39,12 +39,12 @@ export function StreakHero({
   return (
     <section
       aria-label={regionLabel}
-      className="relative isolate overflow-hidden rounded-b-hero bg-ink px-safe pt-safe text-on-ink"
+      className="relative isolate overflow-hidden rounded-b-hero bg-page px-safe pt-safe text-ink"
     >
       <HeroBackdrop />
       <div className="relative flex min-h-14 items-center justify-between gap-3 pt-3">
         <h1 className="font-semibold text-label">{brand}</h1>
-        <span className="flex items-center gap-2 text-label text-on-ink/80">
+        <span className="flex items-center gap-2 text-label">
           {context}
           {action}
         </span>

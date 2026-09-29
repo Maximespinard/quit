@@ -4,7 +4,7 @@ import type * as React from 'react'
 import { Button } from '@/shared/ui/base/button'
 import { cn } from '@/shared/utils/cn'
 
-/** shadcn `dialog`, reskinned: a page-coloured card on a navy scrim, no ring, no shadow. */
+/** shadcn `dialog`, reskinned: a card on a dark scrim, edged with a hairline, no shadow. */
 function Dialog({ ...props }: DialogPrimitive.Root.Props) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />
 }
@@ -26,7 +26,7 @@ function DialogOverlay({ className, ...props }: DialogPrimitive.Backdrop.Props) 
     <DialogPrimitive.Backdrop
       data-slot="dialog-overlay"
       className={cn(
-        'fixed inset-0 isolate z-50 bg-ink/40 transition-opacity duration-150 ease-out-expo data-ending-style:opacity-0 data-starting-style:opacity-0 motion-reduce:transition-none',
+        'fixed inset-0 isolate z-50 bg-page/80 transition-opacity duration-150 ease-out-expo data-ending-style:opacity-0 data-starting-style:opacity-0 motion-reduce:transition-none',
         className,
       )}
       {...props}
@@ -49,7 +49,7 @@ function DialogContent({
       <DialogPrimitive.Popup
         data-slot="dialog-content"
         className={cn(
-          'fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2.5rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-card bg-page p-5 text-ink outline-none transition-[opacity,transform] duration-200 ease-out-expo data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0 motion-reduce:transition-none sm:max-w-sm',
+          'fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2.5rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-card border border-line bg-surface p-5 text-ink outline-none transition-[opacity,transform] duration-200 ease-out-expo data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0 motion-reduce:transition-none sm:max-w-sm',
           className,
         )}
         {...props}
@@ -103,7 +103,7 @@ function DialogDescription({ className, ...props }: DialogPrimitive.Description.
   return (
     <DialogPrimitive.Description
       data-slot="dialog-description"
-      className={cn('text-body text-ink-soft', className)}
+      className={cn('text-body text-muted', className)}
       {...props}
     />
   )

@@ -56,10 +56,10 @@ export function ColumnChart({
 
   return (
     <div className="flex flex-col gap-2">
-      <p aria-hidden className="flex min-h-5 items-baseline gap-1.5 text-label text-ink-soft">
+      <p aria-hidden className="flex min-h-5 items-baseline gap-1.5 text-label text-muted">
         {shown === undefined ? null : (
           <>
-            <span className="font-semibold text-ink">{shown.label}</span>
+            <span className="font-medium text-ink">{shown.label}</span>
             <span>{strings.stats.separator}</span>
             <span>{shown.valueText}</span>
           </>
@@ -88,7 +88,7 @@ export function ColumnChart({
           {markers.map((marker) => (
             <span
               key={marker.index}
-              className="absolute inset-y-0 w-px bg-ink"
+              className="absolute inset-y-0 w-px bg-ghost-line"
               style={{ left: `${(marker.index / count) * 100}%` }}
             />
           ))}
@@ -100,7 +100,7 @@ export function ColumnChart({
               >
                 <div
                   className={cn(
-                    'w-full max-w-6 rounded-t-mark bg-action transition-opacity duration-150 ease-out-expo motion-reduce:transition-none',
+                    'w-full max-w-6 rounded-t-mark bg-ink transition-opacity duration-150 ease-out-expo motion-reduce:transition-none',
                     active !== null && index !== active && 'opacity-35',
                   )}
                   // A column holding anything stays visible, however small beside the tallest.
@@ -115,7 +115,7 @@ export function ColumnChart({
             ))}
           </div>
         </div>
-        <div className="relative h-4 text-detail text-ink-soft">
+        <div className="relative h-4 text-detail text-muted">
           {ticks.map((tick) => (
             <span
               key={tick.index}

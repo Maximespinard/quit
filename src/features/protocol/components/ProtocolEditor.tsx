@@ -49,7 +49,7 @@ export function ProtocolEditor({ journal, onSaved }: ProtocolEditorProps) {
 
   return (
     <form noValidate onSubmit={submit} className="flex flex-col gap-4">
-      <p className="text-body text-ink-soft">{copy.lead}</p>
+      <p className="text-body text-muted">{copy.lead}</p>
 
       <ol className="flex flex-col gap-3">
         {drafts.map((draft, index) => (

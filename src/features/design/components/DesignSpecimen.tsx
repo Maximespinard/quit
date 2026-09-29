@@ -4,6 +4,7 @@ import { CravingButton } from '@/shared/ui/CravingButton'
 import { TabBar, type TabItem } from '@/shared/ui/TabBar'
 import { strings } from '@/shared/utils/strings'
 import { ControlsSpecimen } from './ControlsSpecimen'
+import { FieldsSpecimen } from './FieldsSpecimen'
 import { HomeSpecimen } from './HomeSpecimen'
 import { TokenReference } from './TokenReference'
 
@@ -26,8 +27,9 @@ export function DesignSpecimen() {
         <HomeSpecimen />
         <div className="flex flex-col gap-8 px-safe pt-10">
           {/* The fixed Envie pill may cover scrolling content, never this disclosure. */}
-          <p className="max-w-[64%] text-ink-soft text-label">{strings.design.synthetic}</p>
+          <p className="max-w-[64%] text-muted text-label">{strings.design.synthetic}</p>
           <ControlsSpecimen />
+          <FieldsSpecimen />
           <TokenReference />
         </div>
       </div>

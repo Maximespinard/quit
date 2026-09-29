@@ -35,7 +35,7 @@ export function DebugPanel() {
     <Drawer showSwipeHandle modal={false}>
       <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40">
         <div className="mx-auto max-w-md px-safe pb-safe-4">
-          <DrawerTrigger className="pointer-events-auto inline-flex min-h-11 items-center gap-2 rounded-full bg-ink px-4 font-semibold text-label text-page">
+          <DrawerTrigger className="pointer-events-auto inline-flex min-h-11 items-center gap-2 rounded-full bg-ink px-4 font-medium text-label text-page">
             <FlaskConical aria-hidden="true" className="size-4" />
             {copy.marker}
           </DrawerTrigger>
@@ -55,11 +55,11 @@ export function DebugPanel() {
         <div className="flex min-h-0 flex-col gap-3 overflow-y-auto px-5 pt-4 pb-safe-4">
           <div className="flex items-baseline justify-between gap-3">
             {/* Not an <output>: a live region would read the running clock out every minute. */}
-            <time dateTime={clockDateTime(now)} className="font-semibold text-body tabular-nums">
+            <time dateTime={clockDateTime(now)} className="font-medium text-body tabular-nums">
               {formatClock(now)}
             </time>
             {journal === null ? null : (
-              <span className="text-ink-soft text-label tabular-nums">
+              <span className="text-muted text-label tabular-nums">
                 {copy.facts(journal.facts.length)}
               </span>
             )}

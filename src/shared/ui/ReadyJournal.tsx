@@ -17,7 +17,7 @@ export function ReadyJournal({ state, brand, children }: ReadyJournalProps) {
   if (state.status === 'loading') {
     return (
       <AppShell brand={brand}>
-        <p className="text-body text-ink-soft">{strings.journal.loading}</p>
+        <p className="text-body text-muted">{strings.journal.loading}</p>
       </AppShell>
     )
   }

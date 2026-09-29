@@ -31,7 +31,7 @@ export function ValueStep({ title, lead, input, initial, onDone }: ValueStepProp
     <section className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
         <h2 className="text-title">{title}</h2>
-        <p className="text-body text-ink-soft">{lead}</p>
+        <p className="text-body text-muted">{lead}</p>
       </div>
       <form noValidate onSubmit={submit} className="flex flex-col gap-3">
         <ValueField

@@ -2,7 +2,7 @@ import { Tabs as TabsPrimitive } from '@base-ui/react/tabs'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/shared/utils/cn'
 
-/** shadcn `tabs`, reskinned: a surface tray with the active tab lifted to white, or a line variant. */
+/** shadcn `tabs`, reskinned: a ghost pill tray with the active tab filled in cream, or a line variant. */
 function Tabs({ className, orientation = 'horizontal', ...props }: TabsPrimitive.Root.Props) {
   return (
     <TabsPrimitive.Root
@@ -15,11 +15,11 @@ function Tabs({ className, orientation = 'horizontal', ...props }: TabsPrimitive
 }
 
 const tabsListVariants = cva(
-  'group/tabs-list inline-flex w-full items-center justify-center rounded-control p-1 text-ink-dim group-data-horizontal/tabs:h-11 group-data-vertical/tabs:h-fit group-data-vertical/tabs:flex-col data-[variant=line]:rounded-none data-[variant=line]:border-line data-[variant=line]:border-b data-[variant=line]:p-0',
+  'group/tabs-list inline-flex w-full items-center justify-center rounded-full p-1 text-muted group-data-horizontal/tabs:h-11 group-data-vertical/tabs:h-fit group-data-vertical/tabs:flex-col data-[variant=line]:rounded-none data-[variant=line]:border-line data-[variant=line]:border-b data-[variant=line]:p-0',
   {
     variants: {
       variant: {
-        default: 'bg-surface',
+        default: 'bg-ghost',
         line: 'gap-4 bg-transparent',
       },
     },
@@ -49,10 +49,10 @@ function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
     <TabsPrimitive.Tab
       data-slot="tabs-trigger"
       className={cn(
-        'relative inline-flex h-full flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-step px-3 font-semibold text-body text-ink-dim transition-colors duration-150 ease-out-expo group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=size-])]:size-5',
-        'data-active:bg-action data-active:text-page',
-        'group-data-[variant=line]/tabs-list:h-11 group-data-[variant=line]/tabs-list:flex-none group-data-[variant=line]/tabs-list:rounded-none group-data-[variant=line]/tabs-list:px-0 group-data-[variant=line]/tabs-list:data-active:bg-transparent group-data-[variant=line]/tabs-list:data-active:text-action',
-        'after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 after:bg-action after:opacity-0 after:transition-opacity group-data-[variant=line]/tabs-list:data-active:after:opacity-100',
+        'relative inline-flex h-full flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-full px-3 font-medium text-body text-muted transition-colors duration-150 ease-out-expo group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=size-])]:size-5',
+        'data-active:bg-ink data-active:text-page',
+        'group-data-[variant=line]/tabs-list:h-11 group-data-[variant=line]/tabs-list:flex-none group-data-[variant=line]/tabs-list:rounded-none group-data-[variant=line]/tabs-list:px-0 group-data-[variant=line]/tabs-list:data-active:bg-transparent group-data-[variant=line]/tabs-list:data-active:text-ink',
+        'after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 after:bg-ink after:opacity-0 after:transition-opacity group-data-[variant=line]/tabs-list:data-active:after:opacity-100',
         className,
       )}
       {...props}

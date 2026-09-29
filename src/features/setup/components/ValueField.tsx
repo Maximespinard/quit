@@ -1,3 +1,4 @@
+import { Input } from '@/shared/ui/base/input'
 import type { ValueInput } from '../utils/value-inputs'
 
 type ValueFieldProps = {
@@ -30,7 +31,7 @@ export function ValueField({
         {label}
       </label>
       <div className="relative">
-        <input
+        <Input
           id={id}
           type="text"
           inputMode={input.inputMode}
@@ -40,12 +41,12 @@ export function ValueField({
           onChange={(event) => onChange(event.target.value)}
           aria-invalid={errorId !== null}
           aria-describedby={errorId ?? undefined}
-          className="h-12 w-full rounded-control border border-line bg-white px-4 pr-10 font-medium text-cta text-ink tabular-nums placeholder:font-normal placeholder:text-ink-soft"
+          className="pr-10"
         />
         {input.suffix !== undefined ? (
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute inset-y-0 right-4 flex items-center font-medium text-cta text-ink-soft"
+            className="pointer-events-none absolute inset-y-0 right-4 flex items-center font-medium text-cta text-muted"
           >
             {input.suffix}
           </span>

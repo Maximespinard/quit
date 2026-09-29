@@ -63,11 +63,11 @@ export function DayPatchCard({
   return (
     <section aria-labelledby={titleId} className="flex flex-col gap-2.5">
       <div className="flex items-baseline justify-between text-label">
-        <h2 id={titleId} className="font-semibold text-body text-ink">
+        <h2 id={titleId} className="font-medium text-body text-ink">
           {copy.title}
         </h2>
         {recorded ? (
-          <p role="status" className="text-ink-soft">
+          <p role="status" className="text-muted">
             {copy.recorded}
           </p>
         ) : null}
@@ -78,7 +78,7 @@ export function DayPatchCard({
           // The protocol card's shape: the figure that changes, then its detail.
           <p className="flex flex-col gap-1">
             <span className="text-figure tabular-nums">{copy.logged(formatTime(patch.at))}</span>
-            <span className="text-ink-dim text-label">
+            <span className="text-muted text-label">
               {copy.loggedDetail(
                 isSameLocalDay(patch.at, now),
                 formatDose(patch.doseMg),
@@ -88,12 +88,11 @@ export function DayPatchCard({
           </p>
         ) : (
           <>
-            <p className="font-semibold text-body">{copy.due}</p>
+            <p className="font-medium text-body">{copy.due}</p>
             <SitePicker
               value={site}
               previous={previousSite}
               onValueChange={(next) => setChoice({ kind: 'picked', site: next })}
-              onSurface
             />
             <Button size="lg" onClick={() => applyNow(patch.doseMg)}>
               {copy.apply(formatDose(patch.doseMg))}
@@ -112,7 +111,7 @@ export function DayPatchCard({
           // surface the ghost's own press fill would not show.
           className={cn(
             buttonVariants({ variant: 'ghost' }),
-            '-mb-3 -ml-4 self-start active:bg-surface-locked',
+            '-mb-3 -ml-4 self-start active:bg-ghost',
           )}
         >
           {copy.other}

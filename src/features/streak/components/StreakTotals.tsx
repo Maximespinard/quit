@@ -25,12 +25,12 @@ export function StreakTotals({ smokeFreeDays, personalBest }: StreakTotalsProps)
       {/* One statement card, not stat tiles: columns share a 1px rule and a figure row. */}
       <dl className="grid auto-cols-fr grid-flow-col divide-x divide-line rounded-card bg-surface py-4">
         <div className="flex flex-col justify-between gap-1 px-4">
-          <dt className="text-ink-dim text-label">{copy.smokeFreeDays}</dt>
+          <dt className="text-muted text-label">{copy.smokeFreeDays}</dt>
           <dd className="text-figure tabular-nums">{smokeFreeDays}</dd>
         </div>
         {best !== null ? (
           <div className="flex flex-col justify-between gap-1 px-4">
-            <dt className="text-ink-dim text-label">{copy.personalBest}</dt>
+            <dt className="text-muted text-label">{copy.personalBest}</dt>
             <dd className="text-figure tabular-nums">
               {copy.duration(best.days, twoDigits(best.hours))}
             </dd>

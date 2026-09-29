@@ -13,7 +13,7 @@ const copy = strings.debug
 export function ScenarioPicker({ sandbox }: { sandbox: SandboxControls }) {
   return (
     <fieldset className="flex flex-col gap-2">
-      <legend className="mb-2 text-ink-soft text-label">{copy.scenarios}</legend>
+      <legend className="mb-2 text-muted text-label">{copy.scenarios}</legend>
       {scenarios.map((scenario) => {
         const active = scenario.id === sandbox.scenario
         return (

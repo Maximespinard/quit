@@ -37,7 +37,7 @@ export function HomeSpecimen() {
           <button
             type="button"
             aria-label={strings.nav.settings}
-            className="grid size-11 place-items-center rounded-control text-on-ink active:bg-on-ink/15"
+            className="grid size-11 place-items-center rounded-full text-ink active:bg-ghost"
           >
             <Settings className="size-5" strokeWidth={1.75} aria-hidden="true" />
           </button>

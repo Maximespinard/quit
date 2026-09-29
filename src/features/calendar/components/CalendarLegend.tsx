@@ -15,7 +15,7 @@ const items = [
 /** What each mark of the month grid stands for. Hidden from screen readers: each day says it. */
 export function CalendarLegend() {
   return (
-    <ul aria-hidden="true" className="flex flex-wrap gap-x-4 gap-y-2 text-ink-soft text-label">
+    <ul aria-hidden="true" className="flex flex-wrap gap-x-4 gap-y-2 text-muted text-label">
       {items.map((item) => (
         <li key={item.id} className="flex items-center gap-1.5">
           <span className="grid size-3 place-items-center text-ink">{item.mark}</span>

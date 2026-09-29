@@ -7,19 +7,19 @@ import { cn } from '@/shared/utils/cn'
  * Focus rings come from the global `:focus-visible` outline, never from a ring utility.
  */
 const buttonVariants = cva(
-  'group/button inline-flex shrink-0 select-none items-center justify-center whitespace-nowrap rounded-control font-semibold text-body transition-[transform,background-color,color] duration-150 ease-out-expo active:not-aria-[haspopup]:scale-[0.98] disabled:pointer-events-none disabled:bg-surface-locked disabled:text-ink-dim motion-reduce:transition-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=size-])]:size-5',
+  'group/button inline-flex shrink-0 select-none items-center justify-center whitespace-nowrap rounded-full font-medium text-cta transition-[transform,background-color,color] duration-150 ease-out-expo active:not-aria-[haspopup]:scale-[0.98] disabled:pointer-events-none disabled:border-transparent disabled:bg-ghost disabled:text-muted motion-reduce:transition-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=size-])]:size-5',
   {
     variants: {
       variant: {
-        primary: 'bg-action text-page active:bg-ink',
-        secondary: 'bg-surface text-ink active:bg-surface-locked',
-        outline: 'border border-line bg-transparent text-ink active:bg-surface',
-        ghost: 'bg-transparent text-ink active:bg-surface',
-        destructive: 'bg-alert/10 text-alert active:bg-alert/20',
+        primary: 'bg-ink text-page active:bg-ink/85',
+        secondary: 'border border-ghost-line bg-transparent text-ink active:bg-ghost',
+        outline: 'border border-ghost-line bg-transparent text-ink active:bg-ghost',
+        ghost: 'bg-transparent text-ink active:bg-ghost',
+        destructive: 'bg-alert/15 text-alert active:bg-alert/25',
       },
       size: {
         default: 'h-11 gap-2 px-4',
-        sm: 'h-9 gap-1.5 px-3 text-label',
+        sm: 'h-9 gap-1.5 px-3.5 text-label',
         lg: 'h-12 gap-2 px-5',
         icon: 'size-11',
         'icon-sm': 'size-9',

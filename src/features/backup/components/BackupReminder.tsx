@@ -39,7 +39,7 @@ export function BackupReminder({ journal, quitMoment }: BackupReminderProps) {
           size="sm"
           variant="ghost"
           // On `surface`, the ghost's default press colour would not show.
-          className="active:bg-surface-locked"
+          className="active:bg-ghost"
           onClick={() => void backup.save(dismissReminder(record, now))}
         >
           {copy.later}

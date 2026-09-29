@@ -5,7 +5,6 @@ import {
   isApplicationSite,
 } from '@/shared/domain/application-site'
 import { ToggleGroup, ToggleGroupItem } from '@/shared/ui/base/toggle-group'
-import { cn } from '@/shared/utils/cn'
 import { strings } from '@/shared/utils/strings'
 
 const copy = strings.patch
@@ -16,8 +15,6 @@ type SitePickerProps = {
   onValueChange: (site: ApplicationSite | null) => void
   /** The previous patch application's site: shown, marked, never pressable. */
   previous: ApplicationSite | null
-  /** On a `surface` card, secondary text darkens to `ink-dim` to keep its contrast. */
-  onSurface?: boolean
 }
 
 /**
@@ -26,9 +23,7 @@ type SitePickerProps = {
  * row per body area. The previous site stays in its place, greyed and named as such: it is
  * `aria-disabled` rather than `disabled`, so it keeps its focus and its description.
  */
-export function SitePicker({ value, onValueChange, previous, onSurface = false }: SitePickerProps) {
-  const secondary = onSurface ? 'text-ink-dim' : 'text-ink-soft'
-
+export function SitePicker({ value, onValueChange, previous }: SitePickerProps) {
   const labelId = useId()
   const hintId = useId()
   const previousId = useId()
@@ -60,8 +55,8 @@ export function SitePicker({ value, onValueChange, previous, onSurface = false }
               value={site}
               aria-disabled
               aria-describedby={previousId}
-              // DESIGN.md disabled fill: `surface-locked` / `ink-dim`, no outline, no pointer.
-              className="pointer-events-none h-11 w-full flex-col gap-0 border-transparent bg-surface-locked text-ink-dim"
+              // Disabled fill: `ghost` / `muted`, no outline, no pointer.
+              className="pointer-events-none h-11 w-full flex-col gap-0 border-transparent bg-ghost text-muted"
             >
               {copy.sites[site]}
               <span id={previousId} aria-hidden className="font-medium text-detail">
@@ -69,13 +64,13 @@ export function SitePicker({ value, onValueChange, previous, onSurface = false }
               </span>
             </ToggleGroupItem>
           ) : (
-            <ToggleGroupItem key={site} value={site} className={cn('h-11 w-full', secondary)}>
+            <ToggleGroupItem key={site} value={site} className="h-11 w-full text-muted">
               {copy.sites[site]}
             </ToggleGroupItem>
           ),
         )}
       </ToggleGroup>
-      <p id={hintId} className={cn('text-label', secondary)}>
+      <p id={hintId} className="text-label text-muted">
         {copy.site.hint}
       </p>
     </div>

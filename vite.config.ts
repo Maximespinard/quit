@@ -21,8 +21,8 @@ export default defineConfig({
         short_name: 'Quit',
         description: "Suivi personnel d'un arrêt du tabac sous patchs.",
         lang: 'fr',
-        theme_color: '#1b3c53',
-        background_color: '#fafafa',
+        theme_color: '#101012',
+        background_color: '#101012',
         display: 'standalone',
         orientation: 'portrait',
         scope: '/',
@@ -56,6 +56,7 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/test/setup.ts'],
+    css: { include: [/index\.css/] },
     // Smoke-free days follow local calendar days: pin a zone with daylight saving so the
     // DST cases test what they claim on any machine.
     env: { TZ: 'Europe/Paris' },

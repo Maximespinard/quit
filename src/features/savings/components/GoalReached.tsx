@@ -25,7 +25,7 @@ export function GoalReached({ goal, celebrating, action }: GoalReachedProps) {
     <div className="flex flex-col gap-3 rounded-card bg-surface p-4">
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 flex-col gap-1">
-          <p className="truncate font-semibold text-body">{goal.label}</p>
+          <p className="truncate font-medium text-body">{goal.label}</p>
           <p className="text-figure tabular-nums">
             <span aria-hidden="true">{formatEuros(shown)}</span>
             <span className="sr-only">{price}</span>
@@ -39,7 +39,7 @@ export function GoalReached({ goal, celebrating, action }: GoalReachedProps) {
         max={goal.priceCents}
         valueText={copy.progress(price, price)}
       />
-      <p className="text-body text-ink-dim">{copy.reachedLead}</p>
+      <p className="text-body text-muted">{copy.reachedLead}</p>
     </div>
   )
 }

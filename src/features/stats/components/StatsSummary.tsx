@@ -40,7 +40,7 @@ export function StatsSummary({ stats }: { stats: CravingStats }) {
               index >= 2 && 'border-line border-t',
             )}
           >
-            <dt className="text-ink-dim text-label">{term}</dt>
+            <dt className="text-muted text-label">{term}</dt>
             <dd className="truncate text-figure tabular-nums">{value}</dd>
           </div>
         ))}

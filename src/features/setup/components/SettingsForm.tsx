@@ -1,6 +1,7 @@
 import { type FormEvent, type ReactNode, useId, useState } from 'react'
 import type { Journal } from '@/shared/domain/journal'
 import { Button } from '@/shared/ui/base/button'
+import { Input } from '@/shared/ui/base/input'
 import { formatDate, formatTime } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
 import {
@@ -90,7 +91,7 @@ export function SettingsForm({ journal, now, onSaved }: SettingsFormProps) {
           <label htmlFor={ids.quitMoment} className="text-label">
             {copy.quitMoment.label}
           </label>
-          <input
+          <Input
             id={ids.quitMoment}
             type="datetime-local"
             required
@@ -98,7 +99,6 @@ export function SettingsForm({ journal, now, onSaved }: SettingsFormProps) {
             onChange={(event) => edit('quitMoment')(event.target.value)}
             aria-invalid={errors.quitMoment !== null}
             aria-describedby={describedBy('quitMoment') ?? undefined}
-            className="h-12 rounded-control border border-line bg-white px-4 font-medium text-cta text-ink"
           />
         </div>
       </FieldGroup>

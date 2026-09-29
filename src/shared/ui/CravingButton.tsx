@@ -6,13 +6,13 @@ type CravingButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'childre
   label: string
 }
 
-/** The permanent thumb control. 64px tall, action colour, nothing else wears it as a fill. */
+/** The permanent thumb control, 64px tall. Its look is the Envie ticket's; until then a cream pill. */
 export function CravingButton({ label, className, type = 'button', ...rest }: CravingButtonProps) {
   return (
     <button
       type={type}
       className={cn(
-        'inline-flex h-16 min-w-16 items-center justify-center gap-2 rounded-full bg-action px-6 text-cta text-page transition-transform duration-150 ease-out-expo active:scale-[0.97] disabled:bg-surface-locked disabled:text-ink-dim motion-reduce:transition-none',
+        'inline-flex h-16 min-w-16 items-center justify-center gap-2 rounded-full bg-ink px-6 text-cta text-page transition-transform duration-150 ease-out-expo active:scale-[0.97] disabled:bg-ghost disabled:text-muted motion-reduce:transition-none',
         className,
       )}
       {...rest}

@@ -28,7 +28,7 @@ function StatsPage() {
           <AppShell>
             <div className="flex flex-col gap-2 pt-6">
               <h2 className="text-title">{copy.title}</h2>
-              <p className="text-body text-ink-soft">{copy.lead}</p>
+              <p className="text-body text-muted">{copy.lead}</p>
             </div>
             <CravingStatsView stats={cravingStats} />
             <Link

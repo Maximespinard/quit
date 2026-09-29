@@ -42,7 +42,7 @@ function SettingsPage() {
       </div>
 
       {state.status === 'loading' ? (
-        <p className="text-body text-ink-soft">{strings.journal.loading}</p>
+        <p className="text-body text-muted">{strings.journal.loading}</p>
       ) : state.status === 'error' ? (
         <p role="alert" className="text-alert text-body">
           {strings.journal.error}

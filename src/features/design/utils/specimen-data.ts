@@ -35,45 +35,50 @@ export const SPECIMEN_BADGES: readonly SpecimenBadge[] = [
 
 export const SPECIMEN_BADGE_TOTAL = 12
 
-export type ColorToken = { token: string; swatch: string; hex: string; role: string }
+export type ColorToken = { token: string; swatch: string; value: string; role: string }
 
 export const COLOR_TOKENS: readonly ColorToken[] = [
-  { token: 'page', swatch: 'bg-page', hex: '#fafafa', role: 'Fond de page' },
-  { token: 'ink', swatch: 'bg-ink', hex: '#1b3c53', role: 'Texte, bloc héros, état acquis' },
+  { token: 'page', swatch: 'bg-page', value: '#101012', role: 'Fond de page, texte sur crème' },
+  { token: 'surface', swatch: 'bg-surface', value: '#17171a', role: 'Cartes, tiroirs, dialogues' },
   {
-    token: 'ink-soft',
-    swatch: 'bg-ink-soft',
-    hex: '#5e6c78',
-    role: 'Texte secondaire sur la page',
+    token: 'ink',
+    swatch: 'bg-ink',
+    value: '#f7f4ef',
+    role: 'Texte ; crème des boutons pleins, sélections et barres',
+  },
+  { token: 'muted', swatch: 'bg-muted', value: '#a3a3a3', role: 'Texte secondaire, partout' },
+  { token: 'white', swatch: 'bg-white', value: '#ffffff', role: 'Le chiffre clé, et lui seul' },
+  {
+    token: 'line',
+    swatch: 'bg-line',
+    value: 'rgb(255 255 255 / 0.08)',
+    role: 'Filets, pistes, contours',
   },
   {
-    token: 'ink-dim',
-    swatch: 'bg-ink-dim',
-    hex: '#4a5a66',
-    role: 'Texte secondaire sur surface teintée',
-  },
-  { token: 'on-ink', swatch: 'bg-on-ink', hex: '#e3e3e3', role: 'Texte sur le bloc héros' },
-  {
-    token: 'action',
-    swatch: 'bg-action',
-    hex: '#234c6a',
-    role: 'Envie, remplissage XP, onglet actif, bouton principal',
+    token: 'ghost',
+    swatch: 'bg-ghost',
+    value: 'rgb(255 255 255 / 0.05)',
+    role: 'Puces, champs, appui',
   },
   {
-    token: 'reached',
-    swatch: 'bg-reached',
-    hex: '#456882',
-    role: 'Cran de multiplicateur courant',
+    token: 'ghost-line',
+    swatch: 'bg-ghost-line',
+    value: 'rgb(255 255 255 / 0.3)',
+    role: 'Filet du bouton fantôme',
   },
-  { token: 'surface', swatch: 'bg-surface', hex: '#e3e3e3', role: 'Cartes, plateaux' },
   {
-    token: 'surface-locked',
-    swatch: 'bg-surface-locked',
-    hex: '#d4d4d4',
-    role: 'Badge verrouillé',
+    token: 'alert',
+    swatch: 'bg-alert',
+    value: '#ff6b72',
+    role: 'Erreurs et suppressions — 6,5:1 sur carte',
   },
-  { token: 'line', swatch: 'bg-line', hex: '#d4d4d4', role: 'Filets, pistes, contours' },
-  { token: 'alert', swatch: 'bg-alert', hex: '#a6392f', role: 'Erreurs et suppressions' },
+  { token: 'amber', swatch: 'bg-amber', value: '#b8730f', role: 'Halo du héros' },
+  { token: 'ember', swatch: 'bg-ember', value: '#8d2a1a', role: 'Halo du héros' },
+  { token: 'plum', swatch: 'bg-plum', value: '#7a1b5f', role: 'Halo du héros' },
+  { token: 'pink', swatch: 'bg-pink', value: '#fd429c', role: 'Dégradé d’Envie, et lui seul' },
+  { token: 'yellow', swatch: 'bg-yellow', value: '#f5d907', role: 'Dégradé d’Envie, et lui seul' },
+  { token: 'moss', swatch: 'bg-moss', value: '#33402c', role: 'Halo du minuteur d’envie' },
+  { token: 'bronze', swatch: 'bg-bronze', value: '#b88a4f', role: 'Halo du minuteur d’envie' },
 ]
 
 export type TypeToken = {
@@ -95,18 +100,24 @@ export const TYPE_TOKENS: readonly TypeToken[] = [
   {
     token: 'figure',
     className: 'text-figure',
-    px: '22 px',
+    px: '30 px',
     sample: '07 h 42 · 620 XP',
     role: 'Temps, XP, argent : chiffres tabulaires',
   },
   {
     token: 'title',
     className: 'text-title',
-    px: '19 px',
-    sample: 'Poser le patch',
-    role: 'Titres de tiroir et de boîte de dialogue',
+    px: '20 px',
+    sample: 'Patch du jour',
+    role: 'Titres de carte, de tiroir et de dialogue',
   },
-  { token: 'cta', className: 'text-cta', px: '17 px', sample: 'Envie', role: 'Le bouton Envie' },
+  {
+    token: 'cta',
+    className: 'text-cta',
+    px: '16 px',
+    sample: 'Poser le patch · 14 mg',
+    role: 'Boutons en pilule, champs',
+  },
   {
     token: 'body',
     className: 'text-body',
@@ -124,14 +135,14 @@ export const TYPE_TOKENS: readonly TypeToken[] = [
   {
     token: 'detail',
     className: 'text-detail',
-    px: '11 px',
+    px: '12 px',
     sample: 'J+28',
     role: 'Détail de badge',
   },
   {
     token: 'tab',
     className: 'text-tab',
-    px: '10,5 px',
+    px: '11 px',
     sample: 'Historique',
     role: 'Libellés de la barre d’onglets',
   },

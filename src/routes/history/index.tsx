@@ -29,10 +29,10 @@ function HistoryPage() {
             <div className="flex flex-col gap-2 pt-6">
               <h2 className="text-title">{copy.title}</h2>
               {/* Only a list has lines to touch: the empty state says it all by itself. */}
-              {days.length > 0 ? <p className="text-body text-ink-soft">{copy.lead}</p> : null}
+              {days.length > 0 ? <p className="text-body text-muted">{copy.lead}</p> : null}
             </div>
             {notice !== null ? (
-              <p role="status" className="text-body text-ink-soft">
+              <p role="status" className="text-body text-muted">
                 {notice}
               </p>
             ) : null}

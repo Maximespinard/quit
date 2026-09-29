@@ -20,7 +20,7 @@ export function CravingTrendCharts({ trend }: { trend: CravingTrend }) {
   const { buckets, period, stepChanges } = trend
   const first = buckets[0]
   if (first === undefined || buckets.length < 2) {
-    return <p className="text-body text-ink-soft">{copy.single}</p>
+    return <p className="text-body text-muted">{copy.single}</p>
   }
   const last = buckets.length - 1
   const ticks: readonly ChartMark[] = [
@@ -33,7 +33,7 @@ export function CravingTrendCharts({ trend }: { trend: CravingTrend }) {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-1">
-        <h3 className="font-medium text-label text-ink-soft">{countTitle}</h3>
+        <h3 className="font-medium text-label text-muted">{countTitle}</h3>
         <ColumnChart
           label={countTitle}
           columns={buckets.map((bucket) => ({
@@ -50,7 +50,7 @@ export function CravingTrendCharts({ trend }: { trend: CravingTrend }) {
         />
       </div>
       <div className="flex flex-col gap-1">
-        <h3 className="font-medium text-label text-ink-soft">{copy.intensity}</h3>
+        <h3 className="font-medium text-label text-muted">{copy.intensity}</h3>
         <ColumnChart
           label={copy.intensity}
           columns={buckets.map((bucket) => ({

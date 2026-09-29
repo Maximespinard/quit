@@ -1,7 +1,7 @@
 import { Slider as SliderPrimitive } from '@base-ui/react/slider'
 import { cn } from '@/shared/utils/cn'
 
-/** shadcn `slider`, reskinned: the level bar's track and fill, with a 28px thumb for thumbs. */
+/** shadcn `slider`, reskinned: the progress bar's track and cream fill, with a 28px thumb for thumbs. */
 function Slider({
   className,
   defaultValue,
@@ -34,7 +34,7 @@ function Slider({
         >
           <SliderPrimitive.Indicator
             data-slot="slider-range"
-            className="select-none bg-action data-horizontal:h-full data-vertical:w-full"
+            className="select-none bg-ink data-horizontal:h-full data-vertical:w-full"
           />
         </SliderPrimitive.Track>
         {values.map((_, index) => (
@@ -42,7 +42,7 @@ function Slider({
             data-slot="slider-thumb"
             // biome-ignore lint/suspicious/noArrayIndexKey: thumbs are positional by design
             key={index}
-            className="relative block size-7 shrink-0 select-none rounded-full border-2 border-action bg-white transition-transform duration-150 ease-out-expo after:absolute after:-inset-2 active:scale-110 disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none"
+            className="relative block size-7 shrink-0 select-none rounded-full border-2 border-page bg-white transition-transform duration-150 ease-out-expo after:absolute after:-inset-2 active:scale-110 disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none"
           />
         ))}
       </SliderPrimitive.Control>

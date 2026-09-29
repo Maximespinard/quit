@@ -31,7 +31,7 @@ export function MonthCalendar({ days, now }: MonthCalendarProps) {
   return (
     <section aria-labelledby={titleId} className="flex flex-col gap-2.5">
       <div className="flex items-center justify-between">
-        <h3 id={titleId} className="font-semibold text-body" aria-live="polite">
+        <h3 id={titleId} className="font-medium text-body" aria-live="polite">
           {formatMonth(month.month)}
         </h3>
         <div className="-mr-3 flex">
@@ -62,7 +62,7 @@ export function MonthCalendar({ days, now }: MonthCalendarProps) {
         <thead>
           <tr>
             {copy.weekdays.map(([letter, name]) => (
-              <th key={name} scope="col" className="h-8 font-medium text-ink-soft text-label">
+              <th key={name} scope="col" className="h-8 font-medium text-muted text-label">
                 <span aria-hidden="true">{letter}</span>
                 <span className="sr-only">{name}</span>
               </th>

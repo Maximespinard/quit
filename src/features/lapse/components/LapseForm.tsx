@@ -3,6 +3,7 @@ import { type Lapse, type RecordLapseResult, recordLapse } from '@/shared/domain
 import type { Journal } from '@/shared/domain/journal'
 import { triggersRelapse } from '@/shared/domain/relapse'
 import { Button } from '@/shared/ui/base/button'
+import { Input } from '@/shared/ui/base/input'
 import { fromDatetimeLocal, toDatetimeLocal } from '@/shared/utils/datetime-local'
 import { strings } from '@/shared/utils/strings'
 import { CountStepper } from './CountStepper'
@@ -51,14 +52,14 @@ export function LapseForm({ journal, now, initial, onRecorded }: LapseFormProps)
     <section className="flex flex-col gap-6 pt-6">
       <div className="flex flex-col gap-2">
         <h2 className="text-title">{initial ? copy.edit.title : copy.title}</h2>
-        <p className="text-body text-ink-soft">{copy.lead}</p>
+        <p className="text-body text-muted">{copy.lead}</p>
       </div>
       <form noValidate onSubmit={submit} className="flex flex-col gap-5">
         <div className="flex flex-col gap-3">
           <label htmlFor={inputId} className="text-label">
             {copy.dateLabel}
           </label>
-          <input
+          <Input
             id={inputId}
             type="datetime-local"
             required
@@ -70,15 +71,14 @@ export function LapseForm({ journal, now, initial, onRecorded }: LapseFormProps)
             }}
             aria-invalid={error !== null}
             aria-describedby={error !== null ? errorId : undefined}
-            className="h-12 rounded-control border border-line bg-white px-4 font-medium text-cta text-ink"
           />
         </div>
         <CountStepper value={count} onChange={setCount} />
         <div aria-live="polite">
           {relapse ? (
             <div className="flex flex-col gap-1 rounded-card bg-surface p-4">
-              <p className="font-semibold text-body">{copy.relapseTitle}</p>
-              <p className="text-body text-ink-dim">{copy.relapseCost}</p>
+              <p className="font-medium text-body">{copy.relapseTitle}</p>
+              <p className="text-body text-muted">{copy.relapseCost}</p>
             </div>
           ) : null}
         </div>

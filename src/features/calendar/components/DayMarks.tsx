@@ -4,7 +4,7 @@ import { cn } from '@/shared/utils/cn'
 
 /**
  * The patch application a day asks for, as a dot: filled when logged, hollow when not,
- * ringed in the action colour while still to put on, a faint pip while planned.
+ * ringed in cream while still to put on, a faint pip while planned.
  */
 export function PatchMark({ patch }: { patch: DayPatch }) {
   return (
@@ -13,9 +13,9 @@ export function PatchMark({ patch }: { patch: DayPatch }) {
       className={cn(
         'inline-block shrink-0 rounded-full',
         patch === 'logged' && 'size-2 bg-ink',
-        patch === 'missing' && 'size-2 border border-ink-soft',
-        patch === 'due' && 'size-2 border-2 border-action',
-        patch === 'planned' && 'size-1.5 bg-ink-soft/75',
+        patch === 'missing' && 'size-2 border border-muted',
+        patch === 'due' && 'size-2 border-2 border-ink',
+        patch === 'planned' && 'size-1.5 bg-muted/75',
       )}
     />
   )

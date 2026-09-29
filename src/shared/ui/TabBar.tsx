@@ -14,7 +14,7 @@ type TabBarProps<Id extends string> = {
   onSelect: (id: Id) => void
 }
 
-/** Bottom navigation: icon over label, the active item in the action colour. */
+/** Bottom navigation: icon over label, the active item in cream, the others muted. */
 export function TabBar<Id extends string>({ label, items, activeId, onSelect }: TabBarProps<Id>) {
   return (
     <nav aria-label={label} className="bg-page pb-safe">
@@ -30,7 +30,7 @@ export function TabBar<Id extends string>({ label, items, activeId, onSelect }: 
                 onClick={() => onSelect(item.id)}
                 className={cn(
                   'flex min-h-12 w-full flex-col items-center justify-center gap-1 rounded-control text-tab',
-                  active ? 'text-action' : 'text-ink-soft active:text-ink',
+                  active ? 'text-ink' : 'text-muted active:text-ink',
                 )}
               >
                 <span className="size-6 [&_svg]:size-6">{item.icon}</span>
