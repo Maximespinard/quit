@@ -45,7 +45,7 @@ export const deviceKeys = sqliteTable(
   ],
 )
 
-/** A string constant as an SQL literal, for the checks below; only the contract's own values. */
+/** A constant as an SQL literal, for the checks below; only the contract's own values. */
 const literal = (value: string | number) =>
   sql.raw(typeof value === 'number' ? String(value) : `'${value}'`)
 const literals = (values: readonly (string | number)[]) => sql.join(values.map(literal), sql`, `)

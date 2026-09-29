@@ -74,7 +74,7 @@ fields at fault. A fact id is the UUIDv7 the device gave it.
 | Route | Body | Answers |
 | --- | --- | --- |
 | `GET /api/health` | — | `200` database reachable, `503` otherwise |
-| `PUT /api/facts/:id` | one fact; its `id`, when present, equals the path's | `204` stored or replaced (a replay changes nothing), `400`, `401` |
+| `PUT /api/facts/:id` | one fact; its `id`, when present, equals the path's | `204` stored or replaced, a replay leaving one fact, `400`, `401` |
 | `DELETE /api/facts/:id` | — | `204`, also when already absent; `400` on an id that is not a UUIDv7 |
 | `PUT /api/settings` | the whole settings | `204` replaced, protocol steps included, `400`, `401` |
 | `GET /api/mirror` | — | `200` `{ facts, settings }`: the facts ordered by time, `settings` `null` until first sent |

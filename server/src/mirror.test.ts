@@ -134,6 +134,20 @@ describe('facts', () => {
     ])
   })
 
+  it('reads an id in capitals as the same id: one fact, stored in lower case', async () => {
+    const api = await linkedApi()
+    const fact: Fact = { ...quitMoment, id: '019a3f2c-7b1e-7d4a-9c3b-5e6f7a8b9cde' }
+    const upper = (fact.id ?? '').toUpperCase()
+
+    await api.putFact(fact)
+    const response = await api.putRaw(`/api/facts/${upper}`, { ...fact, id: upper })
+    const deleted = await api.deleteFact(upper)
+
+    expect(response.status).toBe(204)
+    expect(deleted.status).toBe(204)
+    expect((await api.readMirror()).facts).toEqual([])
+  })
+
   it('stores a fact sent without an id under the path id', async () => {
     const api = await linkedApi()
     const { id: _, ...withoutId } = quitMoment
