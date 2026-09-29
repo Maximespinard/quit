@@ -1,3 +1,4 @@
+import type { ApplicationSite } from './application-site'
 import { lapsesUntil } from './facts/lapse'
 import { latestQuitMoment } from './facts/quit-moment'
 import type { Journal } from './journal'
@@ -5,6 +6,7 @@ import { type ProtocolDayPatch, protocolDayPatch } from './protocol-day-patch'
 import { type ProtocolPosition, protocolPosition } from './protocol-position'
 import { lapseRuns, lastSlip, openRun, type Relapse, relapsesOf, streakRestarts } from './relapse'
 import { cigarettesNotSmoked, type GoalProgress, goalProgress, moneySavedCents } from './savings'
+import { siteRotation } from './site-rotation'
 import { smokeFreeDays } from './smoke-free-days'
 import { type Elapsed, type Streak, streaks } from './streak'
 
@@ -29,6 +31,8 @@ export type DerivedState =
       readonly smokeFreeDays: null
       readonly protocol: null
       readonly patch: null
+      readonly suggestedSite: null
+      readonly previousSite: null
     }
   | {
       readonly quitMoment: number
@@ -54,6 +58,10 @@ export type DerivedState =
       readonly smokeFreeDays: number
       readonly protocol: ProtocolPosition
       readonly patch: ProtocolDayPatch
+      /** Where the next patch goes: never the previous patch application's site. */
+      readonly suggestedSite: ApplicationSite
+      /** The previous patch application's site, which the next one may not take; `null` if none. */
+      readonly previousSite: ApplicationSite | null
     }
 
 /**
@@ -77,6 +85,8 @@ export function derive(journal: Journal, now: number): DerivedState {
       smokeFreeDays: null,
       protocol: null,
       patch: null,
+      suggestedSite: null,
+      previousSite: null,
     }
   }
   const lapses = lapsesUntil(journal, quitMoment, now)
@@ -97,5 +107,6 @@ export function derive(journal: Journal, now: number): DerivedState {
     smokeFreeDays: smokeFreeDays(quitMoment, lapses, now),
     protocol,
     patch: protocolDayPatch(journal, quitMoment, protocol, now),
+    ...siteRotation(journal, now),
   }
 }

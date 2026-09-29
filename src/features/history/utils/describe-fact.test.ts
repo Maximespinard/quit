@@ -7,6 +7,13 @@ it('says a patch application with its dose', () => {
   })
 })
 
+it('says a patch application’s site after its dose', () => {
+  expect(describeFact({ type: 'patch-application', at: 0, doseMg: 14, site: 'hip-left' })).toEqual({
+    title: 'Patch posé',
+    detail: '14 mg · Hanche gauche',
+  })
+})
+
 it('says a craving with its intensity and its tags, default ones by their label', () => {
   expect(
     describeFact({

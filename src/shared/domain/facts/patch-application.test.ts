@@ -33,6 +33,21 @@ describe('recordPatchApplication', () => {
     })
   })
 
+  it('records the application site given with it', () => {
+    const result = recordPatchApplication(
+      quitJournal,
+      { at: NOW, doseMg: 21, site: 'hip-left' },
+      NOW,
+    )
+
+    expect(result.ok && result.journal.facts.at(-1)).toEqual({
+      type: 'patch-application',
+      at: NOW,
+      doseMg: 21,
+      site: 'hip-left',
+    })
+  })
+
   it('records a backdated patch application', () => {
     const at = NOW - 2 * DAY
 
@@ -83,6 +98,25 @@ describe('patch application decoding', () => {
     const stored = { facts: [{ type: 'patch-application', at: NOW, doseMg: 14 }] }
 
     expect(decodeJournal(stored).facts).toEqual(stored.facts)
+  })
+
+  it('reads a stored application site back', () => {
+    const stored = {
+      facts: [{ type: 'patch-application', at: NOW, doseMg: 14, site: 'chest-right' }],
+    }
+
+    expect(decodeJournal(stored).facts).toEqual(stored.facts)
+  })
+
+  it('drops a stored patch application whose site is not one of the list', () => {
+    const stored = {
+      facts: [
+        { type: 'patch-application', at: NOW, doseMg: 14, site: 'neck' },
+        { type: 'patch-application', at: NOW, doseMg: 14, site: null },
+      ],
+    }
+
+    expect(decodeJournal(stored)).toEqual(emptyJournal)
   })
 
   it('drops a stored patch application without a valid dose', () => {
