@@ -66,8 +66,12 @@ jobs:
           cache-from: type=gha,scope=image
           cache-to: type=gha,scope=image,mode=max
       - name: Run the image
+        # A throwaway VAPID pair: the server refuses to start without one, and CI sends no push.
         run: |
-          docker run -d --name quit -p 8080:8080 -v quit-data:/data quit:ci
+          read -r public private < <(node -e "const k = require('web-push').generateVAPIDKeys(); console.log(k.publicKey, k.privateKey)")
+          docker run -d --name quit -p 8080:8080 -v quit-data:/data \
+            -e VAPID_PUBLIC_KEY="$public" -e VAPID_PRIVATE_KEY="$private" \
+            -e VAPID_SUBJECT=mailto:ci@example.invalid quit:ci
           curl --retry 20 --retry-all-errors --retry-delay 1 -fsS http://127.0.0.1:8080/api/health
           test "$(docker exec quit id -u)" != 0
       # The shell and the offline launch, served by the server with its headers and CSP on.

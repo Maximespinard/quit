@@ -130,7 +130,8 @@ it publishes `ghcr.io/maximespinard/quit` tagged with the commit sha and `main`.
 
 ```bash
 docker build -t quit .
-docker run --rm --name quit -p 8080:8080 -v quit-data:/data quit   # the app on http://localhost:8080
+docker run --rm --name quit -p 8080:8080 -v quit-data:/data \
+  -e VAPID_PUBLIC_KEY=… -e VAPID_PRIVATE_KEY=… -e VAPID_SUBJECT=mailto:… quit   # the app on http://localhost:8080
 docker exec quit node src/issue-device-key.ts   # the device key, same DATA_DIR
 E2E_BASE_URL=http://127.0.0.1:8080 npm run test:e2e -- smoke.spec.ts offline.spec.ts
 ```
