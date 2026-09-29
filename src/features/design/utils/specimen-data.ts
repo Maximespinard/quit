@@ -122,6 +122,13 @@ export const TYPE_TOKENS: readonly TypeToken[] = [
     role: 'Temps, XP, argent : chiffres tabulaires',
   },
   {
+    token: 'headline',
+    className: 'text-headline',
+    px: '28 px',
+    sample: strings.quitMoment.title,
+    role: 'La question posée seule à l’écran, au premier lancement',
+  },
+  {
     token: 'title',
     className: 'text-title',
     px: '20 px',

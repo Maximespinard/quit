@@ -41,7 +41,8 @@ export function BackupSection({ journal, onImported }: BackupSectionProps) {
         </p>
       )}
       <div className="flex flex-col gap-2">
-        <Button size="lg" onClick={() => void exportFile(journal)}>
+        {/* A ghost pill, never cream: export must not outrank the screen's own primary action. */}
+        <Button variant="secondary" size="lg" onClick={() => void exportFile(journal)}>
           {inSandbox ? copy.exportSandbox : copy.export}
         </Button>
         <p role="status" className="text-muted text-label empty:hidden">
