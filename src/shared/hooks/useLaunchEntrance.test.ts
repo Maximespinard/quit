@@ -1,20 +1,13 @@
 import { renderHook } from '@testing-library/react'
 import { act } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { ENTRANCE_MS, useLaunchEntrance } from './useLaunchEntrance'
+import { withMotion } from '@/shared/test/motion'
+import { COUNT_UP_MS } from '@/shared/utils/count-up'
+import { useLaunchEntrance } from './useLaunchEntrance'
 
 /** The played entrances outlive a render by design: each test takes its own key. */
 let keyCount = 0
 const freshKey = () => `test-entrance-${++keyCount}`
-
-const withMotion = () => {
-  window.matchMedia = vi.fn().mockImplementation((query: string) => ({
-    matches: false,
-    media: query,
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-  }))
-}
 
 describe('useLaunchEntrance', () => {
   const reducedMotion = window.matchMedia
@@ -33,18 +26,18 @@ describe('useLaunchEntrance', () => {
     const { result } = renderHook(() => useLaunchEntrance(freshKey()))
     expect(result.current).toBe(0)
 
-    act(() => vi.advanceTimersByTime(ENTRANCE_MS / 2))
+    act(() => vi.advanceTimersByTime(COUNT_UP_MS / 2))
     expect(result.current).toBeGreaterThan(0)
     expect(result.current).toBeLessThan(1)
 
-    act(() => vi.advanceTimersByTime(ENTRANCE_MS))
+    act(() => vi.advanceTimersByTime(COUNT_UP_MS))
     expect(result.current).toBe(1)
   })
 
   it('does not play again on a later mount of the same key', () => {
     const key = freshKey()
     const first = renderHook(() => useLaunchEntrance(key))
-    act(() => vi.advanceTimersByTime(ENTRANCE_MS))
+    act(() => vi.advanceTimersByTime(COUNT_UP_MS))
     first.unmount()
 
     const second = renderHook(() => useLaunchEntrance(key))
@@ -59,8 +52,9 @@ describe('useLaunchEntrance', () => {
   })
 
   it('never restarts on a re-render once played', () => {
-    const { result, rerender } = renderHook(() => useLaunchEntrance(freshKey()))
-    act(() => vi.advanceTimersByTime(ENTRANCE_MS))
+    const key = freshKey()
+    const { result, rerender } = renderHook(() => useLaunchEntrance(key))
+    act(() => vi.advanceTimersByTime(COUNT_UP_MS))
 
     rerender()
     expect(result.current).toBe(1)
@@ -77,5 +71,14 @@ describe('useLaunchEntrance', () => {
     window.matchMedia = reducedMotion
     const { result } = renderHook(() => useLaunchEntrance(freshKey()))
     expect(result.current).toBe(1)
+  })
+
+  it('is spent under reduced motion too: turning motion back on does not replay it', () => {
+    const key = freshKey()
+    window.matchMedia = reducedMotion
+    renderHook(() => useLaunchEntrance(key)).unmount()
+
+    withMotion()
+    expect(renderHook(() => useLaunchEntrance(key)).result.current).toBe(1)
   })
 })

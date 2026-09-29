@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react'
+import { COUNT_UP_MAX_STEPS, COUNT_UP_MS } from '@/shared/utils/count-up'
+import { prefersReducedMotion } from '@/shared/utils/reduced-motion'
 
-export const ENTRANCE_MS = 240
-const TICKS = 12
+/** One tick per step of the largest count-up, so every figure lands on a tick. */
+const TICKS = COUNT_UP_MAX_STEPS
 
 /**
  * The entrances already played since the app was opened. Transient UI state, never
  * persisted: a cold start, a full reload or a PWA relaunch starts it empty again.
  */
 const played = new Set<string>()
-
-const prefersReducedMotion = () =>
-  typeof window === 'undefined' || window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 /**
  * An entrance that plays once per app launch: the progress (0 to 1) of the first mount of
@@ -22,14 +21,15 @@ export function useLaunchEntrance(key: string): number {
   const [tick, setTick] = useState(plays ? 0 : TICKS)
 
   useEffect(() => {
-    if (!plays) return
+    // Spent even when it does not play: turning reduced motion off later must not replay it.
     played.add(key)
+    if (!plays) return
     let current = 0
     const timer = setInterval(() => {
       current += 1
       setTick(current)
       if (current >= TICKS) clearInterval(timer)
-    }, ENTRANCE_MS / TICKS)
+    }, COUNT_UP_MS / TICKS)
     return () => clearInterval(timer)
   }, [plays, key])
 
