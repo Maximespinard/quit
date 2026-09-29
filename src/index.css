@@ -235,8 +235,12 @@
 }
 
 /* A page's bottom edge: clears the home indicator, and the sandbox marker while it floats there. */
+:root {
+  --page-clearance: calc(1rem + env(safe-area-inset-bottom) + var(--sandbox-clearance, 0px));
+}
+
 @utility pb-page {
-  padding-bottom: calc(1rem + env(safe-area-inset-bottom) + var(--sandbox-clearance, 0px));
+  padding-bottom: var(--page-clearance);
 }
 
 :root:has([data-sandbox-marker]) {

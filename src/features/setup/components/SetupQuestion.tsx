@@ -1,4 +1,5 @@
 import { type ReactNode, useId } from 'react'
+import { ThumbZone } from '@/shared/ui/ThumbZone'
 
 type SetupQuestionProps = {
   title: string
@@ -23,7 +24,7 @@ export function SetupQuestion({ title, lead, children, action }: SetupQuestionPr
         <p className="text-body text-ink">{lead}</p>
       </div>
       {children}
-      <div className="mt-auto flex flex-col gap-3">{action}</div>
+      <ThumbZone>{action}</ThumbZone>
     </section>
   )
 }
