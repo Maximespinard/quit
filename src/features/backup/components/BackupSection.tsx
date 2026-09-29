@@ -2,6 +2,7 @@ import type { Journal } from '@/shared/domain/journal'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
 import { Button } from '@/shared/ui/base/button'
 import { Card } from '@/shared/ui/Card'
+import { StatusLine } from '@/shared/ui/StatusLine'
 import { formatDate } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
 import { useJournalExport } from '../hooks/useJournalExport'
@@ -42,9 +43,7 @@ export function BackupSection({ journal, onImported }: BackupSectionProps) {
         <Button variant="secondary" size="lg" onClick={() => void exportFile(journal)}>
           {inSandbox ? copy.exportSandbox : copy.export}
         </Button>
-        <p role="status" className="text-muted text-label empty:hidden">
-          {status === 'exported' ? copy.exported : null}
-        </p>
+        <StatusLine message={status === 'exported' ? copy.exported : null} className="text-label" />
         {status === 'failed' ? (
           <p role="alert" className="text-alert text-label">
             {copy.exportFailed}
