@@ -5,7 +5,8 @@ import { lapsesUntil } from './facts/lapse'
 import { latestQuitMoment } from './facts/quit-moment'
 import type { Journal } from './journal'
 import { localMidnight } from './local-day'
-import { type ProtocolPosition, protocolPosition } from './protocol-position'
+import { asksForPatch, patchDays } from './patch-days'
+import { type ProtocolPosition, plannedEnd, protocolPosition } from './protocol-position'
 
 /** One step of the protocol laid over the calendar. */
 export type CalendarStep = {
@@ -24,7 +25,8 @@ export type CalendarStep = {
 
 /**
  * Whether a patch application was put on during a calendar day of the protocol: `due` while
- * the day, today, still has none; `planned` for a day still to come.
+ * the day, today, still has none; `planned` for a day still to come. `asksForPatch` says which
+ * days ask for one.
  */
 export type DayPatch = 'logged' | 'missing' | 'due' | 'planned'
 
@@ -80,7 +82,7 @@ function stepsOver(journal: Journal, quitMoment: number): CalendarStep[] {
   return steps
 }
 
-/** A protocol day of the calendar without a patch application: over, today, or to come. */
+/** A calendar day asking for a patch application without one: over, today, or to come. */
 function patchStillAsked(day: number, now: number): DayPatch {
   if (localMidnight(day, 1) <= now) return 'missing'
   return day <= now ? 'due' : 'planned'
@@ -90,8 +92,8 @@ function patchStillAsked(day: number, now: number): DayPatch {
  * The protocol laid over the calendar, from `(journal, now)` alone. Each step spans the
  * calendar days from the one its first protocol day begins on. Patch applications, lapses
  * and cravings sit on the local calendar day they happened on: a patch put on at 08:00 shows
- * on that day whatever the quit moment's time — the calendar answers "did I put one on that
- * day", where the home's patch of the day follows the protocol day. Days are walked on the
+ * on that day whatever the quit moment's time — the home's patch of the day reads the same
+ * rule (`todayPatch`). Days are walked on the
  * calendar, never in 24 h blocks, so a daylight-saving change keeps each day whole. Facts
  * before the quit moment or after `now` are left out. `null` without a quit moment.
  */
@@ -100,7 +102,7 @@ export function patchCalendar(journal: Journal, now: number): PatchCalendar | nu
   if (quitMoment === null) return null
 
   const steps = stepsOver(journal, quitMoment)
-  const plannedEnd = steps.at(-1)?.endsAt ?? quitMoment
+  const end = plannedEnd(journal.protocol, quitMoment)
 
   const facts = new Map<number, DayFacts>()
   const factsOn = (at: number) => {
@@ -118,8 +120,8 @@ export function patchCalendar(journal: Journal, now: number): PatchCalendar | nu
     factsOn(lapse.at).cigarettes += lapse.count
 
   const today = localMidnight(now)
-  const quitDay = localMidnight(quitMoment)
-  const endDay = localMidnight(plannedEnd)
+  const bounds = patchDays(journal.protocol, quitMoment)
+  const { quitDay, endDay } = bounds
   const days: CalendarDay[] = []
   for (let day = quitDay; day <= Math.max(endDay, today); day = localMidnight(day, 1)) {
     const { patches = 0, cigarettes = 0, cravings = 0 } = facts.get(day) ?? {}
@@ -129,9 +131,7 @@ export function patchCalendar(journal: Journal, now: number): PatchCalendar | nu
       day,
       step: step?.number ?? null,
       startingStep: step?.firstDay === day ? step.step : null,
-      // The quit day asks for none: a patch put on before the quit moment cannot be recorded.
-      patch:
-        patches > 0 ? 'logged' : inProtocol && day !== quitDay ? patchStillAsked(day, now) : null,
+      patch: patches > 0 ? 'logged' : asksForPatch(day, bounds) ? patchStillAsked(day, now) : null,
       cigarettes,
       cravings,
       isToday: day === today,
@@ -145,7 +145,7 @@ export function patchCalendar(journal: Journal, now: number): PatchCalendar | nu
     steps,
     nextStepChange:
       position.status === 'running' && position.nextStep !== null ? position.endsAt : null,
-    plannedEnd,
+    plannedEnd: end,
     days,
   }
 }

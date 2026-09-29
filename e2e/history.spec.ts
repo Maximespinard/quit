@@ -87,11 +87,9 @@ test('deleting a lapse of a relapse restarts the streak from the quit moment and
   await expect(totals(page).getByText('Plus long streak')).toHaveCount(0)
 })
 
-test('moving a patch application across midnight moves the patch of the day with it', async ({
-  page,
-}) => {
+test('moving a patch application back across midnight makes today ask again', async ({ page }) => {
   await daysIn(page, 0)
-  // 00:00 on 2 January: the protocol day begun at 13:00 still runs.
+  // 00:00 on 2 January: a new calendar day, a new patch.
   await shiftClock(page, '+1 h', 11)
   await tap(page, /^Poser le patch · 21\smg$/)
   await expect(patchCard(page)).toContainText(/aujourd’hui · 21\smg/)
@@ -107,9 +105,9 @@ test('moving a patch application across midnight moves the patch of the day with
   await expect(page.getByRole('heading', { name: 'Hier' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Aujourd’hui' })).toHaveCount(0)
 
+  // Put on yesterday, the patch no longer counts for today.
   await home(page)
-  await expect(patchCard(page)).toContainText('Posé à 23:30')
-  await expect(patchCard(page)).toContainText(/hier · 21\smg/)
+  await expect(patchCard(page)).toContainText('Pas encore posé')
 })
 
 test('an edit is refused before the quit moment or in the future, as at creation', async ({

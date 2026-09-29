@@ -11,9 +11,9 @@ const tap = (page: Page, name: string | RegExp) =>
   page.getByRole('button', { name, exact: typeof name === 'string' }).click()
 const patchCard = (page: Page) => page.getByRole('region', { name: 'Patch du jour' })
 
-const shiftClock = async (page: Page, shift: string) => {
+const shiftClock = async (page: Page, shift: string, times = 1) => {
   await tap(page, 'Bac à sable')
-  await tap(page, shift)
+  for (let i = 0; i < times; i += 1) await tap(page, shift)
   await tap(page, 'Fermer')
 }
 
@@ -24,7 +24,7 @@ const homeWithStreak = async (page: Page) => {
   await expectStreak(page, 0, '00 h 00')
 }
 
-test('one tap logs the patch; it holds past midnight, the next protocol day asks again', async ({
+test('one tap logs the patch; it holds until midnight, the new day asks again', async ({
   page,
 }) => {
   await homeWithStreak(page)
@@ -36,16 +36,38 @@ test('one tap logs the patch; it holds past midnight, the next protocol day asks
   await expect(patchCard(page)).toContainText(/aujourd’hui · 21\smg/)
   await expect(page.getByRole('button', { name: /^Poser le patch/ })).toHaveCount(0)
 
-  // Past midnight the protocol day, begun at 13:00, still runs: nothing more is asked.
-  await tap(page, 'Bac à sable')
-  for (let hour = 0; hour < 11; hour++) await tap(page, '+1 h')
-  await tap(page, 'Fermer')
-  await expect(patchCard(page)).toContainText(/hier · 21\smg/)
+  // 23:00, still the same calendar day: nothing more is asked.
+  await shiftClock(page, '+1 h', 10)
+  await expect(patchCard(page)).toContainText(/aujourd’hui · 21\smg/)
 
-  // 13:00 the next day: a new protocol day, a new patch.
-  await shiftClock(page, '+1 j')
+  // Midnight: a new day, a new patch.
+  await shiftClock(page, '+1 h')
   await expect(patchCard(page)).toContainText('Pas encore posé')
   await expect(page.getByRole('button', { name: /^Poser le patch · 21\smg$/ })).toBeVisible()
+})
+
+test('after an evening quit, the morning patch is today’s all evening, as on the calendar', async ({
+  page,
+}) => {
+  // 20:00 in Paris.
+  await page.goto(sandboxAt(Date.UTC(2026, 0, 1, 19, 0, 0)))
+  await startNow(page)
+
+  // 08:00 the next morning.
+  await shiftClock(page, '+1 h', 12)
+  await tap(page, /^Poser le patch · 21\smg$/)
+  await expect(patchCard(page)).toContainText('Posé à 08:00')
+
+  // 21:00: the protocol day began at 20:00, but the calendar day still holds the patch.
+  await shiftClock(page, '+1 h', 13)
+  await expect(patchCard(page)).toContainText('Posé à 08:00')
+  await expect(patchCard(page)).toContainText(/aujourd’hui · 21\smg/)
+  await expect(page.getByRole('button', { name: /^Poser le patch/ })).toHaveCount(0)
+
+  await page.getByRole('link', { name: 'Calendrier' }).click()
+  await expect(
+    page.getByRole('cell', { name: 'vendredi 2 janvier, aujourd’hui, patch posé', exact: true }),
+  ).toBeVisible()
 })
 
 const siteGroup = (page: Page) => patchCard(page).getByRole('group', { name: 'Où le poser' })
