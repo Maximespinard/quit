@@ -6,14 +6,13 @@ import {
   recordPatchApplication,
 } from '@/shared/domain/facts/patch-application'
 import type { Journal } from '@/shared/domain/journal'
-import type { ProtocolDayPatch } from '@/shared/domain/protocol-day-patch'
+import type { TodayPatch } from '@/shared/domain/today-patch'
 import { Button, buttonVariants } from '@/shared/ui/base/button'
 import { Card } from '@/shared/ui/Card'
 import { keepSearch } from '@/shared/utils/app-search'
 import { cn } from '@/shared/utils/cn'
 import { newFactId } from '@/shared/utils/fact-id'
 import { formatDose, formatTime } from '@/shared/utils/format'
-import { isSameLocalDay } from '@/shared/utils/local-day'
 import { strings } from '@/shared/utils/strings'
 import { applicationAt, chosenSite, type SiteChoice, untouched } from '../utils/site-choice'
 import { SitePicker } from './SitePicker'
@@ -24,20 +23,23 @@ type Refusal = Extract<RecordPatchApplicationResult, { ok: false }>['reason']
 
 type DayPatchCardProps = {
   journal: Journal
-  /** Only the states that ask for a patch: the app layer shows nothing once the protocol is over. */
-  patch: Exclude<ProtocolDayPatch, { status: 'over' }>
+  /** The app layer shows nothing once the protocol is over. */
+  patch: Exclude<TodayPatch, { status: 'over' }>
   /** Pressed until the user picks another site or none: the one tap logs it. */
   suggestedSite: ApplicationSite
   /** The latest patch application's site: greyed, never pressable. */
   previousSite: ApplicationSite | null
   /** Injected clock: a one-tap log records at this instant. */
   now: number
-  /** Set on arrival from the form: the header confirms it, even for another protocol day. */
+  /** Set on arrival from the form: the header confirms it, even for another day. */
   recorded: boolean
   onRecorded: (journal: Journal) => void
 }
 
-/** Home screen block: whether the protocol day's patch is on, and the one tap that logs it. */
+/**
+ * Home screen block: whether today's patch is on, and the one tap that logs it. The quit day
+ * offers it the same way a due day asks for it.
+ */
 export function DayPatchCard({
   journal,
   patch,
@@ -82,7 +84,6 @@ export function DayPatchCard({
           <span className="text-figure tabular-nums">{copy.logged(formatTime(patch.at))}</span>
           <span className="text-body text-muted">
             {copy.loggedDetail(
-              isSameLocalDay(patch.at, now),
               formatDose(patch.doseMg),
               patch.site === undefined ? null : copy.sites[patch.site],
             )}

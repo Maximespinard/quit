@@ -15,7 +15,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       // Registered from main.tsx through `virtual:pwa-register`, which also reloads on update.
       injectRegister: false,
-      includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
+      includeAssets: ['favicon.png', 'apple-touch-icon.png'],
       manifest: {
         name: 'Quit',
         short_name: 'Quit',

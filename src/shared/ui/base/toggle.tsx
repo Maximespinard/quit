@@ -13,7 +13,7 @@ const toggleVariants = cva(
           'border border-ghost-line bg-transparent aria-pressed:border-ink data-pressed:border-ink',
       },
       size: {
-        default: 'h-10.5 min-w-10.5 px-4',
+        default: 'h-11 min-w-11 px-4',
         sm: 'h-9 min-w-9 px-2.5 text-label',
         lg: 'h-12 min-w-12 px-4',
       },

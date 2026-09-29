@@ -49,7 +49,8 @@ export function HomeSpecimen() {
         />
       </div>
 
-      <div className="flex flex-col gap-5 px-safe pt-16">
+      {/* Positioned, so it paints over the haze that runs past the hero's own box. */}
+      <div className="relative flex flex-col gap-5 px-safe pt-16">
         <SpecimenSection
           title={strings.multiplier.title(multiplier)}
           aside={

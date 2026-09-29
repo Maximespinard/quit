@@ -4,6 +4,7 @@ import type { Journal } from '@/shared/domain/journal'
 import { triggersRelapse } from '@/shared/domain/relapse'
 import { Button } from '@/shared/ui/base/button'
 import { Input } from '@/shared/ui/base/input'
+import { Card } from '@/shared/ui/Card'
 import { fromDatetimeLocal, toDatetimeLocal } from '@/shared/utils/datetime-local'
 import { newFactId } from '@/shared/utils/fact-id'
 import { strings } from '@/shared/utils/strings'
@@ -78,10 +79,10 @@ export function LapseForm({ journal, now, initial, onRecorded }: LapseFormProps)
         <div aria-live="polite">
           {relapse ? (
             // Said, not sounded: a card like any other, never the alert colour.
-            <div className="flex flex-col gap-1.5 rounded-card bg-surface p-5">
+            <Card className="gap-1.5">
               <p className="font-medium text-body">{copy.relapseTitle}</p>
               <p className="text-body text-muted">{copy.relapseCost}</p>
-            </div>
+            </Card>
           ) : null}
         </div>
         {error !== null ? (

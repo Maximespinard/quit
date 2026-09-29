@@ -1,11 +1,11 @@
 import { useId } from 'react'
 import { Button } from '@/shared/ui/base/button'
+import { TopBar } from '@/shared/ui/TopBar'
 import { MINUTE_MS } from '@/shared/utils/duration'
 import { strings } from '@/shared/utils/strings'
 import { CRAVING_TIMER_MS } from '../domain/craving-timer'
 import { formatCountdown } from '../utils/format-countdown'
 import { CravingHaze } from './CravingHaze'
-import { CravingTopBar } from './CravingTopBar'
 import { MinuteSteps } from './MinuteSteps'
 
 type CravingTimerRunningProps = {
@@ -29,23 +29,13 @@ export function CravingTimerRunning({ remainingMs, onStop }: CravingTimerRunning
       className="@container relative isolate flex min-h-dvh flex-col overflow-hidden bg-page px-safe pt-safe text-ink"
     >
       <CravingHaze />
-      <CravingTopBar
-        context={
-          <span id={regionId} className="text-label">
-            {copy.region}
-          </span>
-        }
-      />
+      <TopBar>
+        <span id={regionId}>{copy.region}</span>
+      </TopBar>
       <div className="flex flex-1 flex-col justify-center gap-6 py-8">
-        <p className="max-w-[15ch] text-balance text-[1.5rem] leading-[1.2] tracking-[-0.025em]">
-          {copy.lead}
-        </p>
+        <p className="max-w-[15ch] text-balance text-prompt">{copy.lead}</p>
         <div className="flex flex-col gap-3">
-          <p
-            role="timer"
-            aria-labelledby={labelId}
-            className="font-medium text-[33cqi] text-white leading-[0.86] tracking-[-0.05em]"
-          >
+          <p role="timer" aria-labelledby={labelId} className="text-countdown text-white">
             {formatCountdown(remainingMs)}
           </p>
           <span id={labelId} className="text-label">

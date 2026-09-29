@@ -72,7 +72,7 @@ Undecided: final product name (`quit` is provisional), domain, XP numbers (tuned
 
 - Domain glossary: `CONTEXT.md`. Decisions: `docs/adr/`.
 - Real data will be the user's own journal. Screenshots for publication come from demo mode's fictional journey, never from real data.
-- Placeholder PWA icons in `public/` (scaffold, not a brand asset).
+- App icons in `public/` are rendered from code by `scripts/render-icons.mjs` (the home haze and a Host Grotesk "q").
 - Not available yet, do not fabricate: health milestone facts (each must be sourced), encouragement texts, XP values, default step durations from official notices.
 
 ## Product Principles

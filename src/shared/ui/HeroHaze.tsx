@@ -1,13 +1,25 @@
+import { cn } from '@/shared/utils/cn'
+
+/** `hero`: the full haze, top 640px (home, first launch). `band`: its low band behind a screen's top bar and title. */
+const LOOK = {
+  hero: 'h-160 bg-haze',
+  band: 'h-48 bg-haze-band opacity-70',
+} as const
+
+export type HazeLook = keyof typeof LOOK
+
+type HeroHazeProps = { look?: HazeLook }
+
 /**
- * The warm grainy haze behind the home hero, drawn in CSS: no image, so it paints offline
- * and on the first frame. It fills the top 640px and fades into the page. Decorative, so
- * hidden from assistive tech; its parent must be `relative isolate` to hold it behind content.
+ * The warm grainy haze, drawn in CSS: no image, so it paints offline and on the first frame. It
+ * fades into the page. Decorative, so hidden from assistive tech; its parent must be
+ * `relative isolate` to hold it behind content.
  */
-export function HeroHaze() {
+export function HeroHaze({ look = 'hero' }: HeroHazeProps) {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-160 bg-haze"
+      className={cn('pointer-events-none absolute inset-x-0 top-0 -z-10 mask-haze', LOOK[look])}
     >
       <div className="absolute inset-0 bg-grain opacity-35 mix-blend-overlay" />
     </div>

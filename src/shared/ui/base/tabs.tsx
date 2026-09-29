@@ -52,7 +52,7 @@ function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
         'relative inline-flex h-full flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-full px-3 font-medium text-body text-muted transition-colors duration-150 ease-out-expo group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=size-])]:size-5',
         'data-active:bg-ink data-active:text-page',
         'group-data-[variant=line]/tabs-list:h-11 group-data-[variant=line]/tabs-list:flex-none group-data-[variant=line]/tabs-list:rounded-none group-data-[variant=line]/tabs-list:px-0 group-data-[variant=line]/tabs-list:data-active:bg-transparent group-data-[variant=line]/tabs-list:data-active:text-ink',
-        'after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 after:bg-ink after:opacity-0 after:transition-opacity group-data-[variant=line]/tabs-list:data-active:after:opacity-100',
+        'after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 after:bg-ink after:opacity-0 after:transition-opacity motion-reduce:after:transition-none group-data-[variant=line]/tabs-list:data-active:after:opacity-100',
         className,
       )}
       {...props}
