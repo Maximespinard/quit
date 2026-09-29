@@ -10,6 +10,13 @@ of it and sends the push notifications. No accounts: one device, linked by its k
 - **Patch taper**: a protocol of steps, today's patch and a calendar of the ones applied.
 - **Streak and money saved**, stats on cravings, a history of every fact, export and import.
 
+<p align="center">
+  <img src="docs/screenshots/home.webp" width="190" alt="Home: the streak in days over the amber and plum haze, the Envie button at the bottom right">
+  <img src="docs/screenshots/craving-timer.webp" width="190" alt="Craving timer: a countdown at 2:37 in a moss and bronze haze, with a stop button">
+  <img src="docs/screenshots/calendar.webp" width="190" alt="Calendar: day 4 of 28 of the 7 mg step, and June with a patch applied every day">
+  <img src="docs/screenshots/stats.webp" width="190" alt="Stats: 92 cravings logged, 75 % held to the end, most at 18 h, over coffee">
+</p>
+
 ## Architecture
 
 ```mermaid
@@ -65,6 +72,7 @@ The same hook also rejects a commit whose staged changes match a regex in
 | `npm run test:e2e` | Playwright suite (WebKit, iPhone) against the production preview build, or against `E2E_BASE_URL` when set |
 | `npm run build` | Production build (typecheck included) |
 | `npm run lint:fix` | Biome autofix + ESLint fix |
+| `npm run screenshots` | Builds, then renders the screenshots above into `docs/screenshots/`: demo scenarios, clock stopped, WebKit at iPhone 16 Pro size, phone frame drawn in code |
 
 ## Server
 
