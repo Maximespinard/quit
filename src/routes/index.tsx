@@ -136,6 +136,9 @@ function HomePage() {
               <Link to="/lapse" search={appSearch} className={buttonVariants({ variant: 'ghost' })}>
                 {strings.lapse.declare}
               </Link>
+              <Link to="/stats" search={appSearch} className={buttonVariants({ variant: 'ghost' })}>
+                {strings.stats.open}
+              </Link>
               <Link
                 to="/history"
                 search={appSearch}

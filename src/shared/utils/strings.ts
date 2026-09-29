@@ -291,6 +291,56 @@ export const strings = {
     },
   },
 
+  stats: {
+    open: 'Statistiques des envies',
+    title: 'Tes envies',
+    lead: 'Quand elles arrivent, dans quelles situations, et comment elles s’espacent.',
+    back: 'Retour',
+    /** Before enough cravings: what the screen will show, never an empty chart. */
+    empty: (needed: number) =>
+      `Rien à compter pour l’instant. Dès ${needed}\u00a0envies notées, tu verras ici à quelle heure elles arrivent, dans quelles situations, et comment elles s’espacent.`,
+    sparse: (count: number, needed: number) =>
+      `${count}\u00a0${count <= 1 ? 'envie notée' : 'envies notées'} sur les ${needed} qu’il faut pour tracer tes statistiques. Chaque envie notée, même passée, compte.`,
+    summary: 'En bref',
+    count: 'Envies notées',
+    held: 'Tenues jusqu’au bout',
+    riskiestHour: 'Heure la plus risquée',
+    topTag: 'Situation la plus fréquente',
+    noTag: 'Aucune',
+    percent: (percent: number) => `${percent}\u00a0%`,
+    cravings: (count: number) => (count <= 1 ? `${count} envie` : `${count} envies`),
+    /** A local wall-clock hour: `18 h`. */
+    hour: (hour: number) => `${hour}\u00a0h`,
+    /** One hour of the day, as the chart's readout names it: `18 h – 19 h`. */
+    hourSpan: (hour: number) => `${hour}\u00a0h – ${(hour + 1) % 24}\u00a0h`,
+    byHour: 'Heure de la journée',
+    byTag: 'Situations',
+    untagged: 'Sans situation',
+    byIntensity: {
+      title: 'Intensité',
+      /** 1 to 3, as the craving form names them. */
+      levels: { 1: '1 · légère', 2: '2 · forte', 3: '3 · très forte' },
+    },
+    trend: {
+      title: 'Au fil du temps',
+      countByDay: 'Envies par jour',
+      countByWeek: 'Envies par semaine',
+      intensity: 'Intensité moyenne',
+      noIntensity: 'aucune envie',
+      /** An average intensity out of 3: `2,5 sur 3`. */
+      average: (average: number) =>
+        `${average.toLocaleString('fr-FR', { maximumFractionDigits: 1 })} sur 3`,
+      /** A week of the trend, its first and last days: the oldest may be shorter. */
+      week: (first: string, last: string) => `${first} – ${last}`,
+      today: 'aujourd’hui',
+      /** A step change on the trend: the dose the new step starts. */
+      stepChange: (doseMg: string) => `${doseMg}\u00a0mg`,
+      stepChangeLabel: (stepNumber: number, doseMg: string) =>
+        `Étape ${stepNumber} à ${doseMg}\u00a0mg`,
+      single: 'La tendance apparaîtra dès demain, jour après jour.',
+    },
+  },
+
   protocol: {
     title: 'Protocole',
     stepOf: (number: number, count: number) => `Étape ${number} / ${count}`,
