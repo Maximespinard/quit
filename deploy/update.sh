@@ -96,8 +96,12 @@ if start && [[ $mode != simulate ]] && healthy; then
   exit 0
 fi
 
-echo "health check failed: $source rejected" >&2
-[[ $mode == timer ]] && printf '%s\n' "$candidate" >"$STATE/rejected"
+case $mode in
+  simulate) echo "simulated failure: rolling back" >&2 ;;
+  timer) echo "health check failed: $source rejected" >&2
+    printf '%s\n' "$candidate" >"$STATE/rejected" ;;
+  manual) echo "health check failed: $source not kept" >&2 ;;
+esac
 if [[ -z $live ]]; then
   echo "no live image to roll back to" >&2
   exit 1
