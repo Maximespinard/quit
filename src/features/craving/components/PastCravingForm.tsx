@@ -1,9 +1,10 @@
 import type { CravingIntensity } from '@quit/contract/facts'
 import { useId, useState } from 'react'
 import { type CravingInput, recordCraving } from '@/shared/domain/facts/craving'
-import { type Journal, keptId } from '@/shared/domain/journal'
+import type { Journal } from '@/shared/domain/journal'
 import { Input } from '@/shared/ui/base/input'
 import { fromDatetimeLocal, toDatetimeLocal } from '@/shared/utils/datetime-local'
+import { newFactId } from '@/shared/utils/fact-id'
 import { strings } from '@/shared/utils/strings'
 import { tagOptions } from '../utils/tag-options'
 import { CravingForm } from './CravingForm'
@@ -37,7 +38,13 @@ export function PastCravingForm({ journal, now, initial, onRecorded }: PastCravi
     }
     const result = recordCraving(
       journal,
-      { ...keptId(initial), at, intensity, heldToEnd: initial?.heldToEnd ?? false, tags },
+      {
+        id: initial?.id ?? newFactId(),
+        at,
+        intensity,
+        heldToEnd: initial?.heldToEnd ?? false,
+        tags,
+      },
       now,
     )
     if (result.ok) onRecorded(result.journal)

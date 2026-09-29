@@ -5,6 +5,8 @@ import {
   type PatchApplicationFact,
 } from '@quit/contract/facts'
 import type { Protocol } from '@quit/contract/settings'
+import { factIdSequence } from '@/shared/test/fact-ids'
+import { factId } from '@/shared/utils/fact-id'
 import { derive } from './derive'
 import { recordLapse } from './facts/lapse'
 import { recordPatchApplication } from './facts/patch-application'
@@ -20,7 +22,7 @@ const DAY = 24 * HOUR
 const NOW = Date.UTC(2026, 8, 22, 10, 0, 0)
 
 const journalWithQuitMoment = (at: number, protocol: Protocol = defaultProtocol): Journal => ({
-  facts: [{ type: 'quit-moment', at }],
+  facts: [{ type: 'quit-moment', id: factId(1), at }],
   protocol,
   weeklySpendCents: null,
   baselineSmokesPerDay: null,
@@ -74,8 +76,8 @@ describe('derive', () => {
       baselineSmokesPerDay: null,
       goal: null,
       facts: [
-        { type: 'quit-moment', at: first },
-        { type: 'quit-moment', at: corrected },
+        { type: 'quit-moment', id: factId(1), at: first },
+        { type: 'quit-moment', id: factId(2), at: corrected },
       ],
     }
 
@@ -217,8 +219,11 @@ describe('derive — today’s patch application', () => {
     new Date(2026, month - 1, day, hour, minute).getTime()
   // An evening quit: Sunday 20 September, 20:00.
   const QUIT = local(9, 20, 20)
+  // Quit moments take ids 1 and 2; patch applications count up from 10.
+  const nextId = factIdSequence(10)
   const applied = (at: number, doseMg = 21): PatchApplicationFact => ({
     type: 'patch-application',
+    id: nextId(),
     at,
     doseMg,
   })
@@ -229,7 +234,7 @@ describe('derive — today’s patch application', () => {
   ): Journal => ({
     ...emptyJournal,
     protocol,
-    facts: [{ type: 'quit-moment', at: quitMoment }, ...facts],
+    facts: [{ type: 'quit-moment', id: factId(1), at: quitMoment }, ...facts],
   })
   const patchAt = (now: number, ...applications: PatchApplicationFact[]) =>
     derive(journalOf(applications), now).patch
@@ -277,7 +282,7 @@ describe('derive — today’s patch application', () => {
     const now = local(9, 22, 10)
     const backdated = recordPatchApplication(
       journalOf([]),
-      { at: local(9, 22, 7), doseMg: 21 },
+      { id: factId(10), at: local(9, 22, 7), doseMg: 21 },
       now,
     )
     if (!backdated.ok) throw new Error('the backdated application should be accepted')
@@ -331,9 +336,9 @@ describe('derive — today’s patch application', () => {
     const journal: Journal = {
       ...emptyJournal,
       facts: [
-        { type: 'quit-moment', at: QUIT },
+        { type: 'quit-moment', id: factId(1), at: QUIT },
         applied(local(9, 22, 8)),
-        { type: 'quit-moment', at: local(9, 22, 12) },
+        { type: 'quit-moment', id: factId(2), at: local(9, 22, 12) },
       ],
     }
 
@@ -435,12 +440,13 @@ describe('derive — today’s patch agrees with the calendar', () => {
 
   it('an evening quit with a morning patch most days, hour by hour to past its end', () => {
     const quitMoment = new Date(2026, 8, 20, 20).getTime()
-    const facts: Fact[] = [{ type: 'quit-moment', at: quitMoment }]
+    const facts: Fact[] = [{ type: 'quit-moment', id: factId(1), at: quitMoment }]
     // A patch at 08:00 every day but every third, and one on the end day.
     for (let day = 1; day <= 10; day += 1)
       if (day % 3 !== 0)
         facts.push({
           type: 'patch-application',
+          id: factId(day + 1),
           at: new Date(2026, 8, 20 + day, 8).getTime(),
           doseMg: 7,
         })
@@ -453,13 +459,18 @@ describe('derive — today’s patch agrees with the calendar', () => {
 
 describe('derive — the suggested application site', () => {
   const QUIT = NOW - 10 * DAY
-  const applied = (at: number, site?: ApplicationSite): PatchApplicationFact =>
+  const applied = (id: number, at: number, site?: ApplicationSite): PatchApplicationFact =>
     site === undefined
-      ? { type: 'patch-application', at, doseMg: 21 }
-      : { type: 'patch-application', at, doseMg: 21, site }
+      ? { type: 'patch-application', id: factId(id), at, doseMg: 21 }
+      : { type: 'patch-application', id: factId(id), at, doseMg: 21, site }
   const suggestedAt = (now: number, ...applications: PatchApplicationFact[]) =>
-    derive({ ...emptyJournal, facts: [{ type: 'quit-moment', at: QUIT }, ...applications] }, now)
-      .suggestedSite
+    derive(
+      {
+        ...emptyJournal,
+        facts: [{ type: 'quit-moment', id: factId(1), at: QUIT }, ...applications],
+      },
+      now,
+    ).suggestedSite
 
   it('suggests nothing without a quit moment', () => {
     expect(derive(emptyJournal, NOW).suggestedSite).toBeNull()
@@ -470,48 +481,48 @@ describe('derive — the suggested application site', () => {
   })
 
   it('suggests the site after the previous patch application’s one', () => {
-    expect(suggestedAt(NOW, applied(QUIT + DAY, 'arm-left'))).toBe('arm-right')
-    expect(suggestedAt(NOW, applied(QUIT + DAY, 'chest-right'))).toBe('hip-left')
+    expect(suggestedAt(NOW, applied(2, QUIT + DAY, 'arm-left'))).toBe('arm-right')
+    expect(suggestedAt(NOW, applied(3, QUIT + DAY, 'chest-right'))).toBe('hip-left')
   })
 
   it('starts the list over after its last site', () => {
-    expect(suggestedAt(NOW, applied(QUIT + DAY, 'hip-right'))).toBe('arm-left')
+    expect(suggestedAt(NOW, applied(2, QUIT + DAY, 'hip-right'))).toBe('arm-left')
   })
 
   it('never suggests the previous patch application’s site, whichever it is', () => {
     for (const site of APPLICATION_SITES) {
-      expect(suggestedAt(NOW, applied(QUIT + DAY, site))).not.toBe(site)
+      expect(suggestedAt(NOW, applied(2, QUIT + DAY, site))).not.toBe(site)
     }
   })
 
   it('rotates on from the site the user switched to, not from the one suggested', () => {
     // `arm-left` was suggested first; the user put the patch on the left hip instead.
-    expect(suggestedAt(NOW, applied(QUIT + DAY, 'hip-left'))).toBe('hip-right')
+    expect(suggestedAt(NOW, applied(2, QUIT + DAY, 'hip-left'))).toBe('hip-right')
   })
 
   it('rotates on from the latest site known when the previous patch application has none', () => {
-    expect(suggestedAt(NOW, applied(QUIT + DAY, 'chest-left'), applied(QUIT + 2 * DAY))).toBe(
+    expect(suggestedAt(NOW, applied(2, QUIT + DAY, 'chest-left'), applied(3, QUIT + 2 * DAY))).toBe(
       'chest-right',
     )
   })
 
   it('suggests the first site when no patch application carries one', () => {
-    expect(suggestedAt(NOW, applied(QUIT + DAY), applied(QUIT + 2 * DAY))).toBe('arm-left')
+    expect(suggestedAt(NOW, applied(2, QUIT + DAY), applied(3, QUIT + 2 * DAY))).toBe('arm-left')
   })
 
   it('keys on the latest patch application in time, not the one recorded last', () => {
     const journal: Journal = {
       ...emptyJournal,
       facts: [
-        { type: 'quit-moment', at: QUIT },
-        applied(QUIT + DAY, 'arm-left'),
-        applied(QUIT + 3 * DAY, 'chest-left'),
+        { type: 'quit-moment', id: factId(1), at: QUIT },
+        applied(2, QUIT + DAY, 'arm-left'),
+        applied(3, QUIT + 3 * DAY, 'chest-left'),
       ],
     }
     // Caught up later: the day between the two, recorded after both.
     const backdated = recordPatchApplication(
       journal,
-      { at: QUIT + 2 * DAY, doseMg: 21, site: 'arm-right' },
+      { id: factId(4), at: QUIT + 2 * DAY, doseMg: 21, site: 'arm-right' },
       NOW,
     )
     if (!backdated.ok) throw new Error('the backdated application should be accepted')
@@ -520,27 +531,36 @@ describe('derive — the suggested application site', () => {
   })
 
   it('takes the one recorded last when two patch applications share the same instant', () => {
-    expect(suggestedAt(NOW, applied(QUIT + DAY, 'hip-left'), applied(QUIT + DAY, 'arm-left'))).toBe(
-      'arm-right',
-    )
+    expect(
+      suggestedAt(NOW, applied(2, QUIT + DAY, 'hip-left'), applied(3, QUIT + DAY, 'arm-left')),
+    ).toBe('arm-right')
   })
 
   it('ignores a patch application later than now (a clock moved back)', () => {
     expect(
-      suggestedAt(QUIT + DAY, applied(QUIT + DAY, 'arm-left'), applied(QUIT + 2 * DAY, 'hip-left')),
+      suggestedAt(
+        QUIT + DAY,
+        applied(2, QUIT + DAY, 'arm-left'),
+        applied(3, QUIT + 2 * DAY, 'hip-left'),
+      ),
     ).toBe('arm-right')
   })
 })
 
 describe('derive — the previous application site', () => {
   const QUIT = NOW - 10 * DAY
-  const applied = (at: number, site?: ApplicationSite): PatchApplicationFact =>
+  const applied = (id: number, at: number, site?: ApplicationSite): PatchApplicationFact =>
     site === undefined
-      ? { type: 'patch-application', at, doseMg: 21 }
-      : { type: 'patch-application', at, doseMg: 21, site }
+      ? { type: 'patch-application', id: factId(id), at, doseMg: 21 }
+      : { type: 'patch-application', id: factId(id), at, doseMg: 21, site }
   const previousAt = (now: number, ...applications: PatchApplicationFact[]) =>
-    derive({ ...emptyJournal, facts: [{ type: 'quit-moment', at: QUIT }, ...applications] }, now)
-      .previousSite
+    derive(
+      {
+        ...emptyJournal,
+        facts: [{ type: 'quit-moment', id: factId(1), at: QUIT }, ...applications],
+      },
+      now,
+    ).previousSite
 
   it('is none before the first ever patch application', () => {
     expect(previousAt(NOW)).toBeNull()
@@ -548,28 +568,34 @@ describe('derive — the previous application site', () => {
 
   it('is the site of the latest patch application in time, not the one recorded last', () => {
     expect(
-      previousAt(NOW, applied(QUIT + 3 * DAY, 'chest-left'), applied(QUIT + 2 * DAY, 'arm-right')),
+      previousAt(
+        NOW,
+        applied(2, QUIT + 3 * DAY, 'chest-left'),
+        applied(3, QUIT + 2 * DAY, 'arm-right'),
+      ),
     ).toBe('chest-left')
   })
 
   it('is none when the previous patch application has no site, even if an earlier one had', () => {
-    expect(previousAt(NOW, applied(QUIT + DAY, 'hip-left'), applied(QUIT + 2 * DAY))).toBeNull()
+    expect(
+      previousAt(NOW, applied(2, QUIT + DAY, 'hip-left'), applied(3, QUIT + 2 * DAY)),
+    ).toBeNull()
   })
 
   it('for a day caught up, is the site of the patch application before that day', () => {
-    const facts = [applied(QUIT + DAY, 'arm-right'), applied(QUIT + 3 * DAY, 'hip-left')]
+    const facts = [applied(2, QUIT + DAY, 'arm-right'), applied(3, QUIT + 3 * DAY, 'hip-left')]
 
     expect(previousAt(QUIT + 2 * DAY, ...facts)).toBe('arm-right')
   })
 
   it('takes the one recorded last when two patch applications share the same instant', () => {
-    expect(previousAt(NOW, applied(QUIT + DAY, 'hip-left'), applied(QUIT + DAY))).toBeNull()
+    expect(previousAt(NOW, applied(2, QUIT + DAY, 'hip-left'), applied(3, QUIT + DAY))).toBeNull()
   })
 
   it('is never the suggested site', () => {
-    const facts = [applied(QUIT + DAY, 'arm-left'), applied(QUIT + 2 * DAY, 'hip-right')]
+    const facts = [applied(2, QUIT + DAY, 'arm-left'), applied(3, QUIT + 2 * DAY, 'hip-right')]
     const state = derive(
-      { ...emptyJournal, facts: [{ type: 'quit-moment', at: QUIT }, ...facts] },
+      { ...emptyJournal, facts: [{ type: 'quit-moment', id: factId(1), at: QUIT }, ...facts] },
       NOW,
     )
 
@@ -587,8 +613,8 @@ const journalOf = (quitMoment: number, lapses: readonly number[] = []): Journal 
   baselineSmokesPerDay: null,
   goal: null,
   facts: [
-    { type: 'quit-moment', at: quitMoment },
-    ...lapses.map((at) => ({ type: 'lapse' as const, at, count: 1 })),
+    { type: 'quit-moment', id: factId(1), at: quitMoment },
+    ...lapses.map((at, i) => ({ type: 'lapse' as const, id: factId(100 + i), at, count: 1 })),
   ],
 })
 
@@ -629,9 +655,9 @@ describe('derive — a slip', () => {
       baselineSmokesPerDay: null,
       goal: null,
       facts: [
-        { type: 'quit-moment', at: NOW - 10 * DAY },
-        { type: 'lapse', at: NOW - 8 * DAY, count: 1 },
-        { type: 'quit-moment', at: NOW - 4 * DAY },
+        { type: 'quit-moment', id: factId(1), at: NOW - 10 * DAY },
+        { type: 'lapse', id: factId(2), at: NOW - 8 * DAY, count: 1 },
+        { type: 'quit-moment', id: factId(3), at: NOW - 4 * DAY },
       ],
     }
 
@@ -708,7 +734,7 @@ describe('derive — relapse', () => {
   it('is created after the fact by a backdated lapse completing a run', () => {
     const now = local(1, 9, 12)
     const before = journalOf(QUIT, [local(1, 5, 10), local(1, 7, 9)])
-    const backdated = recordLapse(before, { at: local(1, 6, 22), count: 1 }, now)
+    const backdated = recordLapse(before, { id: factId(200), at: local(1, 6, 22), count: 1 }, now)
     if (!backdated.ok) throw new Error('the backdated lapse should be accepted')
 
     expect(derive(before, now).relapses).toEqual([])
@@ -781,9 +807,9 @@ describe('derive — cigarettes smoked', () => {
       baselineSmokesPerDay: null,
       goal: null,
       facts: [
-        { type: 'quit-moment', at: QUIT },
-        { type: 'lapse', at: local(1, 5, 10), count: 3 },
-        { type: 'lapse', at: local(1, 9, 10), count: 1 },
+        { type: 'quit-moment', id: factId(1), at: QUIT },
+        { type: 'lapse', id: factId(2), at: local(1, 5, 10), count: 3 },
+        { type: 'lapse', id: factId(3), at: local(1, 9, 10), count: 1 },
       ],
     }
 
@@ -793,12 +819,12 @@ describe('derive — cigarettes smoked', () => {
   it('reads a stored lapse without a count as one cigarette', () => {
     const stored = {
       facts: [
-        { type: 'quit-moment', at: QUIT },
-        { type: 'lapse', at: local(1, 5, 10) },
+        { type: 'quit-moment', id: factId(1), at: QUIT },
+        { type: 'lapse', id: factId(2), at: local(1, 5, 10) },
       ],
     }
 
-    expect(derive(decodeJournal(stored), local(1, 10)).cigarettesSmoked).toBe(1)
+    expect(derive(decodeJournal(stored, factIdSequence()), local(1, 10)).cigarettesSmoked).toBe(1)
   })
 })
 

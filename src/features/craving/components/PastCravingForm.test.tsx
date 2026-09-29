@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { emptyJournal } from '@/shared/domain/journal'
-import { factId } from '@/shared/test/fact-ids'
+import { anyFactId } from '@/shared/test/fact-ids'
+import { factId } from '@/shared/utils/fact-id'
 import { strings } from '@/shared/utils/strings'
 import { PastCravingForm } from './PastCravingForm'
 
@@ -27,6 +28,7 @@ it('records a backdated craving, never marked as held to the end', async () => {
     facts: [
       {
         type: 'craving',
+        id: anyFactId,
         at: new Date(2026, 8, 22, 8, 30).getTime(),
         intensity: 2,
         heldToEnd: false,
@@ -46,7 +48,9 @@ it('records the tags of a backdated craving', async () => {
 
   expect(onRecorded).toHaveBeenCalledWith({
     ...emptyJournal,
-    facts: [{ type: 'craving', at: NOW, intensity: 3, heldToEnd: false, tags: ['meal'] }],
+    facts: [
+      { type: 'craving', id: anyFactId, at: NOW, intensity: 3, heldToEnd: false, tags: ['meal'] },
+    ],
   })
 })
 

@@ -11,6 +11,7 @@ import { Button, buttonVariants } from '@/shared/ui/base/button'
 import { Card } from '@/shared/ui/Card'
 import { keepSearch } from '@/shared/utils/app-search'
 import { cn } from '@/shared/utils/cn'
+import { newFactId } from '@/shared/utils/fact-id'
 import { formatDose, formatTime } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
 import { applicationAt, chosenSite, type SiteChoice, untouched } from '../utils/site-choice'
@@ -55,7 +56,11 @@ export function DayPatchCard({
   const site = chosenSite(choice, suggestedSite, previousSite)
 
   const applyNow = (doseMg: number) => {
-    const result = recordPatchApplication(journal, applicationAt(now, doseMg, site), now)
+    const result = recordPatchApplication(
+      journal,
+      { id: newFactId(), ...applicationAt(now, doseMg, site) },
+      now,
+    )
     if (result.ok) {
       setChoice(untouched)
       onRecorded(result.journal)

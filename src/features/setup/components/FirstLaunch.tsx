@@ -4,6 +4,7 @@ import { startJourney } from '@/shared/domain/first-launch'
 import type { Journal } from '@/shared/domain/journal'
 import { Button } from '@/shared/ui/base/button'
 import { cn } from '@/shared/utils/cn'
+import { newFactId } from '@/shared/utils/fact-id'
 import { strings } from '@/shared/utils/strings'
 import { baselineInput, spendInput } from '../utils/value-inputs'
 import { ProtocolStep } from './ProtocolStep'
@@ -53,6 +54,7 @@ export function FirstLaunch({ journal, now, onStarted, restore }: FirstLaunchPro
       journal,
       { quitMoment, weeklySpendCents, baselineSmokesPerDay },
       now,
+      newFactId,
     )
     // Every answer was checked on its own step; a refusal here sends the user back to fix it.
     if (result.ok) onStarted(result.journal)

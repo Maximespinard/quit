@@ -1,5 +1,5 @@
 import type { ApplicationSite } from '@quit/contract/facts'
-import type { PatchApplicationInput } from '@/shared/domain/facts/patch-application'
+import type { PatchApplication } from '@/shared/domain/facts/patch-application'
 
 /** The site as the user left it: untouched, it follows the suggestion; picked, it may be none. */
 export type SiteChoice =
@@ -26,4 +26,4 @@ export const applicationAt = (
   at: number,
   doseMg: number,
   site: ApplicationSite | null,
-): PatchApplicationInput => (site === null ? { at, doseMg } : { at, doseMg, site })
+): PatchApplication => (site === null ? { at, doseMg } : { at, doseMg, site })

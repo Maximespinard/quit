@@ -1,4 +1,5 @@
 import { emptyJournal, type Journal } from '@/shared/domain/journal'
+import { factId } from '@/shared/utils/fact-id'
 import { customTags, resolveTypedTag } from './craving-tags'
 
 const HOUR = 3_600_000
@@ -6,8 +7,9 @@ const NOW = Date.UTC(2026, 8, 22, 10, 0, 0)
 
 const withCravings = (...cravings: { at: number; tags: string[] }[]): Journal => ({
   ...emptyJournal,
-  facts: cravings.map(({ at, tags }) => ({
-    type: 'craving',
+  facts: cravings.map(({ at, tags }, i) => ({
+    type: 'craving' as const,
+    id: factId(i + 1),
     at,
     intensity: 2,
     heldToEnd: false,

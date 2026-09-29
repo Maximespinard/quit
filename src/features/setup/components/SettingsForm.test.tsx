@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { emptyJournal, type Journal } from '@/shared/domain/journal'
+import { factId } from '@/shared/utils/fact-id'
 import { strings } from '@/shared/utils/strings'
 import { SettingsForm } from './SettingsForm'
 
@@ -10,7 +11,7 @@ const copy = strings.settings
 
 const journal: Journal = {
   ...emptyJournal,
-  facts: [{ type: 'quit-moment', at: QUIT }],
+  facts: [{ type: 'quit-moment', id: factId(1), at: QUIT }],
   weeklySpendCents: 3500,
   baselineSmokesPerDay: 15,
 }

@@ -2,6 +2,7 @@ import { type FormEvent, type ReactNode, useId, useState } from 'react'
 import type { Journal } from '@/shared/domain/journal'
 import { Button } from '@/shared/ui/base/button'
 import { Input } from '@/shared/ui/base/input'
+import { newFactId } from '@/shared/utils/fact-id'
 import { formatDate, formatTime } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
 import {
@@ -79,7 +80,7 @@ export function SettingsForm({ journal, now, onSaved }: SettingsFormProps) {
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const result = saveSettings(journal, inForce, fields, now)
+    const result = saveSettings(journal, inForce, fields, now, newFactId)
     if (result.ok) onSaved(result.journal)
     else setRefusals(result.refusals)
   }

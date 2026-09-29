@@ -1,13 +1,17 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { emptyJournal, type Journal } from '@/shared/domain/journal'
-import { factId } from '@/shared/test/fact-ids'
+import { anyFactId } from '@/shared/test/fact-ids'
+import { factId } from '@/shared/utils/fact-id'
 import { strings } from '@/shared/utils/strings'
 import { LapseForm } from './LapseForm'
 
 const NOW = new Date(2026, 8, 22, 10, 0).getTime()
 const QUIT_MOMENT = new Date(2026, 8, 20, 8, 0).getTime()
-const journal: Journal = { ...emptyJournal, facts: [{ type: 'quit-moment', at: QUIT_MOMENT }] }
+const journal: Journal = {
+  ...emptyJournal,
+  facts: [{ type: 'quit-moment', id: factId(1), at: QUIT_MOMENT }],
+}
 const copy = strings.lapse
 
 const fillAndConfirm = async (value: string) => {
@@ -28,7 +32,7 @@ it('records nothing until the lapse is confirmed', async () => {
 
   expect(onRecorded).toHaveBeenCalledWith({
     ...journal,
-    facts: [...journal.facts, { type: 'lapse', at: NOW, count: 1 }],
+    facts: [...journal.facts, { type: 'lapse', id: anyFactId, at: NOW, count: 1 }],
   })
 })
 
@@ -42,7 +46,7 @@ it('records a backdated lapse', async () => {
     ...journal,
     facts: [
       ...journal.facts,
-      { type: 'lapse', at: new Date(2026, 8, 21, 23, 0).getTime(), count: 1 },
+      { type: 'lapse', id: anyFactId, at: new Date(2026, 8, 21, 23, 0).getTime(), count: 1 },
     ],
   })
 })
@@ -70,7 +74,7 @@ it('records now to the millisecond when the time is left untouched', async () =>
 
   expect(onRecorded).toHaveBeenCalledWith({
     ...journal,
-    facts: [...journal.facts, { type: 'lapse', at: now, count: 1 }],
+    facts: [...journal.facts, { type: 'lapse', id: anyFactId, at: now, count: 1 }],
   })
 })
 
@@ -86,18 +90,18 @@ it('records the number of cigarettes, one by default and never fewer', async () 
 
   expect(onRecorded).toHaveBeenCalledWith({
     ...journal,
-    facts: [...journal.facts, { type: 'lapse', at: NOW, count: 2 }],
+    facts: [...journal.facts, { type: 'lapse', id: anyFactId, at: NOW, count: 2 }],
   })
 })
 
 describe('the relapse a lapse would trigger', () => {
-  const lapse = (at: number) => ({ type: 'lapse' as const, at, count: 1 })
+  const lapse = (n: number, at: number) => ({ type: 'lapse' as const, id: factId(n), at, count: 1 })
   const twoDaysOfLapses: Journal = {
     ...journal,
     facts: [
       ...journal.facts,
-      lapse(new Date(2026, 8, 20, 21, 0).getTime()),
-      lapse(new Date(2026, 8, 21, 21, 0).getTime()),
+      lapse(2, new Date(2026, 8, 20, 21, 0).getTime()),
+      lapse(3, new Date(2026, 8, 21, 21, 0).getTime()),
     ],
   }
 

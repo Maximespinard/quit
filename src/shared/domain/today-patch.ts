@@ -1,5 +1,5 @@
 import { PATCH_APPLICATION } from '@quit/contract/facts'
-import type { PatchApplicationInput } from './facts/patch-application'
+import type { PatchApplication } from './facts/patch-application'
 import type { Journal } from './journal'
 import { localMidnight } from './local-day'
 import type { ProtocolPosition } from './protocol-position'
@@ -10,7 +10,7 @@ import { asksForPatch, protocolSpan } from './protocol-span'
  * `now`. `doseMg` is the running step's, the one a one-tap log records.
  */
 export type TodayPatch =
-  | ({ readonly status: 'logged' } & PatchApplicationInput)
+  | ({ readonly status: 'logged' } & PatchApplication)
   | { readonly status: 'due'; readonly doseMg: number }
   /** The quit day asks for none, but its first patch is the usual first action: offered, never missing. */
   | { readonly status: 'offered'; readonly doseMg: number }
@@ -30,7 +30,7 @@ export function todayPatch(
   now: number,
 ): TodayPatch {
   const today = localMidnight(now)
-  let latest: PatchApplicationInput | null = null
+  let latest: PatchApplication | null = null
   for (const fact of journal.facts) {
     if (fact.type !== PATCH_APPLICATION || fact.at < Math.max(today, quitMoment) || fact.at > now)
       continue
