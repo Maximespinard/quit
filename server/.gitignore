@@ -1,0 +1,3 @@
+node_modules
+# Local database written by `npm start` and `npm run issue-device-key`
+data

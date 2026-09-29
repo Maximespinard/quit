@@ -1,7 +1,8 @@
 # quit
 
 Personal PWA tracking one smoke-free journey under a self-managed nicotine patch taper.
-Single user, single device, no accounts, no data backend.
+Single user, single device, no accounts. The device's journal is the reference; `server/` mirrors it
+(`docs/adr/0003`).
 
 ## Design
 
@@ -17,9 +18,10 @@ Design context lives in `PRODUCT.md` + `DESIGN.md` (impeccable's own files), not
 - Tailwind v4 (`@theme` in `src/index.css`, no `tailwind.config.js`) · vite-plugin-pwa 1.x (`generateSW`, `autoUpdate`)
 - Biome v2 (format + lint) + ESLint (boundaries rule only)
 - Vitest 5 + Testing Library (jsdom)
-- Storage: IndexedDB on the device · Deploy: none yet (VPS `lab`, late milestone)
+- Storage: IndexedDB on the device (the reference); `server/` keeps a mirror in SQLite · Deploy: none yet (VPS `lab`, late milestone)
 - npm workspaces: the app at the root, `contract/` (zod 4 **mini** schemas — facts, settings, journal
-  file; types inferred, never hand-written; imported as `@quit/contract/<module>`), `push-sender/`
+  file; types inferred, never hand-written; imported as `@quit/contract/<module>`), `push-sender/`,
+  `server/` (Express 5, SQLite through Drizzle, runs its TypeScript directly on Node 24)
 
 ## Commandes
 
