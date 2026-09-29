@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   verify:
-    name: verify (every workspace: lint · typecheck · test · build)
+    name: verify (every workspace · lint · typecheck · test · build)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
