@@ -3,10 +3,11 @@ import { noBackup } from '@/shared/domain/backup-reminder'
 import { emptyJournal } from '@/shared/domain/journal'
 import { type Scenario, type ScenarioId, scenarioById } from '@/shared/domain/scenarios'
 import { useBackupRecord } from '@/shared/hooks/useBackupRecord'
+import { useDeviceMirroring } from '@/shared/hooks/useDeviceMirroring'
 import { useJournal } from '@/shared/hooks/useJournal'
 import { JournalSourceContext, type SandboxControls } from '@/shared/hooks/useJournalSource'
 import { useNow } from '@/shared/hooks/useNow'
-import { deviceBackupStore, deviceJournalStore } from '@/shared/storage/journal-store'
+import { deviceBackupStore } from '@/shared/storage/journal-store'
 import { createMemoryJournalStore, createMemoryStore } from '@/shared/storage/memory-journal-store'
 import type { JournalSourceChoice } from '@/shared/utils/app-search'
 import {
@@ -40,11 +41,12 @@ export function JournalSourceProvider({ source, children }: JournalSourceProvide
 
 function DeviceSource({ children }: { children: ReactNode }) {
   const now = useNow()
-  const { state, commit } = useJournal(deviceJournalStore)
+  const { store, mirror } = useDeviceMirroring()
+  const { state, commit } = useJournal(store)
   const backup = useBackupRecord(deviceBackupStore)
 
   return (
-    <JournalSourceContext.Provider value={{ state, commit, now, backup, sandbox: null }}>
+    <JournalSourceContext.Provider value={{ state, commit, now, backup, sandbox: null, mirror }}>
       {children}
     </JournalSourceContext.Provider>
   )
@@ -89,7 +91,14 @@ function SandboxSource({ clockAt, scenario: initial, children }: SandboxSourcePr
 
   return (
     <JournalSourceContext.Provider
-      value={{ state, commit, now: readSandboxClock(clock, realNow), backup, sandbox }}
+      value={{
+        state,
+        commit,
+        now: readSandboxClock(clock, realNow),
+        backup,
+        sandbox,
+        mirror: null,
+      }}
     >
       {children}
     </JournalSourceContext.Provider>

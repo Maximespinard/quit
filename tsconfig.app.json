@@ -29,5 +29,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  // Tests against the real server import it, Node's types with it: their own project below.
+  "exclude": ["src/**/*.server.test.ts"]
 }

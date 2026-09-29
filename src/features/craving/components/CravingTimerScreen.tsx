@@ -76,14 +76,14 @@ export function CravingTimerScreen({
           <TopBar />
           <div className="pt-16">{heading}</div>
         </div>
-        <div className="px-safe">{form}</div>
+        <div className="px-safe pb-page">{form}</div>
       </div>
     )
   }
   return (
     <div className="mx-auto max-w-md">
       <CravingHeld />
-      <section className="flex flex-col gap-8 px-safe pt-6">
+      <section className="flex flex-col gap-8 px-safe pt-6 pb-page">
         {heading}
         {form}
       </section>

@@ -32,7 +32,6 @@
   --color-yellow: #f5d907;
   --color-moss: #33402c;
   --color-bronze: #b88a4f;
-  --color-series: #d08a2a;
   --color-transparent: transparent;
   --color-current-color: currentColor;
 
@@ -100,6 +99,14 @@
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
   --animate-step-in: step-in 240ms var(--ease-out-expo) both;
+  /* Ends on `STOP_DELAY_MS` (800ms, `useStopReady`): `Arrêter` answers once fully in. */
+  --animate-stop-in: fade-in 240ms var(--ease-out-expo) 560ms both;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
 
   @keyframes step-in {
     from {
@@ -231,12 +238,16 @@
  * A page's bottom edge: clears the home indicator, and whatever floats there — the sandbox
  * marker, Envie. Both sit on the same row, so the taller one sets the clearance.
  */
-@utility pb-page {
-  padding-bottom: calc(
+:root {
+  --page-clearance: calc(
     1rem +
     env(safe-area-inset-bottom) +
     max(var(--sandbox-clearance, 0px), var(--craving-clearance, 0px))
   );
+}
+
+@utility pb-page {
+  padding-bottom: var(--page-clearance);
 }
 
 :root:has([data-sandbox-marker]) {

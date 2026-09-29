@@ -28,14 +28,21 @@ function GoalPage() {
         if (derived.moneySavedCents === null) return <Navigate to="/" search={appSearch} replace />
         return (
           <AppShell>
-            <GoalForm journal={journal} now={now} goal={derived.goal} onSaved={saved} />
-            <Link
-              to="/"
-              search={appSearch}
-              className={buttonVariants({ variant: 'ghost', size: 'lg' })}
-            >
-              {strings.goal.form.cancel}
-            </Link>
+            <GoalForm
+              journal={journal}
+              now={now}
+              goal={derived.goal}
+              onSaved={saved}
+              secondary={
+                <Link
+                  to="/"
+                  search={appSearch}
+                  className={buttonVariants({ variant: 'ghost', size: 'lg' })}
+                >
+                  {strings.goal.form.cancel}
+                </Link>
+              }
+            />
           </AppShell>
         )
       }}

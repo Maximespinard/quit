@@ -50,6 +50,31 @@ test('a craving stopped early is still recorded, without the celebration', async
   await expect(recordedNotice(page)).toBeVisible()
 })
 
+// Envie and `Arrêter` share the bottom band: the second tap of a stressed double tap lands on
+// `Arrêter`, which waits a beat before it answers.
+test('a double tap on Envie leaves the timer running', async ({ page }) => {
+  await homeWithStreak(page)
+  const envie = await page.getByRole('button', { name: 'Envie', exact: true }).boundingBox()
+  if (envie === null) throw new Error('Envie is not on screen')
+
+  const x = envie.x + envie.width / 2
+  const y = envie.y + envie.height / 2
+
+  // Two thumb taps a stressed beat apart, the second one on the timer screen.
+  await page.touchscreen.tap(x, y)
+  await page.waitForTimeout(150)
+  await page.touchscreen.tap(x, y)
+
+  await expect(timer(page)).toHaveText('4:00')
+  await page.waitForTimeout(1_000)
+  await expect(timer(page)).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Minuteur arrêté.' })).toHaveCount(0)
+
+  // Once in, `Arrêter` stops the timer as before.
+  await tap(page, 'Arrêter')
+  await expect(page.getByRole('heading', { name: 'Minuteur arrêté.' })).toBeVisible()
+})
+
 test('a past craving is logged without the timer', async ({ page }) => {
   await homeWithStreak(page)
 
@@ -176,4 +201,42 @@ test('the timer haze drifts only when motion is allowed', async ({ page }) => {
 
   await page.emulateMedia({ reducedMotion: 'reduce' })
   expect(await hazeAnimations(page)).toEqual(['none', 'none', 'none', 'none'])
+})
+
+/** The animation `Arrêter`'s band plays, as the browser computed it. */
+const stopBandAnimation = (page: Page) =>
+  page
+    .getByRole('button', { name: 'Arrêter', exact: true })
+    .evaluate((stop) =>
+      stop.parentElement ? getComputedStyle(stop.parentElement).animationName : null,
+    )
+
+/** `Arrêter`'s band opacity with its fade frozen `at` ms after the timer mounts. */
+const stopBandOpacityAt = (page: Page, at: number) =>
+  page.getByRole('button', { name: 'Arrêter', exact: true }).evaluate((stop, ms) => {
+    const band = stop.parentElement
+    const fade = band?.getAnimations()[0]
+    if (!band || !fade) return null
+    fade.pause()
+    fade.currentTime = ms
+    return Number(getComputedStyle(band).opacity)
+  }, at)
+
+test('Arrêter fades in only when motion is allowed', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
+  await homeWithStreak(page)
+  await tap(page, 'Envie')
+
+  expect(await stopBandAnimation(page)).toBe('fade-in')
+  expect(await stopBandOpacityAt(page, 400)).toBe(0)
+  const midFade = await stopBandOpacityAt(page, 600)
+  expect(midFade).toBeGreaterThan(0)
+  expect(midFade).toBeLessThan(1)
+  expect(await stopBandOpacityAt(page, 800)).toBe(1)
+
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  expect(await stopBandAnimation(page)).toBe('none')
+  // The wait itself, reduced motion included, is the component test's (tests run reduced).
+  await tap(page, 'Arrêter')
+  await expect(page.getByRole('heading', { name: 'Minuteur arrêté.' })).toBeVisible()
 })

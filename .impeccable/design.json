@@ -273,21 +273,6 @@
           "oklch(84% 0.076 72)",
           "oklch(95% 0.062 72)"
         ]
-      },
-      "series": {
-        "role": "tertiary",
-        "displayName": "Ambre de série",
-        "canonical": "#d08a2a",
-        "tonalRamp": [
-          "oklch(15% 0.079 70)",
-          "oklch(26% 0.100 70)",
-          "oklch(38% 0.123 70)",
-          "oklch(49% 0.135 70)",
-          "oklch(61% 0.135 70)",
-          "oklch(72% 0.123 70)",
-          "oklch(84% 0.100 70)",
-          "oklch(95% 0.079 70)"
-        ]
       }
     },
     "typographyMeta": {
@@ -550,7 +535,7 @@
       },
       {
         "name": "The One Series Rule",
-        "body": "Les graphiques n'ont qu'une teinte, `series`. L'ambre de série ne partage jamais un écran avec le bronze du minuteur.",
+        "body": "Les graphiques n'ont qu'une teinte : le crème à 60 % (6,5:1 sur la carte), sous le texte courant. Jamais d'ambre ni d'accent sur une barre : l'écran le plus chargé en données reste plus calme que l'accueil et son seul objet allumé, `Envie`.",
         "section": "colors"
       },
       {
@@ -619,7 +604,7 @@
       "**Don't** éteindre la brume d'un écran, ni celle du minuteur arrêté.",
       "**Don't** ajouter une ombre portée, un `ring-*` ou un anneau de focus par composant : le seul `box-shadow` est la lueur d'`Envie`, le focus est l'`outline` global.",
       "**Don't** remplir un bouton destructif d'un aplat teinté, ni colorer un écart en `alert`.",
-      "**Don't** mettre l'ambre de série et le bronze du minuteur sur le même écran, ni une seconde couleur de série.",
+      "**Don't** colorer une barre de graphique (ambre, accent, seconde série) : elles restent toutes crème à 60 %.",
       "**Don't** transformer une progression en anneau ou en jauge : une barre de 8 px avec ses bornes chiffrées, ou une rangée de crans.",
       "**Don't** ajouter un raster décoratif : brumes, grain et icônes sont du code.",
       "**Don't** créer une seconde barre haute, une seconde carte ou un second geste de retour.",

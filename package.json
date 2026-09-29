@@ -12,7 +12,7 @@
   },
   "scripts": {
     "dev": "vite --port 3000",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b tsconfig.app.json tsconfig.node.json && vite build",
     "preview": "vite preview",
     "lint": "biome check . && eslint .",
     "lint:fix": "biome check --write . && eslint . --fix",
