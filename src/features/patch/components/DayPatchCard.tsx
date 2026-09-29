@@ -88,6 +88,7 @@ export function DayPatchCard({
           <p className="text-title">{copy.due}</p>
           <SitePicker
             value={site}
+            suggested={suggestedSite}
             previous={previousSite}
             onValueChange={(next) => setChoice({ kind: 'picked', site: next })}
           />

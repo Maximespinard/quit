@@ -15,6 +15,7 @@ const twMerge = extendTailwindMerge({
         'brand',
         'craving',
         'figure',
+        'headline',
         'title',
         'lead',
         'cta',

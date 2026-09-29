@@ -6,6 +6,9 @@ import { formatWeekdayDate } from '../utils/calendar-dates'
 
 const copy = strings.calendar
 
+/** One statement per row, label left and value right, split by a hairline. */
+const row = 'grid grid-cols-[1fr_auto] items-baseline gap-x-4 border-line border-t py-3 last:pb-0'
+
 type CalendarSummaryProps = Pick<PatchCalendar, 'position' | 'nextStepChange' | 'plannedEnd'>
 
 /**
@@ -16,25 +19,24 @@ export function CalendarSummary({ position, nextStepChange, plannedEnd }: Calend
   const titleId = useId()
 
   return (
-    <section aria-labelledby={titleId} className="flex flex-col gap-2.5">
-      <div className="flex items-baseline justify-between text-label">
-        <h3 id={titleId} className="font-medium text-body text-ink">
-          {strings.protocol.title}
-        </h3>
+    <section
+      aria-labelledby={titleId}
+      className="flex flex-col gap-3.5 rounded-card bg-surface p-5"
+    >
+      <div className="flex items-baseline justify-between text-label text-muted">
+        <h3 id={titleId}>{strings.protocol.title}</h3>
         {position.status === 'running' ? (
-          <span className="text-muted">
-            {strings.protocol.stepOf(position.stepNumber, position.stepCount)}
-          </span>
+          <span>{strings.protocol.stepOf(position.stepNumber, position.stepCount)}</span>
         ) : null}
       </div>
 
       {position.status === 'running' ? (
-        <div className="flex flex-col divide-y divide-line rounded-card bg-surface">
-          <div className="flex flex-col gap-1 p-4">
+        <>
+          <div className="flex flex-col gap-1.5">
             <p className="text-figure tabular-nums">
               {strings.protocol.day(position.dayInStep, position.step.durationDays)}
             </p>
-            <p className="text-muted text-label">
+            <p className="text-label text-muted">
               {strings.protocol.detail(
                 formatDose(position.step.doseMg),
                 position.nextStep === null
@@ -46,27 +48,28 @@ export function CalendarSummary({ position, nextStepChange, plannedEnd }: Calend
               )}
             </p>
           </div>
-          {/* The same statement as the home totals: one rule between equal columns. */}
-          <dl className="grid auto-cols-fr grid-flow-col divide-x divide-line py-4">
+          <dl className="flex flex-col">
             {nextStepChange !== null && position.nextStep !== null ? (
-              <div className="flex flex-col gap-1 px-4">
-                <dt className="text-muted text-label">{copy.nextChange}</dt>
-                <dd className="font-medium text-body">{formatWeekdayDate(nextStepChange)}</dd>
-                <dd className="text-muted text-label">
+              <div className={row}>
+                <dt className="row-span-2 text-label text-muted">{copy.nextChange}</dt>
+                <dd className="text-right font-medium text-body">
+                  {formatWeekdayDate(nextStepChange)}
+                </dd>
+                <dd className="col-start-2 text-right text-label text-muted">
                   {copy.nextDose(formatDose(position.nextStep.doseMg))}
                 </dd>
               </div>
             ) : null}
-            <div className="flex flex-col gap-1 px-4">
-              <dt className="text-muted text-label">{copy.plannedEnd}</dt>
-              <dd className="font-medium text-body">{formatWeekdayDate(plannedEnd)}</dd>
+            <div className={row}>
+              <dt className="text-label text-muted">{copy.plannedEnd}</dt>
+              <dd className="text-right font-medium text-body">{formatWeekdayDate(plannedEnd)}</dd>
             </div>
           </dl>
-        </div>
+        </>
       ) : (
-        <div className="flex flex-col gap-1 rounded-card bg-surface p-4">
+        <div className="flex flex-col gap-1.5">
           <p className="text-title">{strings.protocol.over}</p>
-          <p className="text-muted text-label">{copy.endedOn(formatDate(plannedEnd))}</p>
+          <p className="text-label text-muted">{copy.endedOn(formatDate(plannedEnd))}</p>
         </div>
       )}
     </section>

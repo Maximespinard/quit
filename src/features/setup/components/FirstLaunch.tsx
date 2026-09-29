@@ -60,7 +60,7 @@ export function FirstLaunch({ journal, now, onStarted, restore }: FirstLaunchPro
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-1 flex-col gap-6">
       <div className="flex min-h-11 items-center gap-3">
         {step > 1 ? (
           <Button
@@ -100,7 +100,7 @@ export function FirstLaunch({ journal, now, onStarted, restore }: FirstLaunchPro
             onPicked={(quitMoment) => answer({ quitMoment })}
           />
           {/* Another way in, not a third answer: set apart by a filet. */}
-          {restore ? <div className="border-line border-t pt-4">{restore}</div> : null}
+          {restore ? <div className="-mt-2 border-line border-t pt-4">{restore}</div> : null}
         </>
       ) : step === 2 ? (
         // Keyed per step: the two value steps must not share a typed draft.

@@ -28,6 +28,7 @@
   --color-yellow: #f5d907;
   --color-moss: #33402c;
   --color-bronze: #b88a4f;
+  --color-series: #d08a2a;
   --color-transparent: transparent;
   --color-current-color: currentColor;
 
@@ -49,6 +50,10 @@
   --text-figure--line-height: 1;
   --text-figure--letter-spacing: -0.035em;
   --text-figure--font-weight: 500;
+  --text-headline: 1.75rem;
+  --text-headline--line-height: 1.1;
+  --text-headline--letter-spacing: -0.03em;
+  --text-headline--font-weight: 500;
   --text-title: 1.25rem;
   --text-title--line-height: 1.2;
   --text-title--letter-spacing: -0.02em;
@@ -89,6 +94,19 @@
       transform: scale(1);
       opacity: 1;
     }
+  }
+}
+
+/* The craving timer's liquid haze: two slow drifts, played under `motion-safe:` only. */
+@keyframes haze-drift-a {
+  to {
+    transform: translate(18%, 10%) scale(1.15);
+  }
+}
+
+@keyframes haze-drift-b {
+  to {
+    transform: translate(-15%, -8%) scale(0.9);
   }
 }
 
@@ -162,4 +180,14 @@
 
 @utility pb-safe-4 {
   padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+}
+
+/* A page's bottom edge: clears the home indicator, and the sandbox marker while it floats there. */
+@utility pb-page {
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom) + var(--sandbox-clearance, 0px));
+}
+
+:root:has([data-sandbox-marker]) {
+  /* The marker's 44px (`min-h-11`) plus the 1rem gap `pb-safe-4` leaves under it, in DebugPanel. */
+  --sandbox-clearance: 3.75rem;
 }

@@ -1,9 +1,11 @@
+import { useId } from 'react'
 import { Button } from '@/shared/ui/base/button'
-import { HeroBackdrop } from '@/shared/ui/HeroBackdrop'
 import { MINUTE_MS } from '@/shared/utils/duration'
 import { strings } from '@/shared/utils/strings'
 import { CRAVING_TIMER_MS } from '../domain/craving-timer'
 import { formatCountdown } from '../utils/format-countdown'
+import { CravingHaze } from './CravingHaze'
+import { CravingTopBar } from './CravingTopBar'
 import { MinuteSteps } from './MinuteSteps'
 
 type CravingTimerRunningProps = {
@@ -12,28 +14,45 @@ type CravingTimerRunningProps = {
 }
 
 /**
- * The running timer: the whole screen becomes the night block, the countdown takes the one
- * giant figure, and `Arrêter` sits in the thumb zone. Nothing moves but the seconds.
+ * The running timer: the screen turns to slow moss and bronze around one white countdown,
+ * and `Arrêter` sits in the thumb zone. Only the seconds and the haze move.
  */
 export function CravingTimerRunning({ remainingMs, onStop }: CravingTimerRunningProps) {
+  const labelId = useId()
+  const regionId = useId()
   const copy = strings.craving.timer
   const heldMinutes = Math.floor((CRAVING_TIMER_MS - remainingMs) / MINUTE_MS)
 
   return (
     <section
-      aria-label={copy.region}
-      className="relative isolate flex min-h-dvh flex-col overflow-hidden bg-page px-safe pt-safe text-ink"
+      aria-labelledby={regionId}
+      className="@container relative isolate flex min-h-dvh flex-col overflow-hidden bg-page px-safe pt-safe text-ink"
     >
-      <HeroBackdrop />
-      <div className="flex min-h-14 items-center pt-3">
-        <h1 className="font-medium text-label">{strings.app.name}</h1>
-      </div>
-      <div className="flex flex-1 flex-col items-center justify-center gap-7 text-center">
-        <p role="timer" aria-label={copy.remaining} className="text-display text-white">
-          {formatCountdown(remainingMs)}
+      <CravingHaze />
+      <CravingTopBar
+        context={
+          <span id={regionId} className="text-label">
+            {copy.region}
+          </span>
+        }
+      />
+      <div className="flex flex-1 flex-col justify-center gap-6 py-8">
+        <p className="max-w-[15ch] text-balance text-[1.5rem] leading-[1.2] tracking-[-0.025em]">
+          {copy.lead}
         </p>
+        <div className="flex flex-col gap-3">
+          <p
+            role="timer"
+            aria-labelledby={labelId}
+            className="font-medium text-[33cqi] text-white leading-[0.86] tracking-[-0.05em]"
+          >
+            {formatCountdown(remainingMs)}
+          </p>
+          <span id={labelId} className="text-label">
+            {copy.remaining}
+          </span>
+        </div>
         <MinuteSteps total={CRAVING_TIMER_MS / MINUTE_MS} held={heldMinutes} />
-        <p className="max-w-64 text-body text-ink/85">{copy.lead}</p>
       </div>
       <div className="pt-6 pb-safe-4">
         <Button variant="secondary" size="lg" className="w-full" onClick={onStop}>

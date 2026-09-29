@@ -10,7 +10,7 @@ type CountStepperProps = {
 
 const copy = strings.lapse
 
-/** How many cigarettes a lapse held: one by default, never fewer. One filet frame, like the segmented control. */
+/** How many cigarettes a lapse held: one by default, never fewer. One ghost pill tray, the count set as a figure. */
 export function CountStepper({ value, onChange }: CountStepperProps) {
   const labelId = useId()
 
@@ -19,7 +19,7 @@ export function CountStepper({ value, onChange }: CountStepperProps) {
       <span id={labelId} className="text-label">
         {copy.countLabel}
       </span>
-      <div className="flex h-12 items-center rounded-control border border-line bg-ghost">
+      <div className="flex items-center rounded-full bg-ghost p-1">
         <Button
           type="button"
           variant="ghost"
@@ -31,7 +31,7 @@ export function CountStepper({ value, onChange }: CountStepperProps) {
         >
           <Minus aria-hidden="true" />
         </Button>
-        <output aria-live="polite" className="flex-1 text-center font-medium text-cta tabular-nums">
+        <output aria-live="polite" className="flex-1 text-center text-figure tabular-nums">
           {value}
         </output>
         <Button

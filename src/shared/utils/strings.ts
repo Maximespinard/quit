@@ -417,6 +417,8 @@ export const strings = {
     back: 'Retour',
     lead: 'Chaque étape est un patch de 24\u00a0h. Tu peux tout changer, même en cours d’étape.',
     step: (number: number) => `Étape ${number}`,
+    /** Where a step of the protocol in force stands today; an upcoming step carries no mark. */
+    status: { current: 'En cours', past: 'Passée' },
     doseLabel: 'Dose (mg)',
     durationLabel: 'Durée (jours)',
     brandLabel: 'Marque (facultatif)',
@@ -444,6 +446,8 @@ export const strings = {
       hint: 'Facultatif · jamais deux fois de suite au même site',
       /** Under the previous patch application's site, which the next one may not take. */
       previous: 'la dernière fois',
+      /** Under the suggested site, pressed or not. */
+      suggested: 'suggéré',
     },
     sites: {
       'arm-left': 'Bras gauche',

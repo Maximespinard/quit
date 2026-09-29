@@ -76,7 +76,7 @@ export function CravingForm({ tagOptions, initial, onSubmit, children }: Craving
         />
       ) : null}
       {/* Stuck to the thumb zone: however many tags push it down, recording stays one tap away. */}
-      <div className="sticky bottom-0 bg-page pt-3 pb-safe-4">
+      <div className="sticky bottom-0 bg-linear-to-b from-transparent to-page to-40% pt-6 pb-safe-4">
         <Button
           type="submit"
           size="lg"

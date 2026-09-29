@@ -42,7 +42,7 @@ function CalendarPage() {
             {calendar === null ? (
               <p className="text-body text-muted">{copy.empty}</p>
             ) : (
-              <div className="flex flex-col gap-8">
+              <div className="flex flex-col gap-2.5">
                 <CalendarSummary
                   position={calendar.position}
                   nextStepChange={calendar.nextStepChange}

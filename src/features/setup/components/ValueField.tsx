@@ -1,4 +1,5 @@
 import { Input } from '@/shared/ui/base/input'
+import { cn } from '@/shared/utils/cn'
 import type { ValueInput } from '../utils/value-inputs'
 
 type ValueFieldProps = {
@@ -6,6 +7,8 @@ type ValueFieldProps = {
   label: string
   /** Visually hidden when the screen title already asks the question. */
   hideLabel?: boolean
+  /** The step's one answer: typed as a white key figure, not as a form value. */
+  prominent?: boolean
   input: ValueInput
   value: string
   onChange: (value: string) => void
@@ -19,6 +22,7 @@ export function ValueField({
   id,
   label,
   hideLabel = false,
+  prominent = false,
   input,
   value,
   onChange,
@@ -41,12 +45,15 @@ export function ValueField({
           onChange={(event) => onChange(event.target.value)}
           aria-invalid={errorId !== null}
           aria-describedby={errorId ?? undefined}
-          className="pr-10"
+          className={cn('pr-10', prominent && 'h-16 pr-14 text-figure text-white')}
         />
         {input.suffix !== undefined ? (
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute inset-y-0 right-4 flex items-center font-medium text-cta text-muted"
+            className={cn(
+              'pointer-events-none absolute inset-y-0 right-4 flex items-center font-medium text-cta text-muted',
+              prominent && 'right-5 text-figure',
+            )}
           >
             {input.suffix}
           </span>

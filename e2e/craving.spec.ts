@@ -134,3 +134,28 @@ test('a craving is tagged, and the typed tag is offered again on the next one', 
   await expect(recordedNotice(page)).toBeVisible()
   expect(await storedCravingTags(page)).toEqual([['coffee', 'Voiture'], [], ['Métro']])
 })
+
+/** The animation each blob of the timer haze plays, as the browser computed it. */
+const hazeAnimations = (page: Page) =>
+  page.evaluate(() =>
+    [...document.querySelectorAll('[data-haze] > *')].map(
+      (blob) => getComputedStyle(blob).animationName,
+    ),
+  )
+
+test('the timer haze drifts only when motion is allowed', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
+  await homeWithStreak(page)
+  await tap(page, 'Envie')
+  await expect(timer(page)).toBeVisible()
+
+  expect(await hazeAnimations(page)).toEqual([
+    'haze-drift-a',
+    'haze-drift-b',
+    'haze-drift-a',
+    'haze-drift-b',
+  ])
+
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  expect(await hazeAnimations(page)).toEqual(['none', 'none', 'none', 'none'])
+})
