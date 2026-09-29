@@ -9,6 +9,7 @@ const journalOf = (lapses: readonly number[]): Journal => ({
   protocol: defaultProtocol,
   weeklySpendCents: null,
   baselineSmokesPerDay: null,
+  goal: null,
   facts: [
     { type: 'quit-moment', at: jan(1, 20) },
     ...lapses.map((at) => ({ type: 'lapse' as const, at, count: 1 })),

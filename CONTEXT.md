@@ -114,5 +114,5 @@ The longest streak ever held. It is shown only once a relapse exists.
 _Avoid_: Record, best streak, high score
 
 **Goal**:
-The one thing the user is saving towards: a label and a price, against which money saved is shown as progress.
+The one thing the user is saving towards: a label and a price, against which money saved is shown as progress. Once reached and celebrated it stays reached, and the goal that replaces it counts money saved from zero; replacing a goal not yet reached keeps what was already saved towards it.
 _Avoid_: Objective, target, reward, wish
