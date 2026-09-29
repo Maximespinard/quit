@@ -11,6 +11,7 @@ import { useJournalSource } from '@/shared/hooks/useJournalSource'
 import { AppShell } from '@/shared/ui/app-shell'
 import { buttonVariants } from '@/shared/ui/base/button'
 import { ReadyJournal } from '@/shared/ui/ReadyJournal'
+import { ThumbZone } from '@/shared/ui/ThumbZone'
 import { validateAppSearch } from '@/shared/utils/app-search'
 import { strings } from '@/shared/utils/strings'
 
@@ -20,33 +21,59 @@ export const Route = createFileRoute('/history/$factId')({
 
 const copy = strings.history
 
-/** What the form of a fact needs: the journal without it, the clock, where the edit goes. */
+/**
+ * What the form of a fact needs: the journal without it, the clock, where the edit goes, and
+ * what sits under its primary action.
+ */
 type EditContext = {
   readonly rest: Journal
   readonly journal: Journal
   readonly now: number
   readonly onSaved: (journal: Journal) => void
+  readonly secondary: ReactNode
 }
 
 /**
  * The form that recorded a fact, prefilled with it. One case per type: a fact type added to
  * the journal fails to compile here until it can be edited.
  */
-function editForm(fact: HistoryFact, { rest, journal, now, onSaved }: EditContext): ReactNode {
+function editForm(
+  fact: HistoryFact,
+  { rest, journal, now, onSaved, secondary }: EditContext,
+): ReactNode {
   switch (fact.type) {
     case 'lapse':
-      return <LapseForm journal={rest} now={now} initial={fact} onRecorded={onSaved} />
+      return (
+        <LapseForm
+          journal={rest}
+          now={now}
+          initial={fact}
+          onRecorded={onSaved}
+          secondary={secondary}
+        />
+      )
     case 'craving':
-      return <PastCravingForm journal={rest} now={now} initial={fact} onRecorded={onSaved} />
+      return (
+        <PastCravingForm
+          journal={rest}
+          now={now}
+          initial={fact}
+          onRecorded={onSaved}
+          secondary={secondary}
+        />
+      )
     case 'patch-application': {
       const { protocol } = derive(journal, now)
-      return protocol === null ? null : (
+      return protocol === null ? (
+        <ThumbZone>{secondary}</ThumbZone>
+      ) : (
         <PatchApplicationForm
           journal={rest}
           position={protocol}
           now={now}
           initial={fact}
           onRecorded={onSaved}
+          secondary={secondary}
         />
       )
     }
@@ -79,31 +106,42 @@ function EditFactPage() {
       {(journal) => {
         const fact = historyFact(journal, factId)
         const rest = removeFact(journal, factId)
+        const back = (
+          <Link
+            to="/history"
+            search={appSearch}
+            className={buttonVariants({ variant: 'ghost', size: 'lg' })}
+          >
+            {copy.back}
+          </Link>
+        )
         return (
           <AppShell>
             {fact === null ? (
-              <p className="pt-6 text-body text-muted">{copy.missing}</p>
-            ) : (
               <>
-                {editForm(fact, {
-                  rest,
-                  journal,
-                  now,
-                  onSaved: (edited) => commitThenHistory(edited, 'factEdited'),
-                })}
-                {/* Set apart under a rule: saving and deleting never sit one mis-tap apart. */}
-                <div className="mt-4 flex flex-col border-line border-t pt-6">
-                  <DeleteFact fact={fact} onDelete={() => commitThenHistory(rest, 'factDeleted')} />
-                </div>
+                <p className="pt-6 text-body text-muted">{copy.missing}</p>
+                <ThumbZone>{back}</ThumbZone>
               </>
+            ) : (
+              editForm(fact, {
+                rest,
+                journal,
+                now,
+                onSaved: (edited) => commitThenHistory(edited, 'factEdited'),
+                secondary: (
+                  <>
+                    {/* Set apart under a rule: saving and deleting never sit one mis-tap apart. */}
+                    <div className="mt-4 flex flex-col border-line border-t pt-6">
+                      <DeleteFact
+                        fact={fact}
+                        onDelete={() => commitThenHistory(rest, 'factDeleted')}
+                      />
+                    </div>
+                    {back}
+                  </>
+                ),
+              })
             )}
-            <Link
-              to="/history"
-              search={appSearch}
-              className={buttonVariants({ variant: 'ghost', size: 'lg' })}
-            >
-              {copy.back}
-            </Link>
           </AppShell>
         )
       }}

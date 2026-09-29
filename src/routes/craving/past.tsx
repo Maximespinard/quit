@@ -21,14 +21,20 @@ function PastCravingPage() {
     <ReadyJournal state={state}>
       {(journal) => (
         <AppShell>
-          <PastCravingForm journal={journal} now={now} onRecorded={recorded} />
-          <Link
-            to="/"
-            search={appSearch}
-            className={buttonVariants({ variant: 'ghost', size: 'lg' })}
-          >
-            {strings.craving.past.cancel}
-          </Link>
+          <PastCravingForm
+            journal={journal}
+            now={now}
+            onRecorded={recorded}
+            secondary={
+              <Link
+                to="/"
+                search={appSearch}
+                className={buttonVariants({ variant: 'ghost', size: 'lg' })}
+              >
+                {strings.craving.past.cancel}
+              </Link>
+            }
+          />
         </AppShell>
       )}
     </ReadyJournal>

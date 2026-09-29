@@ -447,8 +447,10 @@ largeur derrière la colonne.
   les cartes commencent 64 px sous la ligne `lead`, à 12 px des bords (`px-3`, plus larges
   que la gouttière du texte), espacées de 10 px.
 - **Écrans sous l'accueil (`AppShell`) :** hauteur d'écran (`min-h-svh`), pile à 16 px
-  d'intervalle : barre haute, `PageHeader`, contenu. Une étape de formulaire tient son action
-  en bas (`mt-auto`), dans la zone pouce.
+  d'intervalle : barre haute, `PageHeader`, contenu. Un écran de formulaire (`FormScreen`) ou
+  une étape du premier lancement tient son action en bas (`ThumbZone`, `mt-auto`), dans la zone
+  pouce ; « Annuler », « Retour » ou « Supprimer » suivent dessous. Plus haut que l'écran, la
+  colonne défile et l'action vient en dernier.
 - **Cibles tactiles :** 44 px minimum (`h-11`, `size-11`) ; 48 px pour un champ, un bouton
   `lg`, un item d'onglet ; 52 px pour une ligne de liste.
 
@@ -460,7 +462,7 @@ ne reste sous la pilule.
 
 **The Thumb Zone Rule.** L'action principale d'un écran à décision (question du premier
 lancement, `Arrêter`, `Enregistrer` d'une envie) vit en bas de l'écran, sur un fondu vers la
-page quand elle colle (`sticky`).
+page quand elle colle (`ThumbZone sticky`, décalée de `--page-clearance` au-dessus du bord bas).
 
 ## Elevation & Depth
 

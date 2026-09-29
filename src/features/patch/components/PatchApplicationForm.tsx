@@ -1,4 +1,4 @@
-import { type FormEvent, useId, useState } from 'react'
+import { type FormEvent, type ReactNode, useId, useState } from 'react'
 import { derive } from '@/shared/domain/derive'
 import {
   type PatchApplicationInput,
@@ -9,6 +9,8 @@ import type { Journal } from '@/shared/domain/journal'
 import type { ProtocolPosition } from '@/shared/domain/protocol-position'
 import { Button } from '@/shared/ui/base/button'
 import { Input } from '@/shared/ui/base/input'
+import { FormScreen } from '@/shared/ui/FormScreen'
+import { ThumbZone } from '@/shared/ui/ThumbZone'
 import { fromDatetimeLocal, toDatetimeLocal } from '@/shared/utils/datetime-local'
 import { fromDecimalText, toDecimalText } from '@/shared/utils/decimal-text'
 import { newFactId } from '@/shared/utils/fact-id'
@@ -30,6 +32,8 @@ type PatchApplicationFormProps = {
   /** The application being edited, the journal then holding everything but it; absent to log one. */
   initial?: PatchApplicationInput
   onRecorded: (journal: Journal) => void
+  /** Under the primary action: the way out, and on a fact's page its deletion. */
+  secondary?: ReactNode
 }
 
 /** Logs one patch application with its own dose and time: the catch-up and the exception. */
@@ -39,6 +43,7 @@ export function PatchApplicationForm({
   now,
   initial,
   onRecorded,
+  secondary,
 }: PatchApplicationFormProps) {
   const id = useId()
   const errorId = `${id}-error`
@@ -82,13 +87,11 @@ export function PatchApplicationForm({
   const dateInvalid = error !== null && !doseInvalid
 
   return (
-    <section className="flex flex-col gap-6 pt-6">
-      <div className="flex flex-col gap-2">
-        <h2 className="text-title">{initial ? copy.edit.title : copy.title}</h2>
-        <p className="text-body text-muted">{initial ? copy.edit.lead : copy.lead}</p>
-      </div>
-
-      <form noValidate onSubmit={submit} className="flex flex-col gap-4">
+    <FormScreen
+      title={initial ? copy.edit.title : copy.title}
+      lead={initial ? copy.edit.lead : copy.lead}
+    >
+      <form noValidate onSubmit={submit} className="flex flex-1 flex-col gap-4">
         <div className="flex flex-col gap-1.5">
           <label htmlFor={`${id}-dose`} className="text-label">
             {copy.doseLabel}
@@ -134,10 +137,13 @@ export function PatchApplicationForm({
             {copy[error]}
           </p>
         ) : null}
-        <Button type="submit" size="lg">
-          {initial ? copy.edit.submit : copy.submit}
-        </Button>
+        <ThumbZone>
+          <Button type="submit" size="lg">
+            {initial ? copy.edit.submit : copy.submit}
+          </Button>
+        </ThumbZone>
+        {secondary}
       </form>
-    </section>
+    </FormScreen>
   )
 }

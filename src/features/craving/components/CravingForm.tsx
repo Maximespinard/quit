@@ -3,6 +3,7 @@ import { type FormEvent, type ReactNode, useId, useState } from 'react'
 import type { CravingInput } from '@/shared/domain/facts/craving'
 import { Button } from '@/shared/ui/base/button'
 import { ToggleGroup, ToggleGroupItem } from '@/shared/ui/base/toggle-group'
+import { ThumbZone } from '@/shared/ui/ThumbZone'
 import { strings } from '@/shared/utils/strings'
 import type { CravingTagOption } from '../domain/craving-tags'
 import { CravingTagPicker } from './CravingTagPicker'
@@ -16,13 +17,21 @@ type CravingFormProps = {
   onSubmit: (intensity: CravingIntensity, tags: readonly string[]) => boolean
   /** Extra fields shown above the intensity, e.g. the backdated moment. */
   children?: ReactNode
+  /** Under the primary action: the way out, and on a fact's page its deletion. */
+  secondary?: ReactNode
 }
 
 /**
  * Rates a craving 1–3, then offers its tags, and submits it. No intensity is preselected: the
  * user picks one. Tags appear only once it is picked, and submitting without any is fine.
  */
-export function CravingForm({ tagOptions, initial, onSubmit, children }: CravingFormProps) {
+export function CravingForm({
+  tagOptions,
+  initial,
+  onSubmit,
+  children,
+  secondary,
+}: CravingFormProps) {
   const hintId = useId()
   const [intensity, setIntensity] = useState<CravingIntensity | null>(initial?.intensity ?? null)
   const [tags, setTags] = useState<readonly string[]>(initial?.tags ?? [])
@@ -38,7 +47,7 @@ export function CravingForm({ tagOptions, initial, onSubmit, children }: Craving
   }
 
   return (
-    <form noValidate onSubmit={submit} className="flex flex-col gap-5">
+    <form noValidate onSubmit={submit} className="flex flex-1 flex-col gap-5">
       {children}
       <div className="flex flex-col gap-2">
         <span className="text-label">{copy.label}</span>
@@ -73,16 +82,14 @@ export function CravingForm({ tagOptions, initial, onSubmit, children }: Craving
         />
       ) : null}
       {/* Stuck to the thumb zone: however many tags push it down, recording stays one tap away. */}
-      <div className="sticky bottom-0 bg-linear-to-b from-transparent to-page to-40% pt-6 pb-safe-4">
-        <Button
-          type="submit"
-          size="lg"
-          className="w-full"
-          disabled={intensity === null || recorded}
-        >
+      <ThumbZone sticky>
+        <Button type="submit" size="lg" disabled={intensity === null || recorded}>
           {copy.submit}
         </Button>
-      </div>
+      </ThumbZone>
+      {secondary === undefined ? null : (
+        <div className="relative flex flex-col gap-3">{secondary}</div>
+      )}
     </form>
   )
 }

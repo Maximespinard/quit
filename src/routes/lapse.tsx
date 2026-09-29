@@ -21,14 +21,20 @@ function LapsePage() {
     <ReadyJournal state={state}>
       {(journal) => (
         <AppShell>
-          <LapseForm journal={journal} now={now} onRecorded={recorded} />
-          <Link
-            to="/"
-            search={appSearch}
-            className={buttonVariants({ variant: 'ghost', size: 'lg' })}
-          >
-            {strings.lapse.cancel}
-          </Link>
+          <LapseForm
+            journal={journal}
+            now={now}
+            onRecorded={recorded}
+            secondary={
+              <Link
+                to="/"
+                search={appSearch}
+                className={buttonVariants({ variant: 'ghost', size: 'lg' })}
+              >
+                {strings.lapse.cancel}
+              </Link>
+            }
+          />
         </AppShell>
       )}
     </ReadyJournal>
