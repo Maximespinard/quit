@@ -5,13 +5,18 @@ const ENV = { DATA_DIR: '/data' }
 
 describe('readConfig', () => {
   it('reads the data directory, with defaults for the rest', () => {
-    expect(readConfig(ENV)).toEqual({ port: 8080, dataDir: '/data', logLevel: 'info' })
+    expect(readConfig(ENV)).toEqual({
+      port: 8080,
+      dataDir: '/data',
+      logLevel: 'info',
+      trustProxyHops: 0,
+    })
   })
 
-  it('takes the port and the log level when given', () => {
-    const config = readConfig({ ...ENV, PORT: '3001', LOG_LEVEL: 'warn' })
+  it('takes the port, the log level and the proxies when given', () => {
+    const config = readConfig({ ...ENV, PORT: '3001', LOG_LEVEL: 'warn', TRUST_PROXY: '1' })
 
-    expect([config.port, config.logLevel]).toEqual([3001, 'warn'])
+    expect([config.port, config.logLevel, config.trustProxyHops]).toEqual([3001, 'warn', 1])
   })
 
   it('names every invalid variable at once', () => {
@@ -26,6 +31,7 @@ describe('readConfig', () => {
     ['a port that is not a number', { PORT: 'eighty' }, 'PORT must be an integer'],
     ['a port out of range', { PORT: '70000' }, 'PORT must be an integer'],
     ['an unknown log level', { LOG_LEVEL: 'verbose' }, 'LOG_LEVEL must be one of'],
+    ['a proxy count that is not a number', { TRUST_PROXY: 'true' }, 'TRUST_PROXY must be'],
   ])('refuses %s', (_, override, message) => {
     expect(() => readConfig({ ...ENV, ...override })).toThrow(message)
   })

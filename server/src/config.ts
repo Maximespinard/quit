@@ -6,6 +6,8 @@ export interface Config {
   /** Holds the SQLite database; created when missing. */
   dataDir: string
   logLevel: LogLevel
+  /** Reverse proxies between the clients and the server; 0 when clients connect directly. */
+  trustProxyHops: number
 }
 
 /**
@@ -26,10 +28,16 @@ export function readConfig(env: Record<string, string | undefined>): Config {
   const logLevel = LOG_LEVELS.find((level) => level === (env.LOG_LEVEL ?? 'info'))
   if (!logLevel) problems.push(`LOG_LEVEL must be one of ${LOG_LEVELS.join(', ')}`)
 
+  const trustProxyHops = Number(env.TRUST_PROXY ?? '0')
+  if (!Number.isInteger(trustProxyHops) || trustProxyHops < 0) {
+    problems.push('TRUST_PROXY must be a whole number of proxies')
+  }
+
+  // `!logLevel` is already a problem; repeated here so TypeScript narrows it.
   if (problems.length > 0 || !logLevel) {
     throw new Error(`Invalid configuration: ${problems.join('; ')}`)
   }
-  return { port, dataDir, logLevel }
+  return { port, dataDir, logLevel, trustProxyHops }
 }
 
 /** `readConfig` for an entry point: on invalid configuration, prints why and exits. */

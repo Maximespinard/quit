@@ -27,27 +27,31 @@ const requireDeviceKey =
     sendProblem(res, 401, 'A valid device key is required.')
   }
 
-/** The status of an error Express's own middleware raised for a bad request (body parsing). */
-const clientErrorStatus = (error: unknown) =>
+/** What the body parser's errors mean for the client, by their `type`. */
+const BODY_ERROR_DETAILS: Record<string, string> = {
+  'entity.parse.failed': 'The body is not valid JSON.',
+  'entity.too.large': `The body exceeds ${MAX_BODY_BYTES} bytes.`,
+}
+
+/** A client error Express's own middleware raised (body parsing): its status and type. */
+const clientError = (error: unknown) =>
   typeof error === 'object' &&
   error !== null &&
   'status' in error &&
   typeof error.status === 'number' &&
   error.status >= 400 &&
   error.status < 500
-    ? error.status
+    ? { status: error.status, type: 'type' in error ? String(error.type) : '' }
     : undefined
 
 /**
  * Every error answers problem+json. The body parser's messages quote the body, so only the
- * status is kept from them: a client error is never logged beyond its status line.
+ * status and type are kept from them: a client error is never logged beyond its status line.
  */
 const handleError: ErrorRequestHandler = (error, req, res, next) => {
   if (res.headersSent) return next(error)
-  const status = clientErrorStatus(error)
-  if (status === 400) return sendProblem(res, 400, 'The body is not valid JSON.')
-  if (status === 413) return sendProblem(res, 413, `The body exceeds ${MAX_BODY_BYTES} bytes.`)
-  if (status !== undefined) return sendProblem(res, status)
+  const client = clientError(error)
+  if (client) return sendProblem(res, client.status, BODY_ERROR_DETAILS[client.type])
   req.log.error({ err: error }, 'request failed')
   sendProblem(res, 500)
 }
@@ -55,10 +59,20 @@ const handleError: ErrorRequestHandler = (error, req, res, next) => {
 /**
  * The HTTP API. The health check is open; every other route, unknown ones included, requires
  * the device key. Logs carry a request id, the method, the path and the status, never a
- * header nor a body.
+ * header, a query nor a body.
  */
-export function createApp({ database, logger }: { database: Database; logger: Logger }) {
+export function createApp({
+  database,
+  logger,
+  trustProxyHops,
+}: {
+  database: Database
+  logger: Logger
+  /** Reverse proxies in front (the tunnel): the rate limit then counts per client address. */
+  trustProxyHops: number
+}) {
   const app = express()
+  if (trustProxyHops > 0) app.set('trust proxy', trustProxyHops)
 
   app.use(
     pinoHttp({
@@ -72,7 +86,7 @@ export function createApp({ database, logger }: { database: Database; logger: Lo
         req: (req: { id: string; method: string; url: string }) => ({
           id: req.id,
           method: req.method,
-          url: req.url,
+          path: req.url.replace(/\?.*$/s, ''),
         }),
         res: (res: { statusCode: number }) => ({ statusCode: res.statusCode }),
       },

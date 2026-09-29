@@ -22,16 +22,18 @@ interface RequestOptions {
   /** Sent as is, with a JSON content type. */
   body?: string
   authorization?: string
+  /** The client address a proxy in front would forward. */
+  forwardedFor?: string
 }
 
-async function setup() {
+async function setup({ trustProxyHops = 0 } = {}) {
   const dir = await mkdtemp(join(tmpdir(), 'quit-server-'))
   cleanups.push(() => rm(dir, { recursive: true, force: true }))
   const database = openDatabase(dir)
   cleanups.push(async () => database.close())
   const logs: string[] = []
   const logger = createLogger('info', { write: (line: string) => void logs.push(line) })
-  const server = createApp({ database, logger }).listen(0, '127.0.0.1')
+  const server = createApp({ database, logger, trustProxyHops }).listen(0, '127.0.0.1')
   await new Promise((resolve) => server.once('listening', resolve))
   cleanups.push(() => new Promise((resolve) => server.close(() => resolve())))
   const { port } = server.address() as AddressInfo
@@ -41,6 +43,7 @@ async function setup() {
     if (options.body !== undefined) headers['content-type'] = 'application/json'
     if (options.authorization !== undefined) headers.authorization = options.authorization
     else if (options.key) headers.authorization = `Bearer ${options.key}`
+    if (options.forwardedFor) headers['x-forwarded-for'] = options.forwardedFor
     return fetch(`http://127.0.0.1:${port}${path}`, {
       method,
       headers,
@@ -199,6 +202,27 @@ describe('rate limit', () => {
     await expectProblem(response, 404)
   })
 
+  it('counts per client behind a proxy: one client failing does not lock out another', async () => {
+    const api = await setup({ trustProxyHops: 1 })
+    const key = api.issueKey()
+    const wrong = 'not-the-device-key-not-the-device-key-000'
+
+    for (let attempt = 0; attempt < AUTH_FAILURES_PER_WINDOW; attempt++) {
+      await api.request('GET', '/api/nothing-here', { key: wrong, forwardedFor: '203.0.113.7' })
+    }
+    const attacker = await api.request('GET', '/api/nothing-here', {
+      key,
+      forwardedFor: '203.0.113.7',
+    })
+    const owner = await api.request('GET', '/api/nothing-here', {
+      key,
+      forwardedFor: '198.51.100.20',
+    })
+
+    await expectProblem(attacker, 429)
+    await expectProblem(owner, 404)
+  })
+
   it('keeps the health check out of it', async () => {
     const api = await setup()
 
@@ -212,7 +236,7 @@ describe('rate limit', () => {
 })
 
 describe('logs', () => {
-  it('log each request with an id, never its body nor the device key', async () => {
+  it('log each request with an id, never its body, its query nor the device key', async () => {
     const api = await setup()
     const key = api.issueKey()
     const secret = 'craving-note-that-must-stay-private'
@@ -223,17 +247,18 @@ describe('logs', () => {
     })
     await api.request('PUT', '/api/nothing-here', { key, body: `{"note": "${secret}"` })
     await api.request('PUT', '/api/nothing-here', { key: `${key}-${secret}`, body: '{}' })
+    await api.request('GET', `/api/nothing-here?note=${secret}`, { key })
 
     const lines = api.logs.map((line) => JSON.parse(line))
     const requestId = accepted.headers.get('x-request-id')
     expect(requestId).toBeTruthy()
     expect(lines).toContainEqual(
       expect.objectContaining({
-        req: { id: requestId, method: 'PUT', url: '/api/nothing-here' },
+        req: { id: requestId, method: 'PUT', path: '/api/nothing-here' },
         res: { statusCode: 404 },
       }),
     )
-    expect(lines).toHaveLength(3)
+    expect(lines).toHaveLength(4)
     expect(api.logs.join('\n')).not.toContain(secret)
     expect(api.logs.join('\n')).not.toContain(key)
   })

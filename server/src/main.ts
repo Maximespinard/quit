@@ -11,8 +11,12 @@ const config = readConfigOrExit(process.env)
 const logger = createLogger(config.logLevel)
 const database = openDatabase(config.dataDir)
 
-const server = createApp({ database, logger }).listen(config.port, (error) => {
-  if (error) throw error
+const app = createApp({ database, logger, trustProxyHops: config.trustProxyHops })
+const server = app.listen(config.port, (error) => {
+  if (error) {
+    logger.fatal({ err: error, port: config.port }, 'cannot listen')
+    process.exit(1)
+  }
   logger.info({ port: config.port }, 'listening')
 })
 

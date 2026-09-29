@@ -55,7 +55,8 @@ npm run db:generate -- --name <change>   # after editing src/schema.ts: writes t
 | --- | --- | --- |
 | `DATA_DIR` | — (required) | Directory of the database file `quit.db`, created when missing |
 | `PORT` | `8080` | |
-| `LOG_LEVEL` | `info` | pino level; logs are JSON lines on stdout, never a body nor a header |
+| `LOG_LEVEL` | `info` | pino level; logs are JSON lines on stdout, never a body, a query nor a header |
+| `TRUST_PROXY` | `0` | Reverse proxies in front, e.g. `1` behind the tunnel, so the rate limit counts per client |
 
 A missing or invalid variable stops the start with a message naming it.
 
