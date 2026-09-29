@@ -13,3 +13,6 @@ export function formatTime(ms: number): string {
 /** A local calendar date as French copy shows it: `12 septembre 2026`. */
 export const formatDate = (ms: number) =>
   new Date(ms).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+
+/** A whole count as French copy shows it, thousands apart: `1 250`. */
+export const formatCount = (count: number) => count.toLocaleString('fr-FR')

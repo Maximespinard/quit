@@ -72,6 +72,7 @@ const journalOf = (...facts: readonly (Fact | readonly Fact[])[]): Journal => {
     protocol: defaultProtocol,
     weeklySpendCents: 3500,
     baselineSmokesPerDay: 15,
+    goal: null,
     facts: [quitMoment, ...facts.flat()].sort(byInstant),
   }
 }
@@ -119,15 +120,15 @@ export const scenarios = [
     ]),
   ),
   // Wednesday 17 June, 11:00. One cigarette last night at 22:40: a slip, not a relapse.
-  scenario(
-    'day-45-lapse',
-    sinceQuit(44, 2),
-    journalOf(dailyPatches(defaultProtocol, 45), firstMonthCravings, [
+  // Saving for a 400 € bike since the quit moment: a little over half way.
+  scenario('day-45-lapse', sinceQuit(44, 2), {
+    ...journalOf(dailyPatches(defaultProtocol, 45), firstMonthCravings, [
       craving(sinceQuit(29, 10), 2, true, ['stress']),
       craving(sinceQuit(43, 13, 30), 3, false, ['evening-out']),
       lapse(sinceQuit(43, 13, 40)),
     ]),
-  ),
+    goal: { label: 'Un vélo', priceCents: 40_000, countsFrom: null, celebrated: false },
+  }),
   // Monday 3 August, 12:00: the 84-day protocol ended a week ago, the streak goes on.
   scenario(
     'protocol-over',

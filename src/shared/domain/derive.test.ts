@@ -16,6 +16,7 @@ const journalWithQuitMoment = (at: number, protocol: Protocol = defaultProtocol)
   protocol,
   weeklySpendCents: null,
   baselineSmokesPerDay: null,
+  goal: null,
 })
 
 describe('derive', () => {
@@ -28,6 +29,9 @@ describe('derive', () => {
       lapseDaysInARow: null,
       relapses: null,
       cigarettesSmoked: null,
+      moneySavedCents: null,
+      cigarettesNotSmoked: null,
+      goal: null,
       smokeFreeDays: null,
       protocol: null,
       patch: null,
@@ -57,6 +61,7 @@ describe('derive', () => {
       protocol: defaultProtocol,
       weeklySpendCents: null,
       baselineSmokesPerDay: null,
+      goal: null,
       facts: [
         { type: 'quit-moment', at: first },
         { type: 'quit-moment', at: corrected },
@@ -244,6 +249,7 @@ describe('derive — the patch application of the protocol day', () => {
       protocol: defaultProtocol,
       weeklySpendCents: null,
       baselineSmokesPerDay: null,
+      goal: null,
     }
     const now = local(22, 10)
     const backdated = recordPatchApplication(journal, { at: local(21, 20), doseMg: 21 }, now)
@@ -290,6 +296,7 @@ describe('derive — the patch application of the protocol day', () => {
       protocol: defaultProtocol,
       weeklySpendCents: null,
       baselineSmokesPerDay: null,
+      goal: null,
     }
 
     expect(derive(journal, local(22, 20)).patch).toEqual({ status: 'due', doseMg: 21 })
@@ -327,6 +334,7 @@ const journalOf = (quitMoment: number, lapses: readonly number[] = []): Journal 
   protocol: defaultProtocol,
   weeklySpendCents: null,
   baselineSmokesPerDay: null,
+  goal: null,
   facts: [
     { type: 'quit-moment', at: quitMoment },
     ...lapses.map((at) => ({ type: 'lapse' as const, at, count: 1 })),
@@ -368,6 +376,7 @@ describe('derive — a slip', () => {
       protocol: defaultProtocol,
       weeklySpendCents: null,
       baselineSmokesPerDay: null,
+      goal: null,
       facts: [
         { type: 'quit-moment', at: NOW - 10 * DAY },
         { type: 'lapse', at: NOW - 8 * DAY, count: 1 },
@@ -519,6 +528,7 @@ describe('derive — cigarettes smoked', () => {
       protocol: defaultProtocol,
       weeklySpendCents: null,
       baselineSmokesPerDay: null,
+      goal: null,
       facts: [
         { type: 'quit-moment', at: QUIT },
         { type: 'lapse', at: local(1, 5, 10), count: 3 },

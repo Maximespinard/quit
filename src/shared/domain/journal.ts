@@ -1,4 +1,5 @@
 import { decodeFact, type Fact } from './facts/registry'
+import { decodeGoal, type Goal } from './goal'
 import { isValidBaseline, isValidWeeklySpend } from './journal-settings'
 import { decodeProtocol, defaultProtocol, type Protocol } from './protocol'
 
@@ -10,14 +11,17 @@ export type Journal = {
   readonly weeklySpendCents: number | null
   /** Smokes per day before the quit moment; `null` until first launch sets it. */
   readonly baselineSmokesPerDay: number | null
+  /** The one thing the user is saving towards; `null` until one is set. */
+  readonly goal: Goal | null
 }
 
-/** A new journal: no fact yet, the default protocol, no setting. */
+/** A new journal: no fact yet, the default protocol, no setting, no goal. */
 export const emptyJournal: Journal = {
   facts: [],
   protocol: defaultProtocol,
   weeklySpendCents: null,
   baselineSmokesPerDay: null,
+  goal: null,
 }
 
 const validOrNull = (value: unknown, isValid: (value: number) => boolean) =>
@@ -26,12 +30,16 @@ const validOrNull = (value: unknown, isValid: (value: number) => boolean) =>
 /** Rebuilds a journal from a stored value, dropping anything no fact module recognises. */
 export function decodeJournal(raw: unknown): Journal {
   if (typeof raw !== 'object' || raw === null) return emptyJournal
-  const { facts, protocol, weeklySpendCents, baselineSmokesPerDay } = raw as Record<string, unknown>
+  const { facts, protocol, weeklySpendCents, baselineSmokesPerDay, goal } = raw as Record<
+    string,
+    unknown
+  >
   return {
     facts: Array.isArray(facts) ? facts.map(decodeFact).filter((fact) => fact !== null) : [],
     protocol: decodeProtocol(protocol),
     weeklySpendCents: validOrNull(weeklySpendCents, isValidWeeklySpend),
     baselineSmokesPerDay: validOrNull(baselineSmokesPerDay, isValidBaseline),
+    goal: decodeGoal(goal),
   }
 }
 

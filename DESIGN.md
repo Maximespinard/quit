@@ -452,6 +452,17 @@ pas de fête, pas de reproche.
   stat. `Jours sans fumer` toujours ; `Plus long streak` (`2 j 23 h`) seulement après une
   rechute. Libellé `label` `ink-dim`, chiffre `figure`, chiffres alignés en bas de colonne.
   Le héros dit « jours de streak » : « jours sans fumer » est réservé au total.
+- **Économies (accueil) :** sous les acquis et leur note, la même carte-relevé en `dl` à
+  deux colonnes : `Argent économisé` (`220,08 €`) et `Cigarettes non fumées` (`1 200`),
+  formatés en français (`formatEuros`, `formatCount`). Sans dépense ni référence, une phrase
+  `ink-dim` et le lien vers les réglages, jamais un faux zéro.
+- **Objectif (accueil) :** section titrée comme le protocole (`Objectif`, aside `55 %` puis
+  `Atteint` en `ink-soft`), carte `surface` padding 16px. En cours : libellé en `body` 600,
+  `220,08 € sur 400 €` en `label` `ink-dim`, `Modifier` outline `sm` à droite, puis la barre de
+  progression (celle du niveau). Atteint : libellé, prix en `figure`, barre pleine, une phrase ;
+  `Nouvel objectif` à droite. À la première vue seulement, le prix monte en `useCountUp`, la
+  barre suit et `Atteint` entre en `step-in` ; ce « vu » est gardé dans le journal. Sans
+  objectif : la phrase, puis `Choisir un objectif` dessous, jamais serré à côté.
 - **Note d'écart (accueil) :** après un écart seulement, collée sous la carte des acquis
   (gap 12px, c'est sa note de bas de carte) : `Dernière cigarette il y a …` en `body`
   `ink-soft`, puis, tant que la série est ouverte (un ou deux jours), la ligne du seuil de
@@ -539,11 +550,12 @@ au-dessus du libellé `tab`, hauteur d'item 48px, filet supérieur `line`, fond 
   voile `ink/40`, poignée de swipe en `line` (4px × 96px). La mécanique Base UI est intacte ;
   seules les couleurs et les rayons sont retokenisés.
 
-### Level bar
+### Level bar (`ProgressBar`)
 
 Piste `line` de 8px, `rounded-full`, remplissage `action` animé en largeur sur 500 ms
 `ease-out-expo`, coupé sous `motion-reduce`. Les bornes chiffrées (`620 / 1 000 XP`) vivent
-à côté, en `label` : **la barre ne porte jamais de texte**.
+à côté, en `label` : **la barre ne porte jamais de texte**. La même barre porte l'objectif ;
+en euros, son `aria-valuetext` lit `220,08 € sur 400 €`, jamais les centimes bruts.
 
 ### Multiplier steps (signature)
 

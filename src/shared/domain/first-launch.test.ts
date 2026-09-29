@@ -23,6 +23,7 @@ describe('startJourney', () => {
         protocol: defaultProtocol,
         weeklySpendCents: 4_200,
         baselineSmokesPerDay: 12,
+        goal: null,
       },
     })
     if (result.ok) expect(derive(result.journal, NOW).streak?.elapsedMs).toBe(90 * MINUTE)

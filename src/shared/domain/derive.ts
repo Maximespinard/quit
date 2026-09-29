@@ -4,10 +4,11 @@ import type { Journal } from './journal'
 import { type ProtocolDayPatch, protocolDayPatch } from './protocol-day-patch'
 import { type ProtocolPosition, protocolPosition } from './protocol-position'
 import { lapseRuns, lastSlip, openRun, type Relapse, relapsesOf, streakRestarts } from './relapse'
+import { cigarettesNotSmoked, type GoalProgress, goalProgress, moneySavedCents } from './savings'
 import { smokeFreeDays } from './smoke-free-days'
 import { type Elapsed, type Streak, streaks } from './streak'
 
-export type { Elapsed, Relapse, Streak }
+export type { Elapsed, GoalProgress, Relapse, Streak }
 
 /**
  * Without a quit moment nothing is derived; with one, every figure exists, the personal best
@@ -22,6 +23,9 @@ export type DerivedState =
       readonly lapseDaysInARow: null
       readonly relapses: null
       readonly cigarettesSmoked: null
+      readonly moneySavedCents: null
+      readonly cigarettesNotSmoked: null
+      readonly goal: null
       readonly smokeFreeDays: null
       readonly protocol: null
       readonly patch: null
@@ -40,6 +44,12 @@ export type DerivedState =
       readonly relapses: readonly Relapse[]
       /** Every lapse's cigarettes: money saved and cigarettes not smoked subtract them. */
       readonly cigarettesSmoked: number
+      /** Integer cents, never below zero; `null` without the weekly spend or the baseline. */
+      readonly moneySavedCents: number | null
+      /** Never below zero; `null` without the baseline. */
+      readonly cigarettesNotSmoked: number | null
+      /** `null` without a goal, or without the money saved it is measured against. */
+      readonly goal: GoalProgress | null
       /** Never resets: a lapse only takes away the calendar day it happened on. */
       readonly smokeFreeDays: number
       readonly protocol: ProtocolPosition
@@ -61,6 +71,9 @@ export function derive(journal: Journal, now: number): DerivedState {
       lapseDaysInARow: null,
       relapses: null,
       cigarettesSmoked: null,
+      moneySavedCents: null,
+      cigarettesNotSmoked: null,
+      goal: null,
       smokeFreeDays: null,
       protocol: null,
       patch: null,
@@ -78,6 +91,9 @@ export function derive(journal: Journal, now: number): DerivedState {
     lapseDaysInARow: openRun(runs, now)?.days ?? 0,
     relapses,
     cigarettesSmoked: lapses.reduce((total, lapse) => total + lapse.count, 0),
+    moneySavedCents: moneySavedCents(journal, quitMoment, now),
+    cigarettesNotSmoked: cigarettesNotSmoked(journal, quitMoment, now),
+    goal: goalProgress(journal, quitMoment, now),
     smokeFreeDays: smokeFreeDays(quitMoment, lapses, now),
     protocol,
     patch: protocolDayPatch(journal, quitMoment, protocol, now),
