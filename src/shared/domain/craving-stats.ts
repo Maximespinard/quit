@@ -20,6 +20,8 @@ const DAILY_TREND_DAYS = 14
 export type TrendBucket = {
   readonly start: number
   readonly end: number
+  /** Calendar days it spans: 1 on a day, 7 on a week, fewer on the oldest week, cut at the quit day. */
+  readonly days: number
   readonly count: number
   /** Mean of the bucket's intensities, 1 to 3; `null` without a craving to average. */
   readonly averageIntensity: number | null
@@ -69,12 +71,13 @@ function trendRanges(quitMoment: number, now: number) {
   if (days.length <= DAILY_TREND_DAYS) {
     return {
       period: 'day' as const,
-      ranges: days.map((start) => ({ start, end: localMidnight(start, 1) })),
+      ranges: days.map((start) => ({ start, end: localMidnight(start, 1), days: 1 })),
     }
   }
-  const ranges: { start: number; end: number }[] = []
+  const ranges: { start: number; end: number; days: number }[] = []
   for (let end = localMidnight(now, 1); end > first; end = localMidnight(end, -7)) {
-    ranges.unshift({ start: Math.max(first, localMidnight(end, -7)), end })
+    const start = Math.max(first, localMidnight(end, -7))
+    ranges.unshift({ start, end, days: days.filter((day) => start <= day && day < end).length })
   }
   return { period: 'week' as const, ranges }
 }
@@ -97,12 +100,13 @@ function trendOf(
 ): CravingTrend {
   const { period, ranges } = trendRanges(quitMoment, now)
   const bucketOf = (at: number) => ranges.findIndex(({ start, end }) => start <= at && at < end)
-  const buckets = ranges.map(({ start, end }) => {
+  const buckets = ranges.map(({ start, end, days }) => {
     const inside = cravings.filter((craving) => start <= craving.at && craving.at < end)
     const total = inside.reduce((sum, craving) => sum + craving.intensity, 0)
     return {
       start,
       end,
+      days,
       count: inside.length,
       averageIntensity: inside.length === 0 ? null : total / inside.length,
     }

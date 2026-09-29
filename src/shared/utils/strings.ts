@@ -306,7 +306,10 @@ export const strings = {
     held: 'Tenues jusqu’au bout',
     riskiestHour: 'Heure la plus risquée',
     topTag: 'Situation la plus fréquente',
-    noTag: 'Aucune',
+    /** An hour or a situation there is none of yet. */
+    none: 'Aucune',
+    /** Between a chart readout's name and its value. */
+    separator: '·',
     percent: (percent: number) => `${percent}\u00a0%`,
     cravings: (count: number) => (count <= 1 ? `${count} envie` : `${count} envies`),
     /** A local wall-clock hour: `18 h`. */
@@ -324,7 +327,11 @@ export const strings = {
     trend: {
       title: 'Au fil du temps',
       countByDay: 'Envies par jour',
-      countByWeek: 'Envies par semaine',
+      /** Weeks are compared per day: the oldest one, cut at the quit day, is shorter. */
+      countByWeek: 'Envies par jour, en moyenne sur chaque semaine',
+      /** A week's cravings, then its daily average: `18 envies · 2,6 par jour`. */
+      weekCount: (count: number, perDay: number) =>
+        `${count <= 1 ? `${count} envie` : `${count} envies`} · ${perDay.toLocaleString('fr-FR', { maximumFractionDigits: 1 })} par jour`,
       intensity: 'Intensité moyenne',
       noIntensity: 'aucune envie',
       /** An average intensity out of 3: `2,5 sur 3`. */
@@ -333,10 +340,11 @@ export const strings = {
       /** A week of the trend, its first and last days: the oldest may be shorter. */
       week: (first: string, last: string) => `${first} – ${last}`,
       today: 'aujourd’hui',
-      /** A step change on the trend: the dose the new step starts. */
-      stepChange: (doseMg: string) => `${doseMg}\u00a0mg`,
-      stepChangeLabel: (stepNumber: number, doseMg: string) =>
-        `Étape ${stepNumber} à ${doseMg}\u00a0mg`,
+      /** A step change on the trend: the dose the new step starts, or the doses of steps starting together: `14 → 7 mg`. */
+      stepChange: (doses: readonly string[]) => `${doses.join(' → ')}\u00a0mg`,
+      /** A step change for screen readers, with the day or the week it falls in. */
+      stepChangeAt: (stepNumber: number, doseMg: string, when: string) =>
+        `Étape ${stepNumber} à ${doseMg}\u00a0mg · ${when}`,
       single: 'La tendance apparaîtra dès demain, jour après jour.',
     },
   },

@@ -1,6 +1,8 @@
-import type { TrendBucket } from '@/shared/domain/craving-stats'
+import type { CravingTrend, StepChange, TrendBucket } from '@/shared/domain/craving-stats'
 import { HOUR_MS } from '@/shared/utils/duration'
+import { formatDose, formatShortDate } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
+import type { ChartMark } from '../types/charts'
 
 const defaultTagLabels: Readonly<Record<string, string>> = strings.craving.tags.defaults
 
@@ -11,13 +13,24 @@ export const tagLabel = (tag: string): string => defaultTagLabels[tag] ?? tag
 export const percentOf = (part: number, whole: number): number =>
   whole === 0 ? 0 : Math.round((part / whole) * 100)
 
-/** A local calendar date, short: `4 mai`. */
-export const shortDate = (ms: number): string =>
-  new Date(ms).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
-
-/** What a trend bucket covers: `4 mai`, or `8 mai – 14 mai`. */
-export const bucketLabel = ({ start, end }: TrendBucket, period: 'day' | 'week'): string =>
+/** What a trend bucket covers: `4 mai`, or its first and last days, `8 mai – 14 mai`. */
+export const bucketLabel = ({ start, end }: TrendBucket, period: CravingTrend['period']): string =>
   period === 'day'
-    ? shortDate(start)
+    ? formatShortDate(start)
     : // `end` is the next day's midnight: an hour back lands on the last day, whatever the DST.
-      strings.stats.trend.week(shortDate(start), shortDate(end - HOUR_MS))
+      strings.stats.trend.week(formatShortDate(start), formatShortDate(end - HOUR_MS))
+
+/**
+ * One rule per bucket holding a step change; two steps starting in the same week share it:
+ * `14 → 7 mg`.
+ */
+export function stepMarkers(stepChanges: readonly StepChange[]): readonly ChartMark[] {
+  const dosesByBucket = new Map<number, string[]>()
+  for (const { bucketIndex, doseMg } of stepChanges) {
+    dosesByBucket.set(bucketIndex, [...(dosesByBucket.get(bucketIndex) ?? []), formatDose(doseMg)])
+  }
+  return [...dosesByBucket].map(([index, doses]) => ({
+    index,
+    label: strings.stats.trend.stepChange(doses),
+  }))
+}

@@ -1,13 +1,6 @@
 import { cn } from '@/shared/utils/cn'
 import { strings } from '@/shared/utils/strings'
-
-export type BarRow = {
-  readonly key: string
-  readonly label: string
-  readonly count: number
-  /** A row set apart from the ranking, like cravings without a tag: its label steps back. */
-  readonly muted?: boolean
-}
+import type { BarRow } from '../types/charts'
 
 type BarListProps = {
   rows: readonly BarRow[]
@@ -34,9 +27,10 @@ export function BarList({ rows, max }: BarListProps) {
               <span className="sr-only">{strings.stats.cravings(row.count)}</span>
             </span>
           </p>
-          <div aria-hidden className="h-2">
+          {/* Grown from a hairline baseline, rounded only at its data end. */}
+          <div aria-hidden className="h-2 border-line border-l">
             <div
-              className="h-full rounded-full bg-action"
+              className="h-full rounded-r-mark bg-action"
               // A row holding anything keeps a visible stub; an empty one draws nothing.
               style={{
                 width:

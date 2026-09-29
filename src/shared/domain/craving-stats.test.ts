@@ -115,10 +115,10 @@ describe('derive, craving stats', () => {
     expect(stats.byHour[3]).toBe(1)
     expect(stats.byHour[23]).toBe(1)
     expect(stats.trend.buckets).toEqual([
-      { start: local(3, 27), end: local(3, 28), count: 0, averageIntensity: null },
-      { start: local(3, 28), end: local(3, 29), count: 0, averageIntensity: null },
-      { start: local(3, 29), end: local(3, 30), count: 2, averageIntensity: 2 },
-      { start: local(3, 30), end: local(3, 31), count: 1, averageIntensity: 2 },
+      { start: local(3, 27), end: local(3, 28), days: 1, count: 0, averageIntensity: null },
+      { start: local(3, 28), end: local(3, 29), days: 1, count: 0, averageIntensity: null },
+      { start: local(3, 29), end: local(3, 30), days: 1, count: 2, averageIntensity: 2 },
+      { start: local(3, 30), end: local(3, 31), days: 1, count: 1, averageIntensity: 2 },
     ])
   })
 
@@ -189,7 +189,7 @@ describe('derive, craving stats', () => {
     ])
   })
 
-  it('switches to weeks ending today past two weeks, the oldest cut at the quit day', () => {
+  it('switches to weeks ending today past two weeks, the oldest cut at the quit day and shorter', () => {
     const now = local(9, 16, 20)
     const stats = statsOf(
       journalOf(QUIT, [craving(local(9, 2, 10)), craving(local(9, 3, 10)), craving(local(9, 12))]),
@@ -198,10 +198,21 @@ describe('derive, craving stats', () => {
 
     expect(stats.trend.period).toBe('week')
     expect(stats.trend.buckets).toEqual([
-      { start: local(9, 1), end: local(9, 3), count: 1, averageIntensity: 2 },
-      { start: local(9, 3), end: local(9, 10), count: 1, averageIntensity: 2 },
-      { start: local(9, 10), end: local(9, 17), count: 1, averageIntensity: 2 },
+      { start: local(9, 1), end: local(9, 3), days: 2, count: 1, averageIntensity: 2 },
+      { start: local(9, 3), end: local(9, 10), days: 7, count: 1, averageIntensity: 2 },
+      { start: local(9, 10), end: local(9, 17), days: 7, count: 1, averageIntensity: 2 },
     ])
+  })
+
+  it('counts a week’s days on the calendar, whole across a daylight-saving change', () => {
+    // The week ending Monday 30 March 2026 holds the 23 h day of 29 March: still seven days.
+    const stats = statsOf(journalOf(local(3, 1, 9), []), local(3, 30, 12))
+
+    expect(stats.trend.buckets.at(-1)).toMatchObject({
+      start: local(3, 24),
+      end: local(3, 31),
+      days: 7,
+    })
   })
 
   it('marks each step change in the bucket it falls in, only once it has happened', () => {

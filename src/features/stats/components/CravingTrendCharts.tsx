@@ -1,17 +1,20 @@
 import type { CravingTrend } from '@/shared/domain/craving-stats'
-import { formatDose } from '@/shared/utils/format'
+import { CRAVING_INTENSITIES } from '@/shared/domain/facts/craving'
+import { formatDose, formatShortDate } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
-import { bucketLabel, shortDate } from '../utils/stats-labels'
-import { type ChartMark, ColumnChart } from './ColumnChart'
+import type { ChartMark } from '../types/charts'
+import { bucketLabel, stepMarkers } from '../utils/stats-labels'
+import { ColumnChart } from './ColumnChart'
 
 const copy = strings.stats.trend
 
-/** The highest average intensity: the intensity chart's scale is fixed, not the tallest week. */
-const MAX_INTENSITY = 3
+/** The intensity chart's fixed scale: the strongest intensity, not the strongest week. */
+const MAX_INTENSITY = Math.max(...CRAVING_INTENSITIES)
 
 /**
  * The trend as two charts on one time axis, never one chart with two scales: how many
- * cravings, then how strong on average. The protocol's step changes rule both.
+ * cravings, then how strong on average. The protocol's step changes rule both. Weeks are
+ * compared per day, so the oldest one, shorter, does not read as a dip.
  */
 export function CravingTrendCharts({ trend }: { trend: CravingTrend }) {
   const { buckets, period, stepChanges } = trend
@@ -21,13 +24,10 @@ export function CravingTrendCharts({ trend }: { trend: CravingTrend }) {
   }
   const last = buckets.length - 1
   const ticks: readonly ChartMark[] = [
-    { index: 0, label: shortDate(first.start) },
+    { index: 0, label: formatShortDate(first.start) },
     { index: last, label: copy.today },
   ]
-  const markers = stepChanges.map(({ bucketIndex, doseMg }) => ({
-    index: bucketIndex,
-    label: copy.stepChange(formatDose(doseMg)),
-  }))
+  const markers = stepMarkers(stepChanges)
   const countTitle = period === 'day' ? copy.countByDay : copy.countByWeek
 
   return (
@@ -38,8 +38,11 @@ export function CravingTrendCharts({ trend }: { trend: CravingTrend }) {
           label={countTitle}
           columns={buckets.map((bucket) => ({
             label: bucketLabel(bucket, period),
-            value: bucket.count,
-            valueText: strings.stats.cravings(bucket.count),
+            value: bucket.count / bucket.days,
+            valueText:
+              period === 'day'
+                ? strings.stats.cravings(bucket.count)
+                : copy.weekCount(bucket.count, bucket.count / bucket.days),
           }))}
           ticks={ticks}
           markers={markers}
@@ -68,11 +71,9 @@ export function CravingTrendCharts({ trend }: { trend: CravingTrend }) {
         <ul className="sr-only">
           {stepChanges.map(({ bucketIndex, stepNumber, doseMg }) => {
             const bucket = buckets[bucketIndex]
-            const when = bucket === undefined ? '' : ` · ${bucketLabel(bucket, period)}`
-            return (
+            return bucket === undefined ? null : (
               <li key={stepNumber}>
-                {copy.stepChangeLabel(stepNumber, formatDose(doseMg))}
-                {when}
+                {copy.stepChangeAt(stepNumber, formatDose(doseMg), bucketLabel(bucket, period))}
               </li>
             )
           })}

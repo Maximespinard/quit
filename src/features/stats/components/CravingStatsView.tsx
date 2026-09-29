@@ -41,9 +41,9 @@ export function CravingStatsView({ stats }: { stats: CravingStats }) {
     )
   }
   const tagRows = [
-    ...stats.byTag.map(({ tag, count }) => ({ key: tag, label: tagLabel(tag), count })),
+    ...stats.byTag.map(({ tag, count }) => ({ key: `tag:${tag}`, label: tagLabel(tag), count })),
     ...(stats.untagged > 0
-      ? [{ key: '', label: copy.untagged, count: stats.untagged, muted: true }]
+      ? [{ key: 'untagged', label: copy.untagged, count: stats.untagged, muted: true }]
       : []),
   ]
 

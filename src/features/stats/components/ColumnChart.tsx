@@ -1,16 +1,7 @@
 import { type PointerEvent, useState } from 'react'
 import { cn } from '@/shared/utils/cn'
-
-export type ChartColumn = {
-  /** What the readout and the table name: `18 h – 19 h`, `semaine du 4 mai`. */
-  readonly label: string
-  readonly value: number
-  /** The value as read: `35 envies`, `2,5 sur 3`. */
-  readonly valueText: string
-}
-
-/** A label pinned to the left edge of the column at `index`. */
-export type ChartMark = { readonly index: number; readonly label: string }
+import { strings } from '@/shared/utils/strings'
+import type { ChartColumn, ChartMark } from '../types/charts'
 
 type ColumnChartProps = {
   /** The table twin's caption: what a screen reader hears instead of the columns. */
@@ -69,7 +60,7 @@ export function ColumnChart({
         {shown === undefined ? null : (
           <>
             <span className="font-semibold text-ink">{shown.label}</span>
-            <span>·</span>
+            <span>{strings.stats.separator}</span>
             <span>{shown.valueText}</span>
           </>
         )}
@@ -109,7 +100,7 @@ export function ColumnChart({
               >
                 <div
                   className={cn(
-                    'w-full max-w-6 rounded-t-[4px] bg-action transition-opacity duration-150 ease-out-expo motion-reduce:transition-none',
+                    'w-full max-w-6 rounded-t-mark bg-action transition-opacity duration-150 ease-out-expo motion-reduce:transition-none',
                     active !== null && index !== active && 'opacity-35',
                   )}
                   // A column holding anything stays visible, however small beside the tallest.

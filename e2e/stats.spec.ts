@@ -35,9 +35,11 @@ test('two months of cravings: the riskiest hour, the top situation and the trend
 
   // The trend runs by week, both step-downs marked on it.
   const trend = page.getByRole('region', { name: 'Au fil du temps' })
-  await expect(trend.getByRole('table', { name: 'Envies par semaine' })).toBeAttached()
-  await expect(trend.getByText(/^Étape 2 à 14\smg/)).toBeAttached()
-  await expect(trend.getByText(/^Étape 3 à 7\smg/)).toBeAttached()
+  await expect(
+    trend.getByRole('table', { name: 'Envies par jour, en moyenne sur chaque semaine' }),
+  ).toBeAttached()
+  await expect(trend.getByText(/^Étape 2 à 14\smg · /)).toBeAttached()
+  await expect(trend.getByText(/^Étape 3 à 7\smg · /)).toBeAttached()
 })
 
 test('without a craving the screen says what will appear, with no chart', async ({ page }) => {

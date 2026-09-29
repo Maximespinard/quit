@@ -19,9 +19,9 @@ export function StatsSummary({ stats }: { stats: CravingStats }) {
     { term: copy.held, value: copy.percent(percentOf(stats.heldToEnd, stats.count)) },
     {
       term: copy.riskiestHour,
-      value: stats.riskiestHour === null ? copy.noTag : copy.hour(stats.riskiestHour),
+      value: stats.riskiestHour === null ? copy.none : copy.hour(stats.riskiestHour),
     },
-    { term: copy.topTag, value: topTag === undefined ? copy.noTag : tagLabel(topTag.tag) },
+    { term: copy.topTag, value: topTag === undefined ? copy.none : tagLabel(topTag.tag) },
   ]
 
   return (
