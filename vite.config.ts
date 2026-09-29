@@ -61,8 +61,15 @@ export default defineConfig({
     // DST cases test what they claim on any machine.
     env: { TZ: 'Europe/Paris' },
     // e2e/ is Playwright's suite, run separately via `test:e2e`; .claude/ holds the
-    // parallel sessions' worktrees, each with its own copy of the suite; contract/ and
-    // push-sender/ are workspaces with their own suite and config.
-    exclude: ['node_modules/**', 'e2e/**', '.claude/**', 'contract/**', 'push-sender/**'],
+    // parallel sessions' worktrees, each with its own copy of the suite; contract/,
+    // push-sender/ and server/ are workspaces with their own suite and config.
+    exclude: [
+      'node_modules/**',
+      'e2e/**',
+      '.claude/**',
+      'contract/**',
+      'push-sender/**',
+      'server/**',
+    ],
   },
 })

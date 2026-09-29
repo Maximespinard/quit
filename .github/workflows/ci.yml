@@ -26,7 +26,7 @@ jobs:
           cache: npm
       - run: npm ci
       # The same gate as locally, kept as one script so the two never drift; it ends with
-      # every workspace's own verify (contract, push sender).
+      # every workspace's own verify (contract, push sender, server).
       - run: npm run verify
 
   e2e:
