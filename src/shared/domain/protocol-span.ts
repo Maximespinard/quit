@@ -3,14 +3,14 @@ import { localMidnight } from './local-day'
 import { plannedEnd } from './protocol-position'
 
 /** The local calendar days the protocol opens and closes on, each as its local midnight. */
-export type PatchDays = {
+export type ProtocolSpan = {
   /** The day holding the quit moment. */
   readonly quitDay: number
   /** The day the last step ends on: the last patch comes off. */
   readonly endDay: number
 }
 
-export const patchDays = (protocol: Protocol, quitMoment: number): PatchDays => ({
+export const protocolSpan = (protocol: Protocol, quitMoment: number): ProtocolSpan => ({
   quitDay: localMidnight(quitMoment),
   endDay: localMidnight(plannedEnd(protocol, quitMoment)),
 })
@@ -21,5 +21,5 @@ export const patchDays = (protocol: Protocol, quitMoment: number): PatchDays => 
  * one comes off on the end day. The calendar and the home's patch of the day both ask here,
  * so they always agree on today.
  */
-export const asksForPatch = (day: number, { quitDay, endDay }: PatchDays): boolean =>
+export const asksForPatch = (day: number, { quitDay, endDay }: ProtocolSpan): boolean =>
   day > quitDay && day < endDay

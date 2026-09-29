@@ -2,8 +2,8 @@ import { PATCH_APPLICATION } from '@quit/contract/facts'
 import type { PatchApplicationInput } from './facts/patch-application'
 import type { Journal } from './journal'
 import { localMidnight } from './local-day'
-import { asksForPatch, patchDays } from './patch-days'
 import type { ProtocolPosition } from './protocol-position'
+import { asksForPatch, protocolSpan } from './protocol-span'
 
 /**
  * Whether today's patch application is logged, today being the local calendar day holding
@@ -42,8 +42,9 @@ export function todayPatch(
       ? { status: 'logged', at, doseMg }
       : { status: 'logged', at, doseMg, site }
   }
-  const days = patchDays(journal.protocol, quitMoment)
-  if (position.status === 'over' || today >= days.endDay) return { status: 'over' }
+  const span = protocolSpan(journal.protocol, quitMoment)
+  // Before the end day the protocol still runs: the position check only narrows the type.
+  if (today >= span.endDay || position.status === 'over') return { status: 'over' }
   const { doseMg } = position.step
-  return asksForPatch(today, days) ? { status: 'due', doseMg } : { status: 'offered', doseMg }
+  return asksForPatch(today, span) ? { status: 'due', doseMg } : { status: 'offered', doseMg }
 }

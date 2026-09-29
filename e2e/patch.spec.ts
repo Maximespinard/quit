@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test'
-import { expectStreak, sandboxAt, startNow } from './sandbox'
+import { expectStreak, sandboxAt, shiftClock, startNow } from './sandbox'
 
 // Times on screen are local: the timezone is pinned so the times below are fixed.
 test.use({ timezoneId: 'Europe/Paris' })
@@ -10,12 +10,6 @@ const NOW = Date.UTC(2026, 0, 1, 12, 0, 0)
 const tap = (page: Page, name: string | RegExp) =>
   page.getByRole('button', { name, exact: typeof name === 'string' }).click()
 const patchCard = (page: Page) => page.getByRole('region', { name: 'Patch du jour' })
-
-const shiftClock = async (page: Page, shift: string, times = 1) => {
-  await tap(page, 'Bac à sable')
-  for (let i = 0; i < times; i += 1) await tap(page, shift)
-  await tap(page, 'Fermer')
-}
 
 /** A sandbox with a quit moment, its clock stopped on `NOW`. */
 const homeWithStreak = async (page: Page) => {
@@ -53,13 +47,15 @@ test('after an evening quit, the morning patch is today’s all evening, as on t
   await page.goto(sandboxAt(Date.UTC(2026, 0, 1, 19, 0, 0)))
   await startNow(page)
 
-  // 08:00 the next morning.
-  await shiftClock(page, '+1 h', 12)
-  await tap(page, /^Poser le patch · 21\smg$/)
-  await expect(patchCard(page)).toContainText('Posé à 08:00')
+  // 20:00 the next day, the morning's patch caught up at 08:00.
+  await shiftClock(page, '+1 j')
+  await page.getByRole('link', { name: 'Autre dose ou autre date' }).click()
+  await page.getByLabel('Date et heure').fill('2026-01-02T08:00')
+  await tap(page, 'Enregistrer le patch')
+  await expect(page.getByRole('status').filter({ hasText: 'Patch noté.' })).toBeVisible()
 
   // 21:00: the protocol day began at 20:00, but the calendar day still holds the patch.
-  await shiftClock(page, '+1 h', 13)
+  await shiftClock(page, '+1 h')
   await expect(patchCard(page)).toContainText('Posé à 08:00')
   await expect(patchCard(page)).toContainText(/aujourd’hui · 21\smg/)
   await expect(page.getByRole('button', { name: /^Poser le patch/ })).toHaveCount(0)

@@ -5,8 +5,8 @@ import { lapsesUntil } from './facts/lapse'
 import { latestQuitMoment } from './facts/quit-moment'
 import type { Journal } from './journal'
 import { localMidnight } from './local-day'
-import { asksForPatch, patchDays } from './patch-days'
 import { type ProtocolPosition, plannedEnd, protocolPosition } from './protocol-position'
+import { asksForPatch, protocolSpan } from './protocol-span'
 
 /** One step of the protocol laid over the calendar. */
 export type CalendarStep = {
@@ -93,9 +93,9 @@ function patchStillAsked(day: number, now: number): DayPatch {
  * calendar days from the one its first protocol day begins on. Patch applications, lapses
  * and cravings sit on the local calendar day they happened on: a patch put on at 08:00 shows
  * on that day whatever the quit moment's time — the home's patch of the day reads the same
- * rule (`todayPatch`). Days are walked on the
- * calendar, never in 24 h blocks, so a daylight-saving change keeps each day whole. Facts
- * before the quit moment or after `now` are left out. `null` without a quit moment.
+ * rule (`todayPatch`). Days are walked on the calendar, never in 24 h blocks, so a
+ * daylight-saving change keeps each day whole. Facts before the quit moment or after `now`
+ * are left out. `null` without a quit moment.
  */
 export function patchCalendar(journal: Journal, now: number): PatchCalendar | null {
   const quitMoment = latestQuitMoment(journal)
@@ -120,8 +120,8 @@ export function patchCalendar(journal: Journal, now: number): PatchCalendar | nu
     factsOn(lapse.at).cigarettes += lapse.count
 
   const today = localMidnight(now)
-  const bounds = patchDays(journal.protocol, quitMoment)
-  const { quitDay, endDay } = bounds
+  const span = protocolSpan(journal.protocol, quitMoment)
+  const { quitDay, endDay } = span
   const days: CalendarDay[] = []
   for (let day = quitDay; day <= Math.max(endDay, today); day = localMidnight(day, 1)) {
     const { patches = 0, cigarettes = 0, cravings = 0 } = facts.get(day) ?? {}
@@ -131,7 +131,7 @@ export function patchCalendar(journal: Journal, now: number): PatchCalendar | nu
       day,
       step: step?.number ?? null,
       startingStep: step?.firstDay === day ? step.step : null,
-      patch: patches > 0 ? 'logged' : asksForPatch(day, bounds) ? patchStillAsked(day, now) : null,
+      patch: patches > 0 ? 'logged' : asksForPatch(day, span) ? patchStillAsked(day, now) : null,
       cigarettes,
       cravings,
       isToday: day === today,

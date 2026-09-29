@@ -1,6 +1,6 @@
 import { expect, type Page, test } from '@playwright/test'
 import { UUID_V7 } from './fact-ids'
-import { expectStreak, sandboxAt, startNow } from './sandbox'
+import { expectStreak, sandboxAt, shiftClock, startNow } from './sandbox'
 
 // Times on screen are local: the timezone is pinned so the times below are fixed.
 test.use({ timezoneId: 'Europe/Paris' })
@@ -13,12 +13,6 @@ const tap = (page: Page, name: string | RegExp) =>
 const totals = (page: Page) => page.getByRole('region', { name: 'Ce qui reste acquis' })
 const patchCard = (page: Page) => page.getByRole('region', { name: 'Patch du jour' })
 const rows = (page: Page, name: RegExp) => page.getByRole('link', { name })
-
-const shiftClock = async (page: Page, shift: string, times = 1) => {
-  await tap(page, 'Bac à sable')
-  for (let i = 0; i < times; i += 1) await tap(page, shift)
-  await tap(page, 'Fermer')
-}
 
 /** A sandbox whose quit moment is `NOW`, its clock then moved `days` on. */
 const daysIn = async (page: Page, days: number) => {
