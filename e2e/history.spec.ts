@@ -155,8 +155,12 @@ test('a fact opens by its id, keeps it through an edit, and an unknown id finds 
   await daysIn(page, 1)
   await declareLapse(page)
   await openHistory(page)
+  // Retried until the history row replaces home's own « J’ai fumé » link.
+  await expect(rows(page, /J’ai fumé/)).toHaveAttribute(
+    'href',
+    new RegExp(`/history/${UUID_V7.source}\\?`),
+  )
   const href = await rows(page, /J’ai fumé/).getAttribute('href')
-  expect(href).toMatch(new RegExp(`/history/${UUID_V7.source}\\?`))
 
   await rows(page, /J’ai fumé/).click()
   await tap(page, 'Une de plus')
