@@ -1,6 +1,7 @@
 import type { Fact } from '@quit/contract/facts'
 import type { Protocol } from '@quit/contract/settings'
 import { DAY_MS } from '@/shared/utils/duration'
+import { factId } from '@/shared/utils/fact-id'
 import { emptyJournal, type Journal } from './journal'
 import { type CalendarDay, patchCalendar } from './patch-calendar'
 import { defaultProtocol, setProtocol } from './protocol'
@@ -20,13 +21,24 @@ const journalOf = (
 ): Journal => ({
   ...emptyJournal,
   protocol,
-  facts: [{ type: 'quit-moment', at: quitMoment }, ...facts],
+  facts: [{ type: 'quit-moment', id: factId(1), at: quitMoment }, ...facts],
 })
 
-const patch = (at: number, doseMg = 21): Fact => ({ type: 'patch-application', at, doseMg })
-const lapse = (at: number, count = 1): Fact => ({ type: 'lapse', at, count })
-const craving = (at: number): Fact => ({
+const patch = (id: number, at: number, doseMg = 21): Fact => ({
+  type: 'patch-application',
+  id: factId(id),
+  at,
+  doseMg,
+})
+const lapse = (id: number, at: number, count = 1): Fact => ({
+  type: 'lapse',
+  id: factId(id),
+  at,
+  count,
+})
+const craving = (id: number, at: number): Fact => ({
   type: 'craving',
+  id: factId(id),
   at,
   intensity: 2,
   heldToEnd: true,
@@ -101,7 +113,7 @@ describe('patchCalendar', () => {
   })
 
   it('tells logged, missing, due and planned patch applications apart', () => {
-    const journal = journalOf(QUIT, [patch(local(1, 1, 13, 5)), patch(local(1, 3, 13, 30))])
+    const journal = journalOf(QUIT, [patch(2, local(1, 1, 13, 5)), patch(3, local(1, 3, 13, 30))])
     const { days } = calendarOf(journal, local(1, 4, 14))
 
     expect(dayOf(days, local(1, 1)).patch).toBe('logged')
@@ -115,7 +127,7 @@ describe('patchCalendar', () => {
   it('shows a patch on the day it was put on, whatever the quit moment’s time', () => {
     // Quit at 20:00, patches put on in the morning: each lands on its own day, today's too.
     const quitMoment = local(1, 1, 20)
-    const journal = journalOf(quitMoment, [patch(local(1, 2, 8)), patch(local(1, 3, 8))])
+    const journal = journalOf(quitMoment, [patch(2, local(1, 2, 8)), patch(3, local(1, 3, 8))])
     const { days } = calendarOf(journal, local(1, 3, 9))
 
     expect(days.map((day) => day.patch).slice(0, 4)).toEqual([null, 'logged', 'logged', 'planned'])
@@ -126,13 +138,19 @@ describe('patchCalendar', () => {
     const evening = calendarOf(journalOf(local(1, 1, 20)), local(1, 1, 21))
     expect(evening.days[0]).toMatchObject({ isToday: true, step: 1, patch: null })
 
-    const logged = calendarOf(journalOf(local(1, 1, 20), [patch(local(1, 1, 20, 5))]), local(1, 3))
+    const logged = calendarOf(
+      journalOf(local(1, 1, 20), [patch(2, local(1, 1, 20, 5))]),
+      local(1, 3),
+    )
     expect(logged.days.map((day) => day.patch).slice(0, 2)).toEqual(['logged', 'missing'])
   })
 
   it('shows a patch put on just after midnight on the new day', () => {
     const quitMoment = local(1, 31, 23)
-    const journal = journalOf(quitMoment, [patch(local(1, 31, 23, 10)), patch(local(2, 2, 0, 30))])
+    const journal = journalOf(quitMoment, [
+      patch(2, local(1, 31, 23, 10)),
+      patch(3, local(2, 2, 0, 30)),
+    ])
     const { days } = calendarOf(journal, local(2, 2, 12))
 
     expect(days.map((day) => day.patch).slice(0, 3)).toEqual(['logged', 'missing', 'logged'])
@@ -141,9 +159,9 @@ describe('patchCalendar', () => {
   it('crosses month boundaries day by day, each fact on its own local day', () => {
     const quitMoment = local(1, 30, 9)
     const journal = journalOf(quitMoment, [
-      lapse(local(1, 31, 23, 59), 2),
-      craving(local(2, 1, 0, 1)),
-      craving(local(2, 1, 18)),
+      lapse(2, local(1, 31, 23, 59), 2),
+      craving(3, local(2, 1, 0, 1)),
+      craving(4, local(2, 1, 18)),
     ])
     const { days } = calendarOf(journal, local(2, 3, 12))
 
@@ -159,11 +177,11 @@ describe('patchCalendar', () => {
 
   it('puts lapses and cravings on their local calendar day, never one not yet happened', () => {
     const journal = journalOf(QUIT, [
-      lapse(local(1, 2, 22)),
-      lapse(local(1, 2, 23, 30), 3),
-      craving(local(1, 3, 8)),
-      craving(local(1, 4, 16)),
-      lapse(local(1, 4, 17)),
+      lapse(2, local(1, 2, 22)),
+      lapse(3, local(1, 2, 23, 30), 3),
+      craving(4, local(1, 3, 8)),
+      craving(5, local(1, 4, 16)),
+      lapse(6, local(1, 4, 17)),
     ])
     const { days } = calendarOf(journal, local(1, 4, 14))
 
@@ -174,9 +192,9 @@ describe('patchCalendar', () => {
 
   it('leaves out facts older than a corrected quit moment', () => {
     const journal = journalOf(QUIT, [
-      patch(local(1, 1, 13, 5)),
-      craving(local(1, 1, 14)),
-      { type: 'quit-moment', at: local(1, 1, 20) },
+      patch(2, local(1, 1, 13, 5)),
+      craving(3, local(1, 1, 14)),
+      { type: 'quit-moment', id: factId(4), at: local(1, 1, 20) },
     ])
     const { days } = calendarOf(journal, local(1, 3, 10))
 
@@ -187,7 +205,11 @@ describe('patchCalendar', () => {
   it('does not ask for a patch after the protocol, and runs on to today', () => {
     const protocol: Protocol = [{ doseMg: 7, durationDays: 2 }]
     // One more patch on the end day, put on before the last one came off.
-    const journal = journalOf(QUIT, [patch(local(1, 1, 14), 7), patch(local(1, 3, 9), 7)], protocol)
+    const journal = journalOf(
+      QUIT,
+      [patch(2, local(1, 1, 14), 7), patch(3, local(1, 3, 9), 7)],
+      protocol,
+    )
     const calendar = calendarOf(journal, local(1, 6, 10))
 
     expect(calendar.position).toEqual({ status: 'over' })
@@ -213,7 +235,7 @@ describe('patchCalendar', () => {
   })
 
   it('follows a protocol edited mid-step, past patch applications kept on their days', () => {
-    const journal = journalOf(QUIT, [patch(local(1, 1, 13, 5)), patch(local(1, 2, 13, 5))])
+    const journal = journalOf(QUIT, [patch(2, local(1, 1, 13, 5)), patch(3, local(1, 2, 13, 5))])
     const edited = setProtocol(journal, [
       { doseMg: 21, durationDays: 21 },
       { doseMg: 10, durationDays: 14 },
@@ -238,11 +260,11 @@ describe('patchCalendar', () => {
 
   it('places a backdated fact on its own day, wherever it sits in the journal', () => {
     const journal = journalOf(QUIT, [
-      patch(local(1, 5, 13, 5)),
-      lapse(local(1, 5, 20)),
+      patch(2, local(1, 5, 13, 5)),
+      lapse(3, local(1, 5, 20)),
       // Recorded last, backdated to the second protocol day.
-      patch(local(1, 2, 21)),
-      craving(local(1, 2, 21, 30)),
+      patch(4, local(1, 2, 21)),
+      craving(5, local(1, 2, 21, 30)),
     ])
     const { days } = calendarOf(journal, local(1, 6, 10))
 
@@ -251,7 +273,7 @@ describe('patchCalendar', () => {
   })
 
   it('does not count a patch application later than now (a clock moved back)', () => {
-    const journal = journalOf(QUIT, [patch(local(1, 3, 13, 5))])
+    const journal = journalOf(QUIT, [patch(2, local(1, 3, 13, 5))])
     const { days } = calendarOf(journal, local(1, 3, 13))
 
     expect(dayOf(days, local(1, 3)).patch).toBe('due')
@@ -261,7 +283,10 @@ describe('patchCalendar', () => {
     // 29 March 2026: clocks go from 02:00 to 03:00 in Europe/Paris. The 20:00 protocol
     // days start at 21:00 from then on, and the step change lands on the right date.
     const quitMoment = local(3, 1, 20)
-    const journal = journalOf(quitMoment, [patch(local(3, 29, 21, 5)), craving(local(3, 29, 23))])
+    const journal = journalOf(quitMoment, [
+      patch(2, local(3, 29, 21, 5)),
+      craving(3, local(3, 29, 23)),
+    ])
     const calendar = calendarOf(journal, local(3, 31, 10))
 
     expect(calendar.steps[1]).toMatchObject({ startsAt: local(3, 29, 21), firstDay: local(3, 29) })
@@ -286,7 +311,7 @@ describe('patchCalendar', () => {
     // none begins on 29 March, still a day of the protocol like any other.
     const quitMoment = local(3, 27, 23, 30)
     const { days } = calendarOf(
-      journalOf(quitMoment, [patch(local(3, 30, 0, 40))]),
+      journalOf(quitMoment, [patch(2, local(3, 30, 0, 40))]),
       local(4, 2, 10),
     )
 
@@ -299,8 +324,8 @@ describe('patchCalendar', () => {
     // Clocks go from 03:00 back to 02:00: a patch at 23:45 winter time is still the 25th.
     const quitMoment = local(10, 23, 0, 30)
     const journal = journalOf(quitMoment, [
-      patch(local(10, 25, 23, 45)),
-      craving(local(10, 25, 2, 30)),
+      patch(2, local(10, 25, 23, 45)),
+      craving(3, local(10, 25, 2, 30)),
     ])
     const { days } = calendarOf(journal, local(10, 28))
 

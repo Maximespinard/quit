@@ -1,5 +1,5 @@
 import { cn } from '@/shared/utils/cn'
-import { GRAIN_IMAGE, HAZE_TONE_CLASS, TIMER_HAZE } from '../utils/timer-haze'
+import { HAZE_TONE_CLASS, TIMER_HAZE } from '../utils/timer-haze'
 
 /**
  * The craving timer's backdrop: blurred moss and bronze drifting over the page, grain on top.
@@ -8,11 +8,15 @@ import { GRAIN_IMAGE, HAZE_TONE_CLASS, TIMER_HAZE } from '../utils/timer-haze'
  * stacking context, and the grain's `overlay` must blend with the page, as `brightestHazePixel`
  * models it. Over a transparent backdrop it would paint plain white. The parent sets `relative isolate`.
  */
-export function CravingHaze() {
+export function CravingHaze({ still = false }: { still?: boolean }) {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 -z-10 overflow-hidden bg-page"
+      className={cn(
+        'pointer-events-none absolute inset-0 -z-10 overflow-hidden bg-page',
+        // The timer stopped early: the same haze, dimmed and at rest. Unmarked, never switched off.
+        still && 'opacity-60 [&_span]:animate-none',
+      )}
     >
       <div data-haze className="absolute -inset-[20%]" style={{ opacity: TIMER_HAZE.opacity }}>
         {TIMER_HAZE.blobs.map((blob) => (
@@ -28,8 +32,8 @@ export function CravingHaze() {
         ))}
       </div>
       <div
-        className="absolute inset-0 mix-blend-overlay"
-        style={{ opacity: TIMER_HAZE.grainOpacity, backgroundImage: GRAIN_IMAGE }}
+        className="absolute inset-0 bg-grain mix-blend-overlay"
+        style={{ opacity: TIMER_HAZE.grainOpacity }}
       />
     </div>
   )

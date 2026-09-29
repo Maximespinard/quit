@@ -1,6 +1,6 @@
 import { type DBSchema, openDB } from 'idb'
 import { type BackupRecord, decodeBackupRecord } from '@/shared/domain/backup-reminder'
-import { decodeJournal, giveStoredFactsIds, type Journal } from '@/shared/domain/journal'
+import { decodeJournal, identifyFacts, type Journal } from '@/shared/domain/journal'
 import { newFactId } from '@/shared/utils/fact-id'
 
 /** Where a value is kept: the device for the real journal, memory for the sandbox. */
@@ -32,7 +32,7 @@ const open = () =>
         // Within the upgrade transaction: the app never reads the journal half migrated.
         const journal = transaction.objectStore('journal')
         const stored = await journal.get(KEY)
-        if (stored !== undefined) await journal.put(giveStoredFactsIds(stored, newFactId), KEY)
+        if (stored !== undefined) await journal.put(identifyFacts(stored, newFactId), KEY)
       }
     },
   })
@@ -57,7 +57,7 @@ async function write(store: 'journal' | 'backup', value: unknown): Promise<void>
 
 /** The real journal, in IndexedDB on the device; an unknown or empty store yields the empty journal. */
 export const deviceJournalStore: JournalStore = {
-  load: async () => decodeJournal(await read('journal')),
+  load: async () => decodeJournal(await read('journal'), newFactId),
   save: (journal) => write('journal', journal),
 }
 

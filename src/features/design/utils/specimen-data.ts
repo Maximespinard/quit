@@ -74,8 +74,8 @@ export const COLOR_TOKENS: readonly ColorToken[] = [
   {
     token: 'ghost-line',
     swatch: 'bg-ghost-line',
-    value: 'rgb(255 255 255 / 0.3)',
-    role: 'Filet du bouton fantôme, ligne de base des graphiques',
+    value: 'rgb(255 255 255 / 0.36)',
+    role: 'Filet du bouton fantôme et des champs (3:1), ligne de base des graphiques',
   },
   {
     token: 'alert',
@@ -84,6 +84,13 @@ export const COLOR_TOKENS: readonly ColorToken[] = [
     role: 'Erreurs et suppressions — 6,5:1 sur carte',
   },
   { token: 'amber', swatch: 'bg-amber', value: '#b8730f', role: 'Halo du héros' },
+  { token: 'floor', swatch: 'bg-floor', value: '#3a1a10', role: 'Sol chaud du halo, en haut' },
+  {
+    token: 'floor-deep',
+    swatch: 'bg-floor-deep',
+    value: '#1c1011',
+    role: 'Sol du halo, là où il rejoint la page',
+  },
   { token: 'ember', swatch: 'bg-ember', value: '#8d2a1a', role: 'Halo du héros' },
   { token: 'plum', swatch: 'bg-plum', value: '#7a1b5f', role: 'Halo du héros' },
   { token: 'pink', swatch: 'bg-pink', value: '#fd429c', role: 'Dégradé d’Envie, et lui seul' },
@@ -101,6 +108,8 @@ export const COLOR_TOKENS: readonly ColorToken[] = [
 export type TypeToken = {
   token: string
   className: string
+  /** The sample is a figure: its units show at the `unit` size. */
+  figure?: true
   px: string
   sample: string
   role: string
@@ -110,9 +119,16 @@ export const TYPE_TOKENS: readonly TypeToken[] = [
   {
     token: 'display',
     className: 'text-display',
-    px: '176 px',
+    px: '62 cqi',
     sample: '12',
-    role: 'Le minuteur ; le streak, lui, prend 62 % de la largeur',
+    role: 'Le streak et les minutes tenues : 62 % de la colonne',
+  },
+  {
+    token: 'countdown',
+    className: 'text-countdown',
+    px: '33 cqi',
+    sample: '3:42',
+    role: 'Le compte à rebours du minuteur',
   },
   {
     token: 'brand',
@@ -141,6 +157,13 @@ export const TYPE_TOKENS: readonly TypeToken[] = [
     px: '28 px',
     sample: strings.quitMoment.title,
     role: 'La question posée seule à l’écran, au premier lancement',
+  },
+  {
+    token: 'prompt',
+    className: 'text-prompt',
+    px: '24 px',
+    sample: strings.craving.timer.lead,
+    role: 'La phrase du minuteur, au-dessus du compte à rebours',
   },
   {
     token: 'title',
@@ -183,6 +206,14 @@ export const TYPE_TOKENS: readonly TypeToken[] = [
     px: '12 px',
     sample: 'J+28',
     role: 'Détail de badge',
+  },
+  {
+    token: 'unit',
+    className: 'text-figure',
+    figure: true,
+    px: '0,55 em',
+    sample: '220,08\u00a0€',
+    role: 'L’unité d’un chiffre (€, %, j, h), plus petite et estompée',
   },
   {
     token: 'tab',

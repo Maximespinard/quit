@@ -3,13 +3,13 @@ import { type CravingStats, cravingStats } from './craving-stats'
 import { lapsesUntil } from './facts/lapse'
 import { latestQuitMoment } from './facts/quit-moment'
 import type { Journal } from './journal'
-import { type ProtocolDayPatch, protocolDayPatch } from './protocol-day-patch'
 import { type ProtocolPosition, protocolPosition } from './protocol-position'
 import { lapseRuns, lastSlip, openRun, type Relapse, relapsesOf, streakRestarts } from './relapse'
 import { cigarettesNotSmoked, type GoalProgress, goalProgress, moneySavedCents } from './savings'
 import { siteRotation } from './site-rotation'
 import { smokeFreeDays } from './smoke-free-days'
 import { type Elapsed, type Streak, streaks } from './streak'
+import { type TodayPatch, todayPatch } from './today-patch'
 
 export type { CravingStats, Elapsed, GoalProgress, Relapse, Streak }
 
@@ -59,7 +59,7 @@ export type DerivedState =
       /** Never resets: a lapse only takes away the calendar day it happened on. */
       readonly smokeFreeDays: number
       readonly protocol: ProtocolPosition
-      readonly patch: ProtocolDayPatch
+      readonly patch: TodayPatch
       /** Where the next patch goes: never the previous patch application's site. */
       readonly suggestedSite: ApplicationSite
       /** The previous patch application's site, which the next one may not take; `null` if none. */
@@ -111,7 +111,7 @@ export function derive(journal: Journal, now: number): DerivedState {
     goal: goalProgress(journal, quitMoment, now),
     smokeFreeDays: smokeFreeDays(quitMoment, lapses, now),
     protocol,
-    patch: protocolDayPatch(journal, quitMoment, protocol, now),
+    patch: todayPatch(journal, quitMoment, protocol, now),
     ...siteRotation(journal, now),
     cravingStats: cravingStats(journal, quitMoment, now),
   }

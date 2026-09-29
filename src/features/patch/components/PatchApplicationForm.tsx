@@ -5,12 +5,13 @@ import {
   type RecordPatchApplicationResult,
   recordPatchApplication,
 } from '@/shared/domain/facts/patch-application'
-import { type Journal, keptId } from '@/shared/domain/journal'
+import type { Journal } from '@/shared/domain/journal'
 import type { ProtocolPosition } from '@/shared/domain/protocol-position'
 import { Button } from '@/shared/ui/base/button'
 import { Input } from '@/shared/ui/base/input'
 import { fromDatetimeLocal, toDatetimeLocal } from '@/shared/utils/datetime-local'
 import { fromDecimalText, toDecimalText } from '@/shared/utils/decimal-text'
+import { newFactId } from '@/shared/utils/fact-id'
 import { strings } from '@/shared/utils/strings'
 import { applicationAt, chosenSite, type SiteChoice, untouched } from '../utils/site-choice'
 import { SitePicker } from './SitePicker'
@@ -70,7 +71,7 @@ export function PatchApplicationForm({
     }
     const result = recordPatchApplication(
       journal,
-      { ...keptId(initial), ...applicationAt(at, fromDecimalText(dose), site) },
+      { id: initial?.id ?? newFactId(), ...applicationAt(at, fromDecimalText(dose), site) },
       now,
     )
     if (result.ok) onRecorded(result.journal)

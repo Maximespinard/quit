@@ -1,10 +1,12 @@
 import { type FormEvent, useId, useState } from 'react'
-import { type Lapse, type RecordLapseResult, recordLapse } from '@/shared/domain/facts/lapse'
-import { type Journal, keptId } from '@/shared/domain/journal'
+import { type LapseInput, type RecordLapseResult, recordLapse } from '@/shared/domain/facts/lapse'
+import type { Journal } from '@/shared/domain/journal'
 import { triggersRelapse } from '@/shared/domain/relapse'
 import { Button } from '@/shared/ui/base/button'
 import { Input } from '@/shared/ui/base/input'
+import { Card } from '@/shared/ui/Card'
 import { fromDatetimeLocal, toDatetimeLocal } from '@/shared/utils/datetime-local'
+import { newFactId } from '@/shared/utils/fact-id'
 import { strings } from '@/shared/utils/strings'
 import { CountStepper } from './CountStepper'
 
@@ -13,7 +15,7 @@ type LapseFormProps = {
   /** Injected clock: the form never reads the system time itself. */
   now: number
   /** The lapse being edited, the journal then holding everything but it; absent to declare one. */
-  initial?: Lapse
+  initial?: LapseInput
   onRecorded: (journal: Journal) => void
 }
 
@@ -43,7 +45,7 @@ export function LapseForm({ journal, now, initial, onRecorded }: LapseFormProps)
       setError('invalid')
       return
     }
-    const result = recordLapse(journal, { ...keptId(initial), at, count }, now)
+    const result = recordLapse(journal, { id: initial?.id ?? newFactId(), at, count }, now)
     if (result.ok) onRecorded(result.journal)
     else setError(result.reason)
   }
@@ -77,10 +79,10 @@ export function LapseForm({ journal, now, initial, onRecorded }: LapseFormProps)
         <div aria-live="polite">
           {relapse ? (
             // Said, not sounded: a card like any other, never the alert colour.
-            <div className="flex flex-col gap-1.5 rounded-card bg-surface p-5">
+            <Card className="gap-1.5">
               <p className="font-medium text-body">{copy.relapseTitle}</p>
               <p className="text-body text-muted">{copy.relapseCost}</p>
-            </div>
+            </Card>
           ) : null}
         </div>
         {error !== null ? (

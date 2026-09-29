@@ -7,6 +7,7 @@ import type {
 } from '@quit/contract/facts'
 import type { Protocol } from '@quit/contract/settings'
 import { DAY_MS, HOUR_MS, MINUTE_MS } from '@/shared/utils/duration'
+import { factId } from '@/shared/utils/fact-id'
 import type { Journal } from './journal'
 import { defaultProtocol } from './protocol'
 
@@ -40,12 +41,15 @@ const QUIT = local(5, 4, 9)
 const sinceQuit = (days: number, hours = 0, minutes = 0): number =>
   QUIT + days * DAY_MS + hours * HOUR_MS + minutes * MINUTE_MS
 
+/** A scenario's fact before `journalOf` numbers it: its id is its position in time. */
+type Unnumbered<F extends Fact = Fact> = F extends Fact ? Omit<F, 'id'> : never
+
 /**
  * One patch application per protocol day, put on at 09:15, for the first `days` days,
  * each at the dose of the step the day falls in.
  */
-function dailyPatches(protocol: Protocol, days: number): PatchApplicationFact[] {
-  const patches: PatchApplicationFact[] = []
+function dailyPatches(protocol: Protocol, days: number): Unnumbered<PatchApplicationFact>[] {
+  const patches: Unnumbered<PatchApplicationFact>[] = []
   let stepStart = 0
   for (const step of protocol) {
     for (let day = stepStart; day < Math.min(days, stepStart + step.durationDays); day += 1)
@@ -60,24 +64,27 @@ const craving = (
   intensity: CravingIntensity,
   heldToEnd: boolean,
   tags: readonly string[] = [],
-): CravingFact => ({ type: 'craving', at, intensity, heldToEnd, tags })
+): Unnumbered<CravingFact> => ({ type: 'craving', at, intensity, heldToEnd, tags })
 
-const lapse = (at: number, count = 1): LapseFact => ({ type: 'lapse', at, count })
+const lapse = (at: number, count = 1): Unnumbered<LapseFact> => ({ type: 'lapse', at, count })
 
-const byInstant = (a: Fact, b: Fact) => a.at - b.at
+const byInstant = (a: Unnumbered, b: Unnumbered) => a.at - b.at
 
 /**
  * A journal on the default protocol, first launch done (35 € a week, 15 a day), its facts
- * sorted into the order they happened.
+ * sorted into the order they happened and numbered in that order: the quit moment is
+ * `factId(1)`.
  */
-const journalOf = (...facts: readonly (Fact | readonly Fact[])[]): Journal => {
-  const quitMoment: Fact = { type: 'quit-moment', at: QUIT }
+const journalOf = (...facts: readonly (Unnumbered | readonly Unnumbered[])[]): Journal => {
+  const quitMoment: Unnumbered = { type: 'quit-moment', at: QUIT }
   return {
     protocol: defaultProtocol,
     weeklySpendCents: 3500,
     baselineSmokesPerDay: 15,
     goal: null,
-    facts: [quitMoment, ...facts.flat()].sort(byInstant),
+    facts: [quitMoment, ...facts.flat()]
+      .sort(byInstant)
+      .map((fact, position): Fact => ({ ...fact, id: factId(position + 1) })),
   }
 }
 
@@ -94,7 +101,7 @@ const firstMonthCravings = [
  * the next two, then one every other day. They come most often at 18:00 and over a coffee,
  * each hour and each situation taken in turn from a fixed round, and weaken month after month.
  */
-function fadingCravings(): CravingFact[] {
+function fadingCravings(): Unnumbered<CravingFact>[] {
   const hours = [18, 8, 13, 18, 21, 10, 18, 16]
   const tags: readonly (readonly string[])[] = [
     ['coffee'],
@@ -109,7 +116,7 @@ function fadingCravings(): CravingFact[] {
   // One in three is a notch below the day's usual: not every craving is the worst.
   const notchLower: Record<CravingIntensity, CravingIntensity> = { 1: 1, 2: 1, 3: 2 }
   const perDay = (day: number) => (day < 15 ? 3 : day < 29 ? 2 : day < 43 ? 1 : 1 - (day % 2))
-  const cravings: CravingFact[] = []
+  const cravings: Unnumbered<CravingFact>[] = []
   for (let day = 1; day < 59; day += 1) {
     const intensity: CravingIntensity = day < 21 ? 3 : day < 42 ? 2 : 1
     for (let nth = 0; nth < perDay(day); nth += 1) {

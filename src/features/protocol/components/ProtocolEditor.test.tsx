@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { derive } from '@/shared/domain/derive'
 import { emptyJournal, type Journal } from '@/shared/domain/journal'
 import { DAY_MS } from '@/shared/utils/duration'
+import { factId } from '@/shared/utils/fact-id'
 import { strings } from '@/shared/utils/strings'
 import { ProtocolEditor } from './ProtocolEditor'
 
@@ -10,7 +11,7 @@ const copy = strings.protocol
 const QUIT = Date.UTC(2026, 4, 4, 9, 0)
 const journal: Journal = {
   ...emptyJournal,
-  facts: [{ type: 'quit-moment', at: QUIT }],
+  facts: [{ type: 'quit-moment', id: factId(1), at: QUIT }],
   protocol: [
     { doseMg: 21, durationDays: 28, brand: 'Nicopatch' },
     { doseMg: 14, durationDays: 28 },

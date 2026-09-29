@@ -52,7 +52,8 @@ export function ValueField({
             aria-hidden="true"
             className={cn(
               'pointer-events-none absolute inset-y-0 right-4 flex items-center font-medium text-cta text-muted',
-              prominent && 'right-5 text-figure',
+              // First launch, over the haze: ink keeps the unit legible there.
+              prominent && 'right-5 text-figure text-ink',
             )}
           >
             {input.suffix}

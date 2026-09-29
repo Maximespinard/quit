@@ -1,3 +1,5 @@
+import { factIdSequence } from '@/shared/test/fact-ids'
+import { factId } from '@/shared/utils/fact-id'
 import { decodeJournal, emptyJournal } from './journal'
 import { defaultProtocol, isSameProtocol, setProtocol } from './protocol'
 
@@ -13,7 +15,10 @@ describe('defaultProtocol', () => {
 
 describe('setProtocol', () => {
   it('replaces the protocol and keeps every fact', () => {
-    const journal = { ...emptyJournal, facts: [{ type: 'quit-moment' as const, at: 1_000 }] }
+    const journal = {
+      ...emptyJournal,
+      facts: [{ type: 'quit-moment' as const, id: factId(1), at: 1_000 }],
+    }
     const steps = [
       { doseMg: 25, durationDays: 42, brand: 'Nicopatch' },
       { doseMg: 10, durationDays: 14 },
@@ -92,13 +97,15 @@ describe('decodeJournal, protocol', () => {
   it('reads back a stored protocol', () => {
     const stored = [{ doseMg: 21, durationDays: 28, brand: 'Nicotinell' }]
 
-    expect(decodeJournal({ facts: [], protocol: stored }).protocol).toEqual(stored)
+    expect(decodeJournal({ facts: [], protocol: stored }, factIdSequence()).protocol).toEqual(
+      stored,
+    )
   })
 
   it('keeps a stored protocol whose brand does not read, dropping only the brand', () => {
     const stored = [{ doseMg: 14, durationDays: 21, brand: null }]
 
-    expect(decodeJournal({ facts: [], protocol: stored }).protocol).toEqual([
+    expect(decodeJournal({ facts: [], protocol: stored }, factIdSequence()).protocol).toEqual([
       { doseMg: 14, durationDays: 21 },
     ])
   })
@@ -108,6 +115,8 @@ describe('decodeJournal, protocol', () => {
     ['an empty list', []],
     ['a malformed step', [{ doseMg: '21', durationDays: 28 }]],
   ])('falls back to the default protocol from %s', (_, raw) => {
-    expect(decodeJournal({ facts: [], protocol: raw }).protocol).toEqual(defaultProtocol)
+    expect(decodeJournal({ facts: [], protocol: raw }, factIdSequence()).protocol).toEqual(
+      defaultProtocol,
+    )
   })
 })

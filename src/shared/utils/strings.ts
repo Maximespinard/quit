@@ -432,11 +432,11 @@ export const strings = {
   },
   patch: {
     title: 'Patch du jour',
-    /** A protocol day runs 24 h from the quit moment's time, so it may have begun yesterday. */
+    /** Today's patch, today being the calendar day: one put on yesterday never counts. */
     due: 'Pas encore posé',
     logged: (time: string) => `Posé à ${time}`,
-    loggedDetail: (sameDay: boolean, doseMg: string, site: string | null) =>
-      [sameDay ? 'aujourd’hui' : 'hier', `${doseMg}\u00a0mg`, site].filter(Boolean).join(' · '),
+    loggedDetail: (doseMg: string, site: string | null) =>
+      ['aujourd’hui', `${doseMg}\u00a0mg`, site].filter(Boolean).join(' · '),
     /** The one-tap log: the dose is the running step's. */
     apply: (doseMg: string) => `Poser le patch · ${doseMg}\u00a0mg`,
     other: 'Autre dose ou autre date',
@@ -531,7 +531,11 @@ export const strings = {
       colors: 'Couleurs',
       type: 'Typographie',
       radii: 'Rayons',
+      navigation: 'Navigation',
     },
+    /** The tab bar's look is set; it ships once its fourth screen, Progression, exists (M2). */
+    tabBarLater:
+      'Barre d’onglets : elle arrive avec Progression (M2). D’ici là, la liste de l’accueil.',
     buttons: {
       primary: 'Poser le patch',
       secondary: 'Plus tard',

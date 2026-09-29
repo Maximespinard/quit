@@ -1,5 +1,5 @@
-import { useId } from 'react'
 import type { PatchCalendar } from '@/shared/domain/patch-calendar'
+import { Card } from '@/shared/ui/Card'
 import { formatDate, formatDose } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
 import { formatWeekdayDate } from '../utils/calendar-dates'
@@ -16,20 +16,18 @@ type CalendarSummaryProps = Pick<PatchCalendar, 'position' | 'nextStepChange' | 
  * the date of the next step change (to buy the next box in time) and the planned end.
  */
 export function CalendarSummary({ position, nextStepChange, plannedEnd }: CalendarSummaryProps) {
-  const titleId = useId()
-
   return (
-    <section
-      aria-labelledby={titleId}
-      className="flex flex-col gap-3.5 rounded-card bg-surface p-5"
+    <Card
+      title={strings.protocol.title}
+      headingLevel={3}
+      aside={
+        position.status === 'running' ? (
+          <span className="text-muted">
+            {strings.protocol.stepOf(position.stepNumber, position.stepCount)}
+          </span>
+        ) : null
+      }
     >
-      <div className="flex items-baseline justify-between text-label text-muted">
-        <h3 id={titleId}>{strings.protocol.title}</h3>
-        {position.status === 'running' ? (
-          <span>{strings.protocol.stepOf(position.stepNumber, position.stepCount)}</span>
-        ) : null}
-      </div>
-
       {position.status === 'running' ? (
         <>
           <div className="flex flex-col gap-1.5">
@@ -72,6 +70,6 @@ export function CalendarSummary({ position, nextStepChange, plannedEnd }: Calend
           <p className="text-label text-muted">{copy.endedOn(formatDate(plannedEnd))}</p>
         </div>
       )}
-    </section>
+    </Card>
   )
 }

@@ -1,4 +1,4 @@
-import { type Lapse, lapsesUntil, recordLapse } from './facts/lapse'
+import { type Lapse, lapseRefusal, lapsesUntil } from './facts/lapse'
 import { latestQuitMoment } from './facts/quit-moment'
 import type { Journal } from './journal'
 import { localMidnight } from './local-day'
@@ -62,19 +62,16 @@ export const lastSlip = (runs: readonly LapseRun[], now: number): Elapsed | null
 export const streakRestarts = (runs: readonly LapseRun[]): number[] =>
   runs.flatMap((run) => run.restarts)
 
-const relapsesAt = (journal: Journal, now: number): Relapse[] => {
-  const quitMoment = latestQuitMoment(journal)
-  return quitMoment === null ? [] : relapsesOf(lapseRuns(lapsesUntil(journal, quitMoment, now)))
-}
-
 /**
  * Whether declaring a lapse at `at` would restart the streak: it completes a run of
  * {@link RELAPSE_DAYS} days, or extends one past its latest lapse. Said before it lands.
  */
 export function triggersRelapse(journal: Journal, at: number, now: number): boolean {
-  const declared = recordLapse(journal, { at, count: 1 }, now)
-  if (!declared.ok) return false
-  const before = relapsesAt(journal, now)
-  const after = relapsesAt(declared.journal, now)
+  const declared = { at, count: 1 }
+  const quitMoment = latestQuitMoment(journal)
+  if (quitMoment === null || lapseRefusal(journal, declared, now) !== null) return false
+  const lapses = lapsesUntil(journal, quitMoment, now)
+  const before = relapsesOf(lapseRuns(lapses))
+  const after = relapsesOf(lapseRuns([...lapses, declared].sort((a, b) => a.at - b.at)))
   return after.length !== before.length || after.some((relapse, i) => relapse.at !== before[i]?.at)
 }

@@ -3,7 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/shared/utils/cn'
 
 /**
- * shadcn `button`, reskinned on the quit tokens (see DESIGN.md → Composants shadcn).
+ * shadcn `button`, reskinned on the quit tokens (see DESIGN.md › Components › Buttons).
  * Focus rings come from the global `:focus-visible` outline, never from a ring utility.
  */
 const buttonVariants = cva(
@@ -14,7 +14,8 @@ const buttonVariants = cva(
         primary: 'bg-ink text-page active:bg-ink/85',
         secondary: 'border border-ghost-line bg-transparent text-ink active:bg-ghost',
         ghost: 'bg-transparent text-ink active:bg-ghost',
-        destructive: 'bg-alert/15 text-alert active:bg-alert/25',
+        // A hairline in alert at 70 %: 3.8:1, an edge that clears 3:1 like every control's.
+        destructive: 'border border-alert/70 bg-transparent text-alert active:bg-alert/10',
         // An underlined text action inside a card, its 44px target kept.
         link: 'justify-start bg-transparent font-normal text-body text-ink underline decoration-ghost-line underline-offset-4',
       },

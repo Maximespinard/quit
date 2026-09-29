@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { emptyJournal, type Journal } from '@/shared/domain/journal'
+import { anyFactId } from '@/shared/test/fact-ids'
+import { factId } from '@/shared/utils/fact-id'
 import { strings } from '@/shared/utils/strings'
 import { CravingTimerScreen } from './CravingTimerScreen'
 
@@ -53,7 +55,9 @@ it('celebrates at the end, then records the rated craving as held to the end', a
 
   expect(onRecorded).toHaveBeenCalledWith({
     ...emptyJournal,
-    facts: [{ type: 'craving', at: STARTED_AT, intensity: 3, heldToEnd: true, tags: [] }],
+    facts: [
+      { type: 'craving', id: anyFactId, at: STARTED_AT, intensity: 3, heldToEnd: true, tags: [] },
+    ],
   })
 })
 
@@ -69,7 +73,9 @@ it('records a craving stopped early without the full-timer mark and without cele
 
   expect(onRecorded).toHaveBeenCalledWith({
     ...emptyJournal,
-    facts: [{ type: 'craving', at: STARTED_AT, intensity: 1, heldToEnd: false, tags: [] }],
+    facts: [
+      { type: 'craving', id: anyFactId, at: STARTED_AT, intensity: 1, heldToEnd: false, tags: [] },
+    ],
   })
 })
 
@@ -117,6 +123,7 @@ describe('tags', () => {
       facts: [
         {
           type: 'craving',
+          id: anyFactId,
           at: STARTED_AT,
           intensity: 2,
           heldToEnd: true,
@@ -183,6 +190,7 @@ describe('tags', () => {
       facts: [
         {
           type: 'craving',
+          id: factId(1),
           at: STARTED_AT - MINUTE,
           intensity: 2,
           heldToEnd: false,

@@ -2,6 +2,7 @@ import { dismissReminder, isBackupDue } from '@/shared/domain/backup-reminder'
 import type { Journal } from '@/shared/domain/journal'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
 import { Button } from '@/shared/ui/base/button'
+import { Card } from '@/shared/ui/Card'
 import { DAY_MS } from '@/shared/utils/duration'
 import { strings } from '@/shared/utils/strings'
 import { useJournalExport } from '../hooks/useJournalExport'
@@ -29,7 +30,7 @@ export function BackupReminder({ journal, quitMoment }: BackupReminderProps) {
       : copy.stale(Math.floor((now - record.lastBackupAt) / DAY_MS))
 
   return (
-    <section aria-label={copy.label} className="flex flex-col gap-3.5 rounded-card bg-surface p-5">
+    <Card label={copy.label} className="gap-3.5">
       <p className="text-body">{message}</p>
       <div className="flex gap-2">
         <Button onClick={() => void exportFile(journal)}>{copy.export}</Button>
@@ -37,6 +38,6 @@ export function BackupReminder({ journal, quitMoment }: BackupReminderProps) {
           {copy.later}
         </Button>
       </div>
-    </section>
+    </Card>
   )
 }
