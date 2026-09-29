@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useLocation } from '@tanstack/react-router'
+import { createFileRoute, type HistoryState, Link, useLocation } from '@tanstack/react-router'
 import { Settings } from 'lucide-react'
 import { BackupReminder } from '@/features/backup/components/BackupReminder'
 import { ImportJournal } from '@/features/backup/components/ImportJournal'
@@ -21,6 +21,7 @@ import { buttonVariants } from '@/shared/ui/base/button'
 import { Card } from '@/shared/ui/Card'
 import { ReadyJournal } from '@/shared/ui/ReadyJournal'
 import { RowLink } from '@/shared/ui/RowLink'
+import { StatusLine } from '@/shared/ui/StatusLine'
 import { validateAppSearch } from '@/shared/utils/app-search'
 import { strings } from '@/shared/utils/strings'
 
@@ -28,13 +29,19 @@ export const Route = createFileRoute('/')({
   component: HomePage,
 })
 
+/** What home confirms after a craving, a lapse or an import; the patch card confirms its own. */
+function confirmation(state: HistoryState): string | null {
+  if (state.cravingRecorded === true) return strings.craving.recorded
+  if (state.lapseRecorded === true) return strings.lapse.recorded
+  if (state.journalImported === true) return strings.backup.imported
+  return null
+}
+
 function HomePage() {
   const { state, commit, now } = useJournalSource()
   const appSearch = validateAppSearch(Route.useSearch())
   const imported = useRecordedThenHome(appSearch, 'journalImported')
-  const { cravingRecorded, patchRecorded, lapseRecorded, journalImported } = useLocation({
-    select: (location) => location.state,
-  })
+  const notices = useLocation({ select: (location) => location.state })
   const brand = <SandboxEntry>{strings.app.name}</SandboxEntry>
 
   return (
@@ -67,6 +74,7 @@ function HomePage() {
               streak={derived.streak}
               brand={brand}
               context={protocolContext(derived.protocol)}
+              status={<StatusLine message={confirmation(notices)} />}
               action={
                 <Link
                   to="/settings"
@@ -100,7 +108,7 @@ function HomePage() {
                   suggestedSite={derived.suggestedSite}
                   previousSite={derived.previousSite}
                   now={now}
-                  recorded={patchRecorded === true}
+                  recorded={notices.patchRecorded === true}
                   onRecorded={commit}
                 />
               )}
@@ -109,21 +117,6 @@ function HomePage() {
                 <GoalSummary journal={journal} goal={derived.goal} onCelebrated={commit} />
               )}
               <ProtocolSummary position={derived.protocol} />
-              {cravingRecorded === true ? (
-                <p role="status" className="px-2 text-body text-muted">
-                  {strings.craving.recorded}
-                </p>
-              ) : null}
-              {journalImported === true ? (
-                <p role="status" className="px-2 text-body text-muted">
-                  {strings.backup.imported}
-                </p>
-              ) : null}
-              {lapseRecorded === true ? (
-                <p role="status" className="px-2 text-body text-muted">
-                  {strings.lapse.recorded}
-                </p>
-              ) : null}
               <Link
                 to="/craving/past"
                 search={appSearch}
