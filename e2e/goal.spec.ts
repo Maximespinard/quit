@@ -64,11 +64,8 @@ test('changing the weekly spend recomputes the money saved at once', async ({ pa
   await expect(figure(page, 'Argent économisé')).toHaveText('35 €')
 
   await page.getByRole('link', { name: 'Réglages' }).click()
-  const spend = page.getByRole('form', { name: 'Dépense en tabac par semaine' })
-  await spend.getByRole('textbox').fill('48,90')
-  await spend.getByRole('button', { name: 'Enregistrer' }).click()
-  await expect(spend.getByRole('status')).toHaveText('Enregistré.')
-  await page.getByRole('link', { name: 'Retour' }).click()
+  await page.getByRole('textbox', { name: 'Dépense en tabac par semaine' }).fill('48,90')
+  await page.getByRole('button', { name: 'Enregistrer', exact: true }).click()
 
   await expect(figure(page, 'Argent économisé')).toHaveText('48,90 €')
 })

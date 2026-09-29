@@ -1,8 +1,9 @@
-import { createFileRoute, Link, Navigate } from '@tanstack/react-router'
+import { createFileRoute, Link, Navigate, useNavigate } from '@tanstack/react-router'
 import { ChevronLeft } from 'lucide-react'
 import { BackupSection } from '@/features/backup/components/BackupSection'
 import { SettingsScreen } from '@/features/setup/components/SettingsScreen'
 import { latestQuitMoment } from '@/shared/domain/facts/quit-moment'
+import type { Journal } from '@/shared/domain/journal'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
 import { useRecordedThenHome } from '@/shared/hooks/useRecordedThenHome'
 import { AppShell } from '@/shared/ui/app-shell'
@@ -16,8 +17,13 @@ export const Route = createFileRoute('/settings')({
 })
 
 function SettingsPage() {
+  const appSearch = validateAppSearch(Route.useSearch())
   const { state, commit, now } = useJournalSource()
-  const imported = useRecordedThenHome(validateAppSearch(Route.useSearch()), 'journalImported')
+  const navigate = useNavigate()
+  const imported = useRecordedThenHome(appSearch, 'journalImported')
+  // Home is the acknowledgement: it already shows what the new values change.
+  const saved = (journal: Journal) =>
+    void commit(journal).then(() => navigate({ to: '/', search: appSearch, replace: true }))
   const copy = strings.settings
 
   return (
@@ -46,7 +52,7 @@ function SettingsPage() {
         <Navigate to="/" search={keepSearch} replace />
       ) : (
         <>
-          <SettingsScreen journal={state.journal} now={now} onSaved={commit} />
+          <SettingsScreen journal={state.journal} now={now} onSaved={saved} />
           <BackupSection journal={state.journal} onImported={imported} />
         </>
       )}
