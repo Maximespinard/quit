@@ -19,15 +19,21 @@ export function StepSpans({ steps, position }: StepSpansProps) {
   const current = position.status === 'running' ? position.stepNumber : null
 
   return (
-    <section aria-labelledby={titleId} className="flex flex-col gap-2.5">
-      <h3 id={titleId} className="font-medium text-body">
+    <section
+      aria-labelledby={titleId}
+      className="flex flex-col gap-1.5 rounded-card bg-surface p-5"
+    >
+      <h3 id={titleId} className="text-label text-muted">
         {copy.steps}
       </h3>
-      <ol className="flex flex-col divide-y divide-line border-line border-y">
+      <ol className="flex flex-col divide-y divide-line">
         {steps.map((span) => {
           const running = span.number === current
           return (
-            <li key={span.number} className="flex min-h-12 items-center justify-between gap-3">
+            <li
+              key={span.number}
+              className="flex items-baseline justify-between gap-3 py-3 last:pb-0"
+            >
               <span className={cn('text-body', running && 'font-medium')}>
                 {copy.step(span.number, formatDose(span.step.doseMg))}
                 {running ? (
