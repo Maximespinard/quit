@@ -37,6 +37,7 @@ describe('derive', () => {
       protocol: null,
       patch: null,
       suggestedSite: null,
+      previousSite: null,
     })
   })
 
@@ -416,6 +417,51 @@ describe('derive — the suggested application site', () => {
     expect(
       suggestedAt(QUIT + DAY, applied(QUIT + DAY, 'arm-left'), applied(QUIT + 2 * DAY, 'hip-left')),
     ).toBe('arm-right')
+  })
+})
+
+describe('derive — the previous application site', () => {
+  const QUIT = NOW - 10 * DAY
+  const applied = (at: number, site?: ApplicationSite): PatchApplicationFact =>
+    site === undefined
+      ? { type: 'patch-application', at, doseMg: 21 }
+      : { type: 'patch-application', at, doseMg: 21, site }
+  const previousAt = (now: number, ...applications: PatchApplicationFact[]) =>
+    derive({ ...emptyJournal, facts: [{ type: 'quit-moment', at: QUIT }, ...applications] }, now)
+      .previousSite
+
+  it('is none before the first ever patch application', () => {
+    expect(previousAt(NOW)).toBeNull()
+  })
+
+  it('is the site of the latest patch application in time, not the one recorded last', () => {
+    expect(
+      previousAt(NOW, applied(QUIT + 3 * DAY, 'chest-left'), applied(QUIT + 2 * DAY, 'arm-right')),
+    ).toBe('chest-left')
+  })
+
+  it('is none when the previous patch application has no site, even if an earlier one had', () => {
+    expect(previousAt(NOW, applied(QUIT + DAY, 'hip-left'), applied(QUIT + 2 * DAY))).toBeNull()
+  })
+
+  it('for a day caught up, is the site of the patch application before that day', () => {
+    const facts = [applied(QUIT + DAY, 'arm-right'), applied(QUIT + 3 * DAY, 'hip-left')]
+
+    expect(previousAt(QUIT + 2 * DAY, ...facts)).toBe('arm-right')
+  })
+
+  it('takes the one recorded last when two patch applications share the same instant', () => {
+    expect(previousAt(NOW, applied(QUIT + DAY, 'hip-left'), applied(QUIT + DAY))).toBeNull()
+  })
+
+  it('is never the suggested site', () => {
+    const facts = [applied(QUIT + DAY, 'arm-left'), applied(QUIT + 2 * DAY, 'hip-right')]
+    const state = derive(
+      { ...emptyJournal, facts: [{ type: 'quit-moment', at: QUIT }, ...facts] },
+      NOW,
+    )
+
+    expect(state).toMatchObject({ previousSite: 'hip-right', suggestedSite: 'arm-left' })
   })
 })
 

@@ -278,7 +278,9 @@ export const strings = {
     site: {
       label: 'Où le poser',
       /** Pressing the chosen site again leaves it out. */
-      hint: 'Facultatif · pas le même que la dernière fois',
+      hint: 'Facultatif · jamais deux fois de suite au même site',
+      /** Under the previous patch application's site, which the next one may not take. */
+      previous: 'la dernière fois',
     },
     sites: {
       'arm-left': 'Bras gauche',

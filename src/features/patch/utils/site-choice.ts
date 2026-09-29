@@ -8,10 +8,18 @@ export type SiteChoice =
 
 export const untouched: SiteChoice = { kind: 'suggested' }
 
+/**
+ * The site to record. A site picked that has since become the previous one (the date entered
+ * moved) gives way to the suggestion, which never is.
+ */
 export const chosenSite = (
   choice: SiteChoice,
   suggested: ApplicationSite | null,
-): ApplicationSite | null => (choice.kind === 'suggested' ? suggested : choice.site)
+  previous: ApplicationSite | null,
+): ApplicationSite | null =>
+  choice.kind === 'picked' && (choice.site === null || choice.site !== previous)
+    ? choice.site
+    : suggested
 
 /** The patch application to record, without a site when none is chosen. */
 export const applicationAt = (

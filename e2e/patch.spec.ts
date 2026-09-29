@@ -48,8 +48,9 @@ test('one tap logs the patch; it holds past midnight, the next protocol day asks
   await expect(page.getByRole('button', { name: /^Poser le patch · 21\smg$/ })).toBeVisible()
 })
 
-const pressedSite = (page: Page) =>
-  patchCard(page).getByRole('group', { name: 'Où le poser' }).locator('[aria-pressed="true"]')
+const siteGroup = (page: Page) => patchCard(page).getByRole('group', { name: 'Où le poser' })
+const pressedSite = (page: Page) => siteGroup(page).locator('[aria-pressed="true"]')
+const barredSites = (page: Page) => siteGroup(page).locator('[aria-disabled="true"]')
 
 test('two days in a row, the second suggested site differs from the first', async ({ page }) => {
   await homeWithStreak(page)
@@ -61,6 +62,11 @@ test('two days in a row, the second suggested site differs from the first', asyn
 
   await shiftClock(page, '+1 j')
   await expect(pressedSite(page)).toHaveText('Bras droit')
+  // Yesterday's site is greyed and named as such.
+  await expect(barredSites(page)).toHaveCount(1)
+  await expect(
+    page.getByRole('button', { name: 'Bras gauche', exact: true }),
+  ).toHaveAccessibleDescription('la dernière fois')
   await tap(page, /^Poser le patch · 21\smg$/)
   await expect(patchCard(page)).toContainText(/aujourd’hui · 21\smg · Bras droit/)
 })
@@ -72,17 +78,24 @@ test('the site is switched in one tap, or left out', async ({ page }) => {
   await tap(page, /^Poser le patch/)
   await expect(patchCard(page)).toContainText(/aujourd’hui · 21\smg · Hanche droite/)
 
-  // The rotation goes on from the site switched to; pressed again, it is left out.
+  // The rotation goes on from the site switched to, which cannot be picked again.
   await shiftClock(page, '+1 j')
   await expect(pressedSite(page)).toHaveText('Bras gauche')
+  const previous = page.getByRole('button', { name: 'Hanche droite', exact: true })
+  await expect(previous).toHaveAttribute('aria-disabled', 'true')
+  await previous.click({ force: true })
+  await expect(pressedSite(page)).toHaveText('Bras gauche')
+
+  // Pressed again, the suggested site is left out.
   await tap(page, 'Bras gauche')
   await expect(pressedSite(page)).toHaveCount(0)
   await tap(page, /^Poser le patch/)
   await expect(patchCard(page).getByRole('paragraph')).toHaveText(/aujourd’hui · 21\smg$/)
 
-  // A patch without a site leaves the rotation where it was.
+  // A patch without a site leaves the rotation where it was, and bars no site.
   await shiftClock(page, '+1 j')
   await expect(pressedSite(page)).toHaveText('Bras gauche')
+  await expect(barredSites(page)).toHaveCount(0)
 })
 
 test('a missed day is caught up and a dose overridden for one patch only', async ({ page }) => {

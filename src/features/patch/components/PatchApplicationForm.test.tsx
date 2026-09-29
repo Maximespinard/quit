@@ -1,6 +1,10 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import type { PatchApplicationInput } from '@/shared/domain/facts/patch-application'
+import type { ApplicationSite } from '@/shared/domain/application-site'
+import type {
+  PatchApplicationFact,
+  PatchApplicationInput,
+} from '@/shared/domain/facts/patch-application'
 import { emptyJournal, type Journal } from '@/shared/domain/journal'
 import { protocolPosition } from '@/shared/domain/protocol-position'
 import { strings } from '@/shared/utils/strings'
@@ -30,6 +34,46 @@ const renderForm = (initialApplication?: PatchApplicationInput, withFacts = jour
 }
 const renderEdit = () => renderForm(initial)
 const site = (name: string) => screen.getByRole('button', { name })
+const barred = strings.patch.site.previous
+
+/** A patch application on September `day` at `hour`, with a site or without. */
+const applied = (day: number, hour: number, site?: ApplicationSite): PatchApplicationFact => {
+  const at = new Date(2026, 8, day, hour, 0).getTime()
+  return site === undefined
+    ? { type: 'patch-application', at, doseMg: 21 }
+    : { type: 'patch-application', at, doseMg: 21, site }
+}
+const journalWith = (...applications: PatchApplicationFact[]): Journal => ({
+  ...journal,
+  facts: [...journal.facts, ...applications],
+})
+
+it('bars the previous patch application’s site, named as such, a press changing nothing', async () => {
+  const onRecorded = renderForm(undefined, journalWith(applied(21, 9, 'arm-left')))
+
+  const previous = site(sites['arm-left'])
+  expect(previous).toHaveAttribute('aria-disabled', 'true')
+  expect(previous).toHaveAccessibleDescription(barred)
+  expect(site(sites['arm-right'])).toHaveAttribute('aria-pressed', 'true')
+  // Out of a finger's reach; the keyboard still reaches it, and nothing happens.
+  previous.focus()
+  await userEvent.keyboard(' ')
+  expect(previous).toHaveAttribute('aria-pressed', 'false')
+  await userEvent.click(screen.getByRole('button', { name: copy.submit }))
+
+  expect(onRecorded).toHaveBeenLastCalledWith(
+    journalWith(applied(21, 9, 'arm-left'), { ...applied(22, 10, 'arm-right') }),
+  )
+})
+
+it('bars nothing when the previous patch application has no site', () => {
+  renderForm(undefined, journalWith(applied(20, 9, 'arm-left'), applied(21, 9)))
+
+  for (const name of Object.values(sites)) {
+    expect(site(name)).not.toHaveAttribute('aria-disabled', 'true')
+  }
+  expect(site(sites['arm-right'])).toHaveAttribute('aria-pressed', 'true')
+})
 
 it('logs a patch application at the suggested site unless another or none is pressed', async () => {
   const onRecorded = renderForm()
@@ -81,12 +125,15 @@ it('suggests the site for the date entered when catching up a day', async () => 
   }
   const onRecorded = renderForm(undefined, withSites)
   expect(site(sites['hip-right'])).toHaveAttribute('aria-pressed', 'true')
+  expect(site(sites['hip-left'])).toHaveAttribute('aria-disabled', 'true')
 
   // The day between the two: the site after the 20th's, not after the 22nd's.
   const date = screen.getByLabelText(copy.dateLabel)
   await userEvent.clear(date)
   await userEvent.type(date, '2026-09-21T09:00')
   expect(site(sites['chest-left'])).toHaveAttribute('aria-pressed', 'true')
+  expect(site(sites['arm-right'])).toHaveAttribute('aria-disabled', 'true')
+  expect(site(sites['hip-left'])).not.toHaveAttribute('aria-disabled', 'true')
   await userEvent.click(screen.getByRole('button', { name: copy.submit }))
 
   expect(onRecorded).toHaveBeenLastCalledWith({
@@ -101,6 +148,30 @@ it('suggests the site for the date entered when catching up a day', async () => 
       },
     ],
   })
+})
+
+it('edits a patch application: its own site stays open, the one before it is barred', async () => {
+  // The fact edited shares its site with the one before it, as recorded before the rule.
+  const before = journalWith(applied(20, 9, 'hip-left'))
+  const onRecorded = renderForm({ ...initial, site: 'hip-left' }, before)
+
+  expect(site(sites['hip-left'])).toHaveAttribute('aria-pressed', 'true')
+  expect(site(sites['hip-left'])).not.toHaveAttribute('aria-disabled', 'true')
+  await userEvent.click(screen.getByRole('button', { name: copy.edit.submit }))
+  expect(onRecorded).toHaveBeenLastCalledWith(
+    journalWith(applied(20, 9, 'hip-left'), {
+      type: 'patch-application',
+      ...initial,
+      site: 'hip-left',
+    }),
+  )
+})
+
+it('edits a patch application whose site differs: the one before it is barred', () => {
+  renderForm({ ...initial, site: 'chest-left' }, journalWith(applied(20, 9, 'hip-left')))
+
+  expect(site(sites['hip-left'])).toHaveAttribute('aria-disabled', 'true')
+  expect(site(sites['chest-left'])).toHaveAttribute('aria-pressed', 'true')
 })
 
 it('edits a patch application from its own site, not the suggested one', async () => {

@@ -26,6 +26,8 @@ type DayPatchCardProps = {
   patch: Exclude<ProtocolDayPatch, { status: 'over' }>
   /** Pressed until the user picks another site or none: the one tap logs it. */
   suggestedSite: ApplicationSite
+  /** The latest patch application's site: greyed, never pressable. */
+  previousSite: ApplicationSite | null
   /** Injected clock: a one-tap log records at this instant. */
   now: number
   /** Set on arrival from the form: the header confirms it, even for another protocol day. */
@@ -38,6 +40,7 @@ export function DayPatchCard({
   journal,
   patch,
   suggestedSite,
+  previousSite,
   now,
   recorded,
   onRecorded,
@@ -47,7 +50,7 @@ export function DayPatchCard({
   const [refusal, setRefusal] = useState<Refusal | null>(null)
   // Untouched, the site follows the suggestion, which moves on once a patch is logged.
   const [choice, setChoice] = useState<SiteChoice>(untouched)
-  const site = chosenSite(choice, suggestedSite)
+  const site = chosenSite(choice, suggestedSite, previousSite)
 
   const applyNow = (doseMg: number) => {
     const result = recordPatchApplication(journal, applicationAt(now, doseMg, site), now)
@@ -88,6 +91,7 @@ export function DayPatchCard({
             <p className="font-semibold text-body">{copy.due}</p>
             <SitePicker
               value={site}
+              previous={previousSite}
               onValueChange={(next) => setChoice({ kind: 'picked', site: next })}
               onSurface
             />

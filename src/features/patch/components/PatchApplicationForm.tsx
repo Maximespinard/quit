@@ -59,7 +59,10 @@ export function PatchApplicationForm({
   )
   const [error, setError] = useState<FormError | null>(null)
   const at = date === toDatetimeLocal(openedAt) ? openedAt : fromDatetimeLocal(date)
-  const site = chosenSite(choice, derive(journal, at ?? openedAt).suggestedSite)
+  // The site before the date entered is barred; editing, the application's own site never is.
+  const rotation = derive(journal, at ?? openedAt)
+  const previous = rotation.previousSite === initial?.site ? null : rotation.previousSite
+  const site = chosenSite(choice, rotation.suggestedSite, previous)
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -124,6 +127,7 @@ export function PatchApplicationForm({
         </div>
         <SitePicker
           value={site}
+          previous={previous}
           onValueChange={(next) => setChoice({ kind: 'picked', site: next })}
         />
         {error !== null ? (

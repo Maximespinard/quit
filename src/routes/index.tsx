@@ -80,6 +80,7 @@ function HomePage() {
                   journal={journal}
                   patch={derived.patch}
                   suggestedSite={derived.suggestedSite}
+                  previousSite={derived.previousSite}
                   now={now}
                   recorded={patchRecorded === true}
                   onRecorded={commit}
