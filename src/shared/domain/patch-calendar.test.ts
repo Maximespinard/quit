@@ -1,8 +1,9 @@
+import type { Fact } from '@quit/contract/facts'
+import type { Protocol } from '@quit/contract/settings'
 import { DAY_MS } from '@/shared/utils/duration'
-import type { Fact } from './facts/registry'
 import { emptyJournal, type Journal } from './journal'
 import { type CalendarDay, patchCalendar } from './patch-calendar'
-import { defaultProtocol, type Protocol, setProtocol } from './protocol'
+import { defaultProtocol, setProtocol } from './protocol'
 import { scenarioById } from './scenarios'
 
 // Vitest pins TZ to Europe/Paris: the calendar days below are Paris days.

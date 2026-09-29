@@ -1,9 +1,6 @@
+import { CRAVING_INTENSITIES, type CravingIntensity } from '@quit/contract/facts'
 import { type FormEvent, type ReactNode, useId, useState } from 'react'
-import {
-  CRAVING_INTENSITIES,
-  type CravingInput,
-  type CravingIntensity,
-} from '@/shared/domain/facts/craving'
+import type { CravingInput } from '@/shared/domain/facts/craving'
 import { Button } from '@/shared/ui/base/button'
 import { ToggleGroup, ToggleGroupItem } from '@/shared/ui/base/toggle-group'
 import { strings } from '@/shared/utils/strings'

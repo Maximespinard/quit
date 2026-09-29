@@ -1,4 +1,4 @@
-import type { ApplicationSite } from '@/shared/domain/application-site'
+import type { ApplicationSite } from '@quit/contract/facts'
 import type { PatchApplicationInput } from '@/shared/domain/facts/patch-application'
 
 /** The site as the user left it: untouched, it follows the suggestion; picked, it may be none. */

@@ -1,7 +1,7 @@
+import { CRAVING_INTENSITIES } from '@quit/contract/facts'
 import { Link } from '@tanstack/react-router'
 import { type ReactNode, useId } from 'react'
 import { type CravingStats, MIN_CRAVINGS_FOR_STATS } from '@/shared/domain/craving-stats'
-import { CRAVING_INTENSITIES } from '@/shared/domain/facts/craving'
 import { buttonVariants } from '@/shared/ui/base/button'
 import { keepSearch } from '@/shared/utils/app-search'
 import { strings } from '@/shared/utils/strings'

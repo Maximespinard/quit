@@ -1,4 +1,4 @@
-import type { ApplicationSite } from '@/shared/domain/application-site'
+import type { ApplicationSite } from '@quit/contract/facts'
 import type { ImportRefusal } from '@/shared/domain/journal-file'
 import type { ScenarioId } from '@/shared/domain/scenarios'
 

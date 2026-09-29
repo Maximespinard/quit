@@ -1,9 +1,6 @@
+import type { CravingIntensity } from '@quit/contract/facts'
 import { useId, useState } from 'react'
-import {
-  type CravingInput,
-  type CravingIntensity,
-  recordCraving,
-} from '@/shared/domain/facts/craving'
+import { type CravingInput, recordCraving } from '@/shared/domain/facts/craving'
 import type { Journal } from '@/shared/domain/journal'
 import { Input } from '@/shared/ui/base/input'
 import { fromDatetimeLocal, toDatetimeLocal } from '@/shared/utils/datetime-local'

@@ -1,10 +1,7 @@
+import type { ApplicationSite, PatchApplicationFact } from '@quit/contract/facts'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import type { ApplicationSite } from '@/shared/domain/application-site'
-import type {
-  PatchApplicationFact,
-  PatchApplicationInput,
-} from '@/shared/domain/facts/patch-application'
+import type { PatchApplicationInput } from '@/shared/domain/facts/patch-application'
 import { emptyJournal, type Journal } from '@/shared/domain/journal'
 import { protocolPosition } from '@/shared/domain/protocol-position'
 import { strings } from '@/shared/utils/strings'

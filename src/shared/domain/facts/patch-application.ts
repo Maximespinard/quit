@@ -1,33 +1,7 @@
-import { type ApplicationSite, isApplicationSite } from '../application-site'
+import { PATCH_APPLICATION, type PatchApplicationFact } from '@quit/contract/facts'
 import type { Journal } from '../journal'
 import { isValidDose } from '../protocol'
 import { latestQuitMoment } from './quit-moment'
-
-export const PATCH_APPLICATION = 'patch-application' as const
-
-/** A patch put on, at a given time and dose. The dose may differ from the step's. */
-export type PatchApplicationFact = {
-  readonly type: typeof PATCH_APPLICATION
-  readonly at: number
-  readonly doseMg: number
-  /** Where it went on; absent when the user logged it without one. */
-  readonly site?: ApplicationSite
-}
-
-export const patchApplicationModule = {
-  type: PATCH_APPLICATION,
-  /** Turns a stored value back into a fact, or `null` when it is not one. */
-  decode(raw: unknown): PatchApplicationFact | null {
-    if (typeof raw !== 'object' || raw === null) return null
-    const { type, at, doseMg, site } = raw as Record<string, unknown>
-    if (type !== PATCH_APPLICATION || typeof at !== 'number' || !Number.isFinite(at)) return null
-    if (typeof doseMg !== 'number' || !isValidDose(doseMg)) return null
-    // A patch application stored before sites existed carries none.
-    if (site === undefined) return { type: PATCH_APPLICATION, at, doseMg }
-    if (!isApplicationSite(site)) return null
-    return { type: PATCH_APPLICATION, at, doseMg, site }
-  },
-}
 
 export type PatchApplicationInput = Omit<PatchApplicationFact, 'type'>
 

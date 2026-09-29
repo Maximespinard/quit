@@ -1,9 +1,6 @@
+import { APPLICATION_SITES, type ApplicationSite } from '@quit/contract/facts'
 import { useId } from 'react'
-import {
-  APPLICATION_SITES,
-  type ApplicationSite,
-  isApplicationSite,
-} from '@/shared/domain/application-site'
+import { isApplicationSite } from '@/shared/domain/application-site'
 import { ToggleGroup, ToggleGroupItem } from '@/shared/ui/base/toggle-group'
 import { strings } from '@/shared/utils/strings'
 

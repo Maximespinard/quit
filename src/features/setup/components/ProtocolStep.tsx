@@ -1,4 +1,4 @@
-import type { Protocol } from '@/shared/domain/protocol'
+import type { Protocol } from '@quit/contract/settings'
 import { Button } from '@/shared/ui/base/button'
 import { formatDose } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'

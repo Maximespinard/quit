@@ -1,9 +1,14 @@
-import { APPLICATION_SITES, type ApplicationSite } from './application-site'
+import {
+  APPLICATION_SITES,
+  type ApplicationSite,
+  type PatchApplicationFact,
+} from '@quit/contract/facts'
+import type { Protocol } from '@quit/contract/settings'
 import { derive } from './derive'
 import { recordLapse } from './facts/lapse'
-import { type PatchApplicationFact, recordPatchApplication } from './facts/patch-application'
+import { recordPatchApplication } from './facts/patch-application'
 import { decodeJournal, emptyJournal, type Journal } from './journal'
-import { defaultProtocol, type Protocol, setProtocol } from './protocol'
+import { defaultProtocol, setProtocol } from './protocol'
 import { type ScenarioId, scenarioById } from './scenarios'
 
 const MINUTE = 60_000

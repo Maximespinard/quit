@@ -1,4 +1,4 @@
-import type { ApplicationSite } from './application-site'
+import type { ApplicationSite } from '@quit/contract/facts'
 import { type CravingStats, cravingStats } from './craving-stats'
 import { lapsesUntil } from './facts/lapse'
 import { latestQuitMoment } from './facts/quit-moment'

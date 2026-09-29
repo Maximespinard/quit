@@ -1,3 +1,4 @@
+import type { Step } from '@quit/contract/settings'
 import { Plus } from 'lucide-react'
 import { type FormEvent, useId, useState } from 'react'
 import type { Journal } from '@/shared/domain/journal'
@@ -6,7 +7,6 @@ import {
   isValidDose,
   isValidDuration,
   type SetProtocolResult,
-  type Step,
   setProtocol,
 } from '@/shared/domain/protocol'
 import type { ProtocolPosition } from '@/shared/domain/protocol-position'

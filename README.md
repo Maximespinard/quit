@@ -10,6 +10,14 @@ npm install
 npm run dev
 ```
 
+The repository is npm workspaces, installed together by one `npm install` at the root:
+
+| Workspace | What it holds |
+| --- | --- |
+| root | The PWA |
+| `contract/` | Zod schemas of the facts, the settings and the journal file; their types are inferred from them |
+| `push-sender/` | The Web Push sender (see its README) |
+
 Install the git hooks once per clone (gitleaks scan on every commit):
 
 ```bash
@@ -24,7 +32,7 @@ The same hook also rejects a commit whose staged changes match a regex in
 | Script | What it does |
 | --- | --- |
 | `npm run dev` | Vite dev server on port 3000 |
-| `npm run verify` | lint + typecheck + tests + build — the gate before any commit |
+| `npm run verify` | lint + typecheck + tests + build, then every workspace's own verify — the gate before any commit |
 | `npm run test` | Vitest once (`test:watch` to watch) |
 | `npm run test:e2e` | Playwright smoke test (WebKit, iPhone) against the production preview build |
 | `npm run build` | Production build (typecheck included) |

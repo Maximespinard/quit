@@ -1,11 +1,10 @@
+import { CRAVING, PATCH_APPLICATION } from '@quit/contract/facts'
+import type { Step } from '@quit/contract/settings'
 import { DAY_MS } from '@/shared/utils/duration'
-import { CRAVING } from './facts/craving'
 import { lapsesUntil } from './facts/lapse'
-import { PATCH_APPLICATION } from './facts/patch-application'
 import { latestQuitMoment } from './facts/quit-moment'
 import type { Journal } from './journal'
 import { localMidnight } from './local-day'
-import type { Step } from './protocol'
 import { type ProtocolPosition, protocolPosition } from './protocol-position'
 
 /** One step of the protocol laid over the calendar. */

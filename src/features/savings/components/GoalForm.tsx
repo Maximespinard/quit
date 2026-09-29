@@ -1,6 +1,7 @@
+import { GOAL_LABEL_MAX_LENGTH } from '@quit/contract/settings'
 import { type FormEvent, useId, useState } from 'react'
 import type { GoalProgress } from '@/shared/domain/derive'
-import { GOAL_LABEL_MAX_LENGTH, type SetGoalResult, setGoal } from '@/shared/domain/goal'
+import { type SetGoalResult, setGoal } from '@/shared/domain/goal'
 import type { Journal } from '@/shared/domain/journal'
 import { Button } from '@/shared/ui/base/button'
 import { Input } from '@/shared/ui/base/input'

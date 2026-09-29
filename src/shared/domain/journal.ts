@@ -1,19 +1,19 @@
-import { decodeFact, type Fact } from './facts/registry'
-import { decodeGoal, type Goal } from './goal'
-import { isValidBaseline, isValidWeeklySpend } from './journal-settings'
-import { decodeProtocol, defaultProtocol, type Protocol } from './protocol'
+import { factSchema } from '@quit/contract/facts'
+import type { Journal } from '@quit/contract/journal'
+import {
+  baselineSmokesPerDaySchema,
+  goalSchema,
+  protocolSchema,
+  weeklySpendCentsSchema,
+} from '@quit/contract/settings'
+import * as z from 'zod/mini'
+import { defaultProtocol } from './protocol'
 
-/** The facts recorded by one person plus the settings that shape what is derived — the only thing ever stored. */
-export type Journal = {
-  readonly facts: readonly Fact[]
-  readonly protocol: Protocol
-  /** Weekly tobacco spend in integer cents; `null` until first launch sets it. */
-  readonly weeklySpendCents: number | null
-  /** Smokes per day before the quit moment; `null` until first launch sets it. */
-  readonly baselineSmokesPerDay: number | null
-  /** The one thing the user is saving towards; `null` until one is set. */
-  readonly goal: Goal | null
-}
+/**
+ * The facts recorded by one person plus the settings that shape what is derived — the only
+ * thing ever stored. Defined by the contract; exposed here, where the whole app reads it.
+ */
+export type { Journal }
 
 /** A new journal: no fact yet, the default protocol, no setting, no goal. */
 export const emptyJournal: Journal = {
@@ -24,22 +24,30 @@ export const emptyJournal: Journal = {
   goal: null,
 }
 
-const validOrNull = (value: unknown, isValid: (value: number) => boolean) =>
-  typeof value === 'number' && isValid(value) ? value : null
+/**
+ * The journal as the device stored it, read leniently: storage forgives what an import
+ * refuses. A missing or malformed setting reads as unset (the default protocol for the
+ * protocol); facts are checked one by one below.
+ */
+const storedJournalSchema = z.object({
+  facts: z.catch(z.array(z.unknown()), []),
+  protocol: z.catch(protocolSchema, defaultProtocol),
+  weeklySpendCents: z.catch(z.nullable(weeklySpendCentsSchema), null),
+  baselineSmokesPerDay: z.catch(z.nullable(baselineSmokesPerDaySchema), null),
+  goal: z.catch(z.nullable(goalSchema), null),
+})
 
-/** Rebuilds a journal from a stored value, dropping anything no fact module recognises. */
+/** Rebuilds a journal from a stored value, dropping any fact the contract does not recognise. */
 export function decodeJournal(raw: unknown): Journal {
-  if (typeof raw !== 'object' || raw === null) return emptyJournal
-  const { facts, protocol, weeklySpendCents, baselineSmokesPerDay, goal } = raw as Record<
-    string,
-    unknown
-  >
+  const stored = storedJournalSchema.safeParse(raw)
+  if (!stored.success) return emptyJournal
+  const { facts, ...settings } = stored.data
   return {
-    facts: Array.isArray(facts) ? facts.map(decodeFact).filter((fact) => fact !== null) : [],
-    protocol: decodeProtocol(protocol),
-    weeklySpendCents: validOrNull(weeklySpendCents, isValidWeeklySpend),
-    baselineSmokesPerDay: validOrNull(baselineSmokesPerDay, isValidBaseline),
-    goal: decodeGoal(goal),
+    ...settings,
+    facts: facts.flatMap((rawFact) => {
+      const fact = factSchema.safeParse(rawFact)
+      return fact.success ? [fact.data] : []
+    }),
   }
 }
 
