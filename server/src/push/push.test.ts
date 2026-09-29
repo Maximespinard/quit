@@ -2,7 +2,7 @@ import { PROBLEM_CONTENT_TYPE } from '@quit/contract/problem'
 import type { PushSubscription } from '@quit/contract/push'
 import { sql } from 'drizzle-orm'
 import { afterEach, describe, expect, it } from 'vitest'
-import { closeTestApis, openTestApi, type SentPush, T0 } from './test-api.ts'
+import { closeTestApis, openTestApi, type SentPush, T0 } from '../test/test-api.ts'
 
 const MINUTE = 60_000
 

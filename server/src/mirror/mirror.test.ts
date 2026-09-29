@@ -2,8 +2,8 @@ import type { Fact } from '@quit/contract/facts'
 import { type Mirror, mirrorSchema } from '@quit/contract/mirror'
 import type { Settings } from '@quit/contract/settings'
 import { afterEach, describe, expect, it } from 'vitest'
-import { cravingTags, facts, protocolSteps } from './schema.ts'
-import { closeTestApis, expectProblem, factId, openTestApi, T0 } from './test-api.ts'
+import { cravingTags, facts, protocolSteps } from '../db/schema.ts'
+import { closeTestApis, expectProblem, factId, openTestApi, T0 } from '../test/test-api.ts'
 
 afterEach(closeTestApis)
 

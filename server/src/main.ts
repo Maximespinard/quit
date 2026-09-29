@@ -1,9 +1,9 @@
 import { createApp } from './app.ts'
 import { readConfigOrExit } from './config.ts'
-import { openDatabase } from './database.ts'
+import { openDatabase } from './db/database.ts'
 import { createLogger } from './logger.ts'
-import { createPushSender, startSendLoop } from './push-sender.ts'
-import { createWebPushTransport } from './web-push-transport.ts'
+import { createPushSender, startSendLoop } from './push/push-sender.ts'
+import { createWebPushTransport } from './push/web-push-transport.ts'
 
 /** How long in-flight requests get to finish on shutdown before their connections are cut. */
 const SHUTDOWN_GRACE_MS = 10_000

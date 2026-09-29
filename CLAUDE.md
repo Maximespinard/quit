@@ -79,7 +79,7 @@ never a synonym it lists under _Avoid_.
 **Tests** — colocated `X.test.ts(x)`; concrete data (integer cents); domain tested as "facts in, state out".
 E2e specs are the exception: Playwright, root `e2e/`, `X.spec.ts`. A client test against the real
 server is `X.server.test.ts`: Node environment, its own `tsconfig.server-tests.json`, the server
-started in the test through `quit-server/src/test-api.ts`.
+started in the test through `quit-server/src/test/test-api.ts`.
 
 **Naming** — components `PascalCase.tsx` · hooks `useX.ts` · other modules `kebab-case.ts` · features lowercase.
 

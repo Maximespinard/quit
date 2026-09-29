@@ -76,7 +76,7 @@ contract (mirror, device key, push) is in [`docs/api.md`](docs/api.md).
 cd server
 DATA_DIR=./data npm start                # or: node --env-file=.env src/main.ts (see .env.example)
 npm run verify                           # lint · typecheck · tests
-npm run db:generate -- --name <change>   # after editing src/schema.ts: writes the next migration
+npm run db:generate -- --name <change>   # after editing src/db/schema.ts: writes the next migration
 ```
 
 | Variable | Default | |

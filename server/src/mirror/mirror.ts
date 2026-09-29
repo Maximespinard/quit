@@ -10,8 +10,8 @@ import {
 import type { Mirror } from '@quit/contract/mirror'
 import { type Settings, settingsSchema } from '@quit/contract/settings'
 import { asc, eq } from 'drizzle-orm'
-import type { Db } from './database.ts'
-import { cravingTags, facts, protocolSteps, SETTINGS_ROW_ID, settings } from './schema.ts'
+import type { Db } from '../db/database.ts'
+import { cravingTags, facts, protocolSteps, SETTINGS_ROW_ID, settings } from '../db/schema.ts'
 
 /**
  * The mirror's store (ADR-0003): facts and settings as the device sends them, read back in the

@@ -1,6 +1,6 @@
+import { issueDeviceKey } from './auth/device-keys.ts'
 import { readConfigOrExit } from './config.ts'
-import { openDatabase } from './database.ts'
-import { issueDeviceKey } from './device-keys.ts'
+import { openDatabase } from './db/database.ts'
 
 /**
  * Issues a new device key and revokes the previous one. Run where the server runs, against the
