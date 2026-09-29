@@ -43,7 +43,7 @@ async function setup({
     database,
     logger,
     trustProxyHops,
-    ...(appDir === undefined ? {} : { appDir }),
+    appDir,
   })
   const server = app.listen(0, '127.0.0.1')
   await new Promise((resolve) => server.once('listening', resolve))
@@ -301,7 +301,7 @@ async function builtApp() {
   return dir
 }
 
-const NEVER_CACHED = 'no-cache'
+const REVALIDATED = 'no-cache'
 
 describe('the app', () => {
   it('serves a hashed asset cached for a year, as immutable', async () => {
@@ -322,7 +322,7 @@ describe('the app', () => {
     expect(response.status).toBe(200)
     expect(response.headers.get('content-type')).toContain('text/html')
     expect(await response.text()).toBe(INDEX_HTML)
-    expect(response.headers.get('cache-control')).toBe(NEVER_CACHED)
+    expect(response.headers.get('cache-control')).toBe(REVALIDATED)
   })
 
   it('serves the service worker and the manifest, never cached', async () => {
@@ -333,9 +333,9 @@ describe('the app', () => {
 
     expect(worker.status).toBe(200)
     expect(worker.headers.get('content-type')).toContain('javascript')
-    expect(worker.headers.get('cache-control')).toBe(NEVER_CACHED)
+    expect(worker.headers.get('cache-control')).toBe(REVALIDATED)
     expect(manifest.status).toBe(200)
-    expect(manifest.headers.get('cache-control')).toBe(NEVER_CACHED)
+    expect(manifest.headers.get('cache-control')).toBe(REVALIDATED)
   })
 
   it('serves the shell for a deep link, which the router then resolves', async () => {
@@ -345,13 +345,14 @@ describe('the app', () => {
 
     expect(response.status).toBe(200)
     expect(await response.text()).toBe(INDEX_HTML)
-    expect(response.headers.get('cache-control')).toBe(NEVER_CACHED)
+    expect(response.headers.get('cache-control')).toBe(REVALIDATED)
   })
 
   it('answers 404 to a missing file rather than the shell', async () => {
     const api = await setup({ appDir: await builtApp() })
 
     await expectProblem(await api.request('GET', '/assets/index-0ld0ld.js'), 404)
+    await expectProblem(await api.request('GET', '/assets/chunk'), 404)
     await expectProblem(await api.request('POST', '/history'), 404)
   })
 

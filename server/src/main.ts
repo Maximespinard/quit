@@ -15,7 +15,7 @@ const app = createApp({
   database,
   logger,
   trustProxyHops: config.trustProxyHops,
-  ...(config.appDir === undefined ? {} : { appDir: config.appDir }),
+  appDir: config.appDir,
 })
 const server = app.listen(config.port, (error) => {
   if (error) {

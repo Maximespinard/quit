@@ -89,7 +89,7 @@ export function createApp({
   /** Reverse proxies in front (the tunnel): the rate limit then counts per client address. */
   trustProxyHops: number
   /** The built PWA (`vite build`'s output) to serve outside `/api`. */
-  appDir?: string
+  appDir?: string | undefined
 }) {
   const app = express()
   if (trustProxyHops > 0) app.set('trust proxy', trustProxyHops)

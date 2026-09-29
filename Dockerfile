@@ -22,6 +22,7 @@ RUN npm run build
 
 # --- The server: Node runs its TypeScript sources directly (type stripping), no build stage.
 FROM node:24-alpine
+LABEL org.opencontainers.image.source=https://github.com/Maximespinard/quit
 
 ENV NODE_ENV=production
 WORKDIR /app

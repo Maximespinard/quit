@@ -83,8 +83,8 @@ every load (`no-cache`); a GET for a path without an extension (a deep link) get
 
 One image holds the built app and the server that serves it (`Dockerfile`, built from the
 root). It runs as `node`, not root, with the database on the `/data` volume. CI builds it on
-every pull request and runs the smoke e2e specs against the container; on `main` it publishes
-`ghcr.io/maximespinard/quit` tagged with the commit sha and `main`.
+every pull request and runs the smoke and offline e2e specs against the container; on `main`
+it publishes `ghcr.io/maximespinard/quit` tagged with the commit sha and `main`.
 
 ```bash
 docker build -t quit .
