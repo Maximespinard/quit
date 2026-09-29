@@ -117,12 +117,16 @@ describe('patchCalendar', () => {
     const journal = journalOf(quitMoment, [patch(local(1, 2, 8)), patch(local(1, 3, 8))])
     const { days } = calendarOf(journal, local(1, 3, 9))
 
-    expect(days.map((day) => day.patch).slice(0, 4)).toEqual([
-      'missing',
-      'logged',
-      'logged',
-      'planned',
-    ])
+    expect(days.map((day) => day.patch).slice(0, 4)).toEqual([null, 'logged', 'logged', 'planned'])
+  })
+
+  it('asks no patch on the quit day, but shows one put on then', () => {
+    // An evening quit: the morning's patch predates the quit moment and cannot be recorded.
+    const evening = calendarOf(journalOf(local(1, 1, 20)), local(1, 1, 21))
+    expect(evening.days[0]).toMatchObject({ isToday: true, step: 1, patch: null })
+
+    const logged = calendarOf(journalOf(local(1, 1, 20), [patch(local(1, 1, 20, 5))]), local(1, 3))
+    expect(logged.days.map((day) => day.patch).slice(0, 2)).toEqual(['logged', 'missing'])
   })
 
   it('shows a patch put on just after midnight on the new day', () => {
@@ -175,7 +179,8 @@ describe('patchCalendar', () => {
     ])
     const { days } = calendarOf(journal, local(1, 3, 10))
 
-    expect(dayOf(days, local(1, 1))).toMatchObject({ patch: 'missing', cravings: 0 })
+    expect(dayOf(days, local(1, 1))).toMatchObject({ patch: null, cravings: 0 })
+    expect(dayOf(days, local(1, 2)).patch).toBe('missing')
   })
 
   it('does not ask for a patch after the protocol, and runs on to today', () => {
@@ -312,7 +317,8 @@ describe('patchCalendar', () => {
   it('waits on planned days when now sits before the quit moment (a moved sandbox clock)', () => {
     const { days } = calendarOf(journalOf(QUIT), QUIT - DAY_MS)
 
-    expect(days[0]).toMatchObject({ day: local(1, 1), step: 1, patch: 'planned', isToday: false })
+    expect(days[0]).toMatchObject({ day: local(1, 1), step: 1, patch: null, isToday: false })
+    expect(days[1]?.patch).toBe('planned')
     expect(days.some((day) => day.isToday)).toBe(false)
   })
 

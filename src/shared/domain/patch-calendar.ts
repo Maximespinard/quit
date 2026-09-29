@@ -36,7 +36,10 @@ export type CalendarDay = {
   readonly step: number | null
   /** The step beginning on this day, if one does. */
   readonly startingStep: Step | null
-  /** From the end day on, only a patch application actually put on shows: none is asked for. */
+  /**
+   * On the quit day and from the end day on, only a patch application actually put on
+   * shows: none is asked for.
+   */
   readonly patch: DayPatch | null
   /** Every lapse's cigarettes that day. */
   readonly cigarettes: number
@@ -116,13 +119,10 @@ export function patchCalendar(journal: Journal, now: number): PatchCalendar | nu
     factsOn(lapse.at).cigarettes += lapse.count
 
   const today = localMidnight(now)
+  const quitDay = localMidnight(quitMoment)
   const endDay = localMidnight(plannedEnd)
   const days: CalendarDay[] = []
-  for (
-    let day = localMidnight(quitMoment);
-    day <= Math.max(endDay, today);
-    day = localMidnight(day, 1)
-  ) {
+  for (let day = quitDay; day <= Math.max(endDay, today); day = localMidnight(day, 1)) {
     const { patches = 0, cigarettes = 0, cravings = 0 } = facts.get(day) ?? {}
     const inProtocol = day < endDay
     const step = inProtocol ? steps.findLast((candidate) => candidate.firstDay <= day) : undefined
@@ -130,7 +130,9 @@ export function patchCalendar(journal: Journal, now: number): PatchCalendar | nu
       day,
       step: step?.number ?? null,
       startingStep: step?.firstDay === day ? step.step : null,
-      patch: patches > 0 ? 'logged' : inProtocol ? patchStillAsked(day, now) : null,
+      // The quit day asks for none: a patch put on before the quit moment cannot be recorded.
+      patch:
+        patches > 0 ? 'logged' : inProtocol && day !== quitDay ? patchStillAsked(day, now) : null,
       cigarettes,
       cravings,
       isToday: day === today,
