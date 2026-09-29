@@ -11,7 +11,7 @@ const QUIT = NOW - 10 * DAY
 const journal: Journal = {
   facts: [
     { type: 'quit-moment', at: QUIT },
-    { type: 'patch-application', at: QUIT + HOUR, doseMg: 21 },
+    { type: 'patch-application', at: QUIT + HOUR, doseMg: 21, site: 'arm-left' },
     {
       type: 'craving',
       at: QUIT + 2 * DAY,
@@ -173,6 +173,10 @@ describe('importJournal', () => {
   it.each([
     ['a craving rated 4', { type: 'craving', at: QUIT, intensity: 4, heldToEnd: true, tags: [] }],
     ['a patch application without a dose', { type: 'patch-application', at: QUIT }],
+    [
+      'a patch application on an unknown site',
+      { type: 'patch-application', at: QUIT, doseMg: 21, site: 'knee' },
+    ],
     ['a lapse of half a cigarette', { type: 'lapse', at: QUIT + DAY, count: 0.5 }],
     ['a quit moment without a time', { type: 'quit-moment' }],
     ['a fact that is not an object', 'lapse'],
