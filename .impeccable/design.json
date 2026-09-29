@@ -1,321 +1,437 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-22T12:00:00.000Z",
+  "generatedAt": "2026-09-29T19:30:12.510Z",
   "title": "Design System: quit",
   "extensions": {
     "colorMeta": {
       "page": {
         "role": "neutral",
-        "displayName": "Page",
-        "canonical": "#fafafa",
+        "displayName": "Page nocturne",
+        "canonical": "#101012",
         "tonalRamp": [
-          "oklch(15% 0 0)",
-          "oklch(26% 0 0)",
-          "oklch(38% 0 0)",
-          "oklch(49% 0 0)",
-          "oklch(60% 0 0)",
-          "oklch(72% 0 0)",
-          "oklch(84% 0 0)",
-          "oklch(95% 0 0)"
-        ]
-      },
-      "ink": {
-        "role": "primary",
-        "displayName": "Marine profond",
-        "canonical": "#1b3c53",
-        "tonalRamp": [
-          "oklch(15% 0.048 240)",
-          "oklch(26% 0.048 240)",
-          "oklch(31% 0.048 240)",
-          "oklch(43% 0.048 240)",
-          "oklch(55% 0.048 240)",
-          "oklch(69% 0.040 240)",
-          "oklch(83% 0.028 240)",
-          "oklch(95% 0.012 240)"
-        ]
-      },
-      "ink-soft": {
-        "role": "neutral",
-        "displayName": "Encre douce",
-        "canonical": "#5e6c78",
-        "tonalRamp": [
-          "oklch(15% 0.024 244)",
-          "oklch(26% 0.024 244)",
-          "oklch(38% 0.024 244)",
-          "oklch(53% 0.024 244)",
-          "oklch(64% 0.024 244)",
-          "oklch(75% 0.020 244)",
-          "oklch(86% 0.014 244)",
-          "oklch(95% 0.008 244)"
-        ]
-      },
-      "ink-dim": {
-        "role": "neutral",
-        "displayName": "Encre sourde",
-        "canonical": "#4a5a66",
-        "tonalRamp": [
-          "oklch(15% 0.026 244)",
-          "oklch(26% 0.026 244)",
-          "oklch(37% 0.026 244)",
-          "oklch(45% 0.026 244)",
-          "oklch(59% 0.026 244)",
-          "oklch(72% 0.022 244)",
-          "oklch(84% 0.015 244)",
-          "oklch(95% 0.008 244)"
-        ]
-      },
-      "on-ink": {
-        "role": "neutral",
-        "displayName": "Sur encre",
-        "canonical": "#e3e3e3",
-        "tonalRamp": [
-          "oklch(15% 0 0)",
-          "oklch(26% 0 0)",
-          "oklch(38% 0 0)",
-          "oklch(49% 0 0)",
-          "oklch(61% 0 0)",
-          "oklch(73% 0 0)",
-          "oklch(91% 0 0)",
-          "oklch(96% 0 0)"
-        ]
-      },
-      "action": {
-        "role": "primary",
-        "displayName": "Marine d'action",
-        "canonical": "#234c6a",
-        "tonalRamp": [
-          "oklch(15% 0.055 243)",
-          "oklch(26% 0.055 243)",
-          "oklch(38% 0.055 243)",
-          "oklch(50% 0.055 243)",
-          "oklch(62% 0.050 243)",
-          "oklch(74% 0.042 243)",
-          "oklch(85% 0.028 243)",
-          "oklch(95% 0.012 243)"
-        ]
-      },
-      "reached": {
-        "role": "secondary",
-        "displayName": "Acier atteint",
-        "canonical": "#456882",
-        "tonalRamp": [
-          "oklch(15% 0.048 244)",
-          "oklch(26% 0.048 244)",
-          "oklch(38% 0.048 244)",
-          "oklch(49% 0.048 244)",
-          "oklch(61% 0.044 244)",
-          "oklch(73% 0.036 244)",
-          "oklch(85% 0.024 244)",
-          "oklch(95% 0.010 244)"
+          "oklch(15% 0.000 0)",
+          "oklch(26% 0.000 0)",
+          "oklch(38% 0.000 0)",
+          "oklch(49% 0.000 0)",
+          "oklch(61% 0.000 0)",
+          "oklch(72% 0.000 0)",
+          "oklch(84% 0.000 0)",
+          "oklch(95% 0.000 0)"
         ]
       },
       "surface": {
         "role": "neutral",
-        "displayName": "Surface",
-        "canonical": "#e3e3e3",
+        "displayName": "Surface de carte",
+        "canonical": "#17171a",
         "tonalRamp": [
-          "oklch(15% 0 0)",
-          "oklch(26% 0 0)",
-          "oklch(38% 0 0)",
-          "oklch(49% 0 0)",
-          "oklch(61% 0 0)",
-          "oklch(73% 0 0)",
-          "oklch(91% 0 0)",
-          "oklch(96% 0 0)"
+          "oklch(15% 0.006 286)",
+          "oklch(26% 0.006 286)",
+          "oklch(38% 0.006 286)",
+          "oklch(49% 0.006 286)",
+          "oklch(61% 0.006 286)",
+          "oklch(72% 0.006 286)",
+          "oklch(84% 0.006 286)",
+          "oklch(95% 0.006 286)"
         ]
       },
-      "surface-locked": {
-        "role": "neutral",
-        "displayName": "Surface verrouillée",
-        "canonical": "#d4d4d4",
+      "ink": {
+        "role": "primary",
+        "displayName": "Crème nocturne",
+        "canonical": "#f7f4ef",
         "tonalRamp": [
-          "oklch(15% 0 0)",
-          "oklch(26% 0 0)",
-          "oklch(38% 0 0)",
-          "oklch(49% 0 0)",
-          "oklch(61% 0 0)",
-          "oklch(73% 0 0)",
-          "oklch(86% 0 0)",
-          "oklch(95% 0 0)"
+          "oklch(15% 0.007 81)",
+          "oklch(26% 0.007 81)",
+          "oklch(38% 0.007 81)",
+          "oklch(49% 0.007 81)",
+          "oklch(61% 0.007 81)",
+          "oklch(72% 0.007 81)",
+          "oklch(84% 0.007 81)",
+          "oklch(95% 0.007 81)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Gris sourd",
+        "canonical": "#a3a3a3",
+        "tonalRamp": [
+          "oklch(15% 0.000 0)",
+          "oklch(26% 0.000 0)",
+          "oklch(38% 0.000 0)",
+          "oklch(49% 0.000 0)",
+          "oklch(61% 0.000 0)",
+          "oklch(72% 0.000 0)",
+          "oklch(84% 0.000 0)",
+          "oklch(95% 0.000 0)"
+        ]
+      },
+      "white": {
+        "role": "primary",
+        "displayName": "Blanc pur",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "oklch(15% 0.000 0)",
+          "oklch(26% 0.000 0)",
+          "oklch(38% 0.000 0)",
+          "oklch(49% 0.000 0)",
+          "oklch(61% 0.000 0)",
+          "oklch(72% 0.000 0)",
+          "oklch(84% 0.000 0)",
+          "oklch(95% 0.000 0)"
         ]
       },
       "line": {
         "role": "neutral",
         "displayName": "Filet",
-        "canonical": "#d4d4d4",
+        "canonical": "rgb(255 255 255 / 0.08)",
         "tonalRamp": [
-          "oklch(15% 0 0)",
-          "oklch(26% 0 0)",
-          "oklch(38% 0 0)",
-          "oklch(49% 0 0)",
-          "oklch(61% 0 0)",
-          "oklch(73% 0 0)",
-          "oklch(86% 0 0)",
-          "oklch(95% 0 0)"
+          "oklch(15% 0.000 0)",
+          "oklch(26% 0.000 0)",
+          "oklch(38% 0.000 0)",
+          "oklch(49% 0.000 0)",
+          "oklch(61% 0.000 0)",
+          "oklch(72% 0.000 0)",
+          "oklch(84% 0.000 0)",
+          "oklch(95% 0.000 0)"
+        ]
+      },
+      "ghost": {
+        "role": "neutral",
+        "displayName": "Voile",
+        "canonical": "rgb(255 255 255 / 0.05)",
+        "tonalRamp": [
+          "oklch(15% 0.000 0)",
+          "oklch(26% 0.000 0)",
+          "oklch(38% 0.000 0)",
+          "oklch(49% 0.000 0)",
+          "oklch(61% 0.000 0)",
+          "oklch(72% 0.000 0)",
+          "oklch(84% 0.000 0)",
+          "oklch(95% 0.000 0)"
+        ]
+      },
+      "ghost-line": {
+        "role": "neutral",
+        "displayName": "Bord de contrôle",
+        "canonical": "rgb(255 255 255 / 0.36)",
+        "tonalRamp": [
+          "oklch(15% 0.000 0)",
+          "oklch(26% 0.000 0)",
+          "oklch(38% 0.000 0)",
+          "oklch(49% 0.000 0)",
+          "oklch(61% 0.000 0)",
+          "oklch(72% 0.000 0)",
+          "oklch(84% 0.000 0)",
+          "oklch(95% 0.000 0)"
         ]
       },
       "alert": {
-        "role": "tertiary",
-        "displayName": "Rouge d'alerte",
-        "canonical": "#a6392f",
+        "role": "error",
+        "displayName": "Alerte",
+        "canonical": "#ff6b72",
         "tonalRamp": [
-          "oklch(15% 0.150 27)",
-          "oklch(26% 0.150 27)",
-          "oklch(38% 0.150 27)",
-          "oklch(47% 0.150 27)",
-          "oklch(60% 0.150 27)",
-          "oklch(73% 0.120 27)",
-          "oklch(85% 0.075 27)",
-          "oklch(95% 0.030 27)"
+          "oklch(15% 0.099 20)",
+          "oklch(26% 0.127 20)",
+          "oklch(38% 0.158 20)",
+          "oklch(49% 0.181 20)",
+          "oklch(61% 0.181 20)",
+          "oklch(72% 0.158 20)",
+          "oklch(84% 0.127 20)",
+          "oklch(95% 0.099 20)"
         ]
       },
-      "white": {
-        "role": "neutral",
-        "displayName": "Blanc pur",
-        "canonical": "#ffffff",
+      "amber": {
+        "role": "tertiary",
+        "displayName": "Ambre de brume",
+        "canonical": "#b8730f",
         "tonalRamp": [
-          "oklch(15% 0 0)",
-          "oklch(26% 0 0)",
-          "oklch(38% 0 0)",
-          "oklch(49% 0 0)",
-          "oklch(61% 0 0)",
-          "oklch(73% 0 0)",
-          "oklch(86% 0 0)",
-          "oklch(100% 0 0)"
+          "oklch(15% 0.078 68)",
+          "oklch(26% 0.098 68)",
+          "oklch(38% 0.120 68)",
+          "oklch(49% 0.132 68)",
+          "oklch(61% 0.132 68)",
+          "oklch(72% 0.120 68)",
+          "oklch(84% 0.098 68)",
+          "oklch(95% 0.078 68)"
+        ]
+      },
+      "floor": {
+        "role": "tertiary",
+        "displayName": "Plancher",
+        "canonical": "#3a1a10",
+        "tonalRamp": [
+          "oklch(15% 0.044 38)",
+          "oklch(26% 0.052 38)",
+          "oklch(38% 0.054 38)",
+          "oklch(49% 0.054 38)",
+          "oklch(61% 0.054 38)",
+          "oklch(72% 0.054 38)",
+          "oklch(84% 0.052 38)",
+          "oklch(95% 0.044 38)"
+        ]
+      },
+      "floor-deep": {
+        "role": "tertiary",
+        "displayName": "Plancher profond",
+        "canonical": "#1c1011",
+        "tonalRamp": [
+          "oklch(15% 0.020 14)",
+          "oklch(26% 0.020 14)",
+          "oklch(38% 0.020 14)",
+          "oklch(49% 0.020 14)",
+          "oklch(61% 0.020 14)",
+          "oklch(72% 0.020 14)",
+          "oklch(84% 0.020 14)",
+          "oklch(95% 0.020 14)"
+        ]
+      },
+      "ember": {
+        "role": "tertiary",
+        "displayName": "Ember",
+        "canonical": "#8d2a1a",
+        "tonalRamp": [
+          "oklch(15% 0.080 32)",
+          "oklch(26% 0.101 32)",
+          "oklch(38% 0.124 32)",
+          "oklch(49% 0.137 32)",
+          "oklch(61% 0.137 32)",
+          "oklch(72% 0.124 32)",
+          "oklch(84% 0.101 32)",
+          "oklch(95% 0.080 32)"
+        ]
+      },
+      "plum": {
+        "role": "tertiary",
+        "displayName": "Prune",
+        "canonical": "#7a1b5f",
+        "tonalRamp": [
+          "oklch(15% 0.085 342)",
+          "oklch(26% 0.108 342)",
+          "oklch(38% 0.133 342)",
+          "oklch(49% 0.148 342)",
+          "oklch(61% 0.148 342)",
+          "oklch(72% 0.133 342)",
+          "oklch(84% 0.108 342)",
+          "oklch(95% 0.085 342)"
+        ]
+      },
+      "pink": {
+        "role": "secondary",
+        "displayName": "Rose Envie",
+        "canonical": "#fd429c",
+        "tonalRamp": [
+          "oklch(15% 0.122 356)",
+          "oklch(26% 0.158 356)",
+          "oklch(38% 0.197 356)",
+          "oklch(49% 0.233 356)",
+          "oklch(61% 0.233 356)",
+          "oklch(72% 0.197 356)",
+          "oklch(84% 0.158 356)",
+          "oklch(95% 0.122 356)"
+        ]
+      },
+      "yellow": {
+        "role": "secondary",
+        "displayName": "Jaune Envie",
+        "canonical": "#f5d907",
+        "tonalRamp": [
+          "oklch(15% 0.100 100)",
+          "oklch(26% 0.128 100)",
+          "oklch(38% 0.159 100)",
+          "oklch(49% 0.182 100)",
+          "oklch(61% 0.182 100)",
+          "oklch(72% 0.159 100)",
+          "oklch(84% 0.128 100)",
+          "oklch(95% 0.100 100)"
+        ]
+      },
+      "moss": {
+        "role": "tertiary",
+        "displayName": "Mousse",
+        "canonical": "#33402c",
+        "tonalRamp": [
+          "oklch(15% 0.037 135)",
+          "oklch(26% 0.038 135)",
+          "oklch(38% 0.038 135)",
+          "oklch(49% 0.038 135)",
+          "oklch(61% 0.038 135)",
+          "oklch(72% 0.038 135)",
+          "oklch(84% 0.038 135)",
+          "oklch(95% 0.037 135)"
+        ]
+      },
+      "bronze": {
+        "role": "tertiary",
+        "displayName": "Bronze",
+        "canonical": "#b88a4f",
+        "tonalRamp": [
+          "oklch(15% 0.062 72)",
+          "oklch(26% 0.076 72)",
+          "oklch(38% 0.092 72)",
+          "oklch(49% 0.095 72)",
+          "oklch(61% 0.095 72)",
+          "oklch(72% 0.092 72)",
+          "oklch(84% 0.076 72)",
+          "oklch(95% 0.062 72)"
+        ]
+      },
+      "series": {
+        "role": "tertiary",
+        "displayName": "Ambre de série",
+        "canonical": "#d08a2a",
+        "tonalRamp": [
+          "oklch(15% 0.079 70)",
+          "oklch(26% 0.100 70)",
+          "oklch(38% 0.123 70)",
+          "oklch(49% 0.135 70)",
+          "oklch(61% 0.135 70)",
+          "oklch(72% 0.123 70)",
+          "oklch(84% 0.100 70)",
+          "oklch(95% 0.079 70)"
         ]
       }
     },
     "typographyMeta": {
       "display": {
         "displayName": "Display",
-        "purpose": "Le chiffre du streak, et lui seul. Un seul par écran."
+        "purpose": "Le chiffre du streak et les minutes tenues ; 62 % de sa colonne."
+      },
+      "countdown": {
+        "displayName": "Countdown",
+        "purpose": "Le compte à rebours du minuteur d’envie."
       },
       "figure": {
         "displayName": "Figure",
-        "purpose": "Temps, XP, argent : les chiffres tabulaires."
+        "purpose": "Les chiffres des cartes."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "La question du premier lancement."
+      },
+      "prompt": {
+        "displayName": "Prompt",
+        "purpose": "La phrase du minuteur en cours."
+      },
+      "craving": {
+        "displayName": "Craving",
+        "purpose": "Le libellé d’Envie."
+      },
+      "brand": {
+        "displayName": "Brand",
+        "purpose": "« quit » dans la barre haute."
       },
       "title": {
         "displayName": "Title",
-        "purpose": "Titres de tiroir et de boîte de dialogue."
+        "purpose": "Titre d’écran, de Dialog et de Drawer."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "La ligne sous un chiffre géant."
       },
       "cta": {
         "displayName": "CTA",
-        "purpose": "Le bouton Envie, et rien d'autre."
+        "purpose": "Boutons, valeurs de champ, lignes de liste."
       },
       "body": {
         "displayName": "Body",
-        "purpose": "Lecture — boutons, cartes, tout le reste."
+        "purpose": "Lecture, libellés de ligne, puces."
       },
       "label": {
         "displayName": "Label",
-        "purpose": "Libellés, contexte, valeurs secondaires."
+        "purpose": "Titres de carte, libellés de champ, erreurs."
       },
       "detail": {
         "displayName": "Detail",
-        "purpose": "Détail de badge."
+        "purpose": "Axes, étiquettes de dose, détail de badge."
+      },
+      "unit": {
+        "displayName": "Unit",
+        "purpose": "L’unité d’un chiffre, relative au chiffre."
       },
       "tab": {
         "displayName": "Tab",
-        "purpose": "Libellés de la barre d'onglets."
+        "purpose": "Libellés de la barre d’onglets."
       }
     },
-    "shadows": [],
+    "shadows": [
+      {
+        "name": "envie-glow",
+        "value": "0 14px 40px -10px color-mix(in srgb, var(--color-pink) 60%, transparent), inset 0 0 0 1px rgb(255 255 255 / 0.12)",
+        "purpose": "La lueur d’Envie, seule box-shadow du monde (utilitaire bg-craving)."
+      }
+    ],
     "motion": [
       {
         "name": "ease-out-expo",
         "value": "cubic-bezier(0.16, 1, 0.3, 1)",
-        "purpose": "Seule courbe du système. Toute transition et toute animation la portent."
+        "purpose": "Courbe unique de toutes les transitions."
       },
       {
-        "name": "duration-tactile",
+        "name": "press",
         "value": "150ms",
-        "purpose": "Retour à l'appui : scale de bouton, bascule de Switch, pouce de Slider, couleur d'onglet."
+        "purpose": "Retour tactile (scale 0.98, Envie 0.97)."
       },
       {
-        "name": "duration-dialog",
+        "name": "dialog",
         "value": "200ms",
-        "purpose": "Entrée et sortie de Dialog (opacité + scale-95)."
+        "purpose": "Entrée et sortie du Dialog (opacité + scale 0.95)."
       },
       {
         "name": "count-up",
-        "value": "240ms / pas entiers / 12 pas max",
-        "purpose": "Signature : useCountUp fait monter le chiffre du streak par crans, jamais en interpolation fluide. prefers-reduced-motion rend la cible dès le premier paint."
+        "value": "240ms, 12 steps max",
+        "purpose": "La signature : compteur par crans, jamais fluide. Valeur finale sous mouvement réduit."
       },
       {
-        "name": "animate-step-in",
-        "value": "step-in 240ms cubic-bezier(0.16, 1, 0.3, 1) both",
-        "purpose": "Entrée des crans de multiplicateur (scale 0.92 → 1, opacité 0.4 → 1), décalée de 60ms par cran, sous motion-safe uniquement."
+        "name": "step-in",
+        "value": "step-in 240ms var(--ease-out-expo) both, 60ms stagger",
+        "purpose": "Crans du multiplicateur et crans de minute à la célébration ; motion-safe seulement."
       },
       {
-        "name": "duration-xp",
+        "name": "progress",
         "value": "500ms",
-        "purpose": "Remplissage de la barre de niveau (transition-[width]), coupé sous motion-reduce."
+        "purpose": "Largeur de la barre de progression."
       },
       {
-        "name": "duration-drawer",
+        "name": "haze-drift",
+        "value": "haze-drift-a / haze-drift-b, 14–22s ease-in-out infinite alternate",
+        "purpose": "Dérive de la brume du minuteur, motion-safe seulement ; immobile quand le minuteur est arrêté."
+      },
+      {
+        "name": "drawer",
         "value": "450ms cubic-bezier(0.22, 1, 0.36, 1)",
-        "purpose": "Mécanique Base UI du Drawer, conservée telle quelle : ce n'est pas du style."
+        "purpose": "Mécanique Base UI du Drawer, gardée telle quelle."
       }
     ],
     "breakpoints": [
       {
-        "name": "content",
-        "value": "28rem",
-        "purpose": "max-w-md : la colonne unique de l'app, et la largeur que suit la barre d'onglets."
-      },
-      {
-        "name": "sm",
-        "value": "640px",
-        "purpose": "Seul palier Tailwind utilisé (largeur de Dialog, largeur de Drawer latéral)."
+        "name": "column",
+        "value": "448px"
       }
     ],
-    "safeAreas": [
+    "hazes": [
       {
-        "name": "px-safe",
-        "value": "padding-inline: max(1.25rem, env(safe-area-inset-left/right))"
+        "name": "hero",
+        "value": "bg-haze, h-160 (640px), grain 35 % overlay, mask-haze",
+        "purpose": "Accueil et premier lancement : la brume pleine derrière le streak et les questions."
       },
       {
-        "name": "pt-safe",
-        "value": "padding-top: env(safe-area-inset-top)"
+        "name": "band",
+        "value": "bg-haze-band at 70 % opacity, h-48 (192px), plum + ember only",
+        "purpose": "Tous les autres écrans, derrière la barre haute et le titre ; pas d’ambre sous le texte."
       },
       {
-        "name": "pb-safe",
-        "value": "padding-bottom: env(safe-area-inset-bottom)"
-      },
-      {
-        "name": "pb-safe-4",
-        "value": "padding-bottom: calc(1rem + env(safe-area-inset-bottom))"
+        "name": "timer",
+        "value": "moss + bronze blobs, blur 48px, layer 65 %, grain 20 %",
+        "purpose": "Minuteur d’envie ; arrêté avant la fin : 60 % et immobile."
       }
     ],
     "focus": {
-      "name": "global-focus-visible",
-      "value": ":focus-visible { outline: 2px solid var(--color-action); outline-offset: 3px; }",
-      "purpose": "Anneau de focus unique, posé globalement. Aucun composant ne redéfinit le sien."
+      "value": "outline: 2px solid var(--color-ink); outline-offset: 3px",
+      "purpose": "Global sur :focus-visible, jamais par composant."
     },
-    "imagery": {
-      "hero-backdrop": {
-        "displayName": "Marine de nuit",
-        "purpose": "Unique image du système, derrière le chiffre du streak. Décorative (aria-hidden), aplats vectoriels dans la famille marine.",
-        "source": "src/assets/hero-night-{768,1152,1536}.{avif,webp}",
-        "delivery": "picture > source AVIF + img WebP, srcset 768/1152/1536w, sizes '(min-width: 448px) 448px, 100vw', object-cover, fetchPriority high, decoding async, precached by Workbox",
-        "weight": "8,7 Ko sur le téléphone (AVIF 1152w)",
-        "fallback": "bg-ink — le bloc redevient l'aplat marine si l'image n'arrive pas",
-        "palette": [
-          "#163e59",
-          "#265375",
-          "#3b6788",
-          "#426e8e",
-          "#f1f1ee"
-        ],
-        "paletteNote": "Valeurs internes au fichier image. Aucune n'est un token et aucune ne doit être recopiée dans @theme."
-      },
-      "hero-scrim": {
-        "displayName": "Scrim du héros",
-        "purpose": "Contraste, pas décor : la bande basse de 112px rachète le libellé et l'horloge au-dessus des crêtes claires de la vague.",
-        "value": "linear-gradient(to top, color-mix(in srgb, var(--color-ink) 75%, transparent), transparent)",
-        "size": "h-28 (112px), absolute inset-x-0 bottom-0, sous le contenu",
-        "note": "Seul dégradé du système. Avec le voile modal bg-ink/40, ce sont les deux seuls assombrissements autorisés."
-      }
+    "safeAreas": {
+      "gutter": "max(1.25rem, env(safe-area-inset-left/right))",
+      "top": "env(safe-area-inset-top)",
+      "pageBottom": "calc(1rem + env(safe-area-inset-bottom) + var(--sandbox-clearance, 0px))"
     }
   },
   "components": [
@@ -323,208 +439,191 @@
       "name": "Primary Button",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "Action principale d'un écran ou d'un tiroir. Fond plat, rayon 12px, aucune ombre.",
-      "html": "<button class=\"ds-btn-primary\">Poser le patch</button>",
-      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; height: 2.75rem; padding: 0 1rem; border: none; border-radius: var(--radius-control, 0.75rem); background: var(--color-action, #234c6a); color: var(--color-page, #fafafa); font-family: var(--font-sans, 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif); font-size: 0.9375rem; line-height: 1.35; font-weight: 600; transition: transform 150ms cubic-bezier(0.16,1,0.3,1), background-color 150ms cubic-bezier(0.16,1,0.3,1); } .ds-btn-primary:active { background: var(--color-ink, #1b3c53); transform: scale(0.98); } .ds-btn-primary:focus-visible { outline: 2px solid var(--color-action, #234c6a); outline-offset: 3px; } .ds-btn-primary:disabled { background: var(--color-surface-locked, #d4d4d4); color: var(--color-ink-dim, #4a5a66); pointer-events: none; } @media (prefers-reduced-motion: reduce) { .ds-btn-primary { transition: none; } }"
+      "description": "Aplat crème, texte page : l’action principale et toute sélection.",
+      "html": "<button class=\"ds-btn-primary\">Enregistrer</button>",
+      "css": ".ds-btn-primary { height: 48px; padding: 0 20px; border: 0; border-radius: 9999px; background: var(--color-ink, #f7f4ef); color: var(--color-page, #101012); font: 500 16px/1 \"Host Grotesk Variable\", system-ui, sans-serif; letter-spacing: -0.02em; transition: transform 150ms cubic-bezier(0.16,1,0.3,1), background-color 150ms; } .ds-btn-primary:active { transform: scale(0.98); background: rgb(247 244 239 / 0.85); } .ds-btn-primary:focus-visible { outline: 2px solid #f7f4ef; outline-offset: 3px; }"
     },
     {
       "name": "Secondary Button",
       "kind": "button",
       "refersTo": "button-secondary",
-      "description": "Action de second rang : surface grise, encre marine.",
-      "html": "<button class=\"ds-btn-secondary\">Plus tard</button>",
-      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; height: 2.75rem; padding: 0 1rem; border: none; border-radius: var(--radius-control, 0.75rem); background: var(--color-surface, #e3e3e3); color: var(--color-ink, #1b3c53); font-family: var(--font-sans, 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif); font-size: 0.9375rem; font-weight: 600; transition: transform 150ms cubic-bezier(0.16,1,0.3,1), background-color 150ms cubic-bezier(0.16,1,0.3,1); } .ds-btn-secondary:active { background: var(--color-surface-locked, #d4d4d4); transform: scale(0.98); } .ds-btn-secondary:focus-visible { outline: 2px solid var(--color-action, #234c6a); outline-offset: 3px; }"
+      "description": "Pilule fantôme à filet blanc 36 % : Arrêter, actions secondaires.",
+      "html": "<button class=\"ds-btn-secondary\">Arrêter</button>",
+      "css": ".ds-btn-secondary { height: 48px; padding: 0 20px; border: 1px solid rgb(255 255 255 / 0.36); border-radius: 9999px; background: transparent; color: #f7f4ef; font: 500 16px/1 \"Host Grotesk Variable\", system-ui, sans-serif; letter-spacing: -0.02em; transition: transform 150ms cubic-bezier(0.16,1,0.3,1), background-color 150ms; } .ds-btn-secondary:active { transform: scale(0.98); background: rgb(255 255 255 / 0.05); } .ds-btn-secondary:focus-visible { outline: 2px solid #f7f4ef; outline-offset: 3px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Transparent, texte crème : Annuler, retour.",
+      "html": "<button class=\"ds-btn-ghost\">Annuler</button>",
+      "css": ".ds-btn-ghost { height: 48px; padding: 0 20px; border: 0; border-radius: 9999px; background: transparent; color: #f7f4ef; font: 500 16px/1 \"Host Grotesk Variable\", system-ui, sans-serif; letter-spacing: -0.02em; transition: transform 150ms cubic-bezier(0.16,1,0.3,1), background-color 150ms; } .ds-btn-ghost:active { transform: scale(0.98); background: rgb(255 255 255 / 0.05); } .ds-btn-ghost:focus-visible { outline: 2px solid #f7f4ef; outline-offset: 3px; }"
     },
     {
       "name": "Destructive Button",
       "kind": "button",
       "refersTo": "button-destructive",
-      "description": "Seule utilisation autorisée du rouge alert : fond à 10 %, texte en plein. Jamais d'aplat rouge.",
-      "html": "<button class=\"ds-btn-destructive\">Supprimer ce fait</button>",
-      "css": ".ds-btn-destructive { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; height: 2.75rem; padding: 0 1rem; border: none; border-radius: var(--radius-control, 0.75rem); background: color-mix(in srgb, var(--color-alert, #a6392f) 10%, transparent); color: var(--color-alert, #a6392f); font-family: var(--font-sans, 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif); font-size: 0.9375rem; font-weight: 600; transition: transform 150ms cubic-bezier(0.16,1,0.3,1), background-color 150ms cubic-bezier(0.16,1,0.3,1); } .ds-btn-destructive:active { background: color-mix(in srgb, var(--color-alert, #a6392f) 20%, transparent); transform: scale(0.98); } .ds-btn-destructive:focus-visible { outline: 2px solid var(--color-action, #234c6a); outline-offset: 3px; }"
+      "description": "Pilule fantôme à filet alerte 50 %, jamais un aplat teinté.",
+      "html": "<button class=\"ds-btn-destructive\">Oui, supprimer</button>",
+      "css": ".ds-btn-destructive { height: 48px; padding: 0 20px; border: 1px solid rgb(255 107 114 / 0.5); border-radius: 9999px; background: transparent; color: var(--color-alert, #ff6b72); font: 500 16px/1 \"Host Grotesk Variable\", system-ui, sans-serif; letter-spacing: -0.02em; transition: transform 150ms cubic-bezier(0.16,1,0.3,1), background-color 150ms; } .ds-btn-destructive:active { transform: scale(0.98); background: rgb(255 107 114 / 0.1); } .ds-btn-destructive:focus-visible { outline: 2px solid #f7f4ef; outline-offset: 3px; }"
     },
     {
       "name": "Envie Pill",
       "kind": "custom",
       "refersTo": "craving-button",
-      "description": "Le contrôle permanent en zone pouce : 64px, pilule, aplat action. Rien d'autre ne porte action en aplat à cette échelle.",
-      "html": "<button class=\"ds-craving\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" width=\"20\" height=\"20\" aria-hidden=\"true\"><line x1=\"10\" y1=\"2\" x2=\"14\" y2=\"2\"/><line x1=\"12\" y1=\"14\" x2=\"15\" y2=\"11\"/><circle cx=\"12\" cy=\"14\" r=\"8\"/></svg>Envie</button>",
-      "css": ".ds-craving { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; height: 4rem; min-width: 4rem; padding: 0 1.5rem; border: none; border-radius: 9999px; background: var(--color-action, #234c6a); color: var(--color-page, #fafafa); font-family: var(--font-sans, 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif); font-size: 1.0625rem; line-height: 1; font-weight: 700; transition: transform 150ms cubic-bezier(0.16,1,0.3,1); } .ds-craving:active { transform: scale(0.97); } .ds-craving:focus-visible { outline: 2px solid var(--color-action, #234c6a); outline-offset: 3px; } .ds-craving:disabled { background: var(--color-surface-locked, #d4d4d4); color: var(--color-ink-dim, #4a5a66); } @media (prefers-reduced-motion: reduce) { .ds-craving { transition: none; } }"
+      "description": "Le seul objet allumé : dégradé rose → jaune et lueur rose, qu’il ne prête à rien.",
+      "html": "<button class=\"ds-envie\">Envie</button>",
+      "css": ".ds-envie { height: 64px; min-width: 250px; padding: 0 28px; border: 0; border-radius: 9999px; background-image: linear-gradient(90deg, #fd429c, #f5d907); box-shadow: 0 14px 40px -10px color-mix(in srgb, #fd429c 60%, transparent), inset 0 0 0 1px rgb(255 255 255 / 0.12); color: #101012; font: 600 23px/1 \"Host Grotesk Variable\", system-ui, sans-serif; letter-spacing: -0.03em; transition: transform 150ms cubic-bezier(0.16,1,0.3,1); } .ds-envie:active { transform: scale(0.97); } .ds-envie:focus-visible { outline: 2px solid #f7f4ef; outline-offset: 3px; }"
     },
     {
-      "name": "Streak Hero",
-      "kind": "custom",
-      "refersTo": "hero",
-      "description": "Le bloc marine qui ouvre l'écran d'accueil : une marine de nuit en aplats, un scrim de contraste en bas, puis une colonne centrée — chiffre de 176px, libellé, horloge. Coins bas 28px.",
-      "html": "<section class=\"ds-hero\" aria-label=\"Temps sans fumer\"><div class=\"ds-hero-backdrop\" aria-hidden=\"true\"><svg class=\"ds-hero-art\" viewBox=\"0 0 448 300\" preserveAspectRatio=\"xMidYMid slice\" aria-hidden=\"true\" focusable=\"false\"><rect width=\"448\" height=\"300\" fill=\"#163e59\"/><path d=\"M0 96 C40 62 84 60 118 86 C146 108 168 104 196 96 L196 118 L0 118 Z\" fill=\"#3b6788\"/><path d=\"M448 104 C410 70 368 72 338 96 C312 116 292 112 268 104 L268 118 L448 118 Z\" fill=\"#3b6788\"/><path d=\"M0 104 C48 92 92 100 128 118 L0 118 Z\" fill=\"#265375\"/><circle cx=\"61\" cy=\"20\" r=\"2\" fill=\"#f1f1ee\"/><circle cx=\"147\" cy=\"31\" r=\"2.5\" fill=\"#f1f1ee\"/><circle cx=\"310\" cy=\"43\" r=\"1.8\" fill=\"#f1f1ee\"/><path d=\"M0 238 C112 210 224 262 336 240 C384 231 420 234 448 240 L448 300 L0 300 Z\" fill=\"#265375\"/><path d=\"M0 262 C112 236 224 286 336 264 C384 255 420 258 448 264 L448 300 L0 300 Z\" fill=\"#426e8e\"/><ellipse cx=\"34\" cy=\"258\" rx=\"46\" ry=\"4\" fill=\"#f1f1ee\"/><ellipse cx=\"40\" cy=\"270\" rx=\"24\" ry=\"3\" fill=\"#f1f1ee\"/><ellipse cx=\"404\" cy=\"260\" rx=\"38\" ry=\"4\" fill=\"#f1f1ee\"/><ellipse cx=\"412\" cy=\"272\" rx=\"20\" ry=\"3\" fill=\"#f1f1ee\"/></svg><div class=\"ds-hero-scrim\"></div></div><div class=\"ds-hero-top\"><span class=\"ds-hero-brand\">quit</span><span class=\"ds-hero-aside\"><span class=\"ds-hero-context\">Étape 1 · 21 mg · J-16 avant 14 mg</span><button type=\"button\" class=\"ds-hero-action\" aria-label=\"Réglages\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"3\"/><path d=\"M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z\"/></svg></button></span></div><div class=\"ds-hero-column\"><p class=\"ds-hero-figure\">12</p><span class=\"ds-hero-label\">jours sans fumer</span><span class=\"ds-hero-time\">07:42:09</span></div></section>",
-      "css": ".ds-hero { position: relative; isolation: isolate; overflow: hidden; max-width: 28rem; border-bottom-left-radius: var(--radius-hero, 1.75rem); border-bottom-right-radius: var(--radius-hero, 1.75rem); background: var(--color-ink, #1b3c53); color: var(--color-on-ink, #e3e3e3); padding: 0 1.25rem; font-family: var(--font-sans, 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif); font-variant-numeric: tabular-nums; } .ds-hero-backdrop { position: absolute; inset: 0; z-index: -10; } .ds-hero-art { width: 100%; height: 100%; display: block; object-fit: cover; } .ds-hero-scrim { position: absolute; left: 0; right: 0; bottom: 0; height: 7rem; background: linear-gradient(to top, color-mix(in srgb, var(--color-ink, #1b3c53) 75%, transparent), transparent); } .ds-hero-top { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; min-height: 3.5rem; padding-top: 0.75rem; font-size: 0.8125rem; line-height: 1.25; font-weight: 500; } .ds-hero-aside { display: flex; align-items: center; gap: 0.5rem; } .ds-hero-context { opacity: 0.8; } .ds-hero-action { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; padding: 0; border: none; border-radius: var(--radius-control, 0.75rem); background: transparent; color: inherit; cursor: pointer; } .ds-hero-action:active { background: color-mix(in srgb, var(--color-on-ink, #e3e3e3) 15%, transparent); } .ds-hero-action:focus-visible { outline: 2px solid var(--color-action, #234c6a); outline-offset: 3px; } .ds-hero-column { position: relative; display: flex; flex-direction: column; align-items: center; gap: 0.25rem; padding: 1.5rem 0 2.25rem; text-align: center; } .ds-hero-figure { margin: 0; font-size: 11rem; line-height: 0.9; letter-spacing: -0.02em; font-weight: 800; } .ds-hero-label { font-size: 0.9375rem; line-height: 1.35; } .ds-hero-time { margin-top: 0.25rem; font-size: 1.375rem; line-height: 1; font-weight: 600; }"
-    },
-    {
-      "name": "Multiplier Steps",
-      "kind": "custom",
-      "refersTo": "multiplier-step-acquired",
-      "description": "Cinq crans plats : acquis en ink, courant en reached, verrouillés en filet. Entrée décalée de 60ms par cran.",
-      "html": "<ol class=\"ds-steps\"><li class=\"ds-step ds-step--acquired\">×1</li><li class=\"ds-step ds-step--acquired\">×2</li><li class=\"ds-step ds-step--current\">×3</li><li class=\"ds-step ds-step--locked\">×4</li><li class=\"ds-step ds-step--locked\">×5</li></ol>",
-      "css": ".ds-steps { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.375rem; list-style: none; margin: 0; padding: 0; } .ds-step { display: grid; place-items: center; height: 2.625rem; border: 1px solid transparent; border-radius: var(--radius-step, 0.625rem); font-family: var(--font-sans, 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif); font-size: 0.9375rem; font-weight: 600; } .ds-step--acquired { border-color: var(--color-ink, #1b3c53); background: var(--color-ink, #1b3c53); color: var(--color-on-ink, #e3e3e3); } .ds-step--current { border-color: var(--color-reached, #456882); background: var(--color-reached, #456882); color: var(--color-white, #ffffff); } .ds-step--locked { border-color: var(--color-line, #d4d4d4); background: transparent; color: var(--color-ink-soft, #5e6c78); } @media (prefers-reduced-motion: no-preference) { .ds-step { animation: ds-step-in 240ms cubic-bezier(0.16,1,0.3,1) both; } .ds-step:nth-child(2) { animation-delay: 60ms; } .ds-step:nth-child(3) { animation-delay: 120ms; } .ds-step:nth-child(4) { animation-delay: 180ms; } .ds-step:nth-child(5) { animation-delay: 240ms; } } @keyframes ds-step-in { from { transform: scale(0.92); opacity: 0.4; } to { transform: scale(1); opacity: 1; } }"
-    },
-    {
-      "name": "Level Bar",
-      "kind": "custom",
-      "refersTo": "level-bar-track",
-      "description": "Barre de 8px, piste line, remplissage action. Les bornes chiffrées vivent à côté, jamais dedans.",
-      "html": "<div class=\"ds-levelbar\" role=\"progressbar\" aria-label=\"XP du niveau 4\" aria-valuemin=\"0\" aria-valuemax=\"1000\" aria-valuenow=\"620\"><div class=\"ds-levelbar-fill\" style=\"width: 62%\"></div></div>",
-      "css": ".ds-levelbar { height: 0.5rem; overflow: hidden; border-radius: 9999px; background: var(--color-line, #d4d4d4); } .ds-levelbar-fill { height: 100%; border-radius: 9999px; background: var(--color-action, #234c6a); transition: width 500ms cubic-bezier(0.16,1,0.3,1); } @media (prefers-reduced-motion: reduce) { .ds-levelbar-fill { transition: none; } }"
-    },
-    {
-      "name": "Badge Card",
+      "name": "Card with figure rows",
       "kind": "card",
-      "refersTo": "badge-card",
-      "description": "Carte carrée. Débloquée sur surface ; verrouillée sur surface-locked avec cadenas et texte ink-dim.",
-      "html": "<div class=\"ds-badge\"><span class=\"ds-badge-icon\"></span><span class=\"ds-badge-text\"><span class=\"ds-badge-name\">Une semaine</span><span class=\"ds-badge-detail\">J+7</span></span></div><div class=\"ds-badge ds-badge--locked\"><span class=\"ds-badge-icon\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" width=\"24\" height=\"24\" aria-hidden=\"true\"><rect x=\"3\" y=\"11\" width=\"18\" height=\"11\" rx=\"2\"/><path d=\"M7 11V7a5 5 0 0 1 10 0v4\"/></svg></span><span class=\"ds-badge-text\"><span class=\"ds-badge-name\">Palier 14 mg</span><span class=\"ds-badge-detail\">J+28</span></span></div>",
-      "css": ".ds-badge { display: inline-flex; flex-direction: column; justify-content: space-between; aspect-ratio: 1 / 1; width: 7rem; padding: 0.75rem; border-radius: var(--radius-card, 0.875rem); background: var(--color-surface, #e3e3e3); color: var(--color-ink, #1b3c53); font-family: var(--font-sans, 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif); } .ds-badge--locked { background: var(--color-surface-locked, #d4d4d4); color: var(--color-ink-dim, #4a5a66); } .ds-badge-icon { display: block; height: 1.5rem; } .ds-badge-text { display: flex; flex-direction: column; gap: 0.25rem; line-height: 1.15; } .ds-badge-name { font-size: 0.9375rem; font-weight: 600; } .ds-badge-detail { font-size: 0.6875rem; line-height: 1.2; } .ds-badge:not(.ds-badge--locked) .ds-badge-detail { color: var(--color-ink-dim, #4a5a66); }"
+      "refersTo": "card",
+      "description": "La carte unique : surface, rayon 12, 20 px de retrait ; chiffres en lignes, unités petites et sourdes.",
+      "html": "<section class=\"ds-card\"><h2 class=\"ds-card-title\">Ce que tu gardes</h2><dl class=\"ds-rows\"><div><dt>Argent économisé</dt><dd>140,26<span class=\"ds-unit\"> €</span></dd></div><div><dt>Cigarettes non fumées</dt><dd>420</dd></div></dl></section>",
+      "css": ".ds-card { display: flex; flex-direction: column; gap: 14px; padding: 20px; border-radius: 12px; background: #17171a; color: #f7f4ef; font-family: \"Host Grotesk Variable\", system-ui, sans-serif; } .ds-card-title { margin: 0; font-size: 13px; line-height: 1.3; font-weight: 400; color: #a3a3a3; } .ds-rows { margin: 0; } .ds-rows > div { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 12px 0; border-top: 1px solid rgb(255 255 255 / 0.08); } .ds-rows > div:first-child { border-top: 0; padding-top: 0; } .ds-rows > div:last-child { padding-bottom: 0; } .ds-rows dt { font-size: 15px; color: #a3a3a3; } .ds-rows dd { margin: 0; font-size: 30px; font-weight: 500; line-height: 1; letter-spacing: -0.035em; font-variant-numeric: tabular-nums; } .ds-unit { font-size: 0.55em; letter-spacing: 0; color: #a3a3a3; }"
     },
     {
-      "name": "Tab Bar",
+      "name": "Row Link List",
       "kind": "nav",
-      "refersTo": "tab-item",
-      "description": "Navigation basse : icône 24px sur libellé tab, filet supérieur, actif en couleur seule (action).",
-      "html": "<nav class=\"ds-tabbar\" aria-label=\"Navigation principale\"><ul><li><button class=\"ds-tab ds-tab--active\" aria-current=\"page\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" width=\"24\" height=\"24\" aria-hidden=\"true\"><path d=\"M3 10.5 12 3l9 7.5\"/><path d=\"M5 9.5V21h14V9.5\"/></svg>Accueil</button></li><li><button class=\"ds-tab\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" width=\"24\" height=\"24\" aria-hidden=\"true\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"18\" rx=\"2\"/><path d=\"M16 2v4M8 2v4M3 10h18\"/></svg>Calendrier</button></li><li><button class=\"ds-tab\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" width=\"24\" height=\"24\" aria-hidden=\"true\"><path d=\"M4 20V10M10 20V4M16 20v-6M22 20H2\"/></svg>Progression</button></li><li><button class=\"ds-tab\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" width=\"24\" height=\"24\" aria-hidden=\"true\"><path d=\"M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01\"/></svg>Historique</button></li></ul></nav>",
-      "css": ".ds-tabbar { background: var(--color-page, #fafafa); font-family: var(--font-sans, 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif); } .ds-tabbar ul { display: flex; max-width: 28rem; margin: 0 auto; padding: 0.5rem 0.5rem 0.25rem; list-style: none; border-top: 1px solid var(--color-line, #d4d4d4); } .ds-tabbar li { flex: 1; } .ds-tab { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.25rem; width: 100%; min-height: 3rem; border: none; background: transparent; border-radius: var(--radius-control, 0.75rem); color: var(--color-ink-soft, #5e6c78); font-size: 0.65625rem; line-height: 1; font-weight: 600; } .ds-tab--active { color: var(--color-action, #234c6a); } .ds-tab:active:not(.ds-tab--active) { color: var(--color-ink, #1b3c53); } .ds-tab:focus-visible { outline: 2px solid var(--color-action, #234c6a); outline-offset: 3px; }"
+      "refersTo": "row-link",
+      "description": "La navigation d’aujourd’hui : une carte de lignes à chevron, jusqu’à la barre d’onglets de M2.",
+      "html": "<nav class=\"ds-rowlist\"><a href=\"#\">Déclarer un écart<svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m9 18 6-6-6-6\"/></svg></a><a href=\"#\">Tes envies<svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m9 18 6-6-6-6\"/></svg></a><a href=\"#\">Calendrier<svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m9 18 6-6-6-6\"/></svg></a></nav>",
+      "css": ".ds-rowlist { display: flex; flex-direction: column; padding: 4px 20px; border-radius: 12px; background: #17171a; font-family: \"Host Grotesk Variable\", system-ui, sans-serif; } .ds-rowlist a { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 52px; border-top: 1px solid rgb(255 255 255 / 0.08); color: #f7f4ef; font-size: 16px; letter-spacing: -0.02em; text-decoration: none; } .ds-rowlist a:first-child { border-top: 0; } .ds-rowlist a:active { color: #a3a3a3; } .ds-rowlist svg { color: #a3a3a3; flex-shrink: 0; } .ds-rowlist a:focus-visible { outline: 2px solid #f7f4ef; outline-offset: 3px; }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Champ fantôme à bord blanc 36 %, valeur crème ; filet alerte quand invalide.",
+      "html": "<label class=\"ds-field\"><span>Dépense par semaine</span><input class=\"ds-input\" inputmode=\"decimal\" placeholder=\"35,00\"></label>",
+      "css": ".ds-field { display: flex; flex-direction: column; gap: 8px; font-family: \"Host Grotesk Variable\", system-ui, sans-serif; color: #f7f4ef; font-size: 13px; } .ds-input { height: 48px; padding: 0 16px; border: 1px solid rgb(255 255 255 / 0.36); border-radius: 10px; background: rgb(255 255 255 / 0.05); color: #f7f4ef; font: 500 16px/1 \"Host Grotesk Variable\", system-ui, sans-serif; font-variant-numeric: tabular-nums; } .ds-input::placeholder { color: #a3a3a3; font-weight: 400; } .ds-input:focus-visible { outline: 2px solid #f7f4ef; outline-offset: 3px; } .ds-input[aria-invalid=\"true\"] { border-color: #ff6b72; }"
     },
     {
       "name": "Segmented Control",
       "kind": "chip",
-      "refersTo": "tabs-trigger-active",
-      "description": "ToggleGroup avec spacing=0 et variant=outline : un cadre en filet unique, segments fusionnés, pressé en aplat action.",
-      "html": "<div class=\"ds-segmented\" role=\"group\" aria-label=\"Intensité de l’envie\"><button class=\"ds-segment\">1</button><button class=\"ds-segment ds-segment--pressed\" aria-pressed=\"true\">2</button><button class=\"ds-segment\">3</button></div>",
-      "css": ".ds-segmented { display: flex; width: fit-content; overflow: hidden; border: 1px solid var(--color-line, #d4d4d4); border-radius: var(--radius-step, 0.625rem); } .ds-segment { flex: 1; height: 3rem; min-width: 3rem; padding: 0 0.75rem; border: 0; background: transparent; color: var(--color-ink-soft, #5e6c78); font-family: var(--font-sans, 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif); font-size: 0.9375rem; font-weight: 600; transition: background-color 150ms cubic-bezier(0.16,1,0.3,1), color 150ms cubic-bezier(0.16,1,0.3,1); } .ds-segment + .ds-segment { border-left: 1px solid var(--color-line, #d4d4d4); } .ds-segment--pressed { background: var(--color-action, #234c6a); color: var(--color-page, #fafafa); } .ds-segment:focus-visible { outline: 2px solid var(--color-action, #234c6a); outline-offset: 3px; z-index: 10; } @media (prefers-reduced-motion: reduce) { .ds-segment { transition: none; } }"
+      "refersTo": "chip-pressed",
+      "description": "Plateau pilule à filet, le segment pressé en pilule crème.",
+      "html": "<div class=\"ds-seg\" role=\"group\"><button aria-pressed=\"false\">1</button><button aria-pressed=\"true\">2</button><button aria-pressed=\"false\">3</button></div>",
+      "css": ".ds-seg { display: flex; padding: 4px; border: 1px solid rgb(255 255 255 / 0.36); border-radius: 9999px; font-family: \"Host Grotesk Variable\", system-ui, sans-serif; } .ds-seg button { flex: 1; height: 44px; border: 0; border-radius: 9999px; background: transparent; color: #f7f4ef; font-size: 15px; font-weight: 500; transition: background-color 150ms cubic-bezier(0.16,1,0.3,1), color 150ms; } .ds-seg button[aria-pressed=\"true\"] { background: #f7f4ef; color: #101012; } .ds-seg button:focus-visible { outline: 2px solid #f7f4ef; outline-offset: 3px; }"
     },
     {
-      "name": "Switch",
-      "kind": "input",
-      "refersTo": "switch-track",
-      "description": "Piste 51×31 aux dimensions iOS, pouce blanc 27px, action une fois coché.",
-      "html": "<button class=\"ds-switch ds-switch--checked\" role=\"switch\" aria-checked=\"true\" aria-label=\"Rappel du patch\"><span class=\"ds-switch-thumb\"></span></button>",
-      "css": ".ds-switch { position: relative; display: inline-flex; align-items: center; width: 51px; height: 31px; padding: 2px; border: none; border-radius: 9999px; background: var(--color-line, #d4d4d4); transition: background-color 150ms cubic-bezier(0.16,1,0.3,1); } .ds-switch--checked { background: var(--color-action, #234c6a); } .ds-switch-thumb { display: block; width: 27px; height: 27px; border-radius: 9999px; background: var(--color-white, #ffffff); transition: transform 150ms cubic-bezier(0.16,1,0.3,1); } .ds-switch--checked .ds-switch-thumb { transform: translateX(20px); } .ds-switch:focus-visible { outline: 2px solid var(--color-action, #234c6a); outline-offset: 3px; } @media (prefers-reduced-motion: reduce) { .ds-switch, .ds-switch-thumb { transition: none; } }"
-    },
-    {
-      "name": "Slider",
-      "kind": "input",
-      "refersTo": "level-bar-fill",
-      "description": "Piste de 8px identique à la barre XP, remplissage action, pouce 28px blanc cerclé de 2px action.",
-      "html": "<div class=\"ds-slider\" role=\"slider\" aria-label=\"Humeur du check-in\" aria-valuemin=\"1\" aria-valuemax=\"5\" aria-valuenow=\"3\" tabindex=\"0\"><div class=\"ds-slider-track\"><div class=\"ds-slider-fill\"></div></div><div class=\"ds-slider-thumb\"></div></div>",
-      "css": ".ds-slider { position: relative; display: flex; align-items: center; width: 100%; padding: 0.5rem 0; } .ds-slider-track { position: relative; flex: 1; height: 0.5rem; overflow: hidden; border-radius: 9999px; background: var(--color-line, #d4d4d4); } .ds-slider-fill { width: 50%; height: 100%; background: var(--color-action, #234c6a); } .ds-slider-thumb { position: absolute; left: calc(50% - 0.875rem); width: 1.75rem; height: 1.75rem; border: 2px solid var(--color-action, #234c6a); border-radius: 9999px; background: var(--color-white, #ffffff); transition: transform 150ms cubic-bezier(0.16,1,0.3,1); } .ds-slider:active .ds-slider-thumb { transform: scale(1.1); } .ds-slider:focus-visible { outline: 2px solid var(--color-action, #234c6a); outline-offset: 3px; } @media (prefers-reduced-motion: reduce) { .ds-slider-thumb { transition: none; } }"
-    },
-    {
-      "name": "Tabs",
-      "kind": "chip",
-      "refersTo": "tabs-list",
-      "description": "Plateau surface de 44px, texte ink-dim (fond teinté), onglet actif en aplat action.",
-      "html": "<div class=\"ds-tabs\" role=\"tablist\" aria-label=\"Période\"><button class=\"ds-tabs-trigger ds-tabs-trigger--active\" role=\"tab\" aria-selected=\"true\">Semaine</button><button class=\"ds-tabs-trigger\" role=\"tab\" aria-selected=\"false\">Mois</button><button class=\"ds-tabs-trigger\" role=\"tab\" aria-selected=\"false\">Tout</button></div>",
-      "css": ".ds-tabs { display: inline-flex; align-items: center; justify-content: center; width: 100%; height: 2.75rem; padding: 0.25rem; border-radius: var(--radius-control, 0.75rem); background: var(--color-surface, #e3e3e3); color: var(--color-ink-dim, #4a5a66); } .ds-tabs-trigger { flex: 1; height: 100%; padding: 0 0.75rem; border: 0; background: transparent; border-radius: var(--radius-step, 0.625rem); color: var(--color-ink-dim, #4a5a66); font-family: var(--font-sans, 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif); font-size: 0.9375rem; font-weight: 600; transition: background-color 150ms cubic-bezier(0.16,1,0.3,1), color 150ms cubic-bezier(0.16,1,0.3,1); } .ds-tabs-trigger--active { background: var(--color-action, #234c6a); color: var(--color-page, #fafafa); } .ds-tabs-trigger:focus-visible { outline: 2px solid var(--color-action, #234c6a); outline-offset: 3px; } @media (prefers-reduced-motion: reduce) { .ds-tabs-trigger { transition: none; } }"
-    },
-    {
-      "name": "Dialog",
+      "name": "Streak Hero on the haze",
       "kind": "custom",
-      "refersTo": "dialog",
-      "description": "Carte page sur voile ink/40. Aucun ring, aucune ombre : le voile fait toute la profondeur.",
-      "html": "<div class=\"ds-dialog-scrim\"><div class=\"ds-dialog\" role=\"dialog\" aria-modal=\"true\"><h2 class=\"ds-dialog-title\">Supprimer ce fait ?</h2><p class=\"ds-dialog-body\">Le journal est la seule source de vérité : la suppression est définitive.</p><div class=\"ds-dialog-footer\"><button class=\"ds-btn-ghost\">Annuler</button><button class=\"ds-btn-destructive\">Supprimer</button></div></div></div>",
-      "css": ".ds-dialog-scrim { position: relative; display: grid; place-items: center; padding: 2rem; background: color-mix(in srgb, var(--color-ink, #1b3c53) 40%, transparent); } .ds-dialog { display: grid; gap: 1rem; width: 100%; max-width: 24rem; padding: 1.25rem; border-radius: var(--radius-card, 0.875rem); background: var(--color-page, #fafafa); color: var(--color-ink, #1b3c53); font-family: var(--font-sans, 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif); } .ds-dialog-title { margin: 0; font-size: 1.1875rem; line-height: 1.2; font-weight: 600; } .ds-dialog-body { margin: 0; font-size: 0.9375rem; line-height: 1.35; color: var(--color-ink-soft, #5e6c78); } .ds-dialog-footer { display: flex; justify-content: flex-end; gap: 0.5rem; } .ds-btn-ghost { height: 2.75rem; padding: 0 1rem; border: none; background: transparent; border-radius: var(--radius-control, 0.75rem); color: var(--color-ink, #1b3c53); font: inherit; font-size: 0.9375rem; font-weight: 600; } .ds-btn-ghost:active { background: var(--color-surface, #e3e3e3); }"
+      "refersTo": "display",
+      "description": "La brume codée (trois halos, plancher, grain) derrière le chiffre blanc du streak.",
+      "html": "<section class=\"ds-hero\"><div class=\"ds-haze\" aria-hidden=\"true\"></div><div class=\"ds-hero-bar\"><span class=\"ds-brand\">quit</span><span>Étape 2 · 14 mg</span></div><p class=\"ds-streak\">28</p><p class=\"ds-lead\">jours de streak <span>· 01 h 15</span></p></section>",
+      "css": ".ds-hero { position: relative; isolation: isolate; container-type: inline-size; padding: 8px 20px 48px; background: #101012; color: #f7f4ef; font-family: \"Host Grotesk Variable\", system-ui, sans-serif; text-align: center; overflow: hidden; } .ds-haze { position: absolute; inset: 0; z-index: -1; background-image: radial-gradient(60% 42% at 10% 12%, #b8730f, transparent 70%), radial-gradient(55% 40% at 86% 12%, #7a1b5f, transparent 72%), radial-gradient(80% 50% at 50% 34%, #8d2a1a, transparent 75%), linear-gradient(180deg, #3a1a10 0%, #1c1011 55%, #101012 100%); mask-image: linear-gradient(to bottom, #000 65%, transparent); } .ds-hero-bar { display: flex; justify-content: space-between; align-items: center; min-height: 56px; font-size: 15px; } .ds-brand { font-size: 21px; font-weight: 600; letter-spacing: -0.03em; } .ds-streak { margin: 48px 0 12px; color: #fff; font-size: 62cqi; font-weight: 500; line-height: 0.86; letter-spacing: -0.055em; font-variant-numeric: tabular-nums; } .ds-lead { margin: 0; font-size: 18px; line-height: 1.3; letter-spacing: -0.01em; } .ds-lead span { color: #a3a3a3; }"
     }
   ],
   "narrative": {
-    "northStar": "Le relevé",
-    "overview": "Une seule famille bleu marine porte tous les faits, sur une page presque blanche. Rien n'est grainé ni ombré : la profondeur vient de la couleur et du filet, jamais de la lumière. Le monde est le standard de la catégorie exécuté à fond — plat, typographique, lisible en plein soleil à une main.\n\nLe monde a gagné une seule image, et elle est nommée : une marine de nuit en aplats vectoriels derrière le chiffre du streak. Elle ne rompt pas la règle du plat — pas de photo, pas de grain, pas de texture, aucune valeur hors de la famille marine — elle donne au seul bloc qui porte le chiffre géant une raison d'être un lieu plutôt qu'un rectangle. Partout ailleurs, le fond reste un aplat.\n\nLa hiérarchie est brutalement inégale, et c'est voulu : un chiffre de 176 px règne sur le bloc héros, tout le reste vit entre 10,5 px et 22 px. Une donnée est un chiffre, pas une jauge : le niveau est une barre de 8 px avec ses bornes chiffrées, le multiplicateur est une rangée de crans, jamais un anneau de progression.\n\nAnti-références confirmées : l'anneau de progression santé vert sur blanc ; le flipper (cartoon, saturé, sur-ornementé) ; toute métaphore matérielle (veste de travail, livret tamponné, manuel en acétate), refusée comme « skin » ; les variantes Instrument / Affiche / Registre, jugées froides et « AI-looking ».",
+    "northStar": "Nocturne chaude",
+    "overview": "L'app ouverte la nuit sur un balcon, à la place d'une cigarette. Une page presque noire, une seule brume chaude et grainée — ambre, ember, prune sur un plancher brun — derrière un immense chiffre blanc, et un seul objet allumé : la pilule `Envie`, rose vers jaune. Tout le reste se tient en retrait sur des cartes sombres, en crème et en gris. Pendant une envie, l'écran entier bascule dans une autre matière : une brume liquide mousse et bronze qui dérive lentement autour d'un compte à rebours blanc.\n\nLe monde est dessiné en code, sans image : les brumes sont des dégradés CSS et un bruit fractal SVG en ligne, les icônes de l'app sont rendues depuis ces mêmes stops. Il peint hors ligne et dès la première image. La hiérarchie est volontairement inégale : un chiffre qui prend 62 % de la largeur de sa colonne règne sur l'accueil, tout le reste vit entre 11 et 30 px. Une donnée est un chiffre, jamais une jauge : le niveau est une barre de 8 px, le multiplicateur une rangée de crans.\n\nAnti-références confirmées : l'app bien-être lumineuse (toile blanche, pastels, anneau vert), l'outil néon froid sur noir, le monde marine plat « Le relevé », « Grand air » (ciel de nuages), le flipper (cartoon, saturé), les variantes Instrument / Affiche / Registre, toute métaphore matérielle (veste de travail, livret tamponné, manuel en acétate).",
     "keyCharacteristics": [
-      "Une famille marine + un gris, et une seule exception chaude (alert)",
-      "Aucune ombre, nulle part",
-      "Une seule image dans toute l'app : le fond du héros, en aplats, dans la famille",
-      "Une seule police variable, chiffres tabulaires partout",
-      "Un chiffre géant centré, tout le reste petit",
-      "Un seul geste de motion signature (240 ms, par crans, jamais fluide)",
-      "Le pouce d'abord : Envie fixe, barre d'onglets basse, cibles ≥ 44 px"
+      "Une page noire, une carte sombre, du crème pour le texte et pour toute sélection",
+      "Une brume chaude grainée, placée par règle : pleine sur l'accueil, retenue au premier lancement, en bande basse partout ailleurs",
+      "Un seul objet allumé : `Envie` et son dégradé rose → jaune, que rien d'autre ne porte",
+      "Une seule police, Host Grotesk, chiffres tabulaires, unités petites et sourdes",
+      "Aucune ombre, sauf la lueur rose d'`Envie`",
+      "Un seul geste signature : le compteur par crans, 240 ms ; la brume ne dérive que sous `motion-safe`"
     ],
     "rules": [
       {
-        "name": "The Two Greys Rule",
-        "body": "Le gris de texte muet se choisit par fond, pas par humeur. Sur page → ink-soft. Sur n'importe quel fond teinté → ink-dim. ink-soft sur un fond teinté tombe à 4,20:1 et échoue : c'est la seule raison d'être de ink-dim.",
+        "name": "The Cream Selection Rule",
+        "body": "« Sélectionné » est toujours un aplat crème avec un texte `page`, partout : bouton primaire, puce, segment, onglet, `Switch`, date du jour, cran acquis. Aucune couleur d'accent ne marque une sélection.",
         "section": "colors"
       },
       {
-        "name": "The Three States Rule",
-        "body": "« Sélectionné » est toujours action. « Acquis » est ink. « Courant » est reached. Ces trois-là ne doivent jamais s'effondrer en une seule couleur.",
+        "name": "The One Lit Object Rule",
+        "body": "Le dégradé rose → jaune et sa lueur appartiennent à `Envie` seul. Aucun autre bouton, badge, graphique ou fond ne les emprunte, même en partie.",
         "section": "colors"
       },
       {
-        "name": "The One Warm Value Rule",
-        "body": "alert est la seule exception chaude approuvée à la famille marine-et-gris. Elle appartient aux actions destructives et aux erreurs, et à rien d'autre. Pas de succès vert, pas d'avertissement ambre, pas de second accent.",
+        "name": "The Haze Is Ground Rule",
+        "body": "Les couleurs de brume (`amber`, `ember`, `plum`, `floor`, `floor-deep`, `moss`, `bronze`) ne peignent que des fonds de brume. Elles ne colorent jamais un texte, un contrôle ou une donnée.",
         "section": "colors"
       },
       {
-        "name": "The One Illustration Rule",
-        "body": "Il y a une image dans toute l'app : la marine de nuit du bloc héros. Elle est décorative (aria-hidden), en aplats vectoriels, entièrement dans la famille marine, et bg-ink reste le plancher si elle n'arrive jamais. Pas de seconde illustration, pas de photo, pas d'icône décorative, pas de fond illustré sur une carte.",
+        "name": "The Alert Is Not a Fill Rule",
+        "body": "`alert` écrit un texte d'erreur (`text-alert`), borde un champ invalide, et dessine le bouton destructif en pilule fantôme à filet (1 px `alert` à 50 %, libellé `alert`, appui à 10 %). Jamais d'aplat teinté, jamais de rouge sur un écart : un écart est un fait, pas une erreur.",
         "section": "colors"
+      },
+      {
+        "name": "The One Series Rule",
+        "body": "Les graphiques n'ont qu'une teinte, `series`. L'ambre de série ne partage jamais un écran avec le bronze du minuteur.",
+        "section": "colors"
+      },
+      {
+        "name": "The Share-of-Column Rule",
+        "body": "Les chiffres géants (`display`, `countdown`) sont en `cqi` : leur parent est un `@container` sans padding, pour que la part se calcule sur toute la colonne. Le streak garde 62cqi jusqu'à deux chiffres, puis `streakFigureSize` le réduit (`min(62, floor(144 / chiffres))cqi`) pour qu'il ne dépasse jamais les gouttières.",
+        "section": "typography"
+      },
+      {
+        "name": "The Small Muted Unit Rule",
+        "body": "Une unité (`€`, `%`, `j`, `h`, `min`, après une espace insécable) est posée plus petite et sourde derrière son chiffre : `Figure` découpe la chaîne (`splitUnits`) et habille l'unité en `unit` + `muted`. La chaîne reste une seule phrase pour le lecteur d'écran et une seule entrée dans le module de chaînes.",
+        "section": "typography"
       },
       {
         "name": "The cn() Registration Rule",
-        "body": "src/shared/utils/cn.ts enregistre chaque taille de @theme dans le groupe font-size de tailwind-merge. Sans ça, text-tab est lu comme une couleur et silencieusement supprimé dès qu'un text-<couleur> se trouve dans le même appel cn(). Tout nouveau token de taille doit être ajouté à ce tableau — c'est le point unique dont dépend toute l'échelle typographique.",
-        "section": "typography"
-      },
-      {
-        "name": "The One Giant Rule",
-        "body": "Un seul text-display par écran, et seulement pour le chiffre du streak. Il n'y a pas de second niveau « grand » : après 176 px, on retombe à 22 px.",
-        "section": "typography"
-      },
-      {
-        "name": "The French UI Rule",
-        "body": "Toute chaîne visible est en français et vit dans src/shared/utils/strings.ts. Jamais de littéral dans un composant, jamais d'anglais à l'écran. Le code, lui, reste en anglais.",
+        "body": "Chaque taille et chaque rayon de `@theme` est déclaré dans `src/shared/utils/cn.ts`, sinon tailwind-merge lit `text-tab` comme une couleur et le supprime à côté d'un `text-<couleur>`. `cn.test.ts` échoue si un token manque.",
         "section": "typography"
       },
       {
         "name": "The Fixed Pill Rule",
-        "body": "Le contenu scrollable réserve un dégagement bas (pb-44 sur le spécimen) pour que la pilule Envie fixe ne recouvre jamais une information à lire.",
+        "body": "`Envie` est fixe en bas à droite, sur un fondu vers `page` à 92 % ; le contenu défilant réserve un dégagement bas (`pb-32` sur l'accueil) pour qu'aucune information ne reste sous la pilule.",
         "section": "layout"
       },
       {
-        "name": "The No-Shadow Rule",
-        "body": "Une surface qui doit paraître plus proche change de couleur ou gagne un filet. Elle ne gagne jamais une ombre, ni un ring-*, ni un dégradé. Le focus est un outline: 2px solid action avec outline-offset: 3px, posé globalement sur :focus-visible — les composants ne redéfinissent pas leur anneau.",
+        "name": "The Thumb Zone Rule",
+        "body": "L'action principale d'un écran à décision (question du premier lancement, `Arrêter`, `Enregistrer` d'une envie) vit en bas de l'écran, sur un fondu vers la page quand elle colle (`sticky`).",
+        "section": "layout"
+      },
+      {
+        "name": "The Haze Placement Rule",
+        "body": "La brume ne s'éteint jamais, mais sa dose est fixée par écran : - **Accueil** — la brume pleine (`HeroHaze` `hero`), 640 px, derrière la marque et le streak. - **Premier lancement** — la même brume pleine (`hero`) : première impression du monde. Le texte secondaire posé dessus passe en `ink` pour tenir 4,5:1. - **Tous les autres écrans** — la bande basse (`band`) : 192 px, 70 %, prune et ember seulement, **sans ambre sous le texte**, sur un plancher `floor-deep`, derrière la barre haute et le titre. - **Minuteur d'envie** — sa propre brume liquide mousse et bronze, plein écran. - **Minuteur arrêté avant la fin** — la même brume, à 60 % et immobile : jamais éteinte, jamais marquée.",
         "section": "elevation"
       },
       {
-        "name": "The Scrim-Is-Contrast Rule",
-        "body": "Le dégradé n'existe dans ce monde que pour rendre un texte lisible au-dessus de l'illustration du héros, jamais pour décorer, adoucir un bord ou suggérer de la profondeur. Un fond uni n'a jamais besoin d'un scrim : s'il en réclame un, c'est la couleur du texte qui est fausse.",
+        "name": "The Code-Drawn Rule",
+        "body": "Brumes, grain et icônes sont du code : aucun raster décoratif. Les icônes de `public/` sont rendues par `scripts/render-icons.mjs` depuis les stops de `bg-haze` et un « q » Host Grotesk blanc ; chaque PNG porte sa provenance dans un bloc `tEXt`. Changer un stop de brume ou la police → relancer le script.",
         "section": "elevation"
       },
       {
-        "name": "The Motion-Guard Rule",
-        "body": "Toute transition ou animation porte son garde : motion-safe: pour ce qui doit disparaître, motion-reduce:transition-none pour ce qui doit se figer. Aucune exception.",
+        "name": "The Focus Outline Rule",
+        "body": "Le focus est un `outline: 2px solid ink`, `outline-offset: 3px`, posé globalement sur `:focus-visible`. Aucun composant ne dessine son propre anneau.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Reduced Motion Rule",
+        "body": "Sous `prefers-reduced-motion: reduce`, les compteurs affichent la valeur finale dès la première image ; la dérive de la brume, `step-in` et la séquence des crans ne jouent que sous `motion-safe:` — la brume devient une image fixe ; toute transition porte `motion-reduce:transition-none`.",
         "section": "components"
       }
     ],
     "dos": [
-      "Do choisir le gris muet par le fond : ink-soft sur page, ink-dim sur tout fond teinté.",
-      "Do garder action pour « sélectionné », ink pour « acquis », reached pour « courant ».",
-      "Do enregistrer toute nouvelle taille @theme dans le groupe font-size de src/shared/utils/cn.ts, sinon la classe sera silencieusement supprimée.",
-      "Do utiliser px-safe / pt-safe / pb-safe sur tout conteneur qui touche un bord.",
-      "Do rendre la profondeur par la couleur ou un filet 1px line.",
-      "Do garder bg-ink sous l'illustration du héros : le bloc doit rester lisible si l'image n'arrive pas, et le texte posé dessus doit tenir 4,5:1 sur les crêtes claires, scrim compris.",
-      "Do garder les chiffres en tabular-nums et poser les valeurs qui changent en figure.",
-      "Do écrire toute chaîne visible en français, dans src/shared/utils/strings.ts.",
-      "Do garder les cibles tactiles à 44px minimum et le déclencheur principal en zone pouce.",
-      "Do assortir chaque transition d'un garde motion-safe: ou motion-reduce:."
+      "**Do** marquer toute sélection en aplat crème avec un texte `page`.",
+      "**Do** placer la brume selon The Haze Placement Rule : pleine sur l'accueil et au premier lancement (texte secondaire en `ink` dessus), bande basse sans ambre partout ailleurs, brume mousse et bronze au minuteur, immobile et atténuée quand il est arrêté.",
+      "**Do** construire tout bloc sur la carte unique : `surface`, rayon 12 px, 20 px de retrait.",
+      "**Do** ouvrir tout écran sous l'accueil par la barre haute puis `PageHeader` (chevron à côté du titre) ; fermer un formulaire par un `ghost` « Annuler ».",
+      "**Do** poser les unités d'un chiffre petites et sourdes via `Figure`.",
+      "**Do** border tout contrôle en `ghost-line` (≥ 3:1) et séparer la structure en `line`.",
+      "**Do** écrire les erreurs en `alert` sous leur champ, et le destructif en pilule fantôme à filet `alert`.",
+      "**Do** vérifier chaque texte posé sur une brume : ≥ 3:1 pour la marque et le chiffre, ≥ 4,5:1 pour le texte courant.",
+      "**Do** déclarer toute nouvelle taille ou tout nouveau rayon de `@theme` dans `src/shared/utils/cn.ts`.",
+      "**Do** garder chaque animation derrière `motion-safe:` ou `motion-reduce:transition-none`, et rendre la valeur finale d'un compteur sous mouvement réduit.",
+      "**Do** relancer `scripts/render-icons.mjs` après tout changement de stop de brume ou de police."
     ],
     "donts": [
-      "Don't ajouter une ombre, un ring-*, une texture ou un grain : rien de tout ça n'existe dans ce monde. Le seul dégradé autorisé est le scrim du héros, et il sert le contraste.",
-      "Don't ajouter une seconde image. L'app en a une, le fond du héros ; une carte, un état vide ou un badge se dessinent en type et en aplat.",
-      "Don't introduire une seconde couleur d'accent. alert est la seule valeur chaude, et elle est réservée au destructif et aux erreurs.",
-      "Don't habiller alert en aplat plein : fond à 10 % / 20 %, texte en plein.",
-      "Don't utiliser reached ailleurs que sur le cran de multiplicateur courant.",
-      "Don't redéfinir un anneau de focus par composant : l'outline global :focus-visible fait foi.",
-      "Don't transformer une progression en anneau ou en jauge : une barre de 8px avec ses bornes chiffrées, ou une rangée de crans.",
-      "Don't poser un second text-display sur un écran, ni créer un palier intermédiaire entre 176px et 22px.",
-      "Don't fusionner line et surface-locked sous prétexte qu'ils partagent #d4d4d4 : ce sont deux rôles distincts qui peuvent diverger.",
-      "Don't animer en interpolation fluide : la signature est par pas, 240 ms, ease-out-expo.",
-      "Don't écrire un littéral de chaîne dans un composant, ni une chaîne anglaise à l'écran."
+      "**Don't** prêter le dégradé rose → jaune ou la lueur d'`Envie` à un autre objet.",
+      "**Don't** peindre un texte, un contrôle ou une donnée avec une couleur de brume.",
+      "**Don't** mettre d'ambre sous un texte hors de l'accueil : la bande basse est prune et ember seulement.",
+      "**Don't** éteindre la brume d'un écran, ni celle du minuteur arrêté.",
+      "**Don't** ajouter une ombre portée, un `ring-*` ou un anneau de focus par composant : le seul `box-shadow` est la lueur d'`Envie`, le focus est l'`outline` global.",
+      "**Don't** remplir un bouton destructif d'un aplat teinté, ni colorer un écart en `alert`.",
+      "**Don't** mettre l'ambre de série et le bronze du minuteur sur le même écran, ni une seconde couleur de série.",
+      "**Don't** transformer une progression en anneau ou en jauge : une barre de 8 px avec ses bornes chiffrées, ou une rangée de crans.",
+      "**Don't** ajouter un raster décoratif : brumes, grain et icônes sont du code.",
+      "**Don't** créer une seconde barre haute, une seconde carte ou un second geste de retour.",
+      "**Don't** animer un chiffre en interpolation fluide : par crans, 240 ms, `ease-out-expo`."
     ]
   }
 }

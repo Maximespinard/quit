@@ -1,655 +1,690 @@
 ---
 name: quit
-description: Un monde plat et typographique — une famille bleu marine, une page blanche, aucune ombre, et une seule image : la nuit derrière le chiffre.
+description: Une nocturne chaude — une page noire, une brume grainée ambre, ember et prune derrière un immense chiffre blanc, et un seul objet allumé, Envie.
 colors:
-  page: "#fafafa"
-  ink: "#1b3c53"
-  ink-soft: "#5e6c78"
-  ink-dim: "#4a5a66"
-  on-ink: "#e3e3e3"
-  action: "#234c6a"
-  reached: "#456882"
-  surface: "#e3e3e3"
-  surface-locked: "#d4d4d4"
-  line: "#d4d4d4"
-  alert: "#a6392f"
+  page: "#101012"
+  surface: "#17171a"
+  ink: "#f7f4ef"
+  muted: "#a3a3a3"
   white: "#ffffff"
+  line: "rgb(255 255 255 / 0.08)"
+  ghost: "rgb(255 255 255 / 0.05)"
+  ghost-line: "rgb(255 255 255 / 0.36)"
+  alert: "#ff6b72"
+  amber: "#b8730f"
+  floor: "#3a1a10"
+  floor-deep: "#1c1011"
+  ember: "#8d2a1a"
+  plum: "#7a1b5f"
+  pink: "#fd429c"
+  yellow: "#f5d907"
+  moss: "#33402c"
+  bronze: "#b88a4f"
+  series: "#d08a2a"
+  transparent: "transparent"
+  current-color: "currentColor"
 typography:
   display:
-    fontFamily: "Bricolage Grotesque Variable, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "11rem"
-    fontWeight: 800
-    lineHeight: 0.9
-    letterSpacing: "-0.02em"
-  figure:
-    fontFamily: "Bricolage Grotesque Variable, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "1.375rem"
-    fontWeight: 600
-    lineHeight: 1
-  title:
-    fontFamily: "Bricolage Grotesque Variable, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "1.1875rem"
-    fontWeight: 600
-    lineHeight: 1.2
-  cta:
-    fontFamily: "Bricolage Grotesque Variable, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "1.0625rem"
-    fontWeight: 700
-    lineHeight: 1
-  body:
-    fontFamily: "Bricolage Grotesque Variable, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "0.9375rem"
-    lineHeight: 1.35
-  label:
-    fontFamily: "Bricolage Grotesque Variable, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "0.8125rem"
+    fontFamily: "Host Grotesk Variable, ui-sans-serif, system-ui, -apple-system, sans-serif"
+    fontSize: "62cqi"
     fontWeight: 500
-    lineHeight: 1.25
-  detail:
-    fontFamily: "Bricolage Grotesque Variable, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "0.6875rem"
+    lineHeight: 0.86
+    letterSpacing: "-0.055em"
+  countdown:
+    fontFamily: "Host Grotesk Variable, ui-sans-serif, system-ui, -apple-system, sans-serif"
+    fontSize: "33cqi"
+    fontWeight: 500
+    lineHeight: 0.86
+    letterSpacing: "-0.05em"
+  figure:
+    fontFamily: "Host Grotesk Variable, ui-sans-serif, system-ui, -apple-system, sans-serif"
+    fontSize: "1.875rem"
+    fontWeight: 500
+    lineHeight: 1
+    letterSpacing: "-0.035em"
+  headline:
+    fontFamily: "Host Grotesk Variable, ui-sans-serif, system-ui, -apple-system, sans-serif"
+    fontSize: "1.75rem"
+    fontWeight: 500
+    lineHeight: 1.1
+    letterSpacing: "-0.03em"
+  prompt:
+    fontFamily: "Host Grotesk Variable, ui-sans-serif, system-ui, -apple-system, sans-serif"
+    fontSize: "1.5rem"
     lineHeight: 1.2
-  tab:
-    fontFamily: "Bricolage Grotesque Variable, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "0.65625rem"
+    letterSpacing: "-0.025em"
+  craving:
+    fontFamily: "Host Grotesk Variable, ui-sans-serif, system-ui, -apple-system, sans-serif"
+    fontSize: "1.4375rem"
     fontWeight: 600
+    lineHeight: 1
+    letterSpacing: "-0.03em"
+  brand:
+    fontFamily: "Host Grotesk Variable, ui-sans-serif, system-ui, -apple-system, sans-serif"
+    fontSize: "1.3125rem"
+    fontWeight: 600
+    lineHeight: 1
+    letterSpacing: "-0.03em"
+  title:
+    fontFamily: "Host Grotesk Variable, ui-sans-serif, system-ui, -apple-system, sans-serif"
+    fontSize: "1.25rem"
+    fontWeight: 500
+    lineHeight: 1.2
+    letterSpacing: "-0.02em"
+  lead:
+    fontFamily: "Host Grotesk Variable, ui-sans-serif, system-ui, -apple-system, sans-serif"
+    fontSize: "1.125rem"
+    lineHeight: 1.3
+    letterSpacing: "-0.01em"
+  cta:
+    fontFamily: "Host Grotesk Variable, ui-sans-serif, system-ui, -apple-system, sans-serif"
+    fontSize: "1rem"
+    fontWeight: 500
+    lineHeight: 1
+    letterSpacing: "-0.02em"
+  body:
+    fontFamily: "Host Grotesk Variable, ui-sans-serif, system-ui, -apple-system, sans-serif"
+    fontSize: "0.9375rem"
+    lineHeight: 1.4
+  label:
+    fontFamily: "Host Grotesk Variable, ui-sans-serif, system-ui, -apple-system, sans-serif"
+    fontSize: "0.8125rem"
+    lineHeight: 1.3
+  detail:
+    fontFamily: "Host Grotesk Variable, ui-sans-serif, system-ui, -apple-system, sans-serif"
+    fontSize: "0.75rem"
+    lineHeight: 1.2
+  unit:
+    fontFamily: "Host Grotesk Variable, ui-sans-serif, system-ui, -apple-system, sans-serif"
+    fontSize: "0.55em"
+    lineHeight: 1
+    letterSpacing: "0"
+  tab:
+    fontFamily: "Host Grotesk Variable, ui-sans-serif, system-ui, -apple-system, sans-serif"
+    fontSize: "0.6875rem"
+    fontWeight: 500
     lineHeight: 1
 rounded:
   hero: "1.75rem"
-  card: "0.875rem"
-  control: "0.75rem"
-  step: "0.625rem"
+  card: "0.75rem"
+  control: "0.625rem"
+  step: "0.5rem"
   mark: "0.25rem"
-  pill: "9999px"
 spacing:
   gutter: "1.25rem"
-  block: "1.25rem"
-  section: "2rem"
-  card-padding: "0.75rem"
-  grid-gap: "0.5rem"
-  step-gap: "0.375rem"
+  card-inset: "1.25rem"
+  card-gap: "0.625rem"
+  screen-gap: "1rem"
+  hero-drop: "4rem"
 components:
-  hero:
-    backgroundColor: "{colors.ink}"
-    textColor: "{colors.on-ink}"
-    rounded: "{rounded.hero}"
-    typography: "{typography.display}"
   button-primary:
-    backgroundColor: "{colors.action}"
+    backgroundColor: "{colors.ink}"
     textColor: "{colors.page}"
-    rounded: "{rounded.control}"
-    typography: "{typography.body}"
+    typography: "{typography.cta}"
+    rounded: "9999px"
     height: "2.75rem"
     padding: "0 1rem"
-  button-primary-active:
+  button-primary-lg:
     backgroundColor: "{colors.ink}"
     textColor: "{colors.page}"
+    rounded: "9999px"
+    height: "3rem"
+    padding: "0 1.25rem"
   button-secondary:
-    backgroundColor: "{colors.surface}"
+    backgroundColor: "{colors.transparent}"
     textColor: "{colors.ink}"
-    rounded: "{rounded.control}"
+    typography: "{typography.cta}"
+    rounded: "9999px"
     height: "2.75rem"
     padding: "0 1rem"
   button-secondary-active:
-    backgroundColor: "{colors.surface-locked}"
-  button-outline:
-    backgroundColor: "transparent"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.control}"
-    height: "2.75rem"
-    padding: "0 1rem"
+    backgroundColor: "{colors.ghost}"
   button-ghost:
-    backgroundColor: "transparent"
+    backgroundColor: "{colors.transparent}"
     textColor: "{colors.ink}"
-    rounded: "{rounded.control}"
+    typography: "{typography.cta}"
+    rounded: "9999px"
     height: "2.75rem"
     padding: "0 1rem"
+  button-ghost-active:
+    backgroundColor: "{colors.ghost}"
   button-destructive:
+    backgroundColor: "{colors.transparent}"
     textColor: "{colors.alert}"
-    rounded: "{rounded.control}"
+    typography: "{typography.cta}"
+    rounded: "9999px"
     height: "2.75rem"
     padding: "0 1rem"
   button-disabled:
-    backgroundColor: "{colors.surface-locked}"
-    textColor: "{colors.ink-dim}"
-    rounded: "{rounded.control}"
+    backgroundColor: "{colors.ghost}"
+    textColor: "{colors.muted}"
   craving-button:
-    backgroundColor: "{colors.action}"
     textColor: "{colors.page}"
-    rounded: "{rounded.pill}"
-    typography: "{typography.cta}"
+    typography: "{typography.craving}"
+    rounded: "9999px"
     height: "4rem"
-    padding: "0 1.5rem"
+    padding: "0 1.75rem"
+    width: "62.5%"
   craving-button-disabled:
-    backgroundColor: "{colors.surface-locked}"
-    textColor: "{colors.ink-dim}"
+    backgroundColor: "{colors.ghost}"
+    textColor: "{colors.muted}"
+  card:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.card}"
+    padding: "1.25rem"
+  row-link:
+    textColor: "{colors.ink}"
+    typography: "{typography.cta}"
+    height: "3.25rem"
+  input:
+    backgroundColor: "{colors.ghost}"
+    textColor: "{colors.ink}"
+    typography: "{typography.cta}"
+    rounded: "{rounded.control}"
+    height: "3rem"
+    padding: "0 1rem"
+  chip:
+    backgroundColor: "{colors.ghost}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body}"
+    rounded: "9999px"
+    height: "2.75rem"
+    padding: "0 1rem"
+  chip-pressed:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.page}"
+  tabs-list:
+    backgroundColor: "{colors.ghost}"
+    textColor: "{colors.muted}"
+    rounded: "9999px"
+    height: "2.75rem"
+    padding: "0.25rem"
+  tabs-trigger-active:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.page}"
+    rounded: "9999px"
+  switch-track:
+    backgroundColor: "{colors.ghost-line}"
+    rounded: "9999px"
+    width: "51px"
+    height: "31px"
+  switch-track-checked:
+    backgroundColor: "{colors.ink}"
+  progress-track:
+    backgroundColor: "{colors.line}"
+    rounded: "9999px"
+    height: "0.5rem"
+  progress-fill:
+    backgroundColor: "{colors.ink}"
+    rounded: "9999px"
+    height: "0.5rem"
   multiplier-step-acquired:
     backgroundColor: "{colors.ink}"
-    textColor: "{colors.on-ink}"
+    textColor: "{colors.page}"
     rounded: "{rounded.step}"
     height: "2.625rem"
   multiplier-step-current:
-    backgroundColor: "{colors.reached}"
-    textColor: "{colors.white}"
+    backgroundColor: "{colors.transparent}"
+    textColor: "{colors.ink}"
     rounded: "{rounded.step}"
     height: "2.625rem"
   multiplier-step-locked:
-    backgroundColor: "transparent"
-    textColor: "{colors.ink-soft}"
+    backgroundColor: "{colors.ghost}"
+    textColor: "{colors.muted}"
     rounded: "{rounded.step}"
     height: "2.625rem"
-  level-bar-track:
-    backgroundColor: "{colors.line}"
-    rounded: "{rounded.pill}"
-    height: "0.5rem"
-  level-bar-fill:
-    backgroundColor: "{colors.action}"
-    rounded: "{rounded.pill}"
-    height: "0.5rem"
   badge-card:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.ink}"
     rounded: "{rounded.card}"
     padding: "0.75rem"
   badge-card-locked:
-    backgroundColor: "{colors.surface-locked}"
-    textColor: "{colors.ink-dim}"
+    backgroundColor: "{colors.transparent}"
+    textColor: "{colors.muted}"
     rounded: "{rounded.card}"
     padding: "0.75rem"
   tab-item:
-    textColor: "{colors.ink-soft}"
+    textColor: "{colors.muted}"
     typography: "{typography.tab}"
     rounded: "{rounded.control}"
     height: "3rem"
   tab-item-active:
-    textColor: "{colors.action}"
-  tabs-list:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink-dim}"
-    rounded: "{rounded.control}"
-    height: "2.75rem"
-    padding: "0.25rem"
-  tabs-trigger-active:
-    backgroundColor: "{colors.action}"
-    textColor: "{colors.page}"
-    rounded: "{rounded.step}"
-  switch-track:
-    backgroundColor: "{colors.line}"
-    rounded: "{rounded.pill}"
-    width: "51px"
-    height: "31px"
-  switch-track-checked:
-    backgroundColor: "{colors.action}"
+    textColor: "{colors.ink}"
+  chart-series:
+    backgroundColor: "{colors.series}"
+    rounded: "{rounded.mark}"
+    width: "1.5rem"
   dialog:
-    backgroundColor: "{colors.page}"
+    backgroundColor: "{colors.surface}"
     textColor: "{colors.ink}"
     rounded: "{rounded.card}"
     padding: "1.25rem"
   drawer:
-    backgroundColor: "{colors.page}"
+    backgroundColor: "{colors.surface}"
     textColor: "{colors.ink}"
     rounded: "{rounded.hero}"
 ---
 
 # Design System: quit
 
-> **Being replaced.** The user committed a new world, "Nocturne chaude" (contract in
-> `.impeccable/surfaces/src-routes-design-tsx.md`, target in `docs/design/mocks/nocturne-chaude.html`).
-> This file still describes the navy world the code ships today; it is rewritten from the built
-> world when the foundation ticket lands. New UI work waits for that ticket.
-
 ## Overview
 
-**Creative North Star : « Le relevé »**
+**Creative North Star : « Nocturne chaude »**
 
-Une seule famille bleu marine porte tous les faits, sur une page presque blanche. Rien n'est
-grainé ni ombré : la profondeur vient de la couleur et du filet, jamais de la lumière. Le
-monde est le standard de la catégorie exécuté à fond — plat, typographique, lisible en plein
-soleil à une main.
+L'app ouverte la nuit sur un balcon, à la place d'une cigarette. Une page presque noire, une
+seule brume chaude et grainée — ambre, ember, prune sur un plancher brun — derrière un immense
+chiffre blanc, et un seul objet allumé : la pilule `Envie`, rose vers jaune. Tout le reste se
+tient en retrait sur des cartes sombres, en crème et en gris. Pendant une envie, l'écran entier
+bascule dans une autre matière : une brume liquide mousse et bronze qui dérive lentement autour
+d'un compte à rebours blanc.
 
-Le monde a gagné **une seule image**, et elle est nommée : une marine de nuit en aplats
-vectoriels derrière le chiffre du streak. Elle ne rompt pas la règle du plat — pas de photo,
-pas de grain, pas de texture, aucune valeur hors de la famille marine — elle donne au seul
-bloc qui porte le chiffre géant une raison d'être un lieu plutôt qu'un rectangle. Partout
-ailleurs, le fond reste un aplat.
+Le monde est dessiné en code, sans image : les brumes sont des dégradés CSS et un bruit
+fractal SVG en ligne, les icônes de l'app sont rendues depuis ces mêmes stops. Il peint hors
+ligne et dès la première image. La hiérarchie est volontairement inégale : un chiffre qui prend
+62 % de la largeur de sa colonne règne sur l'accueil, tout le reste vit entre 11 et 30 px. Une
+donnée est un chiffre, jamais une jauge : le niveau est une barre de 8 px, le multiplicateur une
+rangée de crans.
 
-La hiérarchie est brutalement inégale, et c'est voulu : un chiffre de 176 px règne sur le bloc
-héros, tout le reste vit entre 10,5 px et 22 px. Une donnée est un chiffre, pas une jauge :
-le niveau est une barre de 8 px avec ses bornes chiffrées, le multiplicateur est une rangée
-de crans, jamais un anneau de progression.
-
-Anti-références confirmées : l'anneau de progression santé vert sur blanc ; le flipper
-(cartoon, saturé, sur-ornementé) ; toute métaphore matérielle (veste de travail, livret
-tamponné, manuel en acétate), refusée comme « skin » ; les variantes Instrument / Affiche /
-Registre, jugées froides et « AI-looking ».
+Anti-références confirmées : l'app bien-être lumineuse (toile blanche, pastels, anneau vert),
+l'outil néon froid sur noir, le monde marine plat « Le relevé », « Grand air » (ciel de nuages),
+le flipper (cartoon, saturé), les variantes Instrument / Affiche / Registre, toute métaphore
+matérielle (veste de travail, livret tamponné, manuel en acétate).
 
 **Key Characteristics :**
-- Une famille marine + un gris, et une seule exception chaude (`alert`)
-- Aucune ombre, nulle part
-- Une seule image dans toute l'app : le fond du héros, en aplats, dans la famille
-- Une seule police variable, chiffres tabulaires partout
-- Un chiffre géant centré, tout le reste petit
-- Un seul geste de motion signature (240 ms, par crans, jamais fluide)
-- Le pouce d'abord : `Envie` fixe, barre d'onglets basse, cibles ≥ 44 px
+- Une page noire, une carte sombre, du crème pour le texte et pour toute sélection
+- Une brume chaude grainée, placée par règle : pleine sur l'accueil, retenue au premier lancement, en bande basse partout ailleurs
+- Un seul objet allumé : `Envie` et son dégradé rose → jaune, que rien d'autre ne porte
+- Une seule police, Host Grotesk, chiffres tabulaires, unités petites et sourdes
+- Aucune ombre, sauf la lueur rose d'`Envie`
+- Un seul geste signature : le compteur par crans, 240 ms ; la brume ne dérive que sous `motion-safe`
 
 ## Colors
 
-Une famille marine du plus profond au plus clair, deux gris de surface, et un seul rouge
-réservé au danger.
+Un noir chaud et deux gris de structure, un crème qui porte le texte et la sélection, une
+famille de brume chaude réservée aux fonds, et deux exceptions nommées : le dégradé d'`Envie`
+et le rouge d'alerte.
 
 ### Primary
-- **Marine profond** (`ink`) : le texte courant, le bloc héros, et tout état **acquis** —
-  un cran de multiplicateur déjà gagné, l'écrasement d'un bouton primaire.
-- **Marine d'action** (`action`) : la couleur de ce que l'utilisateur déclenche ou gagne —
-  pilule `Envie`, remplissage XP, onglet actif, puce d'onglet sélectionnée, bouton primaire,
-  `Switch` coché, anneau de focus, sélection de texte, caret.
+- **Crème nocturne** (`ink`) : tout le texte courant, et **toute sélection** — bouton primaire
+  en aplat, puce et segment pressés, onglet actif, `Switch` coché, remplissage de barre, cran
+  de multiplicateur acquis, date du jour au calendrier, anneau de focus, caret, sélection de
+  texte. Sur le crème, le texte passe en `page`.
+- **Blanc pur** (`white`) : les chiffres-clés seuls — streak, compte à rebours, minutes tenues —
+  et les crans de minute du minuteur, le pouce du `Switch` et du `Slider`. Le blanc est la
+  lumière du chiffre ; le texte, lui, reste crème.
 
 ### Secondary
-- **Acier atteint** (`reached`) : un seul rôle, le cran de multiplicateur **courant**.
-  Cette couleur n'habille rien d'autre.
+- **Rose Envie** (`pink`) et **Jaune Envie** (`yellow`) : les deux bouts du dégradé horizontal
+  d'`Envie`, et sa lueur rose. Ils n'existent nulle part ailleurs.
 
 ### Tertiary
-- **Rouge d'alerte** (`alert`) : unique valeur chaude du monde. Destructif et erreurs,
-  rien d'autre. Jamais en aplat plein : le bouton destructif l'utilise à 10 % d'opacité de
-  fond avec le texte en plein (20 % à l'appui).
+- **La brume d'accueil** : **Ambre** (`amber`), **Ember** (`ember`) et **Prune** (`plum`) en
+  trois halos radiaux, posés sur un **Plancher** (`floor`) qui descend vers le **Plancher
+  profond** (`floor-deep`) puis vers la `page`. Ces cinq valeurs ne peignent que des fonds de
+  brume — jamais un texte, une bordure ou un composant.
+- **La brume du minuteur** : **Mousse** (`moss`) et **Bronze** (`bronze`), en taches floues qui
+  dérivent. Elles n'appartiennent qu'aux écrans du minuteur d'envie.
+- **Ambre de série** (`series`) : la seule couleur de donnée des graphiques. Une série = une
+  teinte.
 
 ### Neutral
-- **Page** (`page`) : le fond de toute l'application, et la couleur du texte posé sur `action`.
-- **Encre douce** (`ink-soft`) : texte secondaire **sur la page** uniquement (5,17:1).
-- **Encre sourde** (`ink-dim`) : texte secondaire **sur tout fond teinté** — `surface`,
-  `surface-locked`, remplissages désactivés, plateau de `Tabs` (5,56:1 sur `surface`,
-  4,81:1 sur `surface-locked`).
-- **Sur encre** (`on-ink`) : le texte posé sur le bloc héros marine.
-- **Surface** (`surface`) : cartes et plateaux.
-- **Surface verrouillée** (`surface-locked`) : badge verrouillé, remplissage désactivé.
-- **Filet** (`line`) : filets, contours, pistes de barre et de slider, poignée de tiroir.
-  Même valeur que `surface-locked`, rôle différent : ne pas fusionner les deux tokens.
+- **Page** (`page`) : le fond de toute l'app, le texte posé sur le crème et sur `Envie`, le voile
+  des overlays (à 80 %).
+- **Surface** (`surface`) : la carte, le `Dialog`, le `Drawer`, le badge débloqué.
+- **Gris sourd** (`muted`) : texte secondaire — titres de carte, libellés de ligne, pistes,
+  unités, axes, onglets inactifs, placeholder, bouton désactivé.
+- **Filet** (`line`, blanc 8 %) : les séparateurs de structure — entre lignes d'une carte, bord
+  du `Dialog`, contour du badge verrouillé, piste de barre et de slider.
+- **Voile** (`ghost`, blanc 5 %) : le fond d'un contrôle au repos — champ, puce, plateau de
+  `Tabs`, cran verrouillé, retour tactile des boutons secondaire et fantôme, aplat désactivé.
+- **Bord de contrôle** (`ghost-line`, blanc 36 %) : le bord de tout ce qui se touche — bouton
+  secondaire, champ, plateau segmenté, piste de `Switch` éteint, poignée de `Drawer`, soulignement
+  du lien, ligne de base des graphiques.
+- **Alerte** (`alert`) : erreurs et destructif, rien d'autre.
 
-### Hors tokens : la marine de nuit
-
-L'illustration du héros n'introduit aucun token. Ses aplats sont pris dans la famille et
-n'existent que dans le fichier image : fond de ciel et d'eau ≈ `#163e59` (le voisin sombre de
-`ink`), bandes de vagues et collines entre `#265375` et `#426e8e` (autour de `reached`), écume
-en blanc cassé ≈ `#f1f1ee`. Aucune de ces valeurs ne doit être recopiée dans `@theme` ni
-utilisée pour habiller un composant.
+### Contrastes mesurés
+- `muted` : 7,5:1 sur `page`, 7,1:1 sur `surface`.
+- `alert` : 6,9:1 sur `page`, 6,5:1 sur `surface` — et bien plus clair que l'ember de la brume,
+  donc jamais confondu avec elle.
+- `ghost-line` : 3,3:1, bord de contrôle au-dessus de 3:1 sur la page comme sur une carte
+  (WCAG 1.4.11).
+- La marque et le chiffre du streak tiennent ≥ 3:1 (grand texte) sur le pixel le plus clair de
+  la brume : l'ambre est placé entre les deux, pas sous eux.
+- Le texte du premier lancement tient ≥ 4,5:1 sur la brume pleine : sous-titres, étape et unité y
+  passent en `ink` (le gris `muted` n'y tient pas au pixel le plus clair) ; la question, grand texte,
+  tient ≥ 3:1.
+- Le texte du minuteur tient ≥ 6,4:1 en pleine dérive ; `brightestHazePixel` calcule le pixel le
+  plus clair qu'une image de la brume puisse peindre (toute combinaison de taches superposées,
+  grain au maximum) et le test garde ≥ 4,5:1 pour le blanc comme pour le crème.
 
 ### Named Rules
 
-**The Two Greys Rule.** Le gris de texte muet se choisit **par fond, pas par humeur**.
-Sur `page` → `ink-soft`. Sur n'importe quel fond teinté → `ink-dim`. `ink-soft` sur un fond
-teinté tombe à 4,20:1 et échoue : c'est la seule raison d'être de `ink-dim`.
+**The Cream Selection Rule.** « Sélectionné » est toujours un aplat crème avec un texte `page`,
+partout : bouton primaire, puce, segment, onglet, `Switch`, date du jour, cran acquis. Aucune
+couleur d'accent ne marque une sélection.
 
-**The Three States Rule.** « Sélectionné » est toujours `action`. « Acquis » est `ink`.
-« Courant » est `reached`. Ces trois-là ne doivent jamais s'effondrer en une seule couleur.
+**The One Lit Object Rule.** Le dégradé rose → jaune et sa lueur appartiennent à `Envie` seul.
+Aucun autre bouton, badge, graphique ou fond ne les emprunte, même en partie.
 
-**The One Warm Value Rule.** `alert` est la seule exception chaude approuvée à la famille
-marine-et-gris. Elle appartient aux actions destructives et aux erreurs, et à rien d'autre.
-Pas de succès vert, pas d'avertissement ambre, pas de second accent.
+**The Haze Is Ground Rule.** Les couleurs de brume (`amber`, `ember`, `plum`, `floor`,
+`floor-deep`, `moss`, `bronze`) ne peignent que des fonds de brume. Elles ne colorent jamais un
+texte, un contrôle ou une donnée.
 
-**The One Illustration Rule.** Il y a **une** image dans toute l'app : la marine de nuit du
-bloc héros. Elle est décorative (`aria-hidden`), en aplats vectoriels, entièrement dans la
-famille marine, et `bg-ink` reste le plancher si elle n'arrive jamais. Pas de seconde
-illustration, pas de photo, pas d'icône décorative, pas de fond illustré sur une carte.
+**The Alert Is Not a Fill Rule.** `alert` écrit un texte d'erreur (`text-alert`), borde un champ
+invalide, et dessine le bouton destructif en pilule fantôme à filet (1 px `alert` à 50 %,
+libellé `alert`, appui à 10 %). Jamais d'aplat teinté, jamais de rouge sur un écart : un écart
+est un fait, pas une erreur.
+
+**The One Series Rule.** Les graphiques n'ont qu'une teinte, `series`. L'ambre de série ne
+partage jamais un écran avec le bronze du minuteur.
 
 ## Typography
 
-**Une seule famille :** Bricolage Grotesque Variable (`--font-sans`), auto-hébergée via
-`@fontsource-variable`, axe optique 12–96 avec `font-optical-sizing: auto`, graisses 400 /
-500 / 600 / 700 / 800. Pas de police display séparée, pas de mono.
+**Police unique :** Host Grotesk Variable (`--font-sans`), auto-hébergée via
+`@fontsource-variable/host-grotesk` (axe `wght`), repli `ui-sans-serif, system-ui,
+-apple-system, sans-serif`. Pas de police display séparée, pas de mono.
 
-**Character :** un grotesque variable légèrement excentrique, tenu en laisse — la seule
-liberté prise est le chiffre géant. `font-variant-numeric: tabular-nums` est posé sur `body` :
-tout chiffre qui change (streak, heures, XP, euros) ne doit jamais faire danser la ligne.
+**Character :** un grotesque doux et peu vu, tenu serré dans les grands corps (tracking
+négatif croissant avec la taille) et laissé neutre dans le texte. `font-variant-numeric:
+tabular-nums` est posé sur `body` : un chiffre qui change ne fait jamais danser la ligne.
+Chiffres en 500, interface en 400 / 500, 600 seulement pour la marque et `Envie`.
 
 ### Hierarchy
-- **display** (800, 11rem / 176 px, line-height 0,9, tracking -0,02em) : le chiffre du streak,
-  et lui seul.
-- **figure** (600, 1.375rem / 22 px, line-height 1) : temps, XP, argent — les chiffres tabulaires.
-- **title** (600, 1.1875rem / 19 px, line-height 1,2) : titres de tiroir et de dialogue.
-- **cta** (700, 1.0625rem / 17 px, line-height 1) : le bouton `Envie`.
-- **body** (400, 0.9375rem / 15 px, line-height 1,35) : lecture — boutons, cartes, tout le reste.
-- **label** (500, 0.8125rem / 13 px, line-height 1,25) : libellés, contexte, valeurs secondaires.
-- **detail** (400, 0.6875rem / 11 px, line-height 1,2) : détail de badge.
-- **tab** (600, 0.65625rem / 10,5 px, line-height 1) : libellés de la barre d'onglets.
+- **display** (500, 62cqi, 0,86, -0,055em) : le chiffre du streak, et les minutes tenues à la
+  fin d'un minuteur. Proportionnel à sa colonne.
+- **countdown** (500, 33cqi, 0,86, -0,05em) : le compte à rebours `m:ss` du minuteur.
+- **figure** (500, 1.875rem / 30 px, 1, -0,035em) : les chiffres des cartes — totaux, argent,
+  heure de pose, statistiques.
+- **headline** (500, 1.75rem / 28 px, 1,1, -0,03em) : la question du premier lancement, une par
+  écran.
+- **prompt** (400, 1.5rem / 24 px, 1,2, -0,025em) : la phrase du minuteur en cours (« Respire… »),
+  15 caractères de large au plus.
+- **craving** (600, 1.4375rem / 23 px, 1, -0,03em) : le libellé d'`Envie`.
+- **brand** (600, 1.3125rem / 21 px, 1, -0,03em) : « quit » dans la barre haute, sur tous les
+  écrans.
+- **title** (500, 1.25rem / 20 px, 1,2, -0,02em) : titre d'écran sous l'accueil, titre de
+  `Dialog` et de `Drawer`, statut en titre dans une carte.
+- **lead** (400, 1.125rem / 18 px, 1,3, -0,01em) : la ligne sous un chiffre géant (« jours de
+  streak · 07 h 42 »).
+- **cta** (500, 1rem / 16 px, 1, -0,02em) : boutons, valeur des champs, lignes de liste.
+- **body** (400, 0.9375rem / 15 px, 1,4) : lecture, libellés de ligne, sous-titres d'écran,
+  puces.
+- **label** (400, 0.8125rem / 13 px, 1,3) : titres de carte, libellés de champ, erreurs, lecture
+  de graphique.
+- **detail** (400, 0.75rem / 12 px, 1,2) : axes, étiquettes de dose, détail de badge.
+- **tab** (500, 0.6875rem / 11 px, 1) : libellés de la barre d'onglets.
+- **unit** (0.55em, 1, tracking 0) : l'unité d'un chiffre, relative au chiffre qu'elle suit.
 
 ### Named Rules
 
-**The cn() Registration Rule.** `src/shared/utils/cn.ts` enregistre **chaque** taille de
-`@theme` dans le groupe `font-size` de tailwind-merge. Sans ça, `text-tab` est lu comme une
-couleur et silencieusement supprimé dès qu'un `text-<couleur>` se trouve dans le même appel
-`cn()`. **Tout nouveau token de taille doit être ajouté à ce tableau** — c'est le point unique
-dont dépend toute l'échelle typographique.
+**The Share-of-Column Rule.** Les chiffres géants (`display`, `countdown`) sont en `cqi` : leur
+parent est un `@container` sans padding, pour que la part se calcule sur toute la colonne. Le
+streak garde 62cqi jusqu'à deux chiffres, puis `streakFigureSize` le réduit
+(`min(62, floor(144 / chiffres))cqi`) pour qu'il ne dépasse jamais les gouttières.
 
-**The One Giant Rule.** Un seul `text-display` par écran, et seulement pour le chiffre du
-streak — ou, sur l'écran du minuteur d'envie, pour son compte à rebours puis ses minutes
-tenues : le moment d'envie gagne, et le streak n'y est pas affiché. Il n'y a pas de second
-niveau « grand » : après 176 px, on retombe à 22 px.
+**The Small Muted Unit Rule.** Une unité (`€`, `%`, `j`, `h`, `min`, après une espace
+insécable) est posée plus petite et sourde derrière son chiffre : `Figure` découpe la chaîne
+(`splitUnits`) et habille l'unité en `unit` + `muted`. La chaîne reste une seule phrase pour le
+lecteur d'écran et une seule entrée dans le module de chaînes.
 
-**The French UI Rule.** Toute chaîne visible est en français et vit dans
-`src/shared/utils/strings.ts`. Jamais de littéral dans un composant, jamais d'anglais à
-l'écran. Le code, lui, reste en anglais.
+**The cn() Registration Rule.** Chaque taille et chaque rayon de `@theme` est déclaré dans
+`src/shared/utils/cn.ts`, sinon tailwind-merge lit `text-tab` comme une couleur et le supprime
+à côté d'un `text-<couleur>`. `cn.test.ts` échoue si un token manque.
 
 ## Layout
 
-Colonne unique centrée, `max-w-md` (28rem / 448px), pensée pour un iPhone en PWA standalone
-puis simplement centrée au-delà. **Le héros est dans la colonne, pas en pleine page** : sur
-iPhone la colonne *est* le viewport et le bloc touche les deux bords ; au-delà de 448px il se
-centre avec le reste et garde ses coins bas arrondis. Le `<main>` racine porte `min-h-dvh
-bg-page`, et c'est lui qui remplit l'écran quand la colonne ne le fait pas.
+Une colonne unique centrée, `max-w-md` (448 px), pensée pour un iPhone 16 Pro en PWA
+standalone (402 px) puis simplement centrée au-delà. Les brumes, elles, s'étalent sur toute la
+largeur derrière la colonne.
 
-- **Gouttières :** utilitaire `px-safe` — `max(1.25rem, env(safe-area-inset-*))`. Jamais un
-  `px-5` nu sur un conteneur pleine largeur : l'encoche et le coin arrondi mangeraient le texte.
-  `pt-safe`, `pb-safe` et `pb-safe-4` (`calc(1rem + env(safe-area-inset-bottom))`) couvrent
-  haut et bas.
-- **Rythme vertical :** 20px entre blocs de contenu (héros → multiplicateur → niveau →
-  badges), 32px entre grandes sections, 10px entre l'en-tête d'une section et son contenu.
-- **Grilles :** badges en 3 colonnes, gap 8px, cartes carrées (`aspect-square`) ;
-  multiplicateur en 5 colonnes, gap 6px, hauteur 42px.
-- **Bloc héros :** part du bord haut de la colonne, coins bas arrondis 28px, `px-safe pt-safe`.
-  Il n'a pas de marge haute : il *est* le haut de l'écran. À l'intérieur, deux zones seulement :
-  une ligne haute de 56px minimum (marque à gauche, contexte + réglages à droite) et, sous elle,
-  **une colonne centrée** — chiffre 176px, libellé, horloge `hh:mm:ss` — en `pt-6 pb-9` avec un
-  interligne de 4px entre les trois. Le chiffre n'est plus aligné à gauche : centré, il tient la
-  même place qu'il affiche 3 ou 128 jours.
-- **Zone pouce :** `Envie` est fixe, aligné à droite, au-dessus de la barre d'onglets. La
-  barre d'onglets suit la colonne de contenu (`max-w-md`) — son filet supérieur ne doit pas
-  être en pleine largeur, sinon il flotte hors de la colonne sur grand écran.
-- **Cibles tactiles :** 44px minimum (`min-h-11` / `size-11`), 48px pour un item d'onglet.
+- **Gouttières :** `px-safe` — `max(1.25rem, env(safe-area-inset-*))`. `pt-safe` en haut ;
+  `pb-page` en bas des écrans (indicateur d'accueil + marqueur du bac à sable), `pb-safe-4`
+  sous une action en zone pouce.
+- **Barre haute :** 56 px minimum (`min-h-14`, `pt-2`), marque à gauche, contexte et contrôle
+  44 px à droite ; le glyphe du contrôle déborde dans la gouttière (`-mr-2.5`) pour s'aligner.
+- **Accueil :** brume sur les 640 px du haut ; le chiffre commence 64 px sous la barre haute ;
+  les cartes commencent 64 px sous la ligne `lead`, à 12 px des bords (`px-3`, plus larges
+  que la gouttière du texte), espacées de 10 px.
+- **Écrans sous l'accueil (`AppShell`) :** hauteur d'écran (`min-h-svh`), pile à 16 px
+  d'intervalle : barre haute, `PageHeader`, contenu. Une étape de formulaire tient son action
+  en bas (`mt-auto`), dans la zone pouce.
+- **Cibles tactiles :** 44 px minimum (`h-11`, `size-11`) ; 48 px pour un champ, un bouton
+  `lg`, un item d'onglet ; 52 px pour une ligne de liste.
 
 ### Named Rules
 
-**The Fixed Pill Rule.** Le contenu scrollable réserve un dégagement bas (`pb-44` sur le
-spécimen) pour que la pilule `Envie` fixe ne recouvre jamais une information à lire.
+**The Fixed Pill Rule.** `Envie` est fixe en bas à droite, sur un fondu vers `page` à 92 % ; le
+contenu défilant réserve un dégagement bas (`pb-32` sur l'accueil) pour qu'aucune information
+ne reste sous la pilule.
+
+**The Thumb Zone Rule.** L'action principale d'un écran à décision (question du premier
+lancement, `Arrêter`, `Enregistrer` d'une envie) vit en bas de l'écran, sur un fondu vers la
+page quand elle colle (`sticky`).
 
 ## Elevation & Depth
 
-**Aucune ombre, nulle part.** Il n'existe aucun token `--shadow-*`, et aucun `box-shadow`
-n'est écrit dans le code. La profondeur se lit sur quatre registres seulement :
+Pas d'ombres portées : il n'existe aucun token `--shadow-*`. La profondeur vient de la brume,
+de l'aplat `surface` sur la `page`, des filets et du voile. La seule `box-shadow` du monde est
+la lueur d'`Envie` (dans l'utilitaire `bg-craving`), qui en fait l'objet allumé.
 
-1. **Aplat coloré** — le bloc héros marine sur la page blanche ; une carte `surface` sur la page.
-2. **Filet 1px** — `border-line` pour les contours, `border-t` pour la barre d'onglets,
-   `divide-line` pour les listes.
-3. **Voile modal** — `bg-ink/40` pour le fond de `Dialog` et de `Drawer`.
-4. **Scrim du héros** — une bande de 112px (`h-28`) collée au bas du bloc héros,
-   `bg-linear-to-t from-ink/75 to-transparent`, posée entre l'image et le texte. Elle ne
-   crée pas de relief : elle rachète le contraste du libellé et de l'horloge au-dessus des
-   crêtes claires de la vague, qui seules passeraient sous 4,5:1.
+1. **La brume** — halos radiaux sur un plancher, fondue dans la page par un masque
+   (`mask-haze` : opaque jusqu'à 65 %, puis transparent) pour que halos et grain s'éteignent
+   ensemble, sans marche.
+2. **Le grain** — bruit fractal SVG en ligne (`bg-grain`) en `mix-blend-overlay`, 35 %
+   sur la brume d'accueil, 20 % sur celle du minuteur. C'est le seul grain du monde.
+3. **La carte** — `surface` sur `page`, sans bord.
+4. **Le filet** — 1 px `line` pour séparer, 1 px `ghost-line` pour borner ce qui se touche.
+5. **Le voile** — `page` à 80 % sous le `Dialog` et le `Drawer`.
+6. **Les fondus** — vers `page` sous `Envie`, sous une action collante, au bas d'une brume de
+   minuteur (96 px).
 
-Ce sont les deux seuls assombrissements autorisés, et le scrim est le seul dégradé du monde.
+### Shadow Vocabulary
+- **Lueur Envie** (`box-shadow: 0 14px 40px -10px color-mix(in srgb, #fd429c 60%, transparent),
+  inset 0 0 0 1px rgb(255 255 255 / 0.12)`) : `Envie` seul.
 
 ### Named Rules
 
-**The No-Shadow Rule.** Une surface qui doit paraître plus proche change de couleur ou gagne
-un filet. Elle ne gagne jamais une ombre, ni un `ring-*`, ni un dégradé. Le focus est un
-`outline: 2px solid action` avec `outline-offset: 3px`, posé globalement sur `:focus-visible` —
-les composants ne redéfinissent pas leur anneau.
+**The Haze Placement Rule.** La brume ne s'éteint jamais, mais sa dose est fixée par écran :
+- **Accueil** — la brume pleine (`HeroHaze` `hero`), 640 px, derrière la marque et le streak.
+- **Premier lancement** — la même brume pleine (`hero`) : première impression du monde. Le texte
+  secondaire posé dessus passe en `ink` pour tenir 4,5:1.
+- **Tous les autres écrans** — la bande basse (`band`) : 192 px, 70 %, prune et ember
+  seulement, **sans ambre sous le texte**, sur un plancher `floor-deep`, derrière la barre haute
+  et le titre.
+- **Minuteur d'envie** — sa propre brume liquide mousse et bronze, plein écran.
+- **Minuteur arrêté avant la fin** — la même brume, à 60 % et immobile : jamais éteinte, jamais
+  marquée.
 
-**The Scrim-Is-Contrast Rule.** Le dégradé n'existe dans ce monde que pour rendre un texte
-lisible au-dessus de l'illustration du héros, jamais pour décorer, adoucir un bord ou
-suggérer de la profondeur. Un fond uni n'a jamais besoin d'un scrim : s'il en réclame un,
-c'est la couleur du texte qui est fausse.
+**The Code-Drawn Rule.** Brumes, grain et icônes sont du code : aucun raster décoratif. Les
+icônes de `public/` sont rendues par `scripts/render-icons.mjs` depuis les stops de `bg-haze` et
+un « q » Host Grotesk blanc ; chaque PNG porte sa provenance dans un bloc `tEXt`. Changer un
+stop de brume ou la police → relancer le script.
+
+**The Focus Outline Rule.** Le focus est un `outline: 2px solid ink`, `outline-offset: 3px`,
+posé globalement sur `:focus-visible`. Aucun composant ne dessine son propre anneau.
 
 ## Shapes
 
-Quatre rayons nommés, plus la pilule, et un rayon réservé aux marques de données. Ils descendent avec la taille de l'objet :
+Tout ce qui se touche est une pilule ; tout ce qui contient est un rectangle doux.
 
 | Token | Valeur | Où |
 |---|---|---|
-| `rounded-hero` | 1.75rem / 28px | bloc héros (coins bas), bord d'attaque du tiroir |
-| `rounded-card` | 0.875rem / 14px | cartes de badge, `Dialog` |
-| `rounded-control` | 0.75rem / 12px | boutons, plateau `Tabs`, item d'onglet |
-| `rounded-step` | 0.625rem / 10px | crans de multiplicateur, `Toggle`, puce de `Tabs` |
-| `rounded-full` | pilule | `Envie`, barre XP, piste de slider, pouce, `Switch` |
-| `rounded-mark` | 0.25rem / 4px | bout de donnée d'une barre de graphique, jamais côté base |
+| `rounded-full` | pilule | tous les boutons, `Envie`, puces, plateau et onglets de `Tabs`, plateau segmenté, `Switch`, barre de progression, crans de minute, contrôle réglages |
+| `rounded-hero` | 1.75rem / 28 px | bord d'ouverture du `Drawer` |
+| `rounded-card` | 0.75rem / 12 px | carte, badge, `Dialog` |
+| `rounded-control` | 0.625rem / 10 px | champ de saisie, item de la barre d'onglets |
+| `rounded-step` | 0.5rem / 8 px | crans du multiplicateur |
+| `rounded-mark` | 0.25rem / 4 px | bout de donnée d'une barre de graphique, jamais côté base |
 
-Les contours sont toujours des filets de 1px en `line` (2px seulement sur le pouce du slider,
-en `action`). Pas de coins vifs, pas de découpe, pas de biseau. Le carré parfait n'existe
-qu'une fois : la carte de badge (`aspect-square`).
+Les contours font toujours 1 px (2 px seulement autour du pouce du slider, en `page`, et sur
+l'anneau « à poser » du calendrier). Le carré
+parfait n'existe qu'une fois : le badge (`aspect-square`).
 
 ## Components
 
+### Barre haute (`TopBar`)
+Une seule barre sur tous les écrans : « quit » en `brand` à gauche ; à droite, en `body`, le
+contexte (« Étape 2 · 14 mg », « Minuteur d'envie ») puis un contrôle icône de 44 px
+(réglages, trait 1,5, appui en `ghost`).
+
+### En-tête d'écran et retour (`PageHeader`, `BackLink`)
+Chaque écran sous l'accueil s'ouvre pareil : le chevron gauche (bouton `ghost` `icon` 44 px,
+trait 1,75, tiré de 12 px dans la gouttière) **à côté** du titre en `title`, puis un sous-titre
+optionnel en `body` `muted`. C'est la seule manière de remonter. Un formulaire se ferme par un
+bouton `ghost` « Annuler » sous son action, jamais par un second chevron.
+
+### Cards / Containers (`Card`)
+- **Une seule carte :** `surface`, `rounded-card` (12 px), aucun bord, aucune ombre.
+- **Marge intérieure :** `block` 20 px partout (la seule) ; `rows` 20 px sur les côtés, les
+  lignes apportent leur hauteur ; `none` quand le contenu gère son retrait (grille, calendrier).
+- **Titre :** une carte nommée est une région ; son titre est son `h2` (accueil) ou `h3` (sous le
+  titre d'un écran), en `label` `muted` en haut, avec un aside optionnel en face ; 14 px entre
+  lui et le contenu. Sans titre, `label` donne le nom accessible.
+- **Chiffres en lignes (`FigureRows`) :** libellé `body` `muted` à gauche, chiffre `figure` à
+  droite avec ses unités petites, filet `line` entre les lignes, 12 px de haut et de bas.
+- **Résumé de statistiques :** grille 2 × 2 en `dl`, libellé `label` `muted` au-dessus du
+  chiffre `figure`, cellules séparées par des filets.
+
 ### Buttons
-
-Le bouton est calme et franc : fond plat, rayon 12px, texte `body` en 600, aucune ombre.
-
-- **Shape :** `rounded-control` (12px). Tailles : `default` 44px / `sm` 36px / `lg` 48px /
-  `icon` 44×44 / `icon-sm` 36×36.
-- **Primary :** fond `action`, texte `page`. À l'appui, le fond descend vers `ink`.
-- **Secondary :** fond `surface`, texte `ink` ; appui → `surface-locked`.
-- **Outline :** filet `line`, fond transparent, texte `ink` ; appui → `surface`.
-- **Ghost :** transparent, texte `ink` ; appui → `surface`.
-- **Destructive :** fond `alert` à 10 %, texte `alert` ; appui → 20 %.
-- **Disabled :** fond `surface-locked`, texte `ink-dim`, pointer-events coupés.
-- **Feedback :** `active:scale-[0.98]` sur 150 ms en `ease-out-expo`, neutralisé sous
-  `motion-reduce`. Pas d'état `hover` dédié : la cible est le doigt.
+Calmes, en pilule, `cta` 500, aucune ombre.
+- **Tailles :** `default` 44 px / `sm` 36 px (`label`) / `lg` 48 px / `icon` 44 × 44 /
+  `icon-sm` 36 × 36.
+- **Primary :** aplat crème, texte `page` ; appui → crème à 85 %.
+- **Secondary :** pilule fantôme, filet 1 px `ghost-line`, texte crème ; appui → `ghost`.
+- **Ghost :** transparent, texte crème ; appui → `ghost`. Sert « Annuler » et le retour.
+- **Destructive :** pilule fantôme à filet `alert` 50 %, libellé `alert` ; appui → `alert` 10 %.
+  Placée dans un `Dialog` de confirmation ou sous un filet, jamais collée à « Enregistrer ».
+- **Link :** texte `body` crème souligné en `ghost-line` (décalage 4 px), cible 44 px gardée.
+- **Disabled :** aplat `ghost`, texte `muted`, bord effacé.
+- **Retour tactile :** `scale(0.98)` en 150 ms `ease-out-expo`, figé sous `motion-reduce`. Pas
+  d'état `hover` dédié : la cible est le doigt.
 
 ### Envie (signature)
+La pilule permanente, seul objet allumé : 64 px de haut, au moins 62,5 % de la colonne, dégradé
+horizontal `pink` → `yellow`, libellé `craving` en `page`, lueur rose. Fixe en bas à droite sur
+son fondu. S'enfonce à `scale(0.97)`. Désactivée, elle perd dégradé et lueur : aplat `ghost`,
+texte `muted`.
 
-La pilule permanente, et le seul objet de l'app de cette taille : 64px de haut,
-`rounded-full`, fond `action`, texte `page` en `cta`, icône `Timer` 20px. Elle s'enfonce à
-`scale-[0.97]` à l'appui. **Rien d'autre ne porte `action` en aplat plein à cette échelle.**
-Désactivée, elle passe `surface-locked` / `ink-dim`.
-
-### Minuteur d'envie (signature)
-
-L'écran entier devient le bloc de nuit : `bg-ink` plein cadre, même marine en fond, `px-safe
-pt-safe`. Au centre, le compte à rebours `m:ss` en `display` (on-ink), dessous **quatre crans
-de minute** (8px, `rounded-full`, grille 4 colonnes, `max-w-60`) : tenue → `on-ink`, en cours →
-`on-ink` à 45 %, à venir → `on-ink` à 15 % ; puis une phrase en `body` `on-ink/85`. `Arrêter`
-est en zone pouce : outline sur marine, filet `on-ink/40`, appui `on-ink/15`. Rien ne bouge
-que les secondes. **Tenu jusqu'au bout**, le bloc reprend la forme du héros (coins bas 28px) :
-les minutes tenues montent en `useCountUp` et les quatre crans entrent en séquence (`step-in`,
-60 ms) — la seule célébration de l'app, sous `motion-safe:`. **Arrêté**, on reste sur la page :
-pas de fête, pas de reproche.
-
-### Cards / Containers
-
-- **Badge :** carré, `rounded-card`, padding 12px, nom en `body` 600 + détail en `detail`.
-  Débloqué → fond `surface`, texte `ink`, détail `ink-dim`, pas d'icône. Verrouillé → fond
-  `surface-locked`, texte `ink-dim`, cadenas `Lock` 24px (stroke 1,75) en haut. Le suffixe
-  « à débloquer » est en `sr-only`, jamais affiché.
-- **Résumé du protocole (accueil) :** section titrée comme les autres blocs (`Protocole` en
-  `body` 600, `Étape n / N` en aside `ink-soft`), puis une carte `surface`, `rounded-card`,
-  padding 16px. À gauche : `Jour d sur D` en `figure`, puis dose et jours restants en `label`
-  `ink-dim`, puis la marque seule sur sa ligne, tronquée. À droite : `Modifier` en outline
-  `sm`, appui en `surface-locked` (sur `surface`, l'appui par défaut ne se verrait pas).
-  Protocole fini → `Protocole terminé` en `title`, jamais en `figure` : ce n'est pas un chiffre.
-- **Acquis (accueil, sous le héros) :** une seule carte `surface`, `rounded-card`, `py-4`,
-  en `dl` à colonnes égales séparées par un filet `divide-line` — un relevé, pas des tuiles de
-  stat. `Jours sans fumer` toujours ; `Plus long streak` (`2 j 23 h`) seulement après une
-  rechute. Libellé `label` `ink-dim`, chiffre `figure`, chiffres alignés en bas de colonne.
-  Le héros dit « jours de streak » : « jours sans fumer » est réservé au total.
-- **Économies (accueil) :** sous les acquis et leur note, la même carte-relevé en `dl` à
-  deux colonnes : `Argent économisé` (`220,08 €`) et `Cigarettes non fumées` (`1 200`),
-  formatés en français (`formatEuros`, `formatCount`). Sans dépense ni référence, une phrase
-  `ink-dim` et le lien vers les réglages, jamais un faux zéro.
-- **Objectif (accueil) :** section titrée comme le protocole (`Objectif`, aside `55 %` puis
-  `Atteint` en `ink-soft`), carte `surface` padding 16px. En cours : libellé en `body` 600,
-  `220,08 € sur 400 €` en `label` `ink-dim`, `Modifier` outline `sm` à droite, puis la barre de
-  progression (celle du niveau). Atteint : libellé, prix en `figure`, barre pleine, une phrase ;
-  `Nouvel objectif` à droite. À la première vue seulement, le prix monte en `useCountUp`, la
-  barre suit et `Atteint` entre en `step-in` ; ce « vu » est gardé dans le journal. Sans
-  objectif : la phrase, puis `Choisir un objectif` dessous, jamais serré à côté.
-- **Note d'écart (accueil) :** après un écart seulement, collée sous la carte des acquis
-  (gap 12px, c'est sa note de bas de carte) : `Dernière cigarette il y a …` en `body`
-  `ink-soft`, puis, tant que la série est ouverte (un ou deux jours), la ligne du seuil de
-  rechute. Pas de carte, pas de couleur : un constat.
-- **Encart de rechute (écran d'écart) :** carte `surface`, `rounded-card`, padding 16px,
-  entre le compteur et le bouton, seulement quand l'écart saisi ferait une rechute. Titre en
-  `body` 600, coût en `body` `ink-dim`. Jamais `alert` : c'est une information, pas une erreur.
-- **Carte d'étape (éditeur) :** `fieldset` à filet `line`, `rounded-card`, padding 16px,
-  **sans `legend`** (WebKit la laisse couper le filet) : un `h3` nomme le groupe via
-  `aria-labelledby`. Ligne haute : titre à gauche, trois boutons `ghost` `icon` (monter,
-  descendre, supprimer) à droite ; désactivés, ils s'estompent à 30 % sans aplat, car l'aplat
-  `surface-locked` s'y lirait comme une sélection. Dose et durée côte à côte, marque pleine
-  largeur.
-- **Unités :** toujours une espace insécable entre un nombre et son unité (`21 mg`,
-  `28 j`, `24 h`), dans `strings.ts`.
-- **Historique :** un relevé, pas des cartes. Un jour par section, titré comme les blocs de
-  l'accueil (`body` 600 : `Aujourd’hui`, `Hier`, puis la date). Lignes séparées par
-  `divide-line`, 64px minimum, appui en `surface` : heure en `body` `ink-soft` sur la ligne de
-  base du titre, titre en `body` 600, détails en `label` `ink-soft` tronqués, chevron `ink-soft`
-  centré — les trois passent `ink-dim` pendant l'appui (The Two Greys Rule). La consigne n'apparaît que s'il y a des lignes ; vide, une seule phrase.
-- **Écran d'un fait :** le formulaire qui l'a enregistré, prérempli ; `Supprimer` (destructif,
-  `lg`) vient **sous un filet `line`**, jamais collé à `Enregistrer`. Supprimer une cigarette
-  passe par un `Dialog` (`Oui, supprimer` / `Garder`) ; les autres faits partent en un tap.
-- **Réglages :** **un seul formulaire, un seul `Enregistrer`** (`lg`, pleine largeur) pour le
-  moment de l'arrêt, la dépense et les cigarettes par jour — pas une carte ni un bouton par
-  valeur. Les champs sont posés sur la page comme ceux de l'objectif, libellé `label` au-dessus.
-  `Enregistrer` dort tant que rien ne diffère de ce qui est en vigueur. Tout passe ou rien :
-  chaque refus s'affiche **sous son propre champ** (exception à l'alerte unique près du bouton,
-  car trois valeurs indépendantes peuvent être refusées ensemble). L'enregistrement réussi
-  ramène à l'accueil, comme le protocole et l'objectif : c'est l'accueil, qui montre déjà
-  l'effet, qui acquitte. Jamais de libellé « Enregistré » à côté du bouton. Dessous, à 32px :
-  `Modifier le protocole` puis la sauvegarde, chacun dans sa carte `surface`.
-### Bloc héros (signature)
-
-Le seul objet illustré de l'app. Une `section` en `relative isolate overflow-hidden`, fond
-`ink`, texte `on-ink`, coins bas 28px, `px-safe pt-safe`, avec un `aria-label` stable qui ne
-suit pas le pluriel du chiffre.
-
-- **Fond :** `HeroBackdrop`, en `absolute inset-0 -z-10`, `aria-hidden`. Une marine de nuit en
-  aplats, servie en AVIF avec repli WebP sur trois largeurs (768 / 1152 / 1536),
-  `sizes="(min-width: 448px) 448px, 100vw"` — 8,7 Ko atteignent le téléphone. `object-cover`,
-  `fetchPriority="high"`, `decoding="async"` : elle peint avec le premier viewport. Les deux
-  formats sont dans le precache Workbox, sinon l'image manque hors ligne. `bg-ink` reste le
-  plancher : si l'image n'arrive jamais, le bloc est exactement le bloc plat d'avant.
-- **Scrim :** `absolute inset-x-0 bottom-0 h-28 bg-linear-to-t from-ink/75 to-transparent`,
-  dans le backdrop, sous le contenu. Contraste, pas décor (voir _Elevation & Depth_).
-- **Ligne haute :** `min-h-14`, marque en `label` 600 à gauche ; à droite, sur une seule ligne,
-  le contexte de protocole en `label` `on-ink/80` puis le contrôle `Réglages` (44×44,
-  `rounded-control`, `active:bg-on-ink/15`). Les deux slots sont optionnels : l'accueil du
-  premier jour les laisse vides sans que la ligne bouge.
-- **Colonne centrée :** chiffre `display` (176px), libellé `body`, horloge `figure`
-  `hh:mm:ss` à deux chiffres, `pt-6 pb-9`, gap 4px. Le chiffre réel est lu en `sr-only` et la
-  valeur animée est `aria-hidden`.
-
-### Navigation
-
-Barre basse, quatre items (Accueil · Calendrier · Progression · Historique), icône 24px
-au-dessus du libellé `tab`, hauteur d'item 48px, filet supérieur `line`, fond `page`,
-`pb-safe`. Actif → `text-action` (couleur seule, pas de fond, pas d'indicateur). Inactif →
-`ink-soft`, `active:text-ink`. `aria-current="page"` sur l'item actif.
+### Chips et segmented control
+- **Puce (`Toggle`, `ToggleGroup`) :** pilule `ghost` 44 px, texte `body` crème ; pressée →
+  aplat crème, texte `page`. Variante `outline` : filet `ghost-line`, pressée bordée de crème.
+- **Segmented :** `ToggleGroup` avec `spacing={0}` + `variant="outline"` — un plateau pilule à
+  filet `ghost-line`, 4 px de retrait, segments de 44 px à parts égales ; le segment pressé est
+  une pilule crème dans le plateau.
 
 ### Inputs / Fields
+- **Champ :** 48 px, `rounded-control`, fond `ghost`, filet 1 px `ghost-line`, retrait 16 px,
+  valeur crème en `cta` 500 tabulaire, placeholder `muted` 400. Invalide → filet `alert`, et un
+  `<p role="alert">` en `label` `alert` sous le champ. Les dates natives sont calées à gauche.
+- **Switch :** piste 51 × 31 ; éteinte `ghost-line`, pouce blanc 27 px ; allumée crème, pouce
+  `page`, translation 20 px en 150 ms.
+- **Slider :** piste 8 px `line`, remplissage crème, pouce blanc 28 px cerclé 2 px de `page`,
+  `scale(1.1)` à l'appui, zone tactile élargie de 8 px.
+- **Tabs :** plateau pilule `ghost` 44 px, 4 px de retrait, texte `muted` ; onglet actif en
+  pilule crème, texte `page`. Variante `line` : filet bas `line`, actif en crème souligné 2 px.
 
-- **Switch :** piste 51×31 (dimensions iOS), pouce blanc 27px, `line` au repos, `action`
-  coché, translation 20px en 150 ms.
-- **Slider :** piste 8px `line` (identique à la barre XP), remplissage `action`, pouce 28px
-  blanc cerclé de 2px `action`, `active:scale-110`, zone tactile élargie par un `after`
-  de -8px.
-- **Segmented control :** c'est `ToggleGroup` avec `spacing={0}` + `variant="outline"` —
-  un cadre en filet unique, segments fusionnés séparés par un `border-l`, hauteur 48px,
-  segment pressé en aplat `action` / texte `page`.
-- **Tabs :** plateau `surface` de 44px, padding 4px, `rounded-control`, texte `ink-dim` ;
-  onglet actif en aplat `action` / texte `page`, `rounded-step`. Variante `line` : pas de
-  plateau, filet bas `line`, actif en `text-action` + soulignement 2px `action`.
-- **Champ date et heure :** `input type="datetime-local"` natif, hauteur 48px,
-  `rounded-control`, filet 1px `line`, fond `white` (le champ se détache de la `page`),
-  padding horizontal 16px, texte `ink` en `cta` semi-gras. Le sélecteur reste celui du
-  système. Erreur : `aria-invalid` + un `<p role="alert">` en `text-alert` / `label` sous le
-  champ, relié par `aria-describedby` — le même pour la date future et la date illisible.
-- **Compteur (stepper) :** même peau que le champ date (48px, filet `line`, fond `white`),
-  boutons `ghost` `icon` `−` / `+` (lucide) aux bords, valeur centrée en `cta` chiffres
-  tabulaires dans un `output`. Plancher : `−` désactivé, sans aplat. `fieldset` sans
-  `legend`, nommé par son libellé via `aria-labelledby`.
-- **Champ texte / nombre :** même peau que le champ date. Les nombres sont des `input` texte
-  avec `inputMode` (`decimal` pour une dose, qui accepte la virgule ; `numeric` pour des
-  jours), jamais `type="number"`. Erreur : même mécanique, un seul `<p role="alert">` pour le
-  formulaire, près du bouton d'enregistrement, et `aria-invalid` sur chaque champ fautif —
-  sauf dans les réglages, où chaque refus vit sous son champ (voir _Réglages_).
+### Navigation
+- **Liste de lignes (aujourd'hui) :** sur l'accueil, une carte `rows` de `RowLink` porte la
+  navigation : chaque ligne 52 px, libellé `cta` 400 crème, chevron droit `muted` 18 px en bout,
+  filet `line` entre les lignes ; appui → texte `muted`.
+- **Barre d'onglets (avec M2) :** son aspect est fixé dans le spécimen `/design` et elle arrive
+  avec Progression : fond `page`, filet haut `line` borné à la colonne, quatre items (Accueil ·
+  Calendrier · Progression · Historique), icône 24 px sur libellé `tab`, item de 48 px. Actif →
+  crème, sans fond ni indicateur ; inactif → `muted`, crème à l'appui. `aria-current="page"`.
+
+### Streak hero (signature)
+Sur la brume pleine : la barre haute, puis une colonne centrée — le chiffre du streak en
+`display` blanc, puis une seule ligne `lead` : « jours de streak », un point dessiné (non lu),
+et l'horloge `hh h mm` en `muted`. Le chiffre réel est lu en `sr-only` ; la valeur animée est
+`aria-hidden`.
+
+### Minuteur d'envie (signature)
+- **En cours :** plein écran sur la brume liquide — deux taches bronze, une mousse, une tache
+  `page`, floutées 48 px, qui dérivent sur 14 à 22 s en aller-retour ; la couche entière à 65 %,
+  grain à 20 %. Barre haute avec « Minuteur d'envie ». Au centre, calé à gauche : la phrase en
+  `prompt`, le compte à rebours en `countdown` blanc (`role="timer"`), « Temps restant » en
+  `label`, puis une rangée de crans de minute sur toute la colonne (4 px, pilule, 6 px d'écart :
+  tenue blanc, en cours blanc 45 %, à venir blanc 22 %). `Arrêter` en `secondary` `lg` pleine
+  largeur, en zone pouce. Seules les secondes et la brume bougent.
+- **Tenu jusqu'au bout :** la même brume en tête d'écran, fondue vers la page sur 96 px ; les
+  minutes tenues en `display` blanc montent au compteur, les crans entrent en séquence — la
+  célébration de l'app. Dessous, l'intensité et les situations.
+- **Arrêté avant :** la brume reste, à 60 % et immobile ; titre et sous-titre, puis le même
+  formulaire. Pas de fête, pas de reproche.
+
+### Progression
+- **Barre (`ProgressBar`) :** piste 8 px `line`, remplissage crème, largeur animée en 500 ms. Les
+  bornes chiffrées vivent à côté : la barre ne porte jamais de texte.
+- **Multiplicateur :** cinq crans de 42 px, `rounded-step`, filet 1 px : acquis → aplat crème,
+  texte `page` ; courant → cerclé de crème, fond transparent, texte crème ; verrouillé → `ghost`,
+  texte `muted`. Ils entrent en séquence, 60 ms d'écart (`step-in`).
+
+### Badges
+Carrés, `rounded-card`, 12 px de retrait, nom en `body` 500 et détail en `detail`. Débloqué →
+`surface`, texte crème, détail `muted`, sans icône. Verrouillé → contour 1 px `line` sans fond,
+texte `muted`, cadenas 24 px (trait 1,75) en haut ; « à débloquer » en `sr-only`.
+
+### Calendrier
+Grille mensuelle sur une surface de carte, mois en `title` et deux flèches de 44 px ; date en `label` tabulaire dans un disque de 24 px — le jour
+même est le seul disque crème (texte `page`) ; jours à venir en `muted`, hors calendrier en
+`muted` 80 %. Marques de 14 px sous la date, une forme par état : patch posé = point crème,
+manqué = tiret `muted`, à poser = anneau crème, prévu = petit point `muted` ; écart = cigarette,
+envie = minuteur. Premier jour d'étape : pastille `ghost` en `detail`.
+
+### Graphiques
+Sur une carte, une seule série en `series`. Colonnes de 24 px au plus, 2 px d'écart,
+`rounded-mark` au bout de donnée, posées sur une ligne de base `ghost-line` ; barres horizontales
+de 8 px, même règle, ligne de base à gauche. Changement d'étape = filet 1 px `muted` sur toute
+la hauteur, dose en `detail` crème au-dessus. Axes en `detail` `muted`. Une ligne de lecture en
+`label` nomme une colonne (nom crème 500) ; le doigt glissé en choisit une autre et les autres
+passent à 60 %, jamais sous 3:1 contre la carte. Chaque graphique a son jumeau `table` en
+`sr-only` (en `block`, pour ne jamais élargir la page).
 
 ### Overlays
-
-- **Dialog :** carte `page` centrée, `rounded-card`, padding 20px, `max-w-sm`, voile
-  `ink/40`. Entrée/sortie : opacité + `scale-95`, 200 ms `ease-out-expo`.
-- **Drawer :** feuille `page` pleine largeur, `rounded-t-hero` (28px) sur le bord d'attaque,
-  voile `ink/40`, poignée de swipe en `line` (4px × 96px). La mécanique Base UI est intacte ;
-  seules les couleurs et les rayons sont retokenisés.
-
-### Graphiques (statistiques d'envies)
-
-Une série = une teinte : colonnes et barres en `action`, aucune autre couleur de donnée.
-Colonnes de 24px au plus, 2px d'écart, `rounded-mark` au bout de donnée, carrées sur un
-filet de base `line` ; barres horizontales de 8px, même règle, filet de base à gauche.
-Changement d'étape = filet 1px `ink` sur toute la hauteur, dose en `detail` `ink` au-dessus.
-Axe en `detail` `ink-soft`. Une ligne de lecture (`label`) au-dessus de chaque graphique
-nomme une colonne ; le doigt glissé en choisit une autre et les autres passent à 35 %.
-Jamais deux échelles sur un graphique : le nombre et l'intensité sont deux graphiques.
-Chaque graphique a son jumeau `table` en `sr-only`. Sous 5 envies, une phrase et une action,
-jamais un graphique vide.
-
-### Level bar (`ProgressBar`)
-
-Piste `line` de 8px, `rounded-full`, remplissage `action` animé en largeur sur 500 ms
-`ease-out-expo`, coupé sous `motion-reduce`. Les bornes chiffrées (`620 / 1 000 XP`) vivent
-à côté, en `label` : **la barre ne porte jamais de texte**. La même barre porte l'objectif ;
-en euros, son `aria-valuetext` lit `220,08 € sur 400 €`, jamais les centimes bruts.
-
-### Multiplier steps (signature)
-
-Cinq crans de 42px en grille 5 colonnes, `rounded-step`, chacun avec un filet :
-acquis → `ink` sur `ink`, texte `on-ink` · courant → `reached` sur `reached`, texte `white` ·
-verrouillé → filet `line`, fond transparent, texte `ink-soft`. Ils entrent en séquence,
-60 ms de décalage par cran (`--animate-step-in`, 240 ms), sous `motion-safe:` uniquement.
+- **Dialog :** carte `surface`, `rounded-card`, filet `line`, retrait 20 px, largeur `max-w-sm`,
+  sur un voile `page` 80 % ; titre en `title`, description en `body` `muted`. Entrée / sortie :
+  opacité + `scale(0.95)`, 200 ms.
+- **Drawer :** feuille `surface`, `rounded-hero` sur le bord d'ouverture, voile `page` 80 %,
+  poignée `ghost-line` de 4 × 96 px. La mécanique Base UI est intacte (courbes de 450 ms).
 
 ### Motion
+Une seule signature : **le compteur par crans** (`countUpAt`). Un chiffre monte en pas entiers,
+12 au plus, sur 240 ms — une roue qui se pose, jamais une interpolation fluide. Sur l'accueil,
+il joue une fois par lancement (`useLaunchEntrance`) : jours et horloge montent ensemble et se
+posent au même cran. `--ease-out-expo` (`cubic-bezier(0.16, 1, 0.3, 1)`) pour tout ; 150 ms pour
+un retour tactile, 200 ms pour un dialogue, 240 ms pour la signature et `step-in`, 500 ms pour
+une barre.
 
-**Une seule signature : le compteur par crans** (`countUpAt`, lu par `useCountUp` et
-`useLaunchEntrance`). Le chiffre du streak monte en **pas entiers** sur une
-cadence fixe, durée totale 240 ms, 12 pas maximum — une roue de compteur qui se pose, jamais
-une interpolation fluide image par image. La valeur réelle reste lisible pour les lecteurs
-d'écran (`sr-only`) pendant que le chiffre animé est `aria-hidden`. Sous
-`prefers-reduced-motion: reduce`, la cible est rendue dès le premier paint.
-
-Sur le héros de l'accueil, le compteur est l'entrée de l'app : il joue **une fois par lancement**
-(`useLaunchEntrance`), pas à chaque retour sur l'accueil. Les jours et l'horloge `hh:mm:ss`
-montent **ensemble**, sur les mêmes crans, et se posent au même cran : un seul geste de
-240 ms, jamais une cascade. Une fois posés, les chiffres suivent le temps sans rejouer.
-
-Le reste du vocabulaire est court et unique : `--ease-out-expo`
-(`cubic-bezier(0.16, 1, 0.3, 1)`) pour tout ; 150 ms pour un retour tactile, 200 ms pour un
-dialogue, 240 ms pour la signature, 500 ms pour le remplissage XP. Le tiroir garde ses
-courbes Base UI (450 ms) : c'est de la mécanique, pas du style.
-
-### Named Rules
-
-**The Motion-Guard Rule.** Toute transition ou animation porte son garde : `motion-safe:`
-pour ce qui doit disparaître, `motion-reduce:transition-none` pour ce qui doit se figer.
-Aucune exception.
+**The Reduced Motion Rule.** Sous `prefers-reduced-motion: reduce`, les compteurs affichent la
+valeur finale dès la première image ; la dérive de la brume, `step-in` et la séquence des crans
+ne jouent que sous `motion-safe:` — la brume devient une image fixe ; toute transition porte
+`motion-reduce:transition-none`.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** choisir le gris muet par le fond : `ink-soft` sur `page`, `ink-dim` sur tout fond teinté.
-- **Do** garder `action` pour « sélectionné », `ink` pour « acquis », `reached` pour « courant ».
-- **Do** enregistrer toute nouvelle taille `@theme` dans le groupe `font-size` de
-  `src/shared/utils/cn.ts`, sinon la classe sera silencieusement supprimée.
-- **Do** utiliser `px-safe` / `pt-safe` / `pb-safe` sur tout conteneur qui touche un bord.
-- **Do** rendre la profondeur par la couleur ou un filet 1px `line`.
-- **Do** garder `bg-ink` sous l'illustration du héros : le bloc doit rester lisible si l'image
-  n'arrive pas, et le texte posé dessus doit tenir 4,5:1 sur les crêtes claires, scrim compris.
-- **Do** garder les chiffres en `tabular-nums` et poser les valeurs qui changent en `figure`.
-- **Do** écrire toute chaîne visible en français, dans `src/shared/utils/strings.ts`.
-- **Do** garder les cibles tactiles à 44px minimum et le déclencheur principal en zone pouce.
-- **Do** assortir chaque transition d'un garde `motion-safe:` ou `motion-reduce:`.
+- **Do** marquer toute sélection en aplat crème avec un texte `page`.
+- **Do** placer la brume selon The Haze Placement Rule : pleine sur l'accueil et au premier lancement (texte secondaire en `ink` dessus), bande basse sans ambre partout ailleurs, brume mousse et bronze au minuteur, immobile et atténuée quand il est arrêté.
+- **Do** construire tout bloc sur la carte unique : `surface`, rayon 12 px, 20 px de retrait.
+- **Do** ouvrir tout écran sous l'accueil par la barre haute puis `PageHeader` (chevron à côté du titre) ; fermer un formulaire par un `ghost` « Annuler ».
+- **Do** poser les unités d'un chiffre petites et sourdes via `Figure`.
+- **Do** border tout contrôle en `ghost-line` (≥ 3:1) et séparer la structure en `line`.
+- **Do** écrire les erreurs en `alert` sous leur champ, et le destructif en pilule fantôme à filet `alert`.
+- **Do** vérifier chaque texte posé sur une brume : ≥ 3:1 pour la marque et le chiffre, ≥ 4,5:1 pour le texte courant.
+- **Do** déclarer toute nouvelle taille ou tout nouveau rayon de `@theme` dans `src/shared/utils/cn.ts`.
+- **Do** garder chaque animation derrière `motion-safe:` ou `motion-reduce:transition-none`, et rendre la valeur finale d'un compteur sous mouvement réduit.
+- **Do** relancer `scripts/render-icons.mjs` après tout changement de stop de brume ou de police.
 
 ### Don't:
-- **Don't** ajouter une ombre, un `ring-*`, une texture ou un grain : rien de tout ça n'existe
-  dans ce monde. Le seul dégradé autorisé est le scrim du héros, et il sert le contraste.
-- **Don't** ajouter une seconde image. L'app en a une, le fond du héros ; une carte, un état
-  vide ou un badge se dessinent en type et en aplat.
-- **Don't** introduire une seconde couleur d'accent. `alert` est la seule valeur chaude, et
-  elle est réservée au destructif et aux erreurs.
-- **Don't** habiller `alert` en aplat plein : fond à 10 % / 20 %, texte en plein.
-- **Don't** utiliser `reached` ailleurs que sur le cran de multiplicateur courant.
-- **Don't** redéfinir un anneau de focus par composant : l'`outline` global `:focus-visible`
-  fait foi.
-- **Don't** transformer une progression en anneau ou en jauge : une barre de 8px avec ses
-  bornes chiffrées, ou une rangée de crans.
-- **Don't** poser un second `text-display` sur un écran, ni créer un palier intermédiaire
-  entre 176px et 22px.
-- **Don't** fusionner `line` et `surface-locked` sous prétexte qu'ils partagent `#d4d4d4` :
-  ce sont deux rôles distincts qui peuvent diverger.
-- **Don't** animer en interpolation fluide : la signature est par pas, 240 ms, `ease-out-expo`.
-- **Don't** écrire un littéral de chaîne dans un composant, ni une chaîne anglaise à l'écran.
+- **Don't** prêter le dégradé rose → jaune ou la lueur d'`Envie` à un autre objet.
+- **Don't** peindre un texte, un contrôle ou une donnée avec une couleur de brume.
+- **Don't** mettre d'ambre sous un texte hors de l'accueil : la bande basse est prune et ember seulement.
+- **Don't** éteindre la brume d'un écran, ni celle du minuteur arrêté.
+- **Don't** ajouter une ombre portée, un `ring-*` ou un anneau de focus par composant : le seul `box-shadow` est la lueur d'`Envie`, le focus est l'`outline` global.
+- **Don't** remplir un bouton destructif d'un aplat teinté, ni colorer un écart en `alert`.
+- **Don't** mettre l'ambre de série et le bronze du minuteur sur le même écran, ni une seconde couleur de série.
+- **Don't** transformer une progression en anneau ou en jauge : une barre de 8 px avec ses bornes chiffrées, ou une rangée de crans.
+- **Don't** ajouter un raster décoratif : brumes, grain et icônes sont du code.
+- **Don't** créer une seconde barre haute, une seconde carte ou un second geste de retour.
+- **Don't** animer un chiffre en interpolation fluide : par crans, 240 ms, `ease-out-expo`.
