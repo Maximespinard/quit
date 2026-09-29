@@ -1,3 +1,7 @@
+---
+status: superseded by ADR-0003 for data (the dumb push sender still holds)
+---
+
 # Local-first data with a dumb push sender
 
 All user data lives on the device (IndexedDB, with JSON export/import as the backup); there is no data backend, no sync and no accounts. iOS web push still needs a server, so a tiny sender runs on the VPS: the client computes a schedule of ready-made notifications (`sendAt`, title, body) for the coming 30 days and uploads it, and re-uploads a fresh one after a lapse or a protocol change. The sender only stores the push subscription and that schedule, and sends each entry when due.
