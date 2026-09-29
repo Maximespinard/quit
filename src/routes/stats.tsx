@@ -1,4 +1,5 @@
 import { createFileRoute, Navigate } from '@tanstack/react-router'
+import { CravingLauncher } from '@/features/craving/components/CravingLauncher'
 import { CravingStatsView } from '@/features/stats/components/CravingStatsView'
 import { derive } from '@/shared/domain/derive'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
@@ -32,6 +33,7 @@ function StatsPage() {
               back={<BackLink to="/" search={keepSearch} aria-label={copy.back} />}
             />
             <CravingStatsView stats={cravingStats} />
+            <CravingLauncher journal={journal} now={now} />
           </AppShell>
         )
       }}

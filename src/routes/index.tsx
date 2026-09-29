@@ -146,7 +146,7 @@ function HomePage() {
                 </RowLink>
               </Card>
             </StreakScreen>
-            <CravingLauncher now={now} />
+            <CravingLauncher journal={journal} now={now} />
           </div>
         )
       }}

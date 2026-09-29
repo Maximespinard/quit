@@ -140,9 +140,9 @@ export const TYPE_TOKENS: readonly TypeToken[] = [
   {
     token: 'craving',
     className: 'text-craving',
-    px: '23 px',
+    px: '16 px',
     sample: 'Envie',
-    role: 'Le bouton Envie, seul',
+    role: 'Le bouton Envie, seul : la taille de cta, en 600',
   },
   {
     token: 'figure',

@@ -32,7 +32,7 @@ OWN-WORLD: Page #101012, cards #17171a radius 12, text #f7f4ef, key figure #ffff
 
 STORY: The user sees the streak glowing out of the haze, reads what is acquired and saved on dark cards, logs the patch with one cream pill, and finds Envie under the right thumb without looking. Mid-craving, the screen turns to slow moss and bronze around a white countdown.
 
-FIRST VIEWPORT: Haze fills the top 640px and fades into #101012. Top bar: "quit" 21px/600 left; "Étape 2 · 14 mg" 14px and 44px settings control right. Streak centred, ≈62cqi (≈250px at 402), white, weight 500; "jours de streak · 07 h 42" 18px under it, hours muted. Cards start 64px lower, 10px apart. Envie: 64px gradient pill, right-aligned, 62 % wide, over a bottom fade to the page.
+FIRST VIEWPORT: Haze fills the top 640px and fades into #101012. Top bar: "quit" 21px/600 left; "Étape 2 · 14 mg" 14px and 44px settings control right. Streak centred, ≈62cqi (≈250px at 402), white, weight 500; "jours de streak · 07 h 42" 18px under it, hours muted. Cards start 64px lower, 10px apart. Envie: 64px gradient pill hugging its 16px/600 label, right-aligned, over a bottom fade to the page.
 
 FORM: User-pinned after a Refero exploration of three directions ("Grand air" mocked twice and rejected). Primary Refero style Suno (9844e7bf), secondary monopo saigon (76c30104) for the timer haze and ghost pills only. concept-seed key d9995448 rolled; the pinned direction overrides its assignment. Code-led (no image generation). Signature interaction: the stepped 240ms streak count-up stays; the timer haze drifts under motion-safe only.
 
