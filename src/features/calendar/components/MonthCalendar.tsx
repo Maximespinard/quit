@@ -2,7 +2,6 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useId, useState } from 'react'
 import { localMidnight } from '@/shared/domain/local-day'
 import type { CalendarDay } from '@/shared/domain/patch-calendar'
-import type { Step } from '@/shared/domain/protocol'
 import { Button } from '@/shared/ui/base/button'
 import { strings } from '@/shared/utils/strings'
 import { formatMonth } from '../utils/calendar-dates'
@@ -17,18 +16,17 @@ const pagerControl = 'disabled:bg-transparent disabled:opacity-30'
 
 type MonthCalendarProps = {
   days: readonly CalendarDay[]
-  steps: readonly Step[]
   now: number
 }
 
 /** One month at a time, opening on today's, paged within the calendar's range. */
-export function MonthCalendar({ days, steps, now }: MonthCalendarProps) {
+export function MonthCalendar({ days, now }: MonthCalendarProps) {
   const titleId = useId()
   const months = calendarMonths(days)
   const [index, setIndex] = useState(() => monthIndexAt(months, now))
   const month = months[Math.min(index, months.length - 1)]
   if (month === undefined) return null
-  const today = localMidnight(now)
+  const todayStart = localMidnight(now)
 
   return (
     <section aria-labelledby={titleId} className="flex flex-col gap-2.5">
@@ -79,8 +77,7 @@ export function MonthCalendar({ days, steps, now }: MonthCalendarProps) {
                   // A week's blanks have no date of their own: their column tells them apart.
                   key={cell?.day ?? `blank-${column}`}
                   cell={cell}
-                  steps={steps}
-                  today={today}
+                  todayStart={todayStart}
                 />
               ))}
             </tr>

@@ -90,12 +90,13 @@ describe('patchCalendar', () => {
     expect(days[0]?.day).toBe(local(1, 1))
     expect(days.at(-1)?.day).toBe(local(3, 26))
     expect(days).toHaveLength(85)
-    expect(dayOf(days, local(1, 28))).toMatchObject({ step: 1, stepStart: false })
-    expect(dayOf(days, local(1, 29))).toMatchObject({ step: 2, stepStart: true })
+    expect(dayOf(days, local(1, 1))).toMatchObject({ step: 1, startingStep: { doseMg: 21 } })
+    expect(dayOf(days, local(1, 28))).toMatchObject({ step: 1, startingStep: null })
+    expect(dayOf(days, local(1, 29))).toMatchObject({ step: 2, startingStep: { doseMg: 14 } })
     // The end day holds no patch to put on: the last one comes off there.
-    expect(dayOf(days, local(3, 26))).toMatchObject({ step: null, patch: null, end: true })
-    expect(days.filter((day) => day.end)).toHaveLength(1)
-    expect(days.filter((day) => day.today).map((day) => day.day)).toEqual([local(1, 4)])
+    expect(dayOf(days, local(3, 26))).toMatchObject({ step: null, patch: null, isEnd: true })
+    expect(days.filter((day) => day.isEnd)).toHaveLength(1)
+    expect(days.filter((day) => day.isToday).map((day) => day.day)).toEqual([local(1, 4)])
   })
 
   it('tells logged, missing, due and planned patch applications apart', () => {
@@ -105,18 +106,31 @@ describe('patchCalendar', () => {
     expect(dayOf(days, local(1, 1)).patch).toBe('logged')
     expect(dayOf(days, local(1, 2)).patch).toBe('missing')
     expect(dayOf(days, local(1, 3)).patch).toBe('logged')
-    // Its protocol day began at 13:00 and runs until tomorrow 13:00: still time.
+    // Today, none put on yet: still time.
     expect(dayOf(days, local(1, 4)).patch).toBe('due')
     expect(dayOf(days, local(1, 5)).patch).toBe('planned')
   })
 
-  it('counts a patch put on after midnight for the protocol day begun the evening before', () => {
+  it('shows a patch on the day it was put on, whatever the quit moment’s time', () => {
+    // Quit at 20:00, patches put on in the morning: each lands on its own day, today's too.
+    const quitMoment = local(1, 1, 20)
+    const journal = journalOf(quitMoment, [patch(local(1, 2, 8)), patch(local(1, 3, 8))])
+    const { days } = calendarOf(journal, local(1, 3, 9))
+
+    expect(days.map((day) => day.patch).slice(0, 4)).toEqual([
+      'missing',
+      'logged',
+      'logged',
+      'planned',
+    ])
+  })
+
+  it('shows a patch put on just after midnight on the new day', () => {
     const quitMoment = local(1, 31, 23)
-    const journal = journalOf(quitMoment, [patch(local(2, 1, 0, 30))])
+    const journal = journalOf(quitMoment, [patch(local(1, 31, 23, 10)), patch(local(2, 2, 0, 30))])
     const { days } = calendarOf(journal, local(2, 2, 12))
 
-    expect(dayOf(days, local(1, 31)).patch).toBe('logged')
-    expect(dayOf(days, local(2, 1)).patch).toBe('due')
+    expect(days.map((day) => day.patch).slice(0, 3)).toEqual(['logged', 'missing', 'logged'])
   })
 
   it('crosses month boundaries day by day, each fact on its own local day', () => {
@@ -166,7 +180,8 @@ describe('patchCalendar', () => {
 
   it('does not ask for a patch after the protocol, and runs on to today', () => {
     const protocol: Protocol = [{ doseMg: 7, durationDays: 2 }]
-    const journal = journalOf(QUIT, [patch(local(1, 1, 14), 7)], protocol)
+    // One more patch on the end day, put on before the last one came off.
+    const journal = journalOf(QUIT, [patch(local(1, 1, 14), 7), patch(local(1, 3, 9), 7)], protocol)
     const calendar = calendarOf(journal, local(1, 6, 10))
 
     expect(calendar.position).toEqual({ status: 'over' })
@@ -174,12 +189,12 @@ describe('patchCalendar', () => {
     expect(calendar.days.map((day) => [day.patch, day.step])).toEqual([
       ['logged', 1],
       ['missing', 1],
-      [null, null],
+      ['logged', null],
       [null, null],
       [null, null],
       [null, null],
     ])
-    expect(calendar.days.at(-1)).toMatchObject({ day: local(1, 6), today: true })
+    expect(calendar.days.at(-1)).toMatchObject({ day: local(1, 6), isToday: true })
   })
 
   it('has no next step change on the last step', () => {
@@ -206,8 +221,11 @@ describe('patchCalendar', () => {
       [local(1, 1), local(1, 21)],
       [local(1, 22), local(2, 4)],
     ])
-    expect(dayOf(calendar.days, local(1, 22))).toMatchObject({ step: 2, stepStart: true })
-    expect(calendar.days.at(-1)).toMatchObject({ day: local(2, 5), end: true })
+    expect(dayOf(calendar.days, local(1, 22))).toMatchObject({
+      step: 2,
+      startingStep: { doseMg: 10 },
+    })
+    expect(calendar.days.at(-1)).toMatchObject({ day: local(2, 5), isEnd: true })
     expect(dayOf(calendar.days, local(1, 2)).patch).toBe('logged')
     expect(dayOf(calendar.days, local(1, 3)).patch).toBe('missing')
   })
@@ -249,45 +267,53 @@ describe('patchCalendar', () => {
     ])
     expect(dayOf(calendar.days, local(3, 29))).toMatchObject({
       step: 2,
-      stepStart: true,
+      startingStep: { doseMg: 14 },
       patch: 'logged',
       cravings: 1,
     })
-    expect(dayOf(calendar.days, local(3, 30)).patch).toBe('due')
+    expect(dayOf(calendar.days, local(3, 30)).patch).toBe('missing')
+    expect(dayOf(calendar.days, local(3, 31)).patch).toBe('due')
   })
 
-  it('asks no patch on a spring day no protocol day starts in', () => {
-    // Protocol days start at 23:30 in winter time, so at 00:30 once summer time begins:
-    // none starts on 29 March, which still belongs to the step in force.
+  it('asks for a patch on the spring day no protocol day begins in', () => {
+    // Protocol days begin at 23:30 in winter time, then at 00:30 once summer time begins:
+    // none begins on 29 March, still a day of the protocol like any other.
     const quitMoment = local(3, 27, 23, 30)
-    const { days } = calendarOf(journalOf(quitMoment), local(4, 2, 10))
+    const { days } = calendarOf(
+      journalOf(quitMoment, [patch(local(3, 30, 0, 40))]),
+      local(4, 2, 10),
+    )
 
-    expect(dayOf(days, local(3, 28)).patch).toBe('missing')
-    expect(dayOf(days, local(3, 29))).toMatchObject({ step: 1, patch: null })
-    expect(dayOf(days, local(3, 30)).patch).toBe('missing')
+    expect(dayOf(days, local(3, 29))).toMatchObject({ step: 1, patch: 'missing' })
+    expect(dayOf(days, local(3, 30)).patch).toBe('logged')
     expect(new Set(days.map((day) => day.day)).size).toBe(days.length)
   })
 
-  it('merges the two protocol days an autumn day can hold (25 h day)', () => {
-    // 25 October 2026: clocks go from 03:00 back to 02:00. Protocol days start at 00:30 in
-    // summer time, so at 23:30 once winter time begins: 25 October holds two of them.
+  it('keeps the autumn 25 h day as one day (25 October 2026)', () => {
+    // Clocks go from 03:00 back to 02:00: a patch at 23:45 winter time is still the 25th.
     const quitMoment = local(10, 23, 0, 30)
-    const both = [patch(local(10, 25, 0, 45)), patch(local(10, 25, 23, 45))]
-    const one = [patch(local(10, 25, 0, 45))]
+    const journal = journalOf(quitMoment, [
+      patch(local(10, 25, 23, 45)),
+      craving(local(10, 25, 2, 30)),
+    ])
+    const { days } = calendarOf(journal, local(10, 28))
 
-    expect(
-      dayOf(calendarOf(journalOf(quitMoment, both), local(10, 28)).days, local(10, 25)).patch,
-    ).toBe('logged')
-    expect(
-      dayOf(calendarOf(journalOf(quitMoment, one), local(10, 28)).days, local(10, 25)).patch,
-    ).toBe('missing')
+    expect(dayOf(days, local(10, 25))).toMatchObject({ patch: 'logged', cravings: 1 })
+    expect(dayOf(days, local(10, 26)).patch).toBe('missing')
+    expect(days.slice(0, 5).map((day) => day.day)).toEqual([
+      local(10, 23),
+      local(10, 24),
+      local(10, 25),
+      local(10, 26),
+      local(10, 27),
+    ])
   })
 
   it('waits on planned days when now sits before the quit moment (a moved sandbox clock)', () => {
     const { days } = calendarOf(journalOf(QUIT), QUIT - DAY_MS)
 
-    expect(days[0]).toMatchObject({ day: local(1, 1), step: 1, patch: 'planned', today: false })
-    expect(days.some((day) => day.today)).toBe(false)
+    expect(days[0]).toMatchObject({ day: local(1, 1), step: 1, patch: 'planned', isToday: false })
+    expect(days.some((day) => day.isToday)).toBe(false)
   })
 
   it('shows the day-45 scenario: a slip last night, every patch put on', () => {
@@ -297,6 +323,6 @@ describe('patchCalendar', () => {
     // Tuesday 16 June: the slip at 22:40.
     expect(dayOf(days, local(6, 16))).toMatchObject({ cigarettes: 1, cravings: 1 })
     expect(days.filter((day) => day.patch === 'missing')).toEqual([])
-    expect(dayOf(days, local(6, 17))).toMatchObject({ today: true, patch: 'logged', step: 2 })
+    expect(dayOf(days, local(6, 17))).toMatchObject({ isToday: true, patch: 'logged', step: 2 })
   })
 })

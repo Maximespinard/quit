@@ -15,7 +15,7 @@ export function PatchMark({ patch }: { patch: DayPatch }) {
         patch === 'logged' && 'size-2 bg-ink',
         patch === 'missing' && 'size-2 border border-ink-soft',
         patch === 'due' && 'size-2 border-2 border-action',
-        patch === 'planned' && 'size-1.5 bg-ink-soft/50',
+        patch === 'planned' && 'size-1.5 bg-ink-soft/75',
       )}
     />
   )

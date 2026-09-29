@@ -17,33 +17,33 @@ export type CalendarStep = {
   readonly startsAt: number
   /** The instant it ends: the next step, or the end of the protocol, begins there. */
   readonly endsAt: number
-  /** Local midnight of the calendar day its first protocol day begins on. */
+  /** Local midnight of the calendar day it begins on. */
   readonly firstDay: number
-  /** Local midnight of the calendar day its last protocol day begins on. */
+  /** Local midnight of its last calendar day: the next step begins the day after. */
   readonly lastDay: number
 }
 
 /**
- * The patch application a calendar day asks for: the one of the protocol day beginning on it.
- * `due` while that protocol day still runs; `planned` before it has begun.
+ * Whether a patch application was put on during a calendar day of the protocol: `due` while
+ * the day, today, still has none; `planned` for a day still to come.
  */
 export type DayPatch = 'logged' | 'missing' | 'due' | 'planned'
 
 export type CalendarDay = {
   /** Local midnight opening the day. */
   readonly day: number
-  /** The step in force when the day ends; `null` once the protocol is over. */
+  /** The number of the step the day belongs to; `null` from the end day on. */
   readonly step: number | null
-  /** A step begins on this day. */
-  readonly stepStart: boolean
-  /** `null` when no protocol day begins on this day: after the protocol, or a spring DST gap. */
+  /** The step beginning on this day, if one does. */
+  readonly startingStep: Step | null
+  /** From the end day on, only a patch application actually put on shows: none is asked for. */
   readonly patch: DayPatch | null
   /** Every lapse's cigarettes that day. */
   readonly cigarettes: number
   readonly cravings: number
-  readonly today: boolean
+  readonly isToday: boolean
   /** The protocol ends on this day: the last patch comes off. */
-  readonly end: boolean
+  readonly isEnd: boolean
 }
 
 export type PatchCalendar = {
@@ -57,31 +57,13 @@ export type PatchCalendar = {
   readonly days: readonly CalendarDay[]
 }
 
-type DayMarks = { cigarettes: number; cravings: number }
+/** What one calendar day holds, facts only. */
+type DayFacts = { patches: number; cigarettes: number; cravings: number }
 
-/** Which protocol day `at` falls in, 0 for the first; negative before the quit moment. */
-const protocolDayOf = (quitMoment: number, at: number) => Math.floor((at - quitMoment) / DAY_MS)
-
-/** The patch application a day asks for when several protocol days begin on it: the worst. */
-const PATCH_PRIORITY: readonly DayPatch[] = ['missing', 'due', 'planned', 'logged']
-
-/**
- * The protocol laid over the calendar, from `(journal, now)` alone. The patch applications
- * follow protocol days — the 24 h blocks from the quit moment — each shown on the calendar
- * day it begins on; lapses and cravings sit on their own local calendar day. Days are walked
- * on the calendar, never in 24 h blocks, so a daylight-saving change keeps each day whole.
- * Facts before the quit moment or after `now` are left out. `null` without a quit moment.
- */
-export function patchCalendar(journal: Journal, now: number): PatchCalendar | null {
-  const quitMoment = latestQuitMoment(journal)
-  if (quitMoment === null) return null
-
+function stepsOver(journal: Journal, quitMoment: number): CalendarStep[] {
   const steps: CalendarStep[] = []
-  /** The step number of each protocol day, in order. */
-  const stepOfProtocolDay: number[] = []
+  let startsAt = quitMoment
   for (const [index, step] of journal.protocol.entries()) {
-    const firstIndex = stepOfProtocolDay.length
-    const startsAt = quitMoment + firstIndex * DAY_MS
     const endsAt = startsAt + step.durationDays * DAY_MS
     steps.push({
       number: index + 1,
@@ -89,61 +71,70 @@ export function patchCalendar(journal: Journal, now: number): PatchCalendar | nu
       startsAt,
       endsAt,
       firstDay: localMidnight(startsAt),
-      lastDay: localMidnight(endsAt - DAY_MS),
+      lastDay: localMidnight(endsAt, -1),
     })
-    for (let day = 0; day < step.durationDays; day += 1) stepOfProtocolDay.push(index + 1)
+    startsAt = endsAt
   }
-  const protocolDays = stepOfProtocolDay.length
-  const plannedEnd = quitMoment + protocolDays * DAY_MS
+  return steps
+}
 
-  const counts = (at: number) => at >= quitMoment && at <= now
-  const loggedProtocolDays = new Set<number>()
-  const marks = new Map<number, DayMarks>()
-  const marksOn = (at: number) => {
+/** A protocol day of the calendar without a patch application: over, today, or to come. */
+function patchStillAsked(day: number, now: number): DayPatch {
+  if (localMidnight(day, 1) <= now) return 'missing'
+  return day <= now ? 'due' : 'planned'
+}
+
+/**
+ * The protocol laid over the calendar, from `(journal, now)` alone. Each step spans the
+ * calendar days from the one its first protocol day begins on. Patch applications, lapses
+ * and cravings sit on the local calendar day they happened on: a patch put on at 08:00 shows
+ * on that day whatever the quit moment's time — the calendar answers "did I put one on that
+ * day", where the home's patch of the day follows the protocol day. Days are walked on the
+ * calendar, never in 24 h blocks, so a daylight-saving change keeps each day whole. Facts
+ * before the quit moment or after `now` are left out. `null` without a quit moment.
+ */
+export function patchCalendar(journal: Journal, now: number): PatchCalendar | null {
+  const quitMoment = latestQuitMoment(journal)
+  if (quitMoment === null) return null
+
+  const steps = stepsOver(journal, quitMoment)
+  const plannedEnd = steps.at(-1)?.endsAt ?? quitMoment
+
+  const facts = new Map<number, DayFacts>()
+  const factsOn = (at: number) => {
     const day = localMidnight(at)
-    const found = marks.get(day) ?? { cigarettes: 0, cravings: 0 }
-    marks.set(day, found)
+    const found = facts.get(day) ?? { patches: 0, cigarettes: 0, cravings: 0 }
+    facts.set(day, found)
     return found
   }
   for (const fact of journal.facts) {
-    if (!counts(fact.at)) continue
-    if (fact.type === PATCH_APPLICATION) loggedProtocolDays.add(protocolDayOf(quitMoment, fact.at))
-    else if (fact.type === CRAVING) marksOn(fact.at).cravings += 1
+    if (fact.at < quitMoment || fact.at > now) continue
+    if (fact.type === PATCH_APPLICATION) factsOn(fact.at).patches += 1
+    else if (fact.type === CRAVING) factsOn(fact.at).cravings += 1
   }
   for (const lapse of lapsesUntil(journal, quitMoment, now))
-    marksOn(lapse.at).cigarettes += lapse.count
-
-  const patchOf = (index: number): DayPatch => {
-    const startsAt = quitMoment + index * DAY_MS
-    if (loggedProtocolDays.has(index)) return 'logged'
-    if (startsAt + DAY_MS <= now) return 'missing'
-    return startsAt <= now ? 'due' : 'planned'
-  }
+    factsOn(lapse.at).cigarettes += lapse.count
 
   const today = localMidnight(now)
   const endDay = localMidnight(plannedEnd)
-  const lastDay = Math.max(endDay, today)
   const days: CalendarDay[] = []
-  for (let day = localMidnight(quitMoment); day <= lastDay; day = localMidnight(day, 1)) {
-    const next = localMidnight(day, 1)
-    // The protocol days beginning in [day, next): one, but none or two around a DST change.
-    const beginning: number[] = []
-    const from = Math.max(0, Math.ceil((day - quitMoment) / DAY_MS))
-    const to = Math.min(protocolDays, Math.ceil((next - quitMoment) / DAY_MS))
-    for (let index = from; index < to; index += 1) beginning.push(index)
-    const patches = beginning.map(patchOf)
-    const { cigarettes = 0, cravings = 0 } = marks.get(day) ?? {}
+  for (
+    let day = localMidnight(quitMoment);
+    day <= Math.max(endDay, today);
+    day = localMidnight(day, 1)
+  ) {
+    const { patches = 0, cigarettes = 0, cravings = 0 } = facts.get(day) ?? {}
+    const inProtocol = day < endDay
+    const step = inProtocol ? steps.findLast((candidate) => candidate.firstDay <= day) : undefined
     days.push({
       day,
-      step: stepOfProtocolDay[protocolDayOf(quitMoment, next - 1)] ?? null,
-      stepStart: beginning.some(
-        (index) => index === 0 || stepOfProtocolDay[index] !== stepOfProtocolDay[index - 1],
-      ),
-      patch: PATCH_PRIORITY.find((patch) => patches.includes(patch)) ?? null,
+      step: step?.number ?? null,
+      startingStep: step?.firstDay === day ? step.step : null,
+      patch: patches > 0 ? 'logged' : inProtocol ? patchStillAsked(day, now) : null,
       cigarettes,
       cravings,
-      today: day === today,
-      end: day === endDay,
+      isToday: day === today,
+      isEnd: day === endDay,
     })
   }
 

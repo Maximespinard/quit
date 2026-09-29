@@ -48,13 +48,8 @@ function CalendarPage() {
                   nextStepChange={calendar.nextStepChange}
                   plannedEnd={calendar.plannedEnd}
                 />
-                <MonthCalendar days={calendar.days} steps={journal.protocol} now={now} />
-                <StepSpans
-                  steps={calendar.steps}
-                  current={
-                    calendar.position.status === 'running' ? calendar.position.stepNumber : null
-                  }
-                />
+                <MonthCalendar days={calendar.days} now={now} />
+                <StepSpans steps={calendar.steps} position={calendar.position} />
               </div>
             )}
           </AppShell>

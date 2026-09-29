@@ -266,7 +266,6 @@ export const strings = {
     open: 'Calendrier',
     back: 'Retour',
     empty: 'Le calendrier commence à ton arrêt.',
-    summary: 'Où en est le protocole',
     nextChange: 'Prochaine étape',
     /** Under the date of the next step change: the box to buy before it. */
     nextDose: (doseMg: string) => `passage à ${doseMg} mg`,
@@ -275,7 +274,8 @@ export const strings = {
     steps: 'Les étapes',
     step: (number: number, doseMg: string) => `Étape ${number} · ${doseMg} mg`,
     span: (from: string, to: string) => `${from} → ${to}`,
-    current: 'en cours',
+    /** After the running step's name. */
+    current: ' · en cours',
     previousMonth: 'Mois précédent',
     nextMonth: 'Mois suivant',
     /** Monday first: the letter shown, then the name read out. */
@@ -289,7 +289,6 @@ export const strings = {
       ['D', 'dimanche'],
     ],
     legend: {
-      label: 'Légende',
       logged: 'Patch posé',
       missing: 'Pas noté',
       due: 'À poser',

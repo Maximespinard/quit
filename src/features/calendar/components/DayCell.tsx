@@ -1,4 +1,3 @@
-import type { Step } from '@/shared/domain/protocol'
 import { cn } from '@/shared/utils/cn'
 import { formatDose } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
@@ -10,16 +9,15 @@ const copy = strings.calendar
 
 type DayCellProps = {
   cell: MonthCell | null
-  steps: readonly Step[]
   /** Local midnight of today: days after it are still to come. */
-  today: number
+  todayStart: number
 }
 
 /**
  * One date of the month grid: its number, the dose on a step's first day (or the end), then
  * its marks. A screen reader hears the whole day in one sentence instead.
  */
-export function DayCell({ cell, steps, today }: DayCellProps) {
+export function DayCell({ cell, todayStart }: DayCellProps) {
   if (cell === null) return <td />
   const { day, calendarDay } = cell
   const date = new Date(day).getDate()
@@ -35,29 +33,27 @@ export function DayCell({ cell, steps, today }: DayCellProps) {
     )
   }
 
-  const { step, stepStart, end, patch, cigarettes, cravings } = calendarDay
-  const startingStep = stepStart && step !== null ? steps[step - 1] : undefined
+  const { startingStep, isEnd, isToday, patch, cigarettes, cravings } = calendarDay
   const tag =
-    startingStep !== undefined ? copy.dose(formatDose(startingStep.doseMg)) : end ? copy.end : null
-  const tinted = calendarDay.today
+    startingStep !== null ? copy.dose(formatDose(startingStep.doseMg)) : isEnd ? copy.end : null
 
   return (
     <td className="p-0.5 align-top">
       <div
         className={cn(
           'flex h-14 flex-col items-center justify-between rounded-step pt-1.5 pb-2',
-          tinted && 'bg-surface',
-          day > today ? 'text-ink-soft' : 'text-ink',
+          isToday && 'bg-surface',
+          day > todayStart ? 'text-ink-soft' : 'text-ink',
         )}
       >
-        <span aria-hidden="true" className={cn('text-label tabular-nums', tinted && 'font-bold')}>
+        <span aria-hidden="true" className={cn('text-label tabular-nums', isToday && 'font-bold')}>
           {date}
         </span>
         <span
           aria-hidden="true"
           className={cn(
             'whitespace-nowrap font-semibold text-detail',
-            tinted ? 'text-ink-dim' : 'text-ink-soft',
+            isToday ? 'text-ink-dim' : 'text-ink-soft',
           )}
         >
           {tag}
@@ -67,7 +63,7 @@ export function DayCell({ cell, steps, today }: DayCellProps) {
           {cigarettes > 0 ? <CigaretteMark /> : null}
           {cravings > 0 ? <CravingMark /> : null}
         </span>
-        <span className="sr-only">{describeDay(calendarDay, steps)}</span>
+        <span className="sr-only">{describeDay(calendarDay)}</span>
       </div>
     </td>
   )

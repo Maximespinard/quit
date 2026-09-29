@@ -1,5 +1,6 @@
 import { useId } from 'react'
 import type { CalendarStep } from '@/shared/domain/patch-calendar'
+import type { ProtocolPosition } from '@/shared/domain/protocol-position'
 import { cn } from '@/shared/utils/cn'
 import { formatDose } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
@@ -9,13 +10,13 @@ const copy = strings.calendar
 
 type StepSpansProps = {
   steps: readonly CalendarStep[]
-  /** The running step's number; `null` once the protocol is over. */
-  current: number | null
+  position: ProtocolPosition
 }
 
 /** Each step's span over the calendar, from its first patch day to its last. */
-export function StepSpans({ steps, current }: StepSpansProps) {
+export function StepSpans({ steps, position }: StepSpansProps) {
   const titleId = useId()
+  const current = position.status === 'running' ? position.stepNumber : null
 
   return (
     <section aria-labelledby={titleId} className="flex flex-col gap-2.5">
@@ -30,10 +31,7 @@ export function StepSpans({ steps, current }: StepSpansProps) {
               <span className={cn('text-body', running && 'font-semibold')}>
                 {copy.step(span.number, formatDose(span.step.doseMg))}
                 {running ? (
-                  <span className="font-normal text-ink-soft text-label">
-                    {' · '}
-                    {copy.current}
-                  </span>
+                  <span className="font-normal text-ink-soft text-label">{copy.current}</span>
                 ) : null}
               </span>
               <span className="text-ink-soft text-label tabular-nums">
