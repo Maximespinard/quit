@@ -67,13 +67,12 @@ export function CravingTagPicker({
           multiple
           aria-labelledby={labelId}
           aria-describedby={hintId}
-          variant="outline"
           className="w-full flex-wrap"
           value={[...value]}
           onValueChange={(tags: string[]) => onValueChange(tags)}
         >
           {options.map((option) => (
-            <ToggleGroupItem key={option.tag} value={option.tag} className="h-11">
+            <ToggleGroupItem key={option.tag} value={option.tag} className="h-11 font-normal">
               {option.label}
             </ToggleGroupItem>
           ))}

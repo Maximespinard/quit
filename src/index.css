@@ -82,6 +82,19 @@
   }
 }
 
+/* The craving timer's liquid haze: two slow drifts, played under `motion-safe:` only. */
+@keyframes haze-drift-a {
+  to {
+    transform: translate(18%, 10%) scale(1.15);
+  }
+}
+
+@keyframes haze-drift-b {
+  to {
+    transform: translate(-15%, -8%) scale(0.9);
+  }
+}
+
 @utility pt-safe {
   padding-top: env(safe-area-inset-top);
 }
