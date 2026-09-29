@@ -1,9 +1,10 @@
-import { render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { emptyJournal, type Journal } from '@/shared/domain/journal'
 import { anyFactId } from '@/shared/test/fact-ids'
 import { factId } from '@/shared/utils/fact-id'
 import { strings } from '@/shared/utils/strings'
+import { STOP_DELAY_MS } from '../hooks/useStopReady'
 import { CravingTimerScreen } from './CravingTimerScreen'
 
 const SECOND = 1_000
@@ -39,12 +40,43 @@ it('counts down from the start instant, and asks nothing while it runs', () => {
   expect(screen.queryByRole('group', { name: copy.intensity.label })).not.toBeInTheDocument()
 })
 
-it('stops early on request', async () => {
-  const { onStop } = renderTimer({ now: STARTED_AT + MINUTE })
+describe('stopping early', () => {
+  // userEvent 14 hangs under Vitest's fake timers: a plain click is all these tests need.
+  const tapStop = () => fireEvent.click(screen.getByRole('button', { name: copy.timer.stop }))
 
-  await userEvent.click(screen.getByRole('button', { name: copy.timer.stop }))
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+  afterEach(() => {
+    vi.useRealTimers()
+  })
 
-  expect(onStop).toHaveBeenCalledOnce()
+  it('ignores a tap on Arrêter while it is still coming in', () => {
+    const { onStop } = renderTimer({ now: STARTED_AT })
+
+    tapStop()
+    act(() => vi.advanceTimersByTime(STOP_DELAY_MS - 1))
+    tapStop()
+
+    expect(onStop).not.toHaveBeenCalled()
+  })
+
+  it('stops once Arrêter is in', () => {
+    const { onStop } = renderTimer({ now: STARTED_AT + MINUTE })
+
+    act(() => vi.advanceTimersByTime(STOP_DELAY_MS))
+    tapStop()
+
+    expect(onStop).toHaveBeenCalledOnce()
+  })
+
+  it('makes a timer reopened mid-run wait once too', () => {
+    const { onStop } = renderTimer({ now: STARTED_AT + 2 * MINUTE })
+
+    tapStop()
+
+    expect(onStop).not.toHaveBeenCalled()
+  })
 })
 
 it('celebrates at the end, then records the rated craving as held to the end', async () => {

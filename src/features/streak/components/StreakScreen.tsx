@@ -17,12 +17,21 @@ type StreakScreenProps = {
   context?: ReactNode
   /** The hero's top-right control, after the context (settings). */
   action?: ReactNode
+  /** A line right under the hero, e.g. home's confirmations; its room is kept even when empty. */
+  status?: ReactNode
   /** Blocks under the hero, composed by the app layer: dark cards, 10px apart. */
   children?: ReactNode
 }
 
 /** The home screen once a quit moment exists: the streak as elapsed time, live, out of the haze. */
-export function StreakScreen({ streak, brand, context, action, children }: StreakScreenProps) {
+export function StreakScreen({
+  streak,
+  brand,
+  context,
+  action,
+  status,
+  children,
+}: StreakScreenProps) {
   const duration = splitDuration(streak.elapsedMs)
   const entrance = useLaunchEntrance(HOME_ENTRANCE)
 
@@ -39,7 +48,13 @@ export function StreakScreen({ streak, brand, context, action, children }: Strea
           action={action}
           entrance={entrance}
         />
-        {children ? <div className="flex flex-col gap-2.5 px-3 pt-16 pb-4">{children}</div> : null}
+        {children ? (
+          <>
+            {/* The space between the hero and the blocks holds the status: filling it moves nothing. */}
+            <div className="flex h-16 items-center justify-center px-6 text-center">{status}</div>
+            <div className="flex flex-col gap-2.5 px-3 pb-4">{children}</div>
+          </>
+        ) : null}
       </div>
     </div>
   )

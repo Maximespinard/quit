@@ -16,7 +16,8 @@ export default defineConfig({
   reporter: [['html', { open: 'never' }]],
   use: {
     baseURL,
-    trace: 'on-first-retry',
+    // No retries: a failure's only trace is the one kept from its single run.
+    trace: 'retain-on-failure',
   },
   // Real bundle + service worker: the production preview build, not the dev server.
   // `--host 127.0.0.1` is load-bearing: left to its `localhost` default, Vite binds
