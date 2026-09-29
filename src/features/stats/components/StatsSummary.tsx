@@ -1,5 +1,7 @@
 import { useId } from 'react'
 import type { CravingStats } from '@/shared/domain/craving-stats'
+import { Card } from '@/shared/ui/Card'
+import { Figure } from '@/shared/ui/Figure'
 import { cn } from '@/shared/utils/cn'
 import { formatCount } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
@@ -30,21 +32,25 @@ export function StatsSummary({ stats }: { stats: CravingStats }) {
         {copy.summary}
       </h2>
       {/* One statement card, two by two: rules between the cells, never tiles. */}
-      <dl className="grid grid-cols-2 rounded-card bg-surface">
-        {items.map(({ term, value }, index) => (
-          <div
-            key={term}
-            className={cn(
-              'flex min-w-0 flex-col justify-between gap-1 px-4 py-3.5',
-              index % 2 === 1 && 'border-line border-l',
-              index >= 2 && 'border-line border-t',
-            )}
-          >
-            <dt className="text-muted text-label">{term}</dt>
-            <dd className="truncate text-figure tabular-nums">{value}</dd>
-          </div>
-        ))}
-      </dl>
+      <Card padding="none">
+        <dl className="grid grid-cols-2">
+          {items.map(({ term, value }, index) => (
+            <div
+              key={term}
+              className={cn(
+                'flex min-w-0 flex-col justify-between gap-1 px-5 py-4',
+                index % 2 === 1 && 'border-line border-l',
+                index >= 2 && 'border-line border-t',
+              )}
+            >
+              <dt className="text-muted text-label">{term}</dt>
+              <dd className="truncate text-figure tabular-nums">
+                <Figure>{value}</Figure>
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </Card>
     </section>
   )
 }

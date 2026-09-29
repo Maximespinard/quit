@@ -1,9 +1,9 @@
 import { useCountUp } from '@/shared/hooks/useCountUp'
+import { TopBar } from '@/shared/ui/TopBar'
 import { MINUTE_MS } from '@/shared/utils/duration'
 import { strings } from '@/shared/utils/strings'
 import { CRAVING_TIMER_MS } from '../domain/craving-timer'
 import { CravingHaze } from './CravingHaze'
-import { CravingTopBar } from './CravingTopBar'
 import { MinuteSteps } from './MinuteSteps'
 
 const TIMER_MINUTES = CRAVING_TIMER_MS / MINUTE_MS
@@ -24,13 +24,13 @@ export function CravingHeld() {
         aria-hidden="true"
         className="absolute inset-x-0 bottom-0 -z-10 h-24 bg-linear-to-b from-transparent to-page"
       />
-      <CravingTopBar />
+      <TopBar />
       <div className="flex flex-col items-center gap-3 pt-10 pb-12 text-center">
-        <p className="font-medium text-[62cqi] text-white leading-[0.86] tracking-[-0.055em]">
+        <p className="text-display text-white">
           <span className="sr-only">{TIMER_MINUTES} </span>
           <span aria-hidden="true">{shown}</span>
         </p>
-        <span className="text-[1.125rem] tracking-[-0.01em]">{copy.minutes}</span>
+        <span className="text-lead">{copy.minutes}</span>
         <div className="mt-6 w-full">
           <MinuteSteps total={TIMER_MINUTES} held={TIMER_MINUTES} celebrate />
         </div>

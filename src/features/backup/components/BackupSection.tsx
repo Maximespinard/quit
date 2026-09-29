@@ -1,7 +1,7 @@
-import { useId } from 'react'
 import type { Journal } from '@/shared/domain/journal'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
 import { Button } from '@/shared/ui/base/button'
+import { Card } from '@/shared/ui/Card'
 import { formatDate } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
 import { useJournalExport } from '../hooks/useJournalExport'
@@ -19,17 +19,14 @@ const copy = strings.backup
  * which: in the sandbox, its own journal, never the real one.
  */
 export function BackupSection({ journal, onImported }: BackupSectionProps) {
-  const titleId = useId()
   const { backup, sandbox } = useJournalSource()
   const { status, exportFile } = useJournalExport()
   const inSandbox = sandbox !== null
 
   return (
-    <section aria-labelledby={titleId} className="flex flex-col gap-3 rounded-card bg-surface p-4">
+    <Card label={copy.title} className="gap-3">
       <div className="flex flex-col gap-1">
-        <h3 id={titleId} className="font-medium text-body">
-          {copy.title}
-        </h3>
+        <h3 className="font-medium text-body">{copy.title}</h3>
         <p className="text-body text-muted">{inSandbox ? copy.sandboxLead : copy.lead}</p>
       </div>
       {/* Nothing while the record loads, or when it cannot be read: never a false "no backup". */}
@@ -59,6 +56,6 @@ export function BackupSection({ journal, onImported }: BackupSectionProps) {
         label={inSandbox ? copy.importSandbox : copy.import}
         onImported={onImported}
       />
-    </section>
+    </Card>
   )
 }

@@ -1,6 +1,6 @@
-import { Link } from '@tanstack/react-router'
-import { ChevronRight } from 'lucide-react'
 import type { Journal } from '@/shared/domain/journal'
+import { Card } from '@/shared/ui/Card'
+import { RowLink } from '@/shared/ui/RowLink'
 import { keepSearch } from '@/shared/utils/app-search'
 import { formatDose } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
@@ -20,19 +20,16 @@ export function SettingsScreen({ journal, now, onSaved }: SettingsScreenProps) {
   return (
     <div className="flex flex-col gap-8">
       <SettingsForm journal={journal} now={now} onSaved={onSaved} />
-      <Link
-        to="/protocol"
-        search={keepSearch}
-        className="flex min-h-12 items-center justify-between gap-3 rounded-card bg-surface p-4 active:bg-ghost"
-      >
-        <span className="flex flex-col gap-1">
-          <span className="font-medium text-body">{copy.protocol.open}</span>
-          <span className="text-muted text-label">
-            {copy.protocol.doses(journal.protocol.map((step) => formatDose(step.doseMg)))}
+      <Card padding="rows" className="py-1">
+        <RowLink to="/protocol" search={keepSearch} className="py-3">
+          <span className="flex flex-col gap-1">
+            <span>{copy.protocol.open}</span>
+            <span className="text-muted text-label">
+              {copy.protocol.doses(journal.protocol.map((step) => formatDose(step.doseMg)))}
+            </span>
           </span>
-        </span>
-        <ChevronRight className="size-5 text-muted" strokeWidth={1.75} aria-hidden="true" />
-      </Link>
+        </RowLink>
+      </Card>
     </div>
   )
 }

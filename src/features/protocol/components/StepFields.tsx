@@ -13,24 +13,17 @@ const copy = strings.protocol
 const placeControl = 'disabled:bg-transparent disabled:opacity-30'
 
 /**
- * The running step is the lit card with a cream chip; past steps recede to a hairline, a muted
- * title and a ghost chip; upcoming ones sit on the surface, unmarked.
+ * Every step sits on the same card, like every card in the world; its chip alone says where it
+ * stands: the running step's cream chip, a past step's ghost chip over a muted title, upcoming
+ * ones unmarked.
  */
 const lookByStatus: Record<
   StepStatus,
-  { card: string; title: string; mark: { label: string; tone: string } | null }
+  { title: string; mark: { label: string; tone: string } | null }
 > = {
-  current: {
-    card: 'border-ghost-line bg-surface',
-    title: '',
-    mark: { label: copy.status.current, tone: 'bg-ink text-page' },
-  },
-  past: {
-    card: 'border-line',
-    title: 'text-muted',
-    mark: { label: copy.status.past, tone: 'bg-ghost text-muted' },
-  },
-  upcoming: { card: 'border-transparent bg-surface', title: '', mark: null },
+  current: { title: '', mark: { label: copy.status.current, tone: 'bg-ink text-page' } },
+  past: { title: 'text-muted', mark: { label: copy.status.past, tone: 'bg-ghost text-muted' } },
+  upcoming: { title: '', mark: null },
 }
 
 type StepFieldsProps = {
@@ -75,7 +68,7 @@ export function StepFields({
     <fieldset
       aria-labelledby={`${id}-title`}
       aria-describedby={look.mark === null ? undefined : `${id}-status`}
-      className={cn('flex min-w-0 flex-col gap-3 rounded-card border p-4', look.card)}
+      className="flex min-w-0 flex-col gap-3 rounded-card bg-surface p-5"
     >
       <div className="-my-1 -mr-2 flex items-center justify-between">
         <div className="flex items-center gap-2.5">

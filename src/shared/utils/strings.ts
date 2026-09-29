@@ -531,7 +531,11 @@ export const strings = {
       colors: 'Couleurs',
       type: 'Typographie',
       radii: 'Rayons',
+      navigation: 'Navigation',
     },
+    /** The tab bar's look is set; it ships once its fourth screen, Progression, exists (M2). */
+    tabBarLater:
+      'Barre d’onglets : elle arrive avec Progression (M2). D’ici là, la liste de l’accueil.',
     buttons: {
       primary: 'Poser le patch',
       secondary: 'Plus tard',
