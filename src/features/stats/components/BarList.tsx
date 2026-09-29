@@ -28,9 +28,9 @@ export function BarList({ rows, max }: BarListProps) {
             </span>
           </p>
           {/* Grown from a hairline baseline, rounded only at its data end. */}
-          <div aria-hidden className="h-2 border-line border-l">
+          <div aria-hidden className="h-2 border-ghost-line border-l">
             <div
-              className="h-full rounded-r-mark bg-ink"
+              className="h-full rounded-r-mark bg-series"
               // A row holding anything keeps a visible stub; an empty one draws nothing.
               style={{
                 width:

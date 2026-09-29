@@ -9,10 +9,12 @@ import {
   type Step,
   setProtocol,
 } from '@/shared/domain/protocol'
+import type { ProtocolPosition } from '@/shared/domain/protocol-position'
 import { Button } from '@/shared/ui/base/button'
 import { strings } from '@/shared/utils/strings'
 import { useStepDrafts } from '../hooks/useStepDrafts'
 import { stepFrom } from '../utils/step-draft'
+import { stepStatus } from '../utils/step-status'
 import { StepFields } from './StepFields'
 
 const copy = strings.protocol
@@ -27,11 +29,13 @@ const invalidFields = (step: Step | undefined, refused: Refusal | null) => ({
 
 type ProtocolEditorProps = {
   journal: Journal
+  /** Where the protocol in force stands today; `null` before the quit moment is set. */
+  position: ProtocolPosition | null
   onSaved: (journal: Journal) => void
 }
 
 /** Edits the whole protocol as a draft; the journal only changes when the draft is saved. */
-export function ProtocolEditor({ journal, onSaved }: ProtocolEditorProps) {
+export function ProtocolEditor({ journal, position, onSaved }: ProtocolEditorProps) {
   const errorId = useId()
   const { drafts, update, add, remove, move } = useStepDrafts(journal.protocol)
   const [refused, setRefused] = useState<Refusal | null>(null)
@@ -56,6 +60,7 @@ export function ProtocolEditor({ journal, onSaved }: ProtocolEditorProps) {
           <li key={draft.id}>
             <StepFields
               draft={draft}
+              status={stepStatus(position, draft.id, journal.protocol.length)}
               number={index + 1}
               isFirst={index === 0}
               isLast={index === drafts.length - 1}

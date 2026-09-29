@@ -415,6 +415,8 @@ export const strings = {
     back: 'Retour',
     lead: 'Chaque étape est un patch de 24\u00a0h. Tu peux tout changer, même en cours d’étape.',
     step: (number: number) => `Étape ${number}`,
+    /** Where a step of the protocol in force stands today; an upcoming step carries no mark. */
+    status: { current: 'En cours', past: 'Passée' },
     doseLabel: 'Dose (mg)',
     durationLabel: 'Durée (jours)',
     brandLabel: 'Marque (facultatif)',
