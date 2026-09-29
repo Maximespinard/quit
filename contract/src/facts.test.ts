@@ -31,6 +31,17 @@ describe('factSchema', () => {
     })
   })
 
+  it('reads a patch application whose site is left undefined as one without a site', () => {
+    const fact = factSchema.parse({
+      type: 'patch-application',
+      at: AT,
+      doseMg: 21,
+      site: undefined,
+    })
+
+    expect(fact).toEqual({ type: 'patch-application', at: AT, doseMg: 21 })
+  })
+
   it('keeps no key the schema does not know', () => {
     expect(factSchema.parse({ type: 'quit-moment', at: AT, streak: 12 })).toEqual({
       type: 'quit-moment',

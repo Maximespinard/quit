@@ -1,5 +1,5 @@
 import * as z from 'zod/mini'
-import { doseMgSchema } from './facts.ts'
+import { doseMgSchema, instantSchema } from './facts.ts'
 
 /**
  * The settings that shape what is derived from the facts: the protocol, the weekly spend, the
@@ -17,8 +17,19 @@ export const stepSchema = z.readonly(
   z.object({
     doseMg: doseMgSchema,
     durationDays: durationDaysSchema,
-    /** Free-text brand, noted by the user; absent rather than blank. */
-    brand: z.exactOptional(z.string()),
+    /**
+     * Free-text brand, noted by the user. Read trimmed; a blank brand, or one that is not
+     * text, reads as none rather than costing the step.
+     */
+    brand: z.catch(
+      z.optional(
+        z.pipe(
+          z.string().check(z.trim()),
+          z.transform((brand) => (brand === '' ? undefined : brand)),
+        ),
+      ),
+      undefined,
+    ),
   }),
 )
 export type Step = z.infer<typeof stepSchema>
@@ -50,7 +61,7 @@ export const goalSchema = z.readonly(
      * replaced a goal reached — that money went on the previous one. `null` when stored before
      * it existed.
      */
-    countsFrom: z._default(z.nullable(z.number()), null),
+    countsFrom: z._default(z.nullable(instantSchema), null),
     /**
      * Set once the celebration of the goal reached has been seen: it plays only once, and the
      * goal stays reached from then on. Not seen when stored before it existed.

@@ -1,4 +1,5 @@
 import * as z from 'zod/mini'
+import { instantSchema } from './facts.ts'
 import { journalSchema } from './journal.ts'
 
 /**
@@ -15,8 +16,8 @@ export type JournalOrigin = z.infer<typeof journalOriginSchema>
 export const journalFileSchema = z.object({
   format: z.literal(JOURNAL_FILE_FORMAT),
   version: z.literal(JOURNAL_FILE_VERSION),
-  /** When the file was written, in ms since the epoch. */
-  exportedAt: z.number(),
+  /** When the file was written. */
+  exportedAt: instantSchema,
   origin: journalOriginSchema,
   journal: journalSchema,
 })

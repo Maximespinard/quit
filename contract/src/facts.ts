@@ -4,11 +4,11 @@ import * as z from 'zod/mini'
  * The facts a journal holds, one schema per type; their types are inferred from here and
  * nowhere else. A schema checks shape only: rules such as "not before the quit moment" live
  * in the app's domain (ADR-0002). A new fact type is one schema here plus its entry in
- * `factSchema`.
+ * `factTypeSchema` and in `factSchema`.
  */
 
 /** An instant, in ms since the epoch. `z.number()` already refuses NaN and infinities. */
-const instant = z.number()
+export const instantSchema = z.number()
 
 export const QUIT_MOMENT = 'quit-moment'
 export const CRAVING = 'craving'
@@ -18,7 +18,9 @@ export const LAPSE = 'lapse'
 export const factTypeSchema = z.enum([QUIT_MOMENT, CRAVING, PATCH_APPLICATION, LAPSE])
 
 /** The exact timestamp at which the user stopped smoking. */
-export const quitMomentSchema = z.readonly(z.object({ type: z.literal(QUIT_MOMENT), at: instant }))
+export const quitMomentSchema = z.readonly(
+  z.object({ type: z.literal(QUIT_MOMENT), at: instantSchema }),
+)
 export type QuitMomentFact = z.infer<typeof quitMomentSchema>
 
 export const CRAVING_INTENSITIES = [1, 2, 3] as const
@@ -30,7 +32,7 @@ export const cravingSchema = z.readonly(
   z.object({
     type: z.literal(CRAVING),
     /** When the craving began: the timer's start, or a backdated moment. */
-    at: instant,
+    at: instantSchema,
     intensity: cravingIntensitySchema,
     /** True only when the craving timer ran to its end. */
     heldToEnd: z.boolean(),
@@ -65,10 +67,10 @@ export type ApplicationSite = z.infer<typeof applicationSiteSchema>
 export const patchApplicationSchema = z.readonly(
   z.object({
     type: z.literal(PATCH_APPLICATION),
-    at: instant,
+    at: instantSchema,
     doseMg: doseMgSchema,
     /** Where it went on; absent when the user logged it without one, or before sites existed. */
-    site: z.exactOptional(applicationSiteSchema),
+    site: z.optional(applicationSiteSchema),
   }),
 )
 export type PatchApplicationFact = z.infer<typeof patchApplicationSchema>
@@ -81,7 +83,7 @@ export const lapseCountSchema = z.int().check(z.minimum(1))
  * A lapse stored before it had a count reads as one cigarette.
  */
 export const lapseSchema = z.readonly(
-  z.object({ type: z.literal(LAPSE), at: instant, count: z._default(lapseCountSchema, 1) }),
+  z.object({ type: z.literal(LAPSE), at: instantSchema, count: z._default(lapseCountSchema, 1) }),
 )
 export type LapseFact = z.infer<typeof lapseSchema>
 

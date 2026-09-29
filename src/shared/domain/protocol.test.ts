@@ -95,6 +95,14 @@ describe('decodeJournal, protocol', () => {
     expect(decodeJournal({ facts: [], protocol: stored }).protocol).toEqual(stored)
   })
 
+  it('keeps a stored protocol whose brand does not read, dropping only the brand', () => {
+    const stored = [{ doseMg: 14, durationDays: 21, brand: null }]
+
+    expect(decodeJournal({ facts: [], protocol: stored }).protocol).toEqual([
+      { doseMg: 14, durationDays: 21 },
+    ])
+  })
+
   it.each([
     ['nothing', undefined],
     ['an empty list', []],

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { goalSchema, settingsSchema } from './settings.ts'
+import { goalSchema, settingsSchema, stepSchema } from './settings.ts'
 
 const settings = {
   protocol: [
@@ -33,6 +33,25 @@ describe('settingsSchema', () => {
     ['a protocol that is not a list', { protocol: 'default' }],
   ])('refuses %s', (_case, changes) => {
     expect(settingsSchema.safeParse({ ...settings, ...changes }).success).toBe(false)
+  })
+})
+
+describe('stepSchema', () => {
+  it('reads a brand trimmed', () => {
+    expect(stepSchema.parse({ doseMg: 21, durationDays: 28, brand: '  Nicopatch ' })).toEqual({
+      doseMg: 21,
+      durationDays: 28,
+      brand: 'Nicopatch',
+    })
+  })
+
+  it.each([
+    ['blank', '   '],
+    ['not text', 21],
+    ['null', null],
+    ['undefined', undefined],
+  ])('reads a step whose brand is %s as one without a brand, the step kept', (_case, brand) => {
+    expect(stepSchema.parse({ doseMg: 21, durationDays: 28, brand }).brand).toBeUndefined()
   })
 })
 
