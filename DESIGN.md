@@ -20,7 +20,6 @@ colors:
   yellow: "#f5d907"
   moss: "#33402c"
   bronze: "#b88a4f"
-  series: "#d08a2a"
   transparent: "transparent"
   current-color: "currentColor"
 typography:
@@ -252,7 +251,7 @@ components:
   tab-item-active:
     textColor: "{colors.ink}"
   chart-series:
-    backgroundColor: "{colors.series}"
+    backgroundColor: "rgb(247 244 239 / 0.6)"
     rounded: "{rounded.mark}"
     width: "1.5rem"
   dialog:
@@ -309,7 +308,7 @@ et le rouge d'alerte.
 - **Crème nocturne** (`ink`) : tout le texte courant, et **toute sélection** — bouton primaire
   en aplat, puce et segment pressés, onglet actif, `Switch` coché, remplissage de barre, cran
   de multiplicateur acquis, date du jour au calendrier, anneau de focus, caret, sélection de
-  texte. Sur le crème, le texte passe en `page`.
+  texte. Sur le crème, le texte passe en `page`. Les barres des graphiques le portent à 60 %.
 - **Blanc pur** (`white`) : les chiffres-clés seuls — streak, compte à rebours, minutes tenues —
   et les crans de minute du minuteur, le pouce du `Switch` et du `Slider`. Le blanc est la
   lumière du chiffre ; le texte, lui, reste crème.
@@ -325,8 +324,6 @@ et le rouge d'alerte.
   brume — jamais un texte, une bordure ou un composant.
 - **La brume du minuteur** : **Mousse** (`moss`) et **Bronze** (`bronze`), en taches floues qui
   dérivent. Elles n'appartiennent qu'aux écrans du minuteur d'envie.
-- **Ambre de série** (`series`) : la seule couleur de donnée des graphiques. Une série = une
-  teinte.
 
 ### Neutral
 - **Page** (`page`) : le fond de toute l'app, le texte posé sur le crème et sur `Envie`, le voile
@@ -376,8 +373,9 @@ invalide, et dessine le bouton destructif en pilule fantôme à filet (1 px `ale
 libellé `alert`, appui à 10 %). Jamais d'aplat teinté, jamais de rouge sur un écart : un écart
 est un fait, pas une erreur.
 
-**The One Series Rule.** Les graphiques n'ont qu'une teinte, `series`. L'ambre de série ne
-partage jamais un écran avec le bronze du minuteur.
+**The One Series Rule.** Les graphiques n'ont qu'une teinte : le crème à 60 % (6,5:1 sur la
+carte), sous le texte courant. Jamais d'ambre ni d'accent sur une barre : l'écran le plus
+chargé en données reste plus calme que l'accueil et son seul objet allumé, `Envie`.
 
 ## Typography
 
@@ -633,12 +631,12 @@ manqué = tiret `muted`, à poser = anneau crème, prévu = petit point `muted` 
 envie = minuteur. Premier jour d'étape : pastille `ghost` en `detail`.
 
 ### Graphiques
-Sur une carte, une seule série en `series`. Colonnes de 24 px au plus, 2 px d'écart,
+Sur une carte, une seule série en crème à 60 %. Colonnes de 24 px au plus, 2 px d'écart,
 `rounded-mark` au bout de donnée, posées sur une ligne de base `ghost-line` ; barres horizontales
 de 8 px, même règle, ligne de base à gauche. Changement d'étape = filet 1 px `muted` sur toute
 la hauteur, dose en `detail` crème au-dessus. Axes en `detail` `muted`. Une ligne de lecture en
 `label` nomme une colonne (nom crème 500) ; le doigt glissé en choisit une autre et les autres
-passent à 60 %, jamais sous 3:1 contre la carte. Chaque graphique a son jumeau `table` en
+passent à 60 % (3,15:1 contre la carte, jamais sous 3:1). Chaque graphique a son jumeau `table` en
 `sr-only` (en `block`, pour ne jamais élargir la page).
 
 ### Overlays
@@ -683,7 +681,7 @@ ne jouent que sous `motion-safe:` — la brume devient une image fixe ; toute tr
 - **Don't** éteindre la brume d'un écran, ni celle du minuteur arrêté.
 - **Don't** ajouter une ombre portée, un `ring-*` ou un anneau de focus par composant : le seul `box-shadow` est la lueur d'`Envie`, le focus est l'`outline` global.
 - **Don't** remplir un bouton destructif d'un aplat teinté, ni colorer un écart en `alert`.
-- **Don't** mettre l'ambre de série et le bronze du minuteur sur le même écran, ni une seconde couleur de série.
+- **Don't** colorer une barre de graphique (ambre, accent, seconde série) : elles restent toutes crème à 60 %.
 - **Don't** transformer une progression en anneau ou en jauge : une barre de 8 px avec ses bornes chiffrées, ou une rangée de crans.
 - **Don't** ajouter un raster décoratif : brumes, grain et icônes sont du code.
 - **Don't** créer une seconde barre haute, une seconde carte ou un second geste de retour.
