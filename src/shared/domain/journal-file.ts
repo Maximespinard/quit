@@ -2,6 +2,7 @@ import { LAPSE } from './facts/lapse'
 import { PATCH_APPLICATION } from './facts/patch-application'
 import { latestQuitMoment } from './facts/quit-moment'
 import { decodeFact, type Fact, factModules } from './facts/registry'
+import { decodeGoal } from './goal'
 import type { Journal } from './journal'
 import { isValidBaseline, isValidWeeklySpend } from './journal-settings'
 import { decodeStrictProtocol } from './protocol'
@@ -25,13 +26,13 @@ const isOrigin = (value: unknown): value is JournalOrigin =>
  * `now` stamps the file; money stays in integer cents.
  */
 export function exportJournal(journal: Journal, now: number, origin: JournalOrigin): string {
-  const { facts, protocol, weeklySpendCents, baselineSmokesPerDay } = journal
+  const { facts, protocol, weeklySpendCents, baselineSmokesPerDay, goal } = journal
   return JSON.stringify({
     format: FORMAT,
     version: VERSION,
     exportedAt: now,
     origin,
-    journal: { facts, protocol, weeklySpendCents, baselineSmokesPerDay },
+    journal: { facts, protocol, weeklySpendCents, baselineSmokesPerDay, goal },
   })
 }
 
@@ -75,8 +76,11 @@ function readJournal(raw: Record<string, unknown>): Journal | ImportRefusal {
   const protocol = decodeStrictProtocol(raw.protocol)
   const weeklySpendCents = settingOrNull(raw.weeklySpendCents, isValidWeeklySpend)
   const baselineSmokesPerDay = settingOrNull(raw.baselineSmokesPerDay, isValidBaseline)
+  // No goal is a valid answer; a goal that does not read back is not.
+  const goal = raw.goal == null ? null : decodeGoal(raw.goal)
   if (protocol === null || weeklySpendCents === undefined || baselineSmokesPerDay === undefined)
     return 'invalid-settings'
+  if (raw.goal != null && goal === null) return 'invalid-settings'
 
   if (!Array.isArray(raw.facts)) return 'invalid-fact'
   const facts: Fact[] = []
@@ -86,7 +90,7 @@ function readJournal(raw: Record<string, unknown>): Journal | ImportRefusal {
     facts.push(fact)
   }
 
-  const journal: Journal = { facts, protocol, weeklySpendCents, baselineSmokesPerDay }
+  const journal: Journal = { facts, protocol, weeklySpendCents, baselineSmokesPerDay, goal }
   const quitMoment = latestQuitMoment(journal)
   if (quitMoment === null) return 'no-quit-moment'
   if (facts.some((fact) => needsQuitMoment(fact) && fact.at < quitMoment))

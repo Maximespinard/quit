@@ -27,6 +27,7 @@ const journal: Journal = {
   ],
   weeklySpendCents: 4890,
   baselineSmokesPerDay: 18,
+  goal: { label: 'Vélo', priceCents: 45_000, countsFrom: QUIT + 3 * DAY, celebrated: false },
 }
 
 /** An export of `journal` as parsed JSON, to be altered before it is imported back. */
@@ -49,6 +50,7 @@ describe('exportJournal', () => {
         protocol: journal.protocol,
         weeklySpendCents: 4890,
         baselineSmokesPerDay: 18,
+        goal: journal.goal,
       },
     })
   })
@@ -59,6 +61,7 @@ describe('exportJournal', () => {
     expect(Object.keys(written).sort()).toEqual([
       'baselineSmokesPerDay',
       'facts',
+      'goal',
       'protocol',
       'weeklySpendCents',
     ])
@@ -107,8 +110,13 @@ describe('importJournal', () => {
     },
   )
 
-  it('reads a journal whose spend and baseline were never set', () => {
-    const unset: Journal = { ...journal, weeklySpendCents: null, baselineSmokesPerDay: null }
+  it('reads a journal whose spend, baseline and goal were never set', () => {
+    const unset: Journal = {
+      ...journal,
+      weeklySpendCents: null,
+      baselineSmokesPerDay: null,
+      goal: null,
+    }
 
     expect(importJournal(exportJournal(unset, NOW, 'device'), 'device')).toMatchObject({
       ok: true,
@@ -215,6 +223,8 @@ describe('importJournal', () => {
     ['an empty protocol', { protocol: [] }],
     ['a step without a duration', { protocol: [{ doseMg: 21 }] }],
     ['a protocol that is not a list', { protocol: 'default' }],
+    ['a goal priced in euros', { goal: { ...journal.goal, priceCents: 450.5 } }],
+    ['a goal without a label', { goal: { ...journal.goal, label: '  ' } }],
   ])('refuses %s instead of replacing it with a default', (_case, changes) => {
     expect(importJournal(withJournal(changes), 'device')).toEqual({
       ok: false,
