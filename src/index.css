@@ -99,6 +99,14 @@
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
   --animate-step-in: step-in 240ms var(--ease-out-expo) both;
+  /* Ends on `STOP_DELAY_MS` (800ms, `useStopReady`): `Arrêter` answers once fully in. */
+  --animate-stop-in: fade-in 240ms var(--ease-out-expo) 560ms both;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
 
   @keyframes step-in {
     from {
