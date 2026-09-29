@@ -1,12 +1,16 @@
 import { defineConfig, devices } from '@playwright/test'
 
-// Two worktrees run their e2e suites at the same time — each picks its own port.
+// Two worktrees run their e2e suites at the same time — each picks its own port
+// (`scripts/e2e-slot.sh` gives one per slot).
 const port = process.env.E2E_PORT ?? '4173'
 const baseURL = `http://127.0.0.1:${port}`
+// WebKit workers are CPU-heavy: two per suite lets three suites share an 8-core machine.
+const workers = Number(process.env.E2E_WORKERS ?? 2)
 
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
+  workers,
   reporter: [['html', { open: 'never' }]],
   use: {
     baseURL,
