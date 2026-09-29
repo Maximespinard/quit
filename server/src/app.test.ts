@@ -1,4 +1,4 @@
-import { mkdtemp, rm } from 'node:fs/promises'
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
 import type { AddressInfo } from 'node:net'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
@@ -26,14 +26,26 @@ interface RequestOptions {
   forwardedFor?: string
 }
 
-async function setup({ trustProxyHops = 0 } = {}) {
+async function setup({
+  trustProxyHops = 0,
+  appDir,
+}: {
+  trustProxyHops?: number
+  appDir?: string
+} = {}) {
   const dir = await mkdtemp(join(tmpdir(), 'quit-server-'))
   cleanups.push(() => rm(dir, { recursive: true, force: true }))
   const database = openDatabase(dir)
   cleanups.push(async () => database.close())
   const logs: string[] = []
   const logger = createLogger('info', { write: (line: string) => void logs.push(line) })
-  const server = createApp({ database, logger, trustProxyHops }).listen(0, '127.0.0.1')
+  const app = createApp({
+    database,
+    logger,
+    trustProxyHops,
+    appDir,
+  })
+  const server = app.listen(0, '127.0.0.1')
   await new Promise((resolve) => server.once('listening', resolve))
   cleanups.push(() => new Promise((resolve) => server.close(() => resolve())))
   const { port } = server.address() as AddressInfo
@@ -137,16 +149,22 @@ describe('device key', () => {
     await expectProblem(active, 404)
   })
 
-  it('checks the key before the route: an unknown route without a key answers 401', async () => {
+  it('checks the key before the route: an unknown API route without a key answers 401', async () => {
     const api = await setup()
 
-    const response = await api.request('POST', '/anywhere', { body: '{}' })
+    const response = await api.request('POST', '/api/anywhere', { body: '{}' })
 
     await expectProblem(response, 401)
   })
 })
 
 describe('errors', () => {
+  it('answers 404 outside the API while no app is served', async () => {
+    const api = await setup()
+
+    await expectProblem(await api.request('GET', '/history'), 404)
+  })
+
   it('answers 400 to malformed JSON', async () => {
     const api = await setup()
     const key = api.issueKey()
@@ -261,5 +279,109 @@ describe('logs', () => {
     expect(lines).toHaveLength(4)
     expect(api.logs.join('\n')).not.toContain(secret)
     expect(api.logs.join('\n')).not.toContain(key)
+  })
+})
+
+const INDEX_HTML = '<!doctype html><title>Quit</title>'
+const HASHED_ASSET = '/assets/index-D5vVQmWf.js'
+
+/**
+ * A built app as `vite build` lays it out: the shell, the service worker, hashed assets. Its
+ * directory starts with a dot, as a worktree under `.claude/` does: the dotfile rule applies to
+ * the paths served, never to where the build lives.
+ */
+async function builtApp() {
+  const dir = await mkdtemp(join(tmpdir(), '.quit-app-'))
+  cleanups.push(() => rm(dir, { recursive: true, force: true }))
+  await mkdir(join(dir, 'assets'))
+  await writeFile(join(dir, 'index.html'), INDEX_HTML)
+  await writeFile(join(dir, 'sw.js'), 'self.skipWaiting()')
+  await writeFile(join(dir, 'manifest.webmanifest'), '{"name":"Quit"}')
+  await writeFile(join(dir, HASHED_ASSET), 'export {}')
+  return dir
+}
+
+const REVALIDATED = 'no-cache'
+
+describe('the app', () => {
+  it('serves a hashed asset cached for a year, as immutable', async () => {
+    const api = await setup({ appDir: await builtApp() })
+
+    const response = await api.request('GET', HASHED_ASSET)
+
+    expect(response.status).toBe(200)
+    expect(await response.text()).toBe('export {}')
+    expect(response.headers.get('cache-control')).toBe('public, max-age=31536000, immutable')
+  })
+
+  it.each(['/', '/index.html'])('serves the shell at %s, never cached', async (path) => {
+    const api = await setup({ appDir: await builtApp() })
+
+    const response = await api.request('GET', path)
+
+    expect(response.status).toBe(200)
+    expect(response.headers.get('content-type')).toContain('text/html')
+    expect(await response.text()).toBe(INDEX_HTML)
+    expect(response.headers.get('cache-control')).toBe(REVALIDATED)
+  })
+
+  it('serves the service worker and the manifest, never cached', async () => {
+    const api = await setup({ appDir: await builtApp() })
+
+    const worker = await api.request('GET', '/sw.js')
+    const manifest = await api.request('GET', '/manifest.webmanifest')
+
+    expect(worker.status).toBe(200)
+    expect(worker.headers.get('content-type')).toContain('javascript')
+    expect(worker.headers.get('cache-control')).toBe(REVALIDATED)
+    expect(manifest.status).toBe(200)
+    expect(manifest.headers.get('cache-control')).toBe(REVALIDATED)
+  })
+
+  it('serves the shell for a deep link, which the router then resolves', async () => {
+    const api = await setup({ appDir: await builtApp() })
+
+    const response = await api.request('GET', '/history/019a1b2c-3d4e-7f60-8a9b-0c1d2e3f4a5b')
+
+    expect(response.status).toBe(200)
+    expect(await response.text()).toBe(INDEX_HTML)
+    expect(response.headers.get('cache-control')).toBe(REVALIDATED)
+  })
+
+  it('answers 404 to a missing file rather than the shell', async () => {
+    const api = await setup({ appDir: await builtApp() })
+
+    await expectProblem(await api.request('GET', '/assets/index-0ld0ld.js'), 404)
+    await expectProblem(await api.request('GET', '/assets/chunk'), 404)
+    await expectProblem(await api.request('POST', '/history'), 404)
+  })
+
+  it('keeps the API behind the device key', async () => {
+    const api = await setup({ appDir: await builtApp() })
+
+    await expectProblem(await api.request('GET', '/api/nothing-here'), 401)
+    expect((await api.request('GET', '/api/health')).status).toBe(200)
+  })
+
+  it('sends a CSP the PWA works under: its own scripts, fonts and service worker only', async () => {
+    const api = await setup({ appDir: await builtApp() })
+
+    const response = await api.request('GET', '/')
+    const csp = response.headers.get('content-security-policy') ?? ''
+    const directives = new Map(
+      csp.split(';').map((directive) => {
+        const [name = '', ...sources] = directive.trim().split(/\s+/)
+        return [name, sources.join(' ')]
+      }),
+    )
+
+    expect(directives.get('default-src')).toBe("'self'")
+    expect(directives.get('script-src')).toBe("'self'")
+    expect(directives.get('worker-src')).toBe("'self'")
+    expect(directives.get('manifest-src')).toBe("'self'")
+    expect(directives.get('connect-src')).toBe("'self'")
+    expect(directives.get('font-src')).toBe("'self'")
+    // Plain HTTP stays usable: the tunnel terminates TLS, a local run has none.
+    expect(directives.has('upgrade-insecure-requests')).toBe(false)
   })
 })

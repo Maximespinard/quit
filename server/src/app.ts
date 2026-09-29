@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto'
-import express, { type ErrorRequestHandler, type RequestHandler } from 'express'
+import express, { type ErrorRequestHandler, type RequestHandler, Router } from 'express'
 import { rateLimit } from 'express-rate-limit'
 import helmet from 'helmet'
 import { pinoHttp } from 'pino-http'
@@ -7,6 +7,7 @@ import type { Database, Db } from './database.ts'
 import { isActiveDeviceKey } from './device-keys.ts'
 import type { Logger } from './logger.ts'
 import { sendProblem } from './problem.ts'
+import { serveApp } from './serve-app.ts'
 
 /** A fact or the settings weigh a few hundred bytes; a whole journal stays far below. */
 export const MAX_BODY_BYTES = 100 * 1024
@@ -45,6 +46,22 @@ const clientError = (error: unknown) =>
     : undefined
 
 /**
+ * Helmet's defaults, tuned for the PWA: every script, font, worker and request comes from this
+ * origin (the fonts are bundled, no CDN). No `upgrade-insecure-requests`: TLS ends at the tunnel,
+ * and the image run locally over plain HTTP must still load its own assets.
+ */
+const CONTENT_SECURITY_POLICY = {
+  directives: {
+    'font-src': ["'self'"],
+    'style-src': ["'self'", "'unsafe-inline'"],
+    'worker-src': ["'self'"],
+    'manifest-src': ["'self'"],
+    'connect-src': ["'self'"],
+    'upgrade-insecure-requests': null,
+  },
+}
+
+/**
  * Every error answers problem+json. The body parser's messages quote the body, so only the
  * status and type are kept from them: a client error is never logged beyond its status line.
  */
@@ -57,19 +74,22 @@ const handleError: ErrorRequestHandler = (error, req, res, next) => {
 }
 
 /**
- * The HTTP API. The health check is open; every other route, unknown ones included, requires
- * the device key. Logs carry a request id, the method, the path and the status, never a
- * header, a query nor a body.
+ * The HTTP API under `/api`, and the built PWA next to it when `appDir` is given. The health
+ * check is open; every other API route, unknown ones included, requires the device key. Logs
+ * carry a request id, the method, the path and the status, never a header, a query nor a body.
  */
 export function createApp({
   database,
   logger,
   trustProxyHops,
+  appDir,
 }: {
   database: Database
   logger: Logger
   /** Reverse proxies in front (the tunnel): the rate limit then counts per client address. */
   trustProxyHops: number
+  /** The built PWA (`vite build`'s output) to serve outside `/api`. */
+  appDir?: string | undefined
 }) {
   const app = express()
   if (trustProxyHops > 0) app.set('trust proxy', trustProxyHops)
@@ -96,7 +116,7 @@ export function createApp({
       },
     }),
   )
-  app.use(helmet())
+  app.use(helmet({ contentSecurityPolicy: CONTENT_SECURITY_POLICY }))
 
   app.get('/api/health', (_req, res) => {
     try {
@@ -107,7 +127,8 @@ export function createApp({
     res.json({ status: 'ok' })
   })
 
-  app.use(
+  const api = Router()
+  api.use(
     rateLimit({
       windowMs: AUTH_FAILURE_WINDOW_MS,
       limit: AUTH_FAILURES_PER_WINDOW,
@@ -118,10 +139,13 @@ export function createApp({
       handler: (_req, res) => sendProblem(res, 429, 'Too many failed attempts, try again later.'),
     }),
   )
-  app.use(requireDeviceKey(database.db))
-  app.use(express.json({ limit: MAX_BODY_BYTES }))
+  api.use(requireDeviceKey(database.db))
+  api.use(express.json({ limit: MAX_BODY_BYTES }))
+  api.use((_req, res) => sendProblem(res, 404, 'No such route.'))
+  app.use('/api', api)
 
-  app.use((_req, res) => sendProblem(res, 404, 'No such route.'))
+  if (appDir !== undefined) app.use(serveApp(appDir))
+  app.use((_req, res) => sendProblem(res, 404, 'No such file.'))
   app.use(handleError)
 
   return app
