@@ -32,14 +32,8 @@ export function BackupReminder({ journal, quitMoment }: BackupReminderProps) {
     <section aria-label={copy.label} className="flex flex-col gap-3.5 rounded-card bg-surface p-5">
       <p className="text-body">{message}</p>
       <div className="flex gap-2">
-        <Button size="sm" onClick={() => void exportFile(journal)}>
-          {copy.export}
-        </Button>
-        <Button
-          size="sm"
-          variant="ghost"
-          onClick={() => void backup.save(dismissReminder(record, now))}
-        >
+        <Button onClick={() => void exportFile(journal)}>{copy.export}</Button>
+        <Button variant="ghost" onClick={() => void backup.save(dismissReminder(record, now))}>
           {copy.later}
         </Button>
       </div>

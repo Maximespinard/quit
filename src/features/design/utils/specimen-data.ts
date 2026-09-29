@@ -135,7 +135,7 @@ export const TYPE_TOKENS: readonly TypeToken[] = [
     token: 'lead',
     className: 'text-lead',
     px: '18 px',
-    sample: 'jours de streak · 07:42:09',
+    sample: 'jours de streak · 07 h 42',
     role: 'La ligne sous le chiffre du streak',
   },
   {

@@ -1,10 +1,6 @@
 /** Left-pads a non-negative integer to two digits, as clocks and date inputs show them. */
 export const twoDigits = (n: number) => n.toString().padStart(2, '0')
 
-/** The part of a duration past its whole days, as a clock shows it: `07:04:09`. */
-export const formatClock = (hours: number, minutes: number, seconds: number) =>
-  `${twoDigits(hours)}:${twoDigits(minutes)}:${twoDigits(seconds)}`
-
 /** A patch dose as French copy shows it: `21`, `3,5`. */
 export const formatDose = (doseMg: number) => doseMg.toLocaleString('fr-FR')
 

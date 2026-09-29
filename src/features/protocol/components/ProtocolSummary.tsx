@@ -9,7 +9,7 @@ import { strings } from '@/shared/utils/strings'
 
 const copy = strings.protocol
 
-const editAction = cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'shrink-0')
+const editAction = cn(buttonVariants({ variant: 'secondary' }), 'shrink-0')
 
 /** Home screen block: the current step, the day within it, the days left, and the way to edit. */
 export function ProtocolSummary({ position }: { position: ProtocolPosition }) {

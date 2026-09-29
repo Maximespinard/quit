@@ -37,7 +37,7 @@ async function importFile(
 
 /** Day 45 of the `day-45-lapse` scenario, as home shows it. */
 async function expectDay45(page: Page) {
-  await expectStreak(page, 44, '02:00:00')
+  await expectStreak(page, 44, '02 h 00')
   await expect(page.getByText('Dernière cigarette il y a 12 h 20 min.')).toBeVisible()
   await expect(totals(page).getByRole('definition').first()).toHaveText('42')
   await expect(protocolSummary(page)).toContainText('Jour 17 sur 28')
@@ -160,7 +160,7 @@ test('a sandbox export never replaces the real journal', async ({ page }) => {
   )
   await expect(page.getByRole('dialog')).toHaveCount(0)
   await page.getByRole('link', { name: 'Retour' }).click()
-  await expectStreak(page, 0, '00:\\d\\d:\\d\\d')
+  await expectStreak(page, 0, '00 h \\d\\d')
 })
 
 // The real journal: real IndexedDB wiped for real, as iOS may do to a rarely opened PWA.
@@ -187,7 +187,7 @@ test('the real journal survives a storage wipe through its export', async ({ pag
   await importFile(page, 'Restaurer une sauvegarde', file.path)
   await expect(page.getByText('Journal restauré.')).toBeVisible()
   await page.reload()
-  await expectStreak(page, 0, '00:\\d\\d:\\d\\d')
+  await expectStreak(page, 0, '00 h \\d\\d')
   await openSettings(page)
   await expect(page.getByRole('textbox', { name: 'Dépense en tabac par semaine' })).toHaveValue(
     '35',

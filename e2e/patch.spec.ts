@@ -21,7 +21,7 @@ const shiftClock = async (page: Page, shift: string) => {
 const homeWithStreak = async (page: Page) => {
   await page.goto(sandboxAt(NOW))
   await startNow(page)
-  await expectStreak(page, 0, '00:00:00')
+  await expectStreak(page, 0, '00 h 00')
 }
 
 test('one tap logs the patch; it holds past midnight, the next protocol day asks again', async ({

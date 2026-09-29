@@ -1,11 +1,12 @@
 import type { ReactNode } from 'react'
 import { countUpAt } from '@/shared/utils/count-up'
 import type { SplitDuration } from '@/shared/utils/duration'
-import { formatClock } from '@/shared/utils/format'
+import { twoDigits } from '@/shared/utils/format'
 import { streakFigureSize } from '@/shared/utils/streak-figure'
+import { strings } from '@/shared/utils/strings'
 
 type StreakHeroProps = {
-  /** The streak, split into whole days and the hours, minutes and seconds past them. */
+  /** The streak, split into whole days and the hours and minutes past them (seconds unshown). */
   duration: SplitDuration
   /** Copy for the figure, e.g. "jours de streak". Carries its own plural. */
   daysLabel: string
@@ -20,6 +21,9 @@ type StreakHeroProps = {
   /** How far (0 to 1) the figures have counted up; the final values when left out. */
   entrance?: number
 }
+
+const clock = (hours: number, minutes: number) =>
+  strings.streak.clock(twoDigits(hours), twoDigits(minutes))
 
 /**
  * The block that opens the home screen: the top bar, one huge white figure, one label line.
@@ -36,7 +40,7 @@ export function StreakHero({
   action,
   entrance = 1,
 }: StreakHeroProps) {
-  const { days, hours, minutes, seconds } = duration
+  const { days, hours, minutes } = duration
 
   return (
     <section aria-label={regionLabel} className="px-safe pt-safe text-ink">
@@ -55,14 +59,10 @@ export function StreakHero({
         <span className="text-lead">
           {daysLabel}{' '}
           <span className="text-muted">
-            <span className="sr-only">{formatClock(hours, minutes, seconds)}</span>
+            <span className="sr-only">{clock(hours, minutes)}</span>
             {/* The separator is drawn, not read: the label and the clock stay one phrase. */}
             <span aria-hidden="true" className="before:content-['·_']">
-              {formatClock(
-                countUpAt(hours, entrance),
-                countUpAt(minutes, entrance),
-                countUpAt(seconds, entrance),
-              )}
+              {clock(countUpAt(hours, entrance), countUpAt(minutes, entrance))}
             </span>
           </span>
         </span>

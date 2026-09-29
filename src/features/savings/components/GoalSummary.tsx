@@ -21,7 +21,7 @@ type GoalSummaryProps = {
 
 const copy = strings.goal
 
-const cardAction = cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'shrink-0')
+const cardAction = cn(buttonVariants({ variant: 'secondary' }), 'shrink-0')
 
 /** Home screen block: the goal and the money saved towards it, or the way to set one. */
 export function GoalSummary({ journal, goal, onCelebrated }: GoalSummaryProps) {
@@ -61,7 +61,7 @@ export function GoalSummary({ journal, goal, onCelebrated }: GoalSummaryProps) {
         />
       ) : (
         <>
-          <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center justify-between gap-3">
             <p className="min-w-0 truncate text-title">{goal.label}</p>
             <Link to="/goal" search={keepSearch} className={cardAction}>
               {copy.edit}
