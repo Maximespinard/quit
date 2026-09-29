@@ -86,7 +86,8 @@ test('the storage upgrade gives every stored fact an id and loses none', async (
   await expect(page.getByRole('link', { name: /Patch posé/ })).toContainText('Bras gauche')
 
   const upgraded = await stored(page)
-  expect(upgraded.version).toBe(3)
+  // Straight from version 2 to the current one: 3 gave facts ids, 4 added the mirror records.
+  expect(upgraded.version).toBe(4)
   expect(withoutIds(upgraded.facts)).toEqual(journal.facts)
   expectIdentified(upgraded.facts)
 

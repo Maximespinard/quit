@@ -174,6 +174,19 @@ export const strings = {
       later: 'Plus tard',
     },
   },
+  mirror: {
+    title: 'Miroir',
+    lead: 'Colle la clé de l’appareil : chaque changement de ton journal part ensuite vers le miroir, sur ton serveur, sans jamais te faire attendre.',
+    keyLabel: 'Clé de l’appareil',
+    link: 'Lier ce téléphone',
+    linking: 'Liaison…',
+    linked: 'Téléphone lié. Chaque changement part vers le miroir dès que le réseau le permet.',
+    revoked: 'Cette clé a été révoquée.',
+    revokedLead:
+      'Colle la nouvelle : les changements en attente sont gardés et partiront avec elle.',
+    empty: 'Colle d’abord la clé de l’appareil.',
+    linkFailed: 'La clé n’a pas pu être enregistrée sur ce téléphone. Réessaie.',
+  },
   money: {
     'invalid-spend': 'Indique un montant en euros, plus grand que zéro.',
   },
