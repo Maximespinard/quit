@@ -13,7 +13,7 @@ import {
 } from '@/shared/ui/base/drawer'
 import { strings } from '@/shared/utils/strings'
 import { clockShifts } from '../utils/clock-shifts'
-import { formatClock } from '../utils/format-clock'
+import { clockDateTime, formatClock } from '../utils/format-clock'
 import { SandboxActions } from './SandboxActions'
 import { ScenarioPicker } from './ScenarioPicker'
 
@@ -54,11 +54,8 @@ export function DebugPanel() {
         </DrawerHeader>
         <div className="flex min-h-0 flex-col gap-3 overflow-y-auto px-5 pt-4 pb-safe-4">
           <div className="flex items-baseline justify-between gap-3">
-            {/* Not an <output>: a live region would read the running clock out every second. */}
-            <time
-              dateTime={new Date(now).toISOString()}
-              className="font-semibold text-body tabular-nums"
-            >
+            {/* Not an <output>: a live region would read the running clock out every minute. */}
+            <time dateTime={clockDateTime(now)} className="font-semibold text-body tabular-nums">
               {formatClock(now)}
             </time>
             {journal === null ? null : (
