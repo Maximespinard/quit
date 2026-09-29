@@ -137,12 +137,11 @@ export function PatchApplicationForm({
             {copy[error]}
           </p>
         ) : null}
-        <ThumbZone>
+        <ThumbZone secondary={secondary}>
           <Button type="submit" size="lg">
             {initial ? copy.edit.submit : copy.submit}
           </Button>
         </ThumbZone>
-        {secondary}
       </form>
     </FormScreen>
   )

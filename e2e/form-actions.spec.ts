@@ -24,9 +24,10 @@ const hitAtCentre = (target: Locator) =>
 
 /**
  * The actions sit at the bottom of the screen without scrolling: the primary one in its lowest
- * part, the way out right under it, down at the bottom edge.
+ * part, the way out right under it, down at the bottom edge. A form taller than the screen has
+ * no way out in view: its primary action sticks there alone.
  */
-const expectInThumbZone = async (page: Page, primary: Locator, wayOut: Locator) => {
+const expectInThumbZone = async (page: Page, primary: Locator, wayOut: Locator | null) => {
   const viewport = page.viewportSize()
   if (viewport === null) throw new Error('No viewport to measure')
   const bottom = async (action: Locator) => {
@@ -36,18 +37,20 @@ const expectInThumbZone = async (page: Page, primary: Locator, wayOut: Locator) 
     return box.y + box.height
   }
   expect(await bottom(primary)).toBeGreaterThan(viewport.height * 0.7)
+  if (wayOut === null) return
   // Room for the page's bottom padding (home indicator, sandbox marker), nothing more.
   expect(await bottom(wayOut)).toBeGreaterThan(viewport.height - 100)
 }
 
-type FormScreen = {
+type FormCase = {
   name: string
   open: (page: Page) => Promise<unknown>
   primary: string
-  wayOut: string
+  /** `null` when the form outgrows the screen: the way out then comes by scrolling. */
+  wayOut: string | null
 }
 
-const screens: readonly FormScreen[] = [
+const screens: readonly FormCase[] = [
   {
     name: 'goal',
     open: (page) => page.goto(seeded('/goal')),
@@ -72,12 +75,13 @@ const screens: readonly FormScreen[] = [
     primary: 'Enregistrer le patch',
     wayOut: 'Annuler',
   },
-  {
-    name: 'history detail',
-    open: (page) => openFact(page, /J’ai fumé/),
-    primary: 'Enregistrer',
-    wayOut: 'Retour',
-  },
+  ...[/J’ai fumé/, /Envie/, /Patch posé/].map((row) => ({
+    name: `history detail of ${row.source}`,
+    open: (page: Page) => openFact(page, row),
+    primary: row.source === 'Envie' ? 'Enregistrer l’envie' : 'Enregistrer',
+    // A craving opens with its intensity picked, so its tags shown: taller than the screen.
+    wayOut: row.source === 'Envie' ? null : 'Retour',
+  })),
 ]
 
 test.describe('on an iPhone 16 Pro, installed on the home screen', () => {
@@ -92,7 +96,7 @@ test.describe('on an iPhone 16 Pro, installed on the home screen', () => {
       await expectInThumbZone(
         page,
         button(page, screen.primary),
-        page.getByRole('link', { name: screen.wayOut }),
+        screen.wayOut === null ? null : page.getByRole('link', { name: screen.wayOut }),
       )
     })
   }

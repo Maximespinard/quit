@@ -82,14 +82,11 @@ export function CravingForm({
         />
       ) : null}
       {/* Stuck to the thumb zone: however many tags push it down, recording stays one tap away. */}
-      <ThumbZone sticky>
+      <ThumbZone sticky secondary={secondary}>
         <Button type="submit" size="lg" disabled={intensity === null || recorded}>
           {copy.submit}
         </Button>
       </ThumbZone>
-      {secondary === undefined ? null : (
-        <div className="relative flex flex-col gap-3">{secondary}</div>
-      )}
     </form>
   )
 }

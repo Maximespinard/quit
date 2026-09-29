@@ -100,12 +100,11 @@ export function GoalForm({ journal, now, goal, onSaved, secondary }: GoalFormPro
               : copy['invalid-price']}
           </p>
         ) : null}
-        <ThumbZone>
+        <ThumbZone secondary={secondary}>
           <Button type="submit" size="lg">
             {copy.submit}
           </Button>
         </ThumbZone>
-        {secondary}
       </form>
     </FormScreen>
   )

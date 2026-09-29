@@ -90,12 +90,11 @@ export function LapseForm({ journal, now, initial, onRecorded, secondary }: Laps
             {copy[error]}
           </p>
         ) : null}
-        <ThumbZone>
+        <ThumbZone secondary={secondary}>
           <Button type="submit" size="lg">
             {initial ? copy.edit.confirm : copy.confirm}
           </Button>
         </ThumbZone>
-        {secondary}
       </form>
     </FormScreen>
   )
