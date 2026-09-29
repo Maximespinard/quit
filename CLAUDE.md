@@ -20,8 +20,8 @@ Design context lives in `PRODUCT.md` + `DESIGN.md` (impeccable's own files), not
 - Vitest 5 + Testing Library (jsdom)
 - Storage: IndexedDB on the device (the reference); `server/` keeps a mirror in SQLite · Deploy: none yet (VPS `lab`, late milestone)
 - npm workspaces: the app at the root, `contract/` (zod 4 **mini** schemas — facts, settings, journal
-  file; types inferred, never hand-written; imported as `@quit/contract/<module>`), `push-sender/`,
-  `server/` (Express 5, SQLite through Drizzle, runs its TypeScript directly on Node 24)
+  file, API bodies; types inferred, never hand-written; imported as `@quit/contract/<module>`),
+  `server/` (Express 5, SQLite through Drizzle, also the push sender; runs its TypeScript directly on Node 24)
 
 ## Commandes
 

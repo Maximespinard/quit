@@ -1,4 +1,4 @@
-# Read by BuildKit for the root Dockerfile (push-sender/ has its own).
+# Read by BuildKit for the root Dockerfile.
 # Allowlist: the context holds only what the image copies, never secrets.
 *
 !package.json
@@ -12,7 +12,6 @@
 !src
 !contract/package.json
 !contract/src
-!push-sender/package.json
 !server/package.json
 !server/src
 !server/drizzle

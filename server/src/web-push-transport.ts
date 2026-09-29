@@ -1,5 +1,5 @@
 import webPush from 'web-push'
-import type { Transport } from './types.ts'
+import type { Transport } from './push-sender.ts'
 
 export interface VapidDetails {
   /** `mailto:` or `https:` URL: Apple rejects any other JWT subject (`BadJwtToken`). */
@@ -10,6 +10,11 @@ export interface VapidDetails {
 
 /** How long the push service keeps a notification for an offline device, in seconds. */
 const TTL_SECONDS = 60 * 60
+/**
+ * How long a push service gets to answer. Without it a hung connection would hold the send
+ * loop, and the shutdown that waits for it, for good.
+ */
+const TIMEOUT_MS = 10_000
 
 /** The real transport: web push through the `web-push` library, VAPID-signed. */
 export function createWebPushTransport(
@@ -24,6 +29,7 @@ export function createWebPushTransport(
           vapidDetails,
           TTL: TTL_SECONDS,
           urgency: 'high',
+          timeout: TIMEOUT_MS,
         })
         return { status: 'sent' }
       } catch (error) {

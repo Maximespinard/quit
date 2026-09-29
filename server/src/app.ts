@@ -8,10 +8,15 @@ import { isActiveDeviceKey } from './device-keys.ts'
 import type { Logger } from './logger.ts'
 import { mirrorRoutes } from './mirror-routes.ts'
 import { sendProblem } from './problem.ts'
+import { createPushRoutes } from './push-routes.ts'
+import type { PushSender } from './push-sender.ts'
 import { serveApp } from './serve-app.ts'
 
-/** A fact or the settings weigh a few hundred bytes; a whole journal stays far below. */
-export const MAX_BODY_BYTES = 100 * 1024
+/**
+ * The largest body is a push schedule, up to 1000 notifications: the push sender's limit, kept.
+ * A fact or the settings weigh a few hundred bytes.
+ */
+export const MAX_BODY_BYTES = 512 * 1024
 
 /** Failed device key checks allowed per client address and window, then every request is 429. */
 export const AUTH_FAILURES_PER_WINDOW = 10
@@ -85,6 +90,7 @@ export function createApp({
   trustProxyHops,
   appDir,
   now,
+  pushSender,
 }: {
   database: Database
   logger: Logger
@@ -94,6 +100,7 @@ export function createApp({
   appDir?: string | undefined
   /** The server's clock: when the mirror received or replaced what it stores. */
   now: () => Date
+  pushSender: PushSender
 }) {
   const app = express()
   if (trustProxyHops > 0) app.set('trust proxy', trustProxyHops)
@@ -146,6 +153,7 @@ export function createApp({
   api.use(requireDeviceKey(database.db))
   api.use(express.json({ limit: MAX_BODY_BYTES }))
   api.use(mirrorRoutes({ db: database.db, now }))
+  api.use('/push', createPushRoutes(pushSender))
   api.use((_req, res) => sendProblem(res, 404, 'No such route.'))
   app.use('/api', api)
 

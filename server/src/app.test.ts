@@ -1,13 +1,15 @@
 import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
 import { AUTH_FAILURES_PER_WINDOW, MAX_BODY_BYTES } from './app.ts'
-import { expectProblem, onCleanup, setup } from './test-api.ts'
+import { closeTestApis, expectProblem, onCleanup, openTestApi } from './test-api.ts'
+
+afterEach(closeTestApis)
 
 describe('health', () => {
   it('answers 200 without a device key while the database is reachable', async () => {
-    const api = await setup()
+    const api = await openTestApi()
 
     const response = await api.request('GET', '/api/health')
 
@@ -16,7 +18,7 @@ describe('health', () => {
   })
 
   it('answers 503 once the database is unreachable', async () => {
-    const api = await setup()
+    const api = await openTestApi()
 
     api.database.close()
     const response = await api.request('GET', '/api/health')
@@ -27,7 +29,7 @@ describe('health', () => {
 
 describe('device key', () => {
   it('lets a request with the active key through', async () => {
-    const api = await setup()
+    const api = await openTestApi()
     const key = api.issueKey()
 
     const response = await api.request('GET', '/api/nothing-here', { key })
@@ -41,7 +43,7 @@ describe('device key', () => {
     ['another scheme', { authorization: 'Basic dXNlcjpwYXNz' }],
     ['an empty bearer', { authorization: 'Bearer ' }],
   ])('answers 401 to a request with %s', async (_, options) => {
-    const api = await setup()
+    const api = await openTestApi()
     api.issueKey()
 
     const response = await api.request('GET', '/api/nothing-here', options)
@@ -51,7 +53,7 @@ describe('device key', () => {
   })
 
   it('answers 401 while no key was ever issued', async () => {
-    const api = await setup()
+    const api = await openTestApi()
 
     const response = await api.request('GET', '/api/nothing-here', {
       key: 'not-the-device-key-not-the-device-key-000',
@@ -61,7 +63,7 @@ describe('device key', () => {
   })
 
   it('revokes the previous key when a new one is issued', async () => {
-    const api = await setup()
+    const api = await openTestApi()
     const first = api.issueKey()
     const second = api.issueKey()
 
@@ -74,7 +76,7 @@ describe('device key', () => {
   })
 
   it('checks the key before the route: an unknown API route without a key answers 401', async () => {
-    const api = await setup()
+    const api = await openTestApi()
 
     const response = await api.request('POST', '/api/anywhere', { body: '{}' })
 
@@ -84,13 +86,13 @@ describe('device key', () => {
 
 describe('errors', () => {
   it('answers 404 outside the API while no app is served', async () => {
-    const api = await setup()
+    const api = await openTestApi()
 
     await expectProblem(await api.request('GET', '/history'), 404)
   })
 
   it('answers 400 to malformed JSON', async () => {
-    const api = await setup()
+    const api = await openTestApi()
     const key = api.issueKey()
 
     const response = await api.request('PUT', '/api/nothing-here', { key, body: '{"at": 1' })
@@ -99,7 +101,7 @@ describe('errors', () => {
   })
 
   it('answers 413 to a body over the size limit', async () => {
-    const api = await setup()
+    const api = await openTestApi()
     const key = api.issueKey()
     const body = JSON.stringify({ padding: 'x'.repeat(MAX_BODY_BYTES) })
 
@@ -109,7 +111,7 @@ describe('errors', () => {
   })
 
   it('answers 404 to an unknown route', async () => {
-    const api = await setup()
+    const api = await openTestApi()
     const key = api.issueKey()
 
     const response = await api.request('PUT', '/api/nothing-here', { key, body: '{}' })
@@ -120,7 +122,7 @@ describe('errors', () => {
 
 describe('rate limit', () => {
   it('refuses every request with 429 once failed attempts reach the limit', async () => {
-    const api = await setup()
+    const api = await openTestApi()
     const key = api.issueKey()
     const wrong = 'not-the-device-key-not-the-device-key-000'
 
@@ -133,7 +135,7 @@ describe('rate limit', () => {
   })
 
   it('does not count requests with the right key', async () => {
-    const api = await setup()
+    const api = await openTestApi()
     const key = api.issueKey()
 
     for (let attempt = 0; attempt < AUTH_FAILURES_PER_WINDOW; attempt++) {
@@ -145,7 +147,7 @@ describe('rate limit', () => {
   })
 
   it('counts per client behind a proxy: one client failing does not lock out another', async () => {
-    const api = await setup({ trustProxyHops: 1 })
+    const api = await openTestApi({ trustProxyHops: 1 })
     const key = api.issueKey()
     const wrong = 'not-the-device-key-not-the-device-key-000'
 
@@ -166,7 +168,7 @@ describe('rate limit', () => {
   })
 
   it('keeps the health check out of it', async () => {
-    const api = await setup()
+    const api = await openTestApi()
 
     for (let attempt = 0; attempt < AUTH_FAILURES_PER_WINDOW; attempt++) {
       await api.request('GET', '/api/nothing-here')
@@ -179,7 +181,7 @@ describe('rate limit', () => {
 
 describe('logs', () => {
   it('log each request with an id, never its body, its query nor the device key', async () => {
-    const api = await setup()
+    const api = await openTestApi()
     const key = api.issueKey()
     const secret = 'craving-note-that-must-stay-private'
 
@@ -229,7 +231,7 @@ const REVALIDATED = 'no-cache'
 
 describe('the app', () => {
   it('serves a hashed asset cached for a year, as immutable', async () => {
-    const api = await setup({ appDir: await builtApp() })
+    const api = await openTestApi({ appDir: await builtApp() })
 
     const response = await api.request('GET', HASHED_ASSET)
 
@@ -239,7 +241,7 @@ describe('the app', () => {
   })
 
   it.each(['/', '/index.html'])('serves the shell at %s, never cached', async (path) => {
-    const api = await setup({ appDir: await builtApp() })
+    const api = await openTestApi({ appDir: await builtApp() })
 
     const response = await api.request('GET', path)
 
@@ -250,7 +252,7 @@ describe('the app', () => {
   })
 
   it('serves the service worker and the manifest, never cached', async () => {
-    const api = await setup({ appDir: await builtApp() })
+    const api = await openTestApi({ appDir: await builtApp() })
 
     const worker = await api.request('GET', '/sw.js')
     const manifest = await api.request('GET', '/manifest.webmanifest')
@@ -263,7 +265,7 @@ describe('the app', () => {
   })
 
   it('serves the shell for a deep link, which the router then resolves', async () => {
-    const api = await setup({ appDir: await builtApp() })
+    const api = await openTestApi({ appDir: await builtApp() })
 
     const response = await api.request('GET', '/history/019a1b2c-3d4e-7f60-8a9b-0c1d2e3f4a5b')
 
@@ -273,7 +275,7 @@ describe('the app', () => {
   })
 
   it('answers 404 to a missing file rather than the shell', async () => {
-    const api = await setup({ appDir: await builtApp() })
+    const api = await openTestApi({ appDir: await builtApp() })
 
     await expectProblem(await api.request('GET', '/assets/index-0ld0ld.js'), 404)
     await expectProblem(await api.request('GET', '/assets/chunk'), 404)
@@ -281,14 +283,14 @@ describe('the app', () => {
   })
 
   it('keeps the API behind the device key', async () => {
-    const api = await setup({ appDir: await builtApp() })
+    const api = await openTestApi({ appDir: await builtApp() })
 
     await expectProblem(await api.request('GET', '/api/nothing-here'), 401)
     expect((await api.request('GET', '/api/health')).status).toBe(200)
   })
 
   it('sends a CSP the PWA works under: its own scripts, fonts and service worker only', async () => {
-    const api = await setup({ appDir: await builtApp() })
+    const api = await openTestApi({ appDir: await builtApp() })
 
     const response = await api.request('GET', '/')
     const csp = response.headers.get('content-security-policy') ?? ''

@@ -8,6 +8,7 @@ import { join } from 'node:path'
 import { createInterface } from 'node:readline'
 import { promisify } from 'node:util'
 import { afterEach, describe, expect, it } from 'vitest'
+import webPush from 'web-push'
 import { DATABASE_FILE } from './database.ts'
 
 /**
@@ -43,7 +44,16 @@ async function freePort() {
   return port
 }
 
-const envFor = (env: Record<string, string>) => ({ PATH: process.env.PATH ?? '', ...env })
+const VAPID = webPush.generateVAPIDKeys()
+
+/** A valid VAPID configuration, then `env`. */
+const envFor = (env: Record<string, string>) => ({
+  PATH: process.env.PATH ?? '',
+  VAPID_SUBJECT: 'mailto:owner@example.com',
+  VAPID_PUBLIC_KEY: VAPID.publicKey,
+  VAPID_PRIVATE_KEY: VAPID.privateKey,
+  ...env,
+})
 
 async function issueKey(dir: string) {
   const { stdout } = await promisify(execFile)(process.execPath, [ISSUE_COMMAND], {

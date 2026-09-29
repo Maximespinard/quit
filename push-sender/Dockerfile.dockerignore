@@ -1,9 +1,0 @@
-# Read by BuildKit for push-sender/Dockerfile, whose context is the repository root.
-# Allowlist: the context holds only what the image copies, never secrets or the app.
-*
-!package.json
-!package-lock.json
-!contract/package.json
-!push-sender/package.json
-!push-sender/src
-push-sender/src/**/*.test.ts

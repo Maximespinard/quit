@@ -11,6 +11,7 @@ import {
 import { type SQL, sql } from 'drizzle-orm'
 import {
   check,
+  index,
   integer,
   primaryKey,
   real,
@@ -196,4 +197,38 @@ export const protocolSteps = sqliteTable(
     check('protocol_steps_dose_mg', sql`${table.doseMg} > 0`),
     check('protocol_steps_duration_days', sql`${table.durationDays} > 0`),
   ],
+)
+
+/**
+ * The one web push subscription the app registered, as the browser's `toJSON()` gives it.
+ * Registering another replaces it; the check keeps it a single row.
+ */
+export const pushSubscription = sqliteTable(
+  'push_subscription',
+  {
+    id: integer('id').primaryKey(),
+    endpoint: text('endpoint').notNull(),
+    /** Epoch ms, or null when the subscription does not expire. */
+    expirationTime: real('expiration_time'),
+    p256dh: text('p256dh').notNull(),
+    auth: text('auth').notNull(),
+  },
+  (table) => [check('push_subscription_single_row', sql`${table.id} = 1`)],
+)
+
+/**
+ * The upcoming notifications of the schedule the app uploaded, ready-made: sent as they are
+ * when `sendAt` comes, then removed. Uploading a schedule replaces them all.
+ */
+export const scheduledNotifications = sqliteTable(
+  'scheduled_notifications',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    sendAt: integer('send_at', { mode: 'timestamp_ms' }).notNull(),
+    title: text('title').notNull(),
+    body: text('body').notNull(),
+    /** The app route the notification opens. */
+    screen: text('screen').notNull(),
+  },
+  (table) => [index('scheduled_notifications_send_at').on(table.sendAt)],
 )

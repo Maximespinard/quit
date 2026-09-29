@@ -1,6 +1,6 @@
+import type { PushSubscription } from '@quit/contract/push'
 import { describe, expect, it } from 'vitest'
 import webPush from 'web-push'
-import type { PushSubscription } from './types.ts'
 import { createWebPushTransport } from './web-push-transport.ts'
 
 const VAPID = {
@@ -19,7 +19,7 @@ const answering = (statusCode: number) => async () => {
 }
 
 describe('web push transport', () => {
-  it('signs with the VAPID keys and a positive TTL', async () => {
+  it('signs with the VAPID keys, with a positive TTL and a timeout', async () => {
     const calls: unknown[][] = []
     const transport = createWebPushTransport(VAPID, async (...args) => {
       calls.push(args)
@@ -30,7 +30,11 @@ describe('web push transport', () => {
 
     expect(outcome).toEqual({ status: 'sent' })
     expect(calls).toEqual([
-      [PHONE, '{"title":"T"}', { vapidDetails: VAPID, TTL: 3600, urgency: 'high' }],
+      [
+        PHONE,
+        '{"title":"T"}',
+        { vapidDetails: VAPID, TTL: 3600, urgency: 'high', timeout: 10_000 },
+      ],
     ])
   })
 

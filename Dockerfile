@@ -8,10 +8,9 @@ FROM node:24-alpine AS app
 WORKDIR /build
 COPY package.json package-lock.json ./
 COPY contract/package.json ./contract/
-COPY push-sender/package.json ./push-sender/
 COPY server/package.json ./server/
 # The root's dependencies (the app and its build tools) and the contract it imports: never
-# the server's nor the push sender's. No install scripts: the build needs none.
+# the server's. No install scripts: the build needs none.
 RUN npm ci --ignore-scripts --include-workspace-root --workspace contract
 
 COPY tsconfig.json tsconfig.app.json tsconfig.node.json vite.config.ts index.html ./
@@ -29,7 +28,6 @@ WORKDIR /app
 
 COPY package.json package-lock.json ./
 COPY contract/package.json ./contract/
-COPY push-sender/package.json ./push-sender/
 COPY server/package.json ./server/
 # No install scripts: better-sqlite3 loads the prebuilt binary it ships (linuxmusl included),
 # whereas npm would run node-gyp for it, which needs a toolchain the image does not have.

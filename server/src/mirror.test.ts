@@ -1,9 +1,11 @@
 import type { Fact } from '@quit/contract/facts'
 import { type Mirror, mirrorSchema } from '@quit/contract/mirror'
 import type { Settings } from '@quit/contract/settings'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
 import { cravingTags, facts, protocolSteps } from './schema.ts'
-import { expectProblem, factId, setup, T0 } from './test-api.ts'
+import { closeTestApis, expectProblem, factId, openTestApi, T0 } from './test-api.ts'
+
+afterEach(closeTestApis)
 
 const QUIT_AT = Date.parse('2026-09-01T07:30:00Z')
 const HOUR_MS = 3_600_000
@@ -43,8 +45,8 @@ const settings: Settings = {
   goal: { label: 'Vélo', priceCents: 64900, countsFrom: null, celebrated: false },
 }
 
-async function linkedApi(options: Parameters<typeof setup>[0] = {}) {
-  const api = await setup(options)
+async function linkedApi() {
+  const api = await openTestApi()
   const key = api.issueKey()
   const send = (method: string, path: string, body?: unknown) =>
     api.request(method, path, {
@@ -82,19 +84,21 @@ describe('facts', () => {
   })
 
   it('replaces a fact put twice: one row, the latest content, first received time kept', async () => {
-    let now = T0
-    const api = await linkedApi({ now: () => now })
+    const api = await linkedApi()
     const corrected: Fact = { ...craving, intensity: 1, heldToEnd: false, tags: ['stress'] }
 
     await api.putFact(craving)
-    now = new Date(T0.getTime() + HOUR_MS)
+    api.clock.now = T0.getTime() + HOUR_MS
     const response = await api.putFact(corrected)
 
     expect(response.status).toBe(204)
     expect((await api.readMirror()).facts).toEqual([corrected])
     const rows = api.database.db.select().from(facts).all()
     expect(rows).toHaveLength(1)
-    expect(rows[0]).toMatchObject({ receivedAt: T0, updatedAt: now })
+    expect(rows[0]).toMatchObject({
+      receivedAt: T0,
+      updatedAt: new Date(T0.getTime() + HOUR_MS),
+    })
     expect(api.database.db.select().from(cravingTags).all()).toHaveLength(1)
   })
 
@@ -358,7 +362,7 @@ describe('device key', () => {
     ['PUT', '/api/settings'],
     ['GET', '/api/mirror'],
   ])('answers 401 to %s %s without the device key', async (method, path) => {
-    const api = await setup()
+    const api = await openTestApi()
     api.issueKey()
 
     const response = await api.request(method, path, {
