@@ -98,8 +98,12 @@ Something the user recorded as having happened: the quit moment, a patch applica
 _Avoid_: Event, entry, record
 
 **Journal**:
-The whole set of facts recorded by one person, plus the settings that shape what is derived from them: the protocol, the weekly spend, the baseline smokes per day, the goal and the reminder preferences. It is the only thing stored, and the only thing exported and imported.
+The whole set of facts recorded by one person, plus the settings that shape what is derived from them: the protocol, the weekly spend, the baseline smokes per day, the goal and the reminder preferences. It is the only thing exported and imported, and beside the backup record, the only thing stored.
 _Avoid_: History, database, log, diary
+
+**Backup record**:
+What the device keeps about its own backups: when the journal was last exported (or imported) and when the export reminder was last dismissed. It is neither a fact nor a setting, belongs to the device rather than the journey, and is never exported. The sandbox keeps its own, in memory.
+_Avoid_: Backup history, export log, sync state
 
 **Scenario**:
 A named journal paired with a value of the current time, describing one precise situation of the app. The same scenarios are reused by the tests, by the debug panel and by demo mode.

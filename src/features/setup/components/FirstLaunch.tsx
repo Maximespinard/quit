@@ -1,5 +1,5 @@
 import { ChevronLeft } from 'lucide-react'
-import { useState } from 'react'
+import { type ReactNode, useState } from 'react'
 import { startJourney } from '@/shared/domain/first-launch'
 import type { Journal } from '@/shared/domain/journal'
 import { Button } from '@/shared/ui/base/button'
@@ -15,6 +15,8 @@ type FirstLaunchProps = {
   /** Injected clock: first launch never reads the system time itself. */
   now: number
   onStarted: (journal: Journal) => void
+  /** Offered under the first question only: a journey restored from a file skips them all. */
+  restore?: ReactNode
 }
 
 type Answers = {
@@ -31,7 +33,7 @@ const copy = strings.firstLaunch
  * The quit moment, the weekly spend, the baseline, then the default protocol: one question a
  * screen, and nothing is written until the last one is accepted.
  */
-export function FirstLaunch({ journal, now, onStarted }: FirstLaunchProps) {
+export function FirstLaunch({ journal, now, onStarted, restore }: FirstLaunchProps) {
   const [step, setStep] = useState(1)
   const [answers, setAnswers] = useState<Answers>({
     quitMoment: null,
@@ -90,12 +92,16 @@ export function FirstLaunch({ journal, now, onStarted }: FirstLaunchProps) {
       </div>
 
       {step === 1 ? (
-        <QuitMomentStep
-          journal={journal}
-          now={now}
-          initial={answers.quitMoment}
-          onPicked={(quitMoment) => answer({ quitMoment })}
-        />
+        <>
+          <QuitMomentStep
+            journal={journal}
+            now={now}
+            initial={answers.quitMoment}
+            onPicked={(quitMoment) => answer({ quitMoment })}
+          />
+          {/* Another way in, not a third answer: set apart by a filet. */}
+          {restore ? <div className="border-line border-t pt-4">{restore}</div> : null}
+        </>
       ) : step === 2 ? (
         // Keyed per step: the two value steps must not share a typed draft.
         <ValueStep

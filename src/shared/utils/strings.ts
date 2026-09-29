@@ -1,4 +1,5 @@
 import type { ApplicationSite } from '@/shared/domain/application-site'
+import type { ImportRefusal } from '@/shared/domain/journal-file'
 import type { ScenarioId } from '@/shared/domain/scenarios'
 
 export const strings = {
@@ -121,6 +122,57 @@ export const strings = {
       open: 'Modifier le protocole',
       /** The taper at a glance: `21 mg → 14 mg → 7 mg`. */
       doses: (doses: readonly string[]) => doses.map((dose) => `${dose}\u00a0mg`).join(' → '),
+    },
+  },
+  backup: {
+    title: 'Sauvegarde',
+    lead: 'Ton journal ne vit que sur ce téléphone. Exporte-le dans un fichier pour le garder à l’abri ou le retrouver sur un autre.',
+    sandboxLead:
+      'Ici, l’export et l’import portent sur le journal du bac à sable. Ton vrai journal n’est ni lu ni modifié.',
+    never: 'Pas encore de sauvegarde.',
+    last: (date: string) => `Dernière sauvegarde le ${date}.`,
+    export: 'Exporter le journal',
+    exportSandbox: 'Exporter le bac à sable',
+    exported: 'Journal exporté.',
+    exportFailed: 'L’export n’a pas abouti. Réessaie.',
+    import: 'Importer une sauvegarde',
+    importSandbox: 'Importer dans le bac à sable',
+    /** The exported file's name, ASCII only: it travels through the share sheet and Files. */
+    fileName: (day: string, sandbox: boolean) =>
+      `quit-${sandbox ? 'bac-a-sable' : 'journal'}-${day}.json`,
+    /** First launch: a new phone, or a wiped one, starts from a file instead. */
+    restore: 'Restaurer une sauvegarde',
+    imported: 'Journal restauré.',
+    confirm: {
+      title: 'Remplacer ton journal ?',
+      sandboxTitle: 'Remplacer le bac à sable ?',
+      body: (date: string) =>
+        `Tout ce qui est noté ici sera remplacé par la sauvegarde du ${date}. Pas de retour en arrière.`,
+      confirm: 'Oui, remplacer',
+      cancel: 'Garder le mien',
+    },
+    /** Why a file is refused; the journal in place is never touched. */
+    refusal: {
+      unreadable: 'Ce fichier est illisible ou incomplet.',
+      'not-an-export': 'Ce fichier n’est pas une sauvegarde de quit.',
+      'unsupported-version':
+        'Cette sauvegarde vient d’une version de l’app que celle-ci ne sait pas lire.',
+      'sandbox-file':
+        'Cette sauvegarde vient du bac à sable : elle ne remplacera pas ton vrai journal.',
+      'unknown-fact-type': 'Cette sauvegarde contient des faits que cette version ne connaît pas.',
+      'invalid-fact': 'Un des faits de cette sauvegarde est abîmé.',
+      'invalid-settings': 'Les réglages de cette sauvegarde sont abîmés.',
+      'no-quit-moment': 'Cette sauvegarde n’a pas de moment d’arrêt.',
+      'before-quit-moment': 'Cette sauvegarde contient des faits datés d’avant l’arrêt.',
+    } satisfies Record<ImportRefusal, string>,
+    untouched: 'Rien n’a changé.',
+    reminder: {
+      label: 'Rappel de sauvegarde',
+      first: 'Ton journal n’existe que sur ce téléphone. Exporte-le pour ne rien perdre.',
+      stale: (days: number) =>
+        `Ta dernière sauvegarde date de ${days}\u00a0jours. Exporte-la à nouveau pour ne rien perdre.`,
+      export: 'Exporter',
+      later: 'Plus tard',
     },
   },
   money: {
