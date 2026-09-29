@@ -1,6 +1,6 @@
 ---
 name: quit
-description: Une nocturne chaude — une page noire, une brume grainée ambre, ember et prune derrière un immense chiffre blanc, et un seul objet allumé, Envie.
+description: A warm nocturne. A black page, a grainy amber, ember and plum haze behind a huge white figure, and a single lit object, Envie.
 colors:
   page: "#101012"
   surface: "#17171a"
@@ -270,421 +270,418 @@ components:
 
 ## Overview
 
-**Creative North Star : « Nocturne chaude »**
+**Creative North Star: « Nocturne chaude »** (a warm nocturne)
 
-L'app ouverte la nuit sur un balcon, à la place d'une cigarette. Une page presque noire, une
-seule brume chaude et grainée — ambre, ember, prune sur un plancher brun — derrière un immense
-chiffre blanc, et un seul objet allumé : la pilule `Envie`, rose vers jaune. Tout le reste se
-tient en retrait sur des cartes sombres, en crème et en gris. Pendant une envie, l'écran entier
-bascule dans une autre matière : une brume liquide mousse et bronze qui dérive lentement autour
-d'un compte à rebours blanc.
+The app opened at night on a balcony, in place of a cigarette. A near-black page, a single warm,
+grainy haze (amber, ember and plum over a brown floor) behind a huge white figure, and a single
+lit object: the `Envie` pill, pink to yellow. Everything else stays back on dark cards, in cream
+and gray. During a craving, the whole screen shifts into another material: a liquid moss and
+bronze haze drifting slowly around a white countdown.
 
-Le monde est dessiné en code, sans image : les brumes sont des dégradés CSS et un bruit
-fractal SVG en ligne, les icônes de l'app sont rendues depuis ces mêmes stops. Il peint hors
-ligne et dès la première image. La hiérarchie est volontairement inégale : un chiffre qui prend
-62 % de la largeur de sa colonne règne sur l'accueil, tout le reste vit entre 11 et 30 px. Une
-donnée est un chiffre, jamais une jauge : le niveau est une barre de 8 px, le multiplicateur une
-rangée de crans.
+The world is drawn in code, with no images: the hazes are CSS gradients and an inline SVG
+fractal noise, and the app icons are rendered from those same stops. It paints offline and from
+the first frame. The hierarchy is deliberately uneven: a figure taking 62% of its column's width
+rules the home screen, and everything else lives between 11 and 30 px. A data point is a figure,
+never a gauge: the level is an 8 px bar, the multiplier a row of notches.
 
-Anti-références confirmées : l'app bien-être lumineuse (toile blanche, pastels, anneau vert),
-l'outil néon froid sur noir, le monde marine plat « Le relevé », « Grand air » (ciel de nuages),
-le flipper (cartoon, saturé), les variantes Instrument / Affiche / Registre, toute métaphore
-matérielle (veste de travail, livret tamponné, manuel en acétate).
+Confirmed anti-references: the bright wellness app (white canvas, pastels, green ring), the cold
+neon-on-black tool, the flat navy world « Le relevé », « Grand air » (a sky of clouds), the
+pinball machine (cartoon, saturated), the Instrument / Affiche / Registre variants, any material
+metaphor (work jacket, stamped booklet, acetate manual).
 
-**Key Characteristics :**
-- Une page noire, une carte sombre, du crème pour le texte et pour toute sélection
-- Une brume chaude grainée, placée par règle : pleine sur l'accueil, retenue au premier lancement, en bande basse partout ailleurs
-- Un seul objet allumé : `Envie` et son dégradé rose → jaune, que rien d'autre ne porte
-- Une seule police, Host Grotesk, chiffres tabulaires, unités petites et sourdes
-- Aucune ombre, sauf la lueur rose d'`Envie`
-- Un seul geste signature : le compteur par crans, 240 ms ; la brume ne dérive que sous `motion-safe`
+**Key Characteristics:**
+- A black page, a dark card, cream for text and for every selection
+- A warm, grainy haze placed by rule: full on home, kept on first launch, a low band everywhere else
+- A single lit object: `Envie` and its pink → yellow gradient, which nothing else carries
+- A single typeface, Host Grotesk, tabular figures, small muted units
+- No shadows, except the pink glow of `Envie`
+- A single signature gesture: the ticking count-up, 240 ms; the haze drifts only under `motion-safe`
 
 ## Colors
 
-Un noir chaud et deux gris de structure, un crème qui porte le texte et la sélection, une
-famille de brume chaude réservée aux fonds, et deux exceptions nommées : le dégradé d'`Envie`
-et le rouge d'alerte.
+A warm black and two structural grays, a cream that carries text and selection, a warm haze
+family reserved for backgrounds, and two named exceptions: the `Envie` gradient and the alert
+red.
 
 ### Primary
-- **Crème nocturne** (`ink`) : tout le texte courant, et **toute sélection** — bouton primaire
-  en aplat, puce et segment pressés, onglet actif, `Switch` coché, remplissage de barre, cran
-  de multiplicateur acquis, date du jour au calendrier, anneau de focus, caret, sélection de
-  texte. Sur le crème, le texte passe en `page`.
-- **Blanc pur** (`white`) : les chiffres-clés seuls — streak, compte à rebours, minutes tenues —
-  et les crans de minute du minuteur, le pouce du `Switch` et du `Slider`. Le blanc est la
-  lumière du chiffre ; le texte, lui, reste crème.
+- **Nocturne cream** (`ink`): all running text, and **every selection**: solid primary button,
+  pressed chip and segment, active tab, checked `Switch`, bar fill, acquired multiplier notch,
+  today's date in the calendar, focus ring, caret, text selection. On cream, text switches to
+  `page`.
+- **Pure white** (`white`): the key figures only (streak, countdown, minutes held), plus the
+  timer's minute notches and the thumb of the `Switch` and the `Slider`. White is the light of
+  the figure; text stays cream.
 
 ### Secondary
-- **Rose Envie** (`pink`) et **Jaune Envie** (`yellow`) : les deux bouts du dégradé horizontal
-  d'`Envie`, et sa lueur rose. Ils n'existent nulle part ailleurs.
+- **Envie pink** (`pink`) and **Envie yellow** (`yellow`): the two ends of `Envie`'s horizontal
+  gradient, and its pink glow. They exist nowhere else.
 
 ### Tertiary
-- **La brume d'accueil** : **Ambre** (`amber`), **Ember** (`ember`) et **Prune** (`plum`) en
-  trois halos radiaux, posés sur un **Plancher** (`floor`) qui descend vers le **Plancher
-  profond** (`floor-deep`) puis vers la `page`. Ces cinq valeurs ne peignent que des fonds de
-  brume — jamais un texte, une bordure ou un composant.
-- **La brume du minuteur** : **Mousse** (`moss`) et **Bronze** (`bronze`), en taches floues qui
-  dérivent. Elles n'appartiennent qu'aux écrans du minuteur d'envie.
-- **Ambre de série** (`series`) : la seule couleur de donnée des graphiques. Une série = une
-  teinte.
+- **The home haze**: **Amber** (`amber`), **Ember** (`ember`) and **Plum** (`plum`) as three
+  radial halos, laid on a **Floor** (`floor`) that falls to the **Deep floor** (`floor-deep`),
+  then to `page`. These five values paint haze backgrounds only, never text, a border or a
+  component.
+- **The timer haze**: **Moss** (`moss`) and **Bronze** (`bronze`), as drifting blurred blobs.
+  They belong to the craving timer screens only.
+- **Series amber** (`series`): the only data color in charts. One series = one hue.
 
 ### Neutral
-- **Page** (`page`) : le fond de toute l'app, le texte posé sur le crème et sur `Envie`, le voile
-  des overlays (à 80 %).
-- **Surface** (`surface`) : la carte, le `Dialog`, le `Drawer`, le badge débloqué.
-- **Gris sourd** (`muted`) : texte secondaire — titres de carte, libellés de ligne, pistes,
-  unités, axes, onglets inactifs, placeholder, bouton désactivé.
-- **Filet** (`line`, blanc 8 %) : les séparateurs de structure — entre lignes d'une carte, bord
-  du `Dialog`, contour du badge verrouillé, piste de barre et de slider.
-- **Voile** (`ghost`, blanc 5 %) : le fond d'un contrôle au repos — champ, puce, plateau de
-  `Tabs`, cran verrouillé, retour tactile des boutons secondaire et fantôme, aplat désactivé.
-- **Bord de contrôle** (`ghost-line`, blanc 36 %) : le bord de tout ce qui se touche — bouton
-  secondaire, champ, plateau segmenté, piste de `Switch` éteint, poignée de `Drawer`, soulignement
-  du lien, ligne de base des graphiques.
-- **Alerte** (`alert`) : erreurs et destructif, rien d'autre.
+- **Page** (`page`): the background of the whole app, text set on cream and on `Envie`, the
+  overlay scrim (at 80%).
+- **Surface** (`surface`): the card, the `Dialog`, the `Drawer`, the unlocked badge.
+- **Muted gray** (`muted`): secondary text: card titles, row labels, tracks, units, axes,
+  inactive tabs, placeholder, disabled button.
+- **Hairline** (`line`, white 8%): structural separators: between the rows of a card, the
+  `Dialog` border, the locked badge outline, the bar and slider track.
+- **Veil** (`ghost`, white 5%): a control's resting background: field, chip, `Tabs` tray,
+  locked notch, press feedback of the secondary and ghost buttons, disabled fill.
+- **Control edge** (`ghost-line`, white 36%): the edge of everything touchable: secondary
+  button, field, segmented tray, off `Switch` track, `Drawer` handle, link underline, chart
+  baseline.
+- **Alert** (`alert`): errors and destructive actions, nothing else.
 
-### Contrastes mesurés
-- `muted` : 7,5:1 sur `page`, 7,1:1 sur `surface`.
-- `alert` : 6,9:1 sur `page`, 6,5:1 sur `surface` — et bien plus clair que l'ember de la brume,
-  donc jamais confondu avec elle.
-- `ghost-line` : 3,3:1, bord de contrôle au-dessus de 3:1 sur la page comme sur une carte
+### Measured contrast
+- `muted`: 7.5:1 on `page`, 7.1:1 on `surface`.
+- `alert`: 6.9:1 on `page`, 6.5:1 on `surface`, and much lighter than the haze's ember, so it is
+  never mistaken for it.
+- `ghost-line`: 3.3:1, a control edge above 3:1 on the page as on a card
   (WCAG 1.4.11).
-- La marque et le chiffre du streak tiennent ≥ 3:1 (grand texte) sur le pixel le plus clair de
-  la brume : l'ambre est placé entre les deux, pas sous eux.
-- Le texte du premier lancement tient ≥ 4,5:1 sur la brume pleine : sous-titres, étape et unité y
-  passent en `ink` (le gris `muted` n'y tient pas au pixel le plus clair) ; la question, grand texte,
-  tient ≥ 3:1.
-- Le texte du minuteur tient ≥ 6,4:1 en pleine dérive ; `brightestHazePixel` calcule le pixel le
-  plus clair qu'une image de la brume puisse peindre (toute combinaison de taches superposées,
-  grain au maximum) et le test garde ≥ 4,5:1 pour le blanc comme pour le crème.
+- The brand and the streak figure hold ≥ 3:1 (large text) on the lightest pixel of the haze: the
+  amber sits between them, not beneath them.
+- First-launch text holds ≥ 4.5:1 on the full haze: subtitles, progress indicator and unit
+  switch to `ink` there (`muted` gray does not hold on the lightest pixel); the question, large
+  text, holds ≥ 3:1.
+- Timer text holds ≥ 6.4:1 at full drift; `brightestHazePixel` computes the lightest pixel a
+  frame of the haze can paint (any combination of overlapping blobs, grain at maximum) and the
+  test keeps ≥ 4.5:1 for both white and cream.
 
 ### Named Rules
 
-**The Cream Selection Rule.** « Sélectionné » est toujours un aplat crème avec un texte `page`,
-partout : bouton primaire, puce, segment, onglet, `Switch`, date du jour, cran acquis. Aucune
-couleur d'accent ne marque une sélection.
+**The Cream Selection Rule.** "Selected" is always a solid cream fill with `page` text,
+everywhere: primary button, chip, segment, tab, `Switch`, today's date, acquired notch. No
+accent color marks a selection.
 
-**The One Lit Object Rule.** Le dégradé rose → jaune et sa lueur appartiennent à `Envie` seul.
-Aucun autre bouton, badge, graphique ou fond ne les emprunte, même en partie.
+**The One Lit Object Rule.** The pink → yellow gradient and its glow belong to `Envie` alone.
+No other button, badge, chart or background borrows them, even in part.
 
-**The Haze Is Ground Rule.** Les couleurs de brume (`amber`, `ember`, `plum`, `floor`,
-`floor-deep`, `moss`, `bronze`) ne peignent que des fonds de brume. Elles ne colorent jamais un
-texte, un contrôle ou une donnée.
+**The Haze Is Ground Rule.** The haze colors (`amber`, `ember`, `plum`, `floor`,
+`floor-deep`, `moss`, `bronze`) paint haze backgrounds only. They never color text, a control
+or data.
 
-**The Alert Is Not a Fill Rule.** `alert` écrit un texte d'erreur (`text-alert`), borde un champ
-invalide, et dessine le bouton destructif en pilule fantôme à filet (1 px `alert` à 70 %, 3,8:1,
-libellé `alert`, appui à 10 %). Jamais d'aplat teinté, jamais de rouge sur un écart : un écart
-est un fait, pas une erreur.
+**The Alert Is Not a Fill Rule.** `alert` writes error text (`text-alert`), borders an invalid
+field, and draws the destructive button as a ghost pill with a hairline (1 px `alert` at 70%,
+3.8:1, `alert` label, 10% on press). Never a tinted fill, never red on a lapse: a lapse is a
+fact, not an error.
 
-**The One Series Rule.** Les graphiques n'ont qu'une teinte, `series`. L'ambre de série ne
-partage jamais un écran avec le bronze du minuteur.
+**The One Series Rule.** Charts have a single hue, `series`. Series amber never shares a screen
+with the timer's bronze.
 
 ## Typography
 
-**Police unique :** Host Grotesk Variable (`--font-sans`), auto-hébergée via
-`@fontsource-variable/host-grotesk` (axe `wght`), repli `ui-sans-serif, system-ui,
--apple-system, sans-serif`. Pas de police display séparée, pas de mono.
+**Single typeface:** Host Grotesk Variable (`--font-sans`), self-hosted through
+`@fontsource-variable/host-grotesk` (`wght` axis), fallback `ui-sans-serif, system-ui,
+-apple-system, sans-serif`. No separate display face, no mono.
 
-**Character :** un grotesque doux et peu vu, tenu serré dans les grands corps (tracking
-négatif croissant avec la taille) et laissé neutre dans le texte. `font-variant-numeric:
-tabular-nums` est posé sur `body` : un chiffre qui change ne fait jamais danser la ligne.
-Chiffres en 500, interface en 400 / 500, 600 seulement pour la marque et `Envie`.
+**Character:** a soft, rarely seen grotesque, set tight at large sizes (negative tracking that
+grows with size) and left neutral in text. `font-variant-numeric:
+tabular-nums` is set on `body`: a changing figure never makes the line jump.
+Figures at 500, interface at 400 / 500, 600 only for the brand and `Envie`.
 
 ### Hierarchy
-- **display** (500, 62cqi, 0,86, -0,055em) : le chiffre du streak, et les minutes tenues à la
-  fin d'un minuteur. Proportionnel à sa colonne.
-- **countdown** (500, 33cqi, 0,86, -0,05em) : le compte à rebours `m:ss` du minuteur.
-- **figure** (500, 1.875rem / 30 px, 1, -0,035em) : les chiffres des cartes — totaux, argent,
-  heure de pose, statistiques.
-- **headline** (500, 1.75rem / 28 px, 1,1, -0,03em) : la question du premier lancement, une par
-  écran.
-- **prompt** (400, 1.5rem / 24 px, 1,2, -0,025em) : la phrase du minuteur en cours (« Respire… »),
-  15 caractères de large au plus.
-- **craving** (600, 1.4375rem / 23 px, 1, -0,03em) : le libellé d'`Envie`.
-- **brand** (600, 1.3125rem / 21 px, 1, -0,03em) : « quit » dans la barre haute, sur tous les
-  écrans.
-- **title** (500, 1.25rem / 20 px, 1,2, -0,02em) : titre d'écran sous l'accueil, titre de
-  `Dialog` et de `Drawer`, statut en titre dans une carte.
-- **lead** (400, 1.125rem / 18 px, 1,3, -0,01em) : la ligne sous un chiffre géant (« jours de
+- **display** (500, 62cqi, 0.86, -0.055em): the streak figure, and the minutes held at the end
+  of a timer. Proportional to its column.
+- **countdown** (500, 33cqi, 0.86, -0.05em): the timer's `m:ss` countdown.
+- **figure** (500, 1.875rem / 30 px, 1, -0.035em): the figures on cards: totals, money,
+  application time, statistics.
+- **headline** (500, 1.75rem / 28 px, 1.1, -0.03em): the first-launch question, one per
+  screen.
+- **prompt** (400, 1.5rem / 24 px, 1.2, -0.025em): the running timer's sentence (« Respire… »),
+  15 characters wide at most.
+- **craving** (600, 1.4375rem / 23 px, 1, -0.03em): the `Envie` label.
+- **brand** (600, 1.3125rem / 21 px, 1, -0.03em): « quit » in the top bar, on every
+  screen.
+- **title** (500, 1.25rem / 20 px, 1.2, -0.02em): the title of a screen below home, the
+  `Dialog` and `Drawer` title, a status set as a title inside a card.
+- **lead** (400, 1.125rem / 18 px, 1.3, -0.01em): the line under a giant figure (« jours de
   streak · 07 h 42 »).
-- **cta** (500, 1rem / 16 px, 1, -0,02em) : boutons, valeur des champs, lignes de liste.
-- **body** (400, 0.9375rem / 15 px, 1,4) : lecture, libellés de ligne, sous-titres d'écran,
-  puces.
-- **label** (400, 0.8125rem / 13 px, 1,3) : titres de carte, libellés de champ, erreurs, lecture
-  de graphique.
-- **detail** (400, 0.75rem / 12 px, 1,2) : axes, étiquettes de dose, détail de badge.
-- **tab** (500, 0.6875rem / 11 px, 1) : libellés de la barre d'onglets.
-- **unit** (0.55em, 1, tracking 0) : l'unité d'un chiffre, relative au chiffre qu'elle suit.
+- **cta** (500, 1rem / 16 px, 1, -0.02em): buttons, field values, list rows.
+- **body** (400, 0.9375rem / 15 px, 1.4): reading text, row labels, screen subtitles,
+  chips.
+- **label** (400, 0.8125rem / 13 px, 1.3): card titles, field labels, errors, chart
+  readout.
+- **detail** (400, 0.75rem / 12 px, 1.2): axes, dose labels, badge detail.
+- **tab** (500, 0.6875rem / 11 px, 1): tab bar labels.
+- **unit** (0.55em, 1, tracking 0): a figure's unit, relative to the figure it follows.
 
 ### Named Rules
 
-**The Share-of-Column Rule.** Les chiffres géants (`display`, `countdown`) sont en `cqi` : leur
-parent est un `@container` sans padding, pour que la part se calcule sur toute la colonne. Le
-streak garde 62cqi jusqu'à deux chiffres, puis `streakFigureSize` le réduit
-(`min(62, floor(144 / chiffres))cqi`) pour qu'il ne dépasse jamais les gouttières.
+**The Share-of-Column Rule.** The giant figures (`display`, `countdown`) are in `cqi`: their
+parent is an `@container` with no padding, so the share is computed over the whole column. The
+streak keeps 62cqi up to two digits, then `streakFigureSize` shrinks it
+(`min(62, floor(144 / digits))cqi`) so it never runs past the gutters.
 
-**The Small Muted Unit Rule.** Une unité (`€`, `%`, `j`, `h`, `min`, après une espace
-insécable) est posée plus petite et sourde derrière son chiffre : `Figure` découpe la chaîne
-(`splitUnits`) et habille l'unité en `unit` + `muted`. La chaîne reste une seule phrase pour le
-lecteur d'écran et une seule entrée dans le module de chaînes.
+**The Small Muted Unit Rule.** A unit (`€`, `%`, `j`, `h`, `min`, after a non-breaking
+space) is set smaller and muted behind its figure: `Figure` splits the string
+(`splitUnits`) and dresses the unit in `unit` + `muted`. The string stays a single sentence for
+the screen reader and a single entry in the strings module.
 
-**The cn() Registration Rule.** Chaque taille et chaque rayon de `@theme` est déclaré dans
-`src/shared/utils/cn.ts`, sinon tailwind-merge lit `text-tab` comme une couleur et le supprime
-à côté d'un `text-<couleur>`. `cn.test.ts` échoue si un token manque.
+**The cn() Registration Rule.** Every `@theme` size and radius is declared in
+`src/shared/utils/cn.ts`; otherwise tailwind-merge reads `text-tab` as a color and drops it
+next to a `text-<color>`. `cn.test.ts` fails if a token is missing.
 
 ## Layout
 
-Une colonne unique centrée, `max-w-md` (448 px), pensée pour un iPhone 16 Pro en PWA
-standalone (402 px) puis simplement centrée au-delà. Les brumes, elles, s'étalent sur toute la
-largeur derrière la colonne.
+A single centered column, `max-w-md` (448 px), designed for an iPhone 16 Pro as a standalone
+PWA (402 px), then simply centered beyond that. The hazes, however, spread across the full
+width behind the column.
 
-- **Gouttières :** `px-safe` — `max(1.25rem, env(safe-area-inset-*))`. `pt-safe` en haut ;
-  `pb-page` en bas des écrans (indicateur d'accueil + marqueur du bac à sable), `pb-safe-4`
-  sous une action en zone pouce.
-- **Barre haute :** 56 px minimum (`min-h-14`, `pt-2`), marque à gauche, contexte et contrôle
-  44 px à droite ; le glyphe du contrôle déborde dans la gouttière (`-mr-2.5`) pour s'aligner.
-- **Accueil :** brume sur les 640 px du haut ; le chiffre commence 64 px sous la barre haute ;
-  les cartes commencent 64 px sous la ligne `lead`, à 12 px des bords (`px-3`, plus larges
-  que la gouttière du texte), espacées de 10 px.
-- **Écrans sous l'accueil (`AppShell`) :** hauteur d'écran (`min-h-svh`), pile à 16 px
-  d'intervalle : barre haute, `PageHeader`, contenu. Une étape de formulaire tient son action
-  en bas (`mt-auto`), dans la zone pouce.
-- **Cibles tactiles :** 44 px minimum (`h-11`, `size-11`) ; 48 px pour un champ, un bouton
-  `lg`, un item d'onglet ; 52 px pour une ligne de liste.
+- **Gutters:** `px-safe`, i.e. `max(1.25rem, env(safe-area-inset-*))`. `pt-safe` at the top;
+  `pb-page` at the bottom of screens (home indicator + sandbox marker), `pb-safe-4`
+  under an action in the thumb zone.
+- **Top bar:** 56 px minimum (`min-h-14`, `pt-2`), brand on the left, context and a 44 px
+  control on the right; the control's glyph overhangs into the gutter (`-mr-2.5`) to line up.
+- **Home:** haze over the top 640 px; the figure starts 64 px below the top bar;
+  the cards start 64 px below the `lead` line, 12 px from the edges (`px-3`, wider
+  than the text gutter), 10 px apart.
+- **Screens below home (`AppShell`):** screen height (`min-h-svh`), a stack at 16 px
+  intervals: top bar, `PageHeader`, content. A form screen keeps its action
+  at the bottom (`mt-auto`), in the thumb zone.
+- **Touch targets:** 44 px minimum (`h-11`, `size-11`); 48 px for a field, an `lg`
+  button, a tab item; 52 px for a list row.
 
 ### Named Rules
 
-**The Fixed Pill Rule.** `Envie` est fixe en bas à droite, sur un fondu vers `page` à 92 % ; le
-contenu défilant réserve un dégagement bas (`pb-32` sur l'accueil) pour qu'aucune information
-ne reste sous la pilule.
+**The Fixed Pill Rule.** `Envie` is fixed at the bottom right, over a fade to `page` at 92%;
+scrolling content reserves bottom clearance (`pb-32` on home) so no information
+stays under the pill.
 
-**The Thumb Zone Rule.** L'action principale d'un écran à décision (question du premier
-lancement, `Arrêter`, `Enregistrer` d'une envie) vit en bas de l'écran, sur un fondu vers la
-page quand elle colle (`sticky`).
+**The Thumb Zone Rule.** The main action of a decision screen (first-launch question,
+`Arrêter`, `Enregistrer` on a craving) lives at the bottom of the screen, over a fade to the
+page when it sticks (`sticky`).
 
 ## Elevation & Depth
 
-Pas d'ombres portées : il n'existe aucun token `--shadow-*`. La profondeur vient de la brume,
-de l'aplat `surface` sur la `page`, des filets et du voile. La seule `box-shadow` du monde est
-la lueur d'`Envie` (dans l'utilitaire `bg-craving`), qui en fait l'objet allumé.
+No drop shadows: there is no `--shadow-*` token. Depth comes from the haze, the `surface` fill
+on `page`, the hairlines and the veil. The only `box-shadow` in the world is `Envie`'s glow
+(in the `bg-craving` utility), which makes it the lit object.
 
-1. **La brume** — halos radiaux sur un plancher, fondue dans la page par un masque
-   (`mask-haze` : opaque jusqu'à 65 %, puis transparent) pour que halos et grain s'éteignent
-   ensemble, sans marche.
-2. **Le grain** — bruit fractal SVG en ligne (`bg-grain`) en `mix-blend-overlay`, 35 %
-   sur la brume d'accueil, 20 % sur celle du minuteur. C'est le seul grain du monde.
-3. **La carte** — `surface` sur `page`, sans bord.
-4. **Le filet** — 1 px `line` pour séparer, 1 px `ghost-line` pour borner ce qui se touche.
-5. **Le voile** — `page` à 80 % sous le `Dialog` et le `Drawer`.
-6. **Les fondus** — vers `page` sous `Envie`, sous une action collante, au bas d'une brume de
-   minuteur (96 px).
+1. **The haze**: radial halos over a floor, faded into the page by a mask
+   (`mask-haze`: opaque up to 65%, then transparent) so halos and grain die out
+   together, with no visible edge.
+2. **The grain**: inline SVG fractal noise (`bg-grain`) in `mix-blend-overlay`, 35%
+   on the home haze, 20% on the timer's. It is the only grain in the world.
+3. **The card**: `surface` on `page`, no border.
+4. **The hairline**: 1 px `line` to separate, 1 px `ghost-line` to edge what is touchable.
+5. **The scrim**: `page` at 80% under the `Dialog` and the `Drawer`.
+6. **The fades**: to `page` under `Envie`, under a sticky action, at the bottom of a timer
+   haze (96 px).
 
 ### Shadow Vocabulary
-- **Lueur Envie** (`box-shadow: 0 14px 40px -10px color-mix(in srgb, #fd429c 60%, transparent),
-  inset 0 0 0 1px rgb(255 255 255 / 0.12)`) : `Envie` seul.
+- **Envie glow** (`box-shadow: 0 14px 40px -10px color-mix(in srgb, #fd429c 60%, transparent),
+  inset 0 0 0 1px rgb(255 255 255 / 0.12)`): `Envie` alone.
 
 ### Named Rules
 
-**The Haze Placement Rule.** La brume ne s'éteint jamais, mais sa dose est fixée par écran :
-- **Accueil** — la brume pleine (`HeroHaze` `hero`), 640 px, derrière la marque et le streak.
-- **Premier lancement** — la même brume pleine (`hero`) : première impression du monde. Le texte
-  secondaire posé dessus passe en `ink` pour tenir 4,5:1.
-- **Tous les autres écrans** — la bande basse (`band`) : 192 px, 70 %, prune et ember
-  seulement, **sans ambre sous le texte**, sur un plancher `floor-deep`, derrière la barre haute
-  et le titre.
-- **Minuteur d'envie** — sa propre brume liquide mousse et bronze, plein écran.
-- **Minuteur arrêté avant la fin** — la même brume, à 60 % et immobile : jamais éteinte, jamais
-  marquée.
+**The Haze Placement Rule.** The haze never goes out, but its dose is set per screen:
+- **Home**: the full haze (`HeroHaze` `hero`), 640 px, behind the brand and the streak.
+- **First launch**: the same full haze (`hero`), the world's first impression. Secondary
+  text set on it switches to `ink` to hold 4.5:1.
+- **All other screens**: the low band (`band`): 192 px, 70%, plum and ember only,
+  **no amber under text**, on a `floor-deep` floor, behind the top bar
+  and the title.
+- **Craving timer**: its own liquid moss and bronze haze, full screen.
+- **Timer stopped early**: the same haze, at 60% and still: never switched off, never
+  flagged.
 
-**The Code-Drawn Rule.** Brumes, grain et icônes sont du code : aucun raster décoratif. Les
-icônes de `public/` sont rendues par `scripts/render-icons.mjs` depuis les stops de `bg-haze` et
-un « q » Host Grotesk blanc ; chaque PNG porte sa provenance dans un bloc `tEXt`. Changer un
-stop de brume ou la police → relancer le script.
+**The Code-Drawn Rule.** Hazes, grain and icons are code: no decorative raster. The
+icons in `public/` are rendered by `scripts/render-icons.mjs` from the `bg-haze` stops and
+a white Host Grotesk "q"; each PNG carries its provenance in a `tEXt` chunk. Changing a
+haze stop or the typeface → rerun the script.
 
-**The Focus Outline Rule.** Le focus est un `outline: 2px solid ink`, `outline-offset: 3px`,
-posé globalement sur `:focus-visible`. Aucun composant ne dessine son propre anneau.
+**The Focus Outline Rule.** Focus is an `outline: 2px solid ink`, `outline-offset: 3px`,
+set globally on `:focus-visible`. No component draws its own ring.
 
 ## Shapes
 
-Tout ce qui se touche est une pilule ; tout ce qui contient est un rectangle doux.
+Everything touchable is a pill; everything that contains is a soft rectangle.
 
-| Token | Valeur | Où |
+| Token | Value | Where |
 |---|---|---|
-| `rounded-full` | pilule | tous les boutons, `Envie`, puces, plateau et onglets de `Tabs`, plateau segmenté, `Switch`, barre de progression, crans de minute, contrôle réglages |
-| `rounded-hero` | 1.75rem / 28 px | bord d'ouverture du `Drawer` |
-| `rounded-card` | 0.75rem / 12 px | carte, badge, `Dialog` |
-| `rounded-control` | 0.625rem / 10 px | champ de saisie, item de la barre d'onglets |
-| `rounded-step` | 0.5rem / 8 px | crans du multiplicateur |
-| `rounded-mark` | 0.25rem / 4 px | bout de donnée d'une barre de graphique, jamais côté base |
+| `rounded-full` | pill | all buttons, `Envie`, chips, `Tabs` tray and tabs, segmented tray, `Switch`, progress bar, minute notches, settings control |
+| `rounded-hero` | 1.75rem / 28 px | the `Drawer`'s opening edge |
+| `rounded-card` | 0.75rem / 12 px | card, badge, `Dialog` |
+| `rounded-control` | 0.625rem / 10 px | text field, tab bar item |
+| `rounded-step` | 0.5rem / 8 px | multiplier notches |
+| `rounded-mark` | 0.25rem / 4 px | the data end of a chart bar, never the base end |
 
-Les contours font toujours 1 px (2 px seulement autour du pouce du slider, en `page`, et sur
-l'anneau « à poser » du calendrier). Le carré
-parfait n'existe qu'une fois : le badge (`aspect-square`).
+Outlines are always 1 px (2 px only around the slider thumb, in `page`, and on the
+calendar's « à poser » ring). The perfect
+square exists only once: the badge (`aspect-square`).
 
 ## Components
 
-### Barre haute (`TopBar`)
-Une seule barre sur tous les écrans : « quit » en `brand` à gauche ; à droite, en `body`, le
-contexte (« Étape 2 · 14 mg », « Minuteur d'envie ») puis un contrôle icône de 44 px
-(réglages, trait 1,5, appui en `ghost`).
+### Top bar (`TopBar`)
+A single bar on every screen: « quit » in `brand` on the left; on the right, in `body`, the
+context (« Étape 2 · 14 mg », « Minuteur d'envie »), then a 44 px icon control
+(settings, 1.5 stroke, `ghost` on press).
 
-### En-tête d'écran et retour (`PageHeader`, `BackLink`)
-Chaque écran sous l'accueil s'ouvre pareil : le chevron gauche (bouton `ghost` `icon` 44 px,
-trait 1,75, tiré de 12 px dans la gouttière) **à côté** du titre en `title`, puis un sous-titre
-optionnel en `body` `muted`. C'est la seule manière de remonter. Un formulaire se ferme par un
-bouton `ghost` « Annuler » sous son action, jamais par un second chevron.
+### Screen header and back (`PageHeader`, `BackLink`)
+Every screen below home opens the same way: the left chevron (44 px `ghost` `icon` button,
+1.75 stroke, pulled 12 px into the gutter) **next to** the title in `title`, then an optional
+subtitle in `body` `muted`. It is the only way back up. A form closes with a `ghost`
+« Annuler » button under its action, never with a second chevron.
 
 ### Cards / Containers (`Card`)
-- **Une seule carte :** `surface`, `rounded-card` (12 px), aucun bord, aucune ombre.
-- **Marge intérieure :** `block` 20 px partout (la seule) ; `rows` 20 px sur les côtés, les
-  lignes apportent leur hauteur ; `none` quand le contenu gère son retrait (grille, calendrier).
-- **Titre :** une carte nommée est une région ; son titre est son `h2` (accueil) ou `h3` (sous le
-  titre d'un écran), en `label` `muted` en haut, avec un aside optionnel en face ; 14 px entre
-  lui et le contenu. Sans titre, `label` donne le nom accessible.
-- **Chiffres en lignes (`FigureRows`) :** libellé `body` `muted` à gauche, chiffre `figure` à
-  droite avec ses unités petites, filet `line` entre les lignes, 12 px de haut et de bas.
-- **Résumé de statistiques :** grille 2 × 2 en `dl`, libellé `label` `muted` au-dessus du
-  chiffre `figure`, cellules séparées par des filets.
+- **A single card:** `surface`, `rounded-card` (12 px), no border, no shadow.
+- **Padding:** `block` 20 px on every side (the only one); `rows` 20 px on the sides, the
+  rows bring their own height; `none` when the content handles its own inset (grid, calendar).
+- **Title:** a titled card is a region; its title is its `h2` (home) or `h3` (below a
+  screen title), in `label` `muted` at the top, with an optional aside opposite; 14 px between
+  it and the content. Without a title, `label` provides the accessible name.
+- **Figure rows (`FigureRows`):** `body` `muted` label on the left, `figure` on the
+  right with its small units, `line` hairline between rows, 12 px above and below.
+- **Statistics summary:** a 2 × 2 grid as a `dl`, `label` `muted` label above the
+  `figure`, cells separated by hairlines.
 
 ### Buttons
-Calmes, en pilule, `cta` 500, aucune ombre.
-- **Tailles :** `default` 44 px / `sm` 36 px (`label`) / `lg` 48 px / `icon` 44 × 44 /
+Calm, pill-shaped, `cta` 500, no shadow.
+- **Sizes:** `default` 44 px / `sm` 36 px (`label`) / `lg` 48 px / `icon` 44 × 44 /
   `icon-sm` 36 × 36.
-- **Primary :** aplat crème, texte `page` ; appui → crème à 85 %.
-- **Secondary :** pilule fantôme, filet 1 px `ghost-line`, texte crème ; appui → `ghost`.
-- **Ghost :** transparent, texte crème ; appui → `ghost`. Sert « Annuler » et le retour.
-- **Destructive :** pilule fantôme à filet `alert` 70 % (3,8:1), libellé `alert` ; appui → `alert` 10 %.
-  Placée dans un `Dialog` de confirmation ou sous un filet, jamais collée à « Enregistrer ».
-- **Link :** texte `body` crème souligné en `ghost-line` (décalage 4 px), cible 44 px gardée.
-- **Disabled :** aplat `ghost`, texte `muted`, bord effacé.
-- **Retour tactile :** `scale(0.98)` en 150 ms `ease-out-expo`, figé sous `motion-reduce`. Pas
-  d'état `hover` dédié : la cible est le doigt.
+- **Primary:** solid cream, `page` text; press → cream at 85%.
+- **Secondary:** ghost pill, 1 px `ghost-line` hairline, cream text; press → `ghost`.
+- **Ghost:** transparent, cream text; press → `ghost`. Used for « Annuler » and back.
+- **Destructive:** ghost pill with a 70% `alert` hairline (3.8:1), `alert` label; press → `alert` 10%.
+  Placed in a confirmation `Dialog` or below a hairline, never right next to « Enregistrer ».
+- **Link:** cream `body` text underlined in `ghost-line` (4 px offset), 44 px target kept.
+- **Disabled:** `ghost` fill, `muted` text, border removed.
+- **Press feedback:** `scale(0.98)` over 150 ms `ease-out-expo`, frozen under `motion-reduce`. No
+  dedicated `hover` state: the target is a finger.
 
 ### Envie (signature)
-La pilule permanente, seul objet allumé : 64 px de haut, au moins 62,5 % de la colonne, dégradé
-horizontal `pink` → `yellow`, libellé `craving` en `page`, lueur rose. Fixe en bas à droite sur
-son fondu. S'enfonce à `scale(0.97)`. Désactivée, elle perd dégradé et lueur : aplat `ghost`,
-texte `muted`.
+The permanent pill, the only lit object: 64 px high, at least 62.5% of the column, a horizontal
+`pink` → `yellow` gradient, `craving` label in `page`, pink glow. Fixed at the bottom right over
+its fade. Sinks to `scale(0.97)`. Disabled, it loses gradient and glow: `ghost` fill,
+`muted` text.
 
-### Chips et segmented control
-- **Puce (`Toggle`, `ToggleGroup`) :** pilule `ghost` 44 px, texte `body` crème ; pressée →
-  aplat crème, texte `page`. Variante `outline` : filet `ghost-line`, pressée bordée de crème.
-- **Segmented :** `ToggleGroup` avec `spacing={0}` + `variant="outline"` — un plateau pilule à
-  filet `ghost-line`, 4 px de retrait, segments de 44 px à parts égales ; le segment pressé est
-  une pilule crème dans le plateau.
+### Chips and segmented control
+- **Chip (`Toggle`, `ToggleGroup`):** 44 px `ghost` pill, cream `body` text; pressed →
+  solid cream, `page` text. `outline` variant: `ghost-line` hairline, pressed edged in cream.
+- **Segmented:** `ToggleGroup` with `spacing={0}` + `variant="outline"`: a pill tray with a
+  `ghost-line` hairline, 4 px inset, equal 44 px segments; the pressed segment is
+  a cream pill inside the tray.
 
 ### Inputs / Fields
-- **Champ :** 48 px, `rounded-control`, fond `ghost`, filet 1 px `ghost-line`, retrait 16 px,
-  valeur crème en `cta` 500 tabulaire, placeholder `muted` 400. Invalide → filet `alert`, et un
-  `<p role="alert">` en `label` `alert` sous le champ. Les dates natives sont calées à gauche.
-- **Switch :** piste 51 × 31 ; éteinte `ghost-line`, pouce blanc 27 px ; allumée crème, pouce
-  `page`, translation 20 px en 150 ms.
-- **Slider :** piste 8 px `line`, remplissage crème, pouce blanc 28 px cerclé 2 px de `page`,
-  `scale(1.1)` à l'appui, zone tactile élargie de 8 px.
-- **Tabs :** plateau pilule `ghost` 44 px, 4 px de retrait, texte `muted` ; onglet actif en
-  pilule crème, texte `page`. Variante `line` : filet bas `line`, actif en crème souligné 2 px.
+- **Field:** 48 px, `rounded-control`, `ghost` background, 1 px `ghost-line` hairline, 16 px inset,
+  cream value in tabular `cta` 500, `muted` 400 placeholder. Invalid → `alert` hairline, and a
+  `<p role="alert">` in `label` `alert` under the field. Native dates are left-aligned.
+- **Switch:** 51 × 31 track; off `ghost-line`, 27 px white thumb; on cream, `page` thumb,
+  20 px travel in 150 ms.
+- **Slider:** 8 px `line` track, cream fill, 28 px white thumb ringed 2 px in `page`,
+  `scale(1.1)` on press, touch area widened by 8 px.
+- **Tabs:** 44 px `ghost` pill tray, 4 px inset, `muted` text; active tab as a
+  cream pill, `page` text. `line` variant: bottom `line` hairline, active in cream with a 2 px underline.
 
 ### Navigation
-- **Liste de lignes (aujourd'hui) :** sur l'accueil, une carte `rows` de `RowLink` porte la
-  navigation : chaque ligne 52 px, libellé `cta` 400 crème, chevron droit `muted` 18 px en bout,
-  filet `line` entre les lignes ; appui → texte `muted`.
-- **Barre d'onglets (avec M2) :** son aspect est fixé dans le spécimen `/design` et elle arrive
-  avec Progression : fond `page`, filet haut `line` borné à la colonne, quatre items (Accueil ·
-  Calendrier · Progression · Historique), icône 24 px sur libellé `tab`, item de 48 px. Actif →
-  crème, sans fond ni indicateur ; inactif → `muted`, crème à l'appui. `aria-current="page"`.
+- **Row list (current):** on home, a `rows` card of `RowLink` carries the
+  navigation: each row 52 px, cream `cta` 400 label, 18 px `muted` right chevron at the end,
+  `line` hairline between rows; press → `muted` text.
+- **Tab bar (with M2):** its look is fixed in the `/design` specimen and it arrives
+  with Progression: `page` background, top `line` hairline bounded to the column, four items (Accueil ·
+  Calendrier · Progression · Historique), 24 px icon over a `tab` label, 48 px item. Active →
+  cream, with no background or indicator; inactive → `muted`, cream on press. `aria-current="page"`.
 
 ### Streak hero (signature)
-Sur la brume pleine : la barre haute, puis une colonne centrée — le chiffre du streak en
-`display` blanc, puis une seule ligne `lead` : « jours de streak », un point dessiné (non lu),
-et l'horloge `hh h mm` en `muted`. Le chiffre réel est lu en `sr-only` ; la valeur animée est
+On the full haze: the top bar, then a centered column: the streak figure in white
+`display`, then a single `lead` line: « jours de streak », a drawn dot (not read aloud),
+and the `hh h mm` clock in `muted`. The real figure is read through `sr-only`; the animated value is
 `aria-hidden`.
 
-### Minuteur d'envie (signature)
-- **En cours :** plein écran sur la brume liquide — deux taches bronze, une mousse, une tache
-  `page`, floutées 48 px, qui dérivent sur 14 à 22 s en aller-retour ; la couche entière à 65 %,
-  grain à 20 %. Barre haute avec « Minuteur d'envie ». Au centre, calé à gauche : la phrase en
-  `prompt`, le compte à rebours en `countdown` blanc (`role="timer"`), « Temps restant » en
-  `label`, puis une rangée de crans de minute sur toute la colonne (4 px, pilule, 6 px d'écart :
-  tenue blanc, en cours blanc 45 %, à venir blanc 22 %). `Arrêter` en `secondary` `lg` pleine
-  largeur, en zone pouce. Seules les secondes et la brume bougent.
-- **Tenu jusqu'au bout :** la même brume en tête d'écran, fondue vers la page sur 96 px ; les
-  minutes tenues en `display` blanc montent au compteur, les crans entrent en séquence — la
-  célébration de l'app. Dessous, l'intensité et les situations.
-- **Arrêté avant :** la brume reste, à 60 % et immobile ; titre et sous-titre, puis le même
-  formulaire. Pas de fête, pas de reproche.
+### Craving timer (signature)
+- **Running:** full screen on the liquid haze: two bronze blobs, one moss, one `page`
+  blob, blurred 48 px, drifting back and forth over 14 to 22 s; the whole layer at 65%,
+  grain at 20%. Top bar with « Minuteur d'envie ». In the center, left-aligned: the sentence in
+  `prompt`, the countdown in white `countdown` (`role="timer"`), « Temps restant » in
+  `label`, then a row of minute notches across the whole column (4 px, pill, 6 px gap:
+  held white, current white 45%, upcoming white 22%). `Arrêter` as a full-width `secondary` `lg`,
+  in the thumb zone. Only the seconds and the haze move.
+- **Held to the end:** the same haze at the top of the screen, faded to the page over 96 px; the
+  minutes held count up in white `display`, the notches enter in sequence: the app's
+  celebration. Below, the intensity and the tags.
+- **Stopped early:** the haze stays, at 60% and still; title and subtitle, then the same
+  form. No celebration, no reproach.
 
-### Progression
-- **Barre (`ProgressBar`) :** piste 8 px `line`, remplissage crème, largeur animée en 500 ms. Les
-  bornes chiffrées vivent à côté : la barre ne porte jamais de texte.
-- **Multiplicateur :** cinq crans de 42 px, `rounded-step`, filet 1 px : acquis → aplat crème,
-  texte `page` ; courant → cerclé de crème, fond transparent, texte crème ; verrouillé → `ghost`,
-  texte `muted`. Ils entrent en séquence, 60 ms d'écart (`step-in`).
+### Progress
+- **Bar (`ProgressBar`):** 8 px `line` track, cream fill, width animated over 500 ms. The
+  numeric bounds live beside it: the bar never carries text.
+- **Multiplier:** five 42 px notches, `rounded-step`, 1 px hairline: acquired → solid cream,
+  `page` text; current → ringed in cream, transparent background, cream text; locked → `ghost`,
+  `muted` text. They enter in sequence, 60 ms apart (`step-in`).
 
 ### Badges
-Carrés, `rounded-card`, 12 px de retrait, nom en `body` 500 et détail en `detail`. Débloqué →
-`surface`, texte crème, détail `muted`, sans icône. Verrouillé → contour 1 px `line` sans fond,
-texte `muted`, cadenas 24 px (trait 1,75) en haut ; « à débloquer » en `sr-only`.
+Square, `rounded-card`, 12 px inset, name in `body` 500 and detail in `detail`. Unlocked →
+`surface`, cream text, `muted` detail, no icon. Locked → 1 px `line` outline with no background,
+`muted` text, 24 px padlock (1.75 stroke) at the top; « à débloquer » in `sr-only`.
 
-### Calendrier
-Grille mensuelle sur une surface de carte, mois en `title` et deux flèches de 44 px ; date en `label` tabulaire dans un disque de 24 px — le jour
-même est le seul disque crème (texte `page`) ; jours à venir en `muted`, hors calendrier en
-`muted` 80 %. Marques de 14 px sous la date, une forme par état : patch posé = point crème,
-manqué = tiret `muted`, à poser = anneau crème, prévu = petit point `muted` ; écart = cigarette,
-envie = minuteur. Premier jour d'étape : pastille `ghost` en `detail`.
+### Calendar
+Month grid on a card surface, month in `title` and two 44 px arrows; date in tabular `label` inside a 24 px disc; today
+is the only cream disc (`page` text); upcoming days in `muted`, days outside the calendar in
+`muted` 80%. 14 px marks under the date, one shape per state: patch applied = cream dot,
+missed = `muted` dash, due = cream ring, planned = small `muted` dot; lapse = cigarette,
+craving = timer. First day of a step: a `ghost` pill in `detail`.
 
-### Graphiques
-Sur une carte, une seule série en `series`. Colonnes de 24 px au plus, 2 px d'écart,
-`rounded-mark` au bout de donnée, posées sur une ligne de base `ghost-line` ; barres horizontales
-de 8 px, même règle, ligne de base à gauche. Changement d'étape = filet 1 px `muted` sur toute
-la hauteur, dose en `detail` crème au-dessus. Axes en `detail` `muted`. Une ligne de lecture en
-`label` nomme une colonne (nom crème 500) ; le doigt glissé en choisit une autre et les autres
-passent à 60 %, jamais sous 3:1 contre la carte. Chaque graphique a son jumeau `table` en
-`sr-only` (en `block`, pour ne jamais élargir la page).
+### Charts
+On a card, a single series in `series`. Columns 24 px wide at most, 2 px apart,
+`rounded-mark` at the data end, sitting on a `ghost-line` baseline; horizontal bars
+8 px thick, same rule, baseline on the left. A step change = a 1 px `muted` hairline across the full
+height, dose in cream `detail` above it. Axes in `detail` `muted`. A readout line in
+`label` names one column (name in cream 500); a sliding finger picks another and the others
+drop to 60%, never below 3:1 against the card. Every chart has its `table` twin in
+`sr-only` (as `block`, so it never widens the page).
 
 ### Overlays
-- **Dialog :** carte `surface`, `rounded-card`, filet `line`, retrait 20 px, largeur `max-w-sm`,
-  sur un voile `page` 80 % ; titre en `title`, description en `body` `muted`. Entrée / sortie :
-  opacité + `scale(0.95)`, 200 ms.
-- **Drawer :** feuille `surface`, `rounded-hero` sur le bord d'ouverture, voile `page` 80 %,
-  poignée `ghost-line` de 4 × 96 px. La mécanique Base UI est intacte (courbes de 450 ms).
+- **Dialog:** `surface` card, `rounded-card`, `line` hairline, 20 px inset, `max-w-sm` width,
+  over a `page` 80% scrim; title in `title`, description in `body` `muted`. Enter / exit:
+  opacity + `scale(0.95)`, 200 ms.
+- **Drawer:** `surface` sheet, `rounded-hero` on the opening edge, `page` 80% scrim,
+  4 × 96 px `ghost-line` handle. The Base UI mechanics are untouched (450 ms curves).
 
 ### Motion
-Une seule signature : **le compteur par crans** (`countUpAt`). Un chiffre monte en pas entiers,
-12 au plus, sur 240 ms — une roue qui se pose, jamais une interpolation fluide. Sur l'accueil,
-il joue une fois par lancement (`useLaunchEntrance`) : jours et horloge montent ensemble et se
-posent au même cran. `--ease-out-expo` (`cubic-bezier(0.16, 1, 0.3, 1)`) pour tout ; 150 ms pour
-un retour tactile, 200 ms pour un dialogue, 240 ms pour la signature et `step-in`, 500 ms pour
-une barre.
+A single signature: **the ticking count-up** (`countUpAt`). A figure climbs in whole ticks,
+12 at most, over 240 ms: a wheel settling into place, never a smooth interpolation. On home,
+it plays once per launch (`useLaunchEntrance`): days and clock climb together and land
+on the same tick. `--ease-out-expo` (`cubic-bezier(0.16, 1, 0.3, 1)`) for everything; 150 ms for
+press feedback, 200 ms for a dialog, 240 ms for the signature and `step-in`, 500 ms for
+a bar.
 
-**The Reduced Motion Rule.** Sous `prefers-reduced-motion: reduce`, les compteurs affichent la
-valeur finale dès la première image ; la dérive de la brume, `step-in` et la séquence des crans
-ne jouent que sous `motion-safe:` — la brume devient une image fixe ; toute transition porte
+**The Reduced Motion Rule.** Under `prefers-reduced-motion: reduce`, counters show the
+final value from the first frame; the haze drift, `step-in` and the notch sequence
+play only under `motion-safe:`, so the haze becomes a still image; every transition carries
 `motion-reduce:transition-none`.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** marquer toute sélection en aplat crème avec un texte `page`.
-- **Do** placer la brume selon The Haze Placement Rule : pleine sur l'accueil et au premier lancement (texte secondaire en `ink` dessus), bande basse sans ambre partout ailleurs, brume mousse et bronze au minuteur, immobile et atténuée quand il est arrêté.
-- **Do** construire tout bloc sur la carte unique : `surface`, rayon 12 px, 20 px de retrait.
-- **Do** ouvrir tout écran de consultation sous l'accueil (calendrier, statistiques, historique, réglages, protocole) par la barre haute puis `PageHeader` (chevron à côté du titre) ; un formulaire n'a pas de chevron et se ferme par un `ghost` « Annuler » (la fiche d'un fait, par un `ghost` « Retour »).
-- **Do** poser les unités d'un chiffre petites et sourdes via `Figure`.
-- **Do** border tout contrôle en `ghost-line` (≥ 3:1) et séparer la structure en `line`.
-- **Do** écrire les erreurs en `alert` sous leur champ, et le destructif en pilule fantôme à filet `alert`.
-- **Do** vérifier chaque texte posé sur une brume : ≥ 3:1 pour la marque et le chiffre, ≥ 4,5:1 pour le texte courant.
-- **Do** déclarer toute nouvelle taille ou tout nouveau rayon de `@theme` dans `src/shared/utils/cn.ts`.
-- **Do** garder chaque animation derrière `motion-safe:` ou `motion-reduce:transition-none`, et rendre la valeur finale d'un compteur sous mouvement réduit.
-- **Do** relancer `scripts/render-icons.mjs` après tout changement de stop de brume ou de police.
+- **Do** mark every selection with a solid cream fill and `page` text.
+- **Do** place the haze per The Haze Placement Rule: full on home and on first launch (secondary text in `ink` over it), a low band with no amber everywhere else, a moss and bronze haze on the timer, still and dimmed once it is stopped.
+- **Do** build every block on the single card: `surface`, 12 px radius, 20 px inset.
+- **Do** open every viewing screen below home (calendar, statistics, history, settings, protocol) with the top bar then `PageHeader` (chevron next to the title); a form has no chevron and closes with a `ghost` « Annuler » (a fact's detail sheet, with a `ghost` « Retour »).
+- **Do** set a figure's units small and muted through `Figure`.
+- **Do** edge every control in `ghost-line` (≥ 3:1) and separate structure with `line`.
+- **Do** write errors in `alert` under their field, and draw destructive actions as a ghost pill with an `alert` hairline.
+- **Do** check every text set on a haze: ≥ 3:1 for the brand and the figure, ≥ 4.5:1 for running text.
+- **Do** declare every new `@theme` size or radius in `src/shared/utils/cn.ts`.
+- **Do** keep every animation behind `motion-safe:` or `motion-reduce:transition-none`, and render a counter's final value under reduced motion.
+- **Do** rerun `scripts/render-icons.mjs` after any change to a haze stop or the typeface.
 
 ### Don't:
-- **Don't** prêter le dégradé rose → jaune ou la lueur d'`Envie` à un autre objet.
-- **Don't** peindre un texte, un contrôle ou une donnée avec une couleur de brume.
-- **Don't** mettre d'ambre sous un texte hors de l'accueil : la bande basse est prune et ember seulement.
-- **Don't** éteindre la brume d'un écran, ni celle du minuteur arrêté.
-- **Don't** ajouter une ombre portée, un `ring-*` ou un anneau de focus par composant : le seul `box-shadow` est la lueur d'`Envie`, le focus est l'`outline` global.
-- **Don't** remplir un bouton destructif d'un aplat teinté, ni colorer un écart en `alert`.
-- **Don't** mettre l'ambre de série et le bronze du minuteur sur le même écran, ni une seconde couleur de série.
-- **Don't** transformer une progression en anneau ou en jauge : une barre de 8 px avec ses bornes chiffrées, ou une rangée de crans.
-- **Don't** ajouter un raster décoratif : brumes, grain et icônes sont du code.
-- **Don't** créer une seconde barre haute, une seconde carte ou un second geste de retour.
-- **Don't** animer un chiffre en interpolation fluide : par crans, 240 ms, `ease-out-expo`.
+- **Don't** lend the pink → yellow gradient or `Envie`'s glow to any other object.
+- **Don't** paint text, a control or data with a haze color.
+- **Don't** put amber under text outside home: the low band is plum and ember only.
+- **Don't** switch off a screen's haze, nor the stopped timer's.
+- **Don't** add a drop shadow, a `ring-*` or a per-component focus ring: the only `box-shadow` is `Envie`'s glow, and focus is the global `outline`.
+- **Don't** give a destructive button a tinted fill, nor color a lapse in `alert`.
+- **Don't** put series amber and the timer's bronze on the same screen, nor add a second series color.
+- **Don't** turn progress into a ring or a gauge: an 8 px bar with its numeric bounds, or a row of notches.
+- **Don't** add a decorative raster: hazes, grain and icons are code.
+- **Don't** create a second top bar, a second card or a second back gesture.
+- **Don't** animate a figure with smooth interpolation: in ticks, 240 ms, `ease-out-expo`.
