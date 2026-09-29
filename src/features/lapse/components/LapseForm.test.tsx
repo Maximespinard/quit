@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { emptyJournal, type Journal } from '@/shared/domain/journal'
+import { factId } from '@/shared/test/fact-ids'
 import { strings } from '@/shared/utils/strings'
 import { LapseForm } from './LapseForm'
 
@@ -125,9 +126,9 @@ describe('the relapse a lapse would trigger', () => {
 })
 
 describe('editing a lapse', () => {
-  const initial = { at: new Date(2026, 8, 21, 22, 15, 42).getTime(), count: 3 }
+  const initial = { id: factId(7), at: new Date(2026, 8, 21, 22, 15, 42).getTime(), count: 3 }
 
-  it('starts from the lapse and, left untouched, keeps its exact instant', async () => {
+  it('starts from the lapse and, left untouched, keeps its exact instant and its id', async () => {
     const onRecorded = vi.fn()
     render(<LapseForm journal={journal} now={NOW} initial={initial} onRecorded={onRecorded} />)
 
@@ -137,7 +138,7 @@ describe('editing a lapse', () => {
 
     expect(onRecorded).toHaveBeenCalledWith({
       ...journal,
-      facts: [...journal.facts, { type: 'lapse', at: initial.at, count: 2 }],
+      facts: [...journal.facts, { type: 'lapse', id: initial.id, at: initial.at, count: 2 }],
     })
   })
 

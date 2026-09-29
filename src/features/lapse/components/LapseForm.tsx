@@ -1,6 +1,6 @@
 import { type FormEvent, useId, useState } from 'react'
 import { type Lapse, type RecordLapseResult, recordLapse } from '@/shared/domain/facts/lapse'
-import type { Journal } from '@/shared/domain/journal'
+import { type Journal, keptId } from '@/shared/domain/journal'
 import { triggersRelapse } from '@/shared/domain/relapse'
 import { Button } from '@/shared/ui/base/button'
 import { Input } from '@/shared/ui/base/input'
@@ -43,7 +43,7 @@ export function LapseForm({ journal, now, initial, onRecorded }: LapseFormProps)
       setError('invalid')
       return
     }
-    const result = recordLapse(journal, { at, count }, now)
+    const result = recordLapse(journal, { ...keptId(initial), at, count }, now)
     if (result.ok) onRecorded(result.journal)
     else setError(result.reason)
   }

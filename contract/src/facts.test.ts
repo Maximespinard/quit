@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { factSchema } from './facts.ts'
 
 const AT = Date.UTC(2026, 8, 29, 10, 0, 0)
+const ID = '0199a6f2-4c00-7abc-8def-0123456789ab'
 
 describe('factSchema', () => {
   it.each([
@@ -13,6 +14,7 @@ describe('factSchema', () => {
       { type: 'patch-application', at: AT, doseMg: 21, site: 'hip-left' },
     ],
     ['a lapse', { type: 'lapse', at: AT, count: 3 }],
+    ['a fact with its id', { type: 'lapse', id: ID, at: AT, count: 1 }],
   ])('reads %s as it was written', (_case, fact) => {
     expect(factSchema.parse(fact)).toEqual(fact)
   })
@@ -67,6 +69,11 @@ describe('factSchema', () => {
     ['a lapse of half a cigarette', { type: 'lapse', at: AT, count: 0.5 }],
     ['a lapse of no cigarette', { type: 'lapse', at: AT, count: 0 }],
     ['a value that is not an object', 'lapse'],
+    ['an id that is not a UUID', { type: 'lapse', id: 'fact-1', at: AT, count: 1 }],
+    [
+      'an id that is a UUID of another version',
+      { type: 'lapse', id: '0199a6f2-4c00-4abc-8def-0123456789ab', at: AT, count: 1 },
+    ],
   ])('refuses %s', (_case, fact) => {
     expect(factSchema.safeParse(fact).success).toBe(false)
   })

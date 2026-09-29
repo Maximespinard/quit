@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { PastCravingForm } from '@/features/craving/components/PastCravingForm'
 import { DeleteFact } from '@/features/history/components/DeleteFact'
-import { type HistoryFact, historyFactAt } from '@/features/history/utils/history-days'
+import { type HistoryFact, historyFact } from '@/features/history/utils/history-days'
 import { LapseForm } from '@/features/lapse/components/LapseForm'
 import { PatchApplicationForm } from '@/features/patch/components/PatchApplicationForm'
 import { derive } from '@/shared/domain/derive'
@@ -14,7 +14,7 @@ import { ReadyJournal } from '@/shared/ui/ReadyJournal'
 import { validateAppSearch } from '@/shared/utils/app-search'
 import { strings } from '@/shared/utils/strings'
 
-export const Route = createFileRoute('/history/$factIndex')({
+export const Route = createFileRoute('/history/$factId')({
   component: EditFactPage,
 })
 
@@ -58,12 +58,13 @@ function editForm(fact: HistoryFact, { rest, journal, now, onSaved }: EditContex
 }
 
 /**
- * One fact of the history, to edit or delete. Its form is the one that recorded it, given the
- * journal without it: saving records the new version under the same rules as at creation.
+ * One fact of the history, opened by its id, to edit or delete. Its form is the one that
+ * recorded it, given the journal without it: saving records the new version, under the same
+ * id, by the same rules as at creation.
  */
 function EditFactPage() {
   const appSearch = validateAppSearch(Route.useSearch())
-  const { factIndex } = Route.useParams()
+  const { factId } = Route.useParams()
   const { state, commit, now } = useJournalSource()
   const navigate = useNavigate()
 
@@ -76,9 +77,8 @@ function EditFactPage() {
   return (
     <ReadyJournal state={state}>
       {(journal) => {
-        const index = Number(factIndex)
-        const fact = historyFactAt(journal, index)
-        const rest = removeFact(journal, index)
+        const fact = historyFact(journal, factId)
+        const rest = removeFact(journal, factId)
         return (
           <AppShell>
             {fact === null ? (
