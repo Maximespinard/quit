@@ -1,3 +1,4 @@
+import { Figure } from '@/shared/ui/Figure'
 import { strings } from '@/shared/utils/strings'
 import { COLOR_TOKENS, RADIUS_TOKENS, TYPE_TOKENS } from '../utils/specimen-data'
 import { SpecimenSection } from './SpecimenSection'
@@ -30,7 +31,9 @@ export function TokenReference() {
         <dl className="flex flex-col divide-y divide-line">
           {TYPE_TOKENS.map((token) => (
             <div key={token.token} className="flex flex-col gap-1.5 py-3.5">
-              <dd className={`${token.className} truncate`}>{token.sample}</dd>
+              <dd className={`${token.className} truncate`}>
+                {token.figure ? <Figure>{token.sample}</Figure> : token.sample}
+              </dd>
               <dt className="flex items-baseline justify-between gap-3 text-muted text-label">
                 <span>
                   <span className="font-medium text-ink">{token.token}</span> — {token.role}

@@ -1,8 +1,9 @@
 import { CRAVING_INTENSITIES } from '@quit/contract/facts'
 import { Link } from '@tanstack/react-router'
-import { type ReactNode, useId } from 'react'
+import type { ReactNode } from 'react'
 import { type CravingStats, MIN_CRAVINGS_FOR_STATS } from '@/shared/domain/craving-stats'
 import { buttonVariants } from '@/shared/ui/base/button'
+import { Card } from '@/shared/ui/Card'
 import { keepSearch } from '@/shared/utils/app-search'
 import { strings } from '@/shared/utils/strings'
 import { tagLabel } from '../utils/stats-labels'
@@ -84,16 +85,5 @@ export function CravingStatsView({ stats }: { stats: CravingStats }) {
 
 /** One chart in its card, named in the card's muted label like the home's blocks. */
 function StatsSection({ title, children }: { title: string; children: ReactNode }) {
-  const titleId = useId()
-  return (
-    <section
-      aria-labelledby={titleId}
-      className="flex flex-col gap-3.5 rounded-card bg-surface p-4"
-    >
-      <h2 id={titleId} className="text-label text-muted">
-        {title}
-      </h2>
-      {children}
-    </section>
-  )
+  return <Card title={title}>{children}</Card>
 }

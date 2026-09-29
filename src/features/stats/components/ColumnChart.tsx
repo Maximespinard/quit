@@ -129,7 +129,8 @@ export function ColumnChart({
           ))}
         </div>
       </div>
-      <table className="sr-only">
+      {/* `block`: a table ignores `sr-only`'s 1px width, and its cells would widen the page. */}
+      <table className="sr-only block">
         <caption>{label}</caption>
         <tbody>
           {columns.map((column) => (

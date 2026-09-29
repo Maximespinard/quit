@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import type { GoalProgress } from '@/shared/domain/derive'
 import { useCountUp } from '@/shared/hooks/useCountUp'
+import { Figure } from '@/shared/ui/Figure'
 import { ProgressBar } from '@/shared/ui/ProgressBar'
 import { formatEuros } from '@/shared/utils/euros'
 import { strings } from '@/shared/utils/strings'
@@ -27,7 +28,9 @@ export function GoalReached({ goal, celebrating, action }: GoalReachedProps) {
         <div className="flex min-w-0 flex-col gap-1">
           <p className="truncate text-title">{goal.label}</p>
           <p className="text-figure tabular-nums">
-            <span aria-hidden="true">{formatEuros(shown)}</span>
+            <span aria-hidden="true">
+              <Figure>{formatEuros(shown)}</Figure>
+            </span>
             <span className="sr-only">{price}</span>
           </p>
         </div>

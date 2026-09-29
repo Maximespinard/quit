@@ -1,11 +1,11 @@
-import { createFileRoute, Link, Navigate } from '@tanstack/react-router'
+import { createFileRoute, Navigate } from '@tanstack/react-router'
 import { CravingStatsView } from '@/features/stats/components/CravingStatsView'
 import { derive } from '@/shared/domain/derive'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
 import { AppShell } from '@/shared/ui/app-shell'
-import { buttonVariants } from '@/shared/ui/base/button'
+import { BackLink, PageHeader } from '@/shared/ui/PageHeader'
 import { ReadyJournal } from '@/shared/ui/ReadyJournal'
-import { validateAppSearch } from '@/shared/utils/app-search'
+import { keepSearch, validateAppSearch } from '@/shared/utils/app-search'
 import { strings } from '@/shared/utils/strings'
 
 export const Route = createFileRoute('/stats')({
@@ -26,18 +26,12 @@ function StatsPage() {
         if (cravingStats === null) return <Navigate to="/" search={appSearch} replace />
         return (
           <AppShell>
-            <div className="flex flex-col gap-2 pt-6">
-              <h2 className="text-title">{copy.title}</h2>
-              <p className="text-body text-muted">{copy.lead}</p>
-            </div>
+            <PageHeader
+              title={copy.title}
+              lead={copy.lead}
+              back={<BackLink to="/" search={keepSearch} aria-label={copy.back} />}
+            />
             <CravingStatsView stats={cravingStats} />
-            <Link
-              to="/"
-              search={appSearch}
-              className={buttonVariants({ variant: 'ghost', size: 'lg' })}
-            >
-              {copy.back}
-            </Link>
           </AppShell>
         )
       }}
