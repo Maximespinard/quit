@@ -300,13 +300,7 @@
         "delivery": "picture > source AVIF + img WebP, srcset 768/1152/1536w, sizes '(min-width: 448px) 448px, 100vw', object-cover, fetchPriority high, decoding async, precached by Workbox",
         "weight": "8,7 Ko sur le téléphone (AVIF 1152w)",
         "fallback": "bg-ink — le bloc redevient l'aplat marine si l'image n'arrive pas",
-        "palette": [
-          "#163e59",
-          "#265375",
-          "#3b6788",
-          "#426e8e",
-          "#f1f1ee"
-        ],
+        "palette": ["#163e59", "#265375", "#3b6788", "#426e8e", "#f1f1ee"],
         "paletteNote": "Valeurs internes au fichier image. Aucune n'est un token et aucune ne doit être recopiée dans @theme."
       },
       "hero-scrim": {

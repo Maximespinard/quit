@@ -7,9 +7,14 @@ import type { Database, Db } from './database.ts'
 import { isActiveDeviceKey } from './device-keys.ts'
 import type { Logger } from './logger.ts'
 import { sendProblem } from './problem.ts'
+import { createPushRoutes } from './push-routes.ts'
+import type { PushSender } from './push-sender.ts'
 
-/** A fact or the settings weigh a few hundred bytes; a whole journal stays far below. */
-export const MAX_BODY_BYTES = 100 * 1024
+/**
+ * The largest body is a push schedule, up to 1000 notifications: the push sender's limit, kept.
+ * A fact or the settings weigh a few hundred bytes.
+ */
+export const MAX_BODY_BYTES = 512 * 1024
 
 /** Failed device key checks allowed per client address and window, then every request is 429. */
 export const AUTH_FAILURES_PER_WINDOW = 10
@@ -65,11 +70,13 @@ export function createApp({
   database,
   logger,
   trustProxyHops,
+  pushSender,
 }: {
   database: Database
   logger: Logger
   /** Reverse proxies in front (the tunnel): the rate limit then counts per client address. */
   trustProxyHops: number
+  pushSender: PushSender
 }) {
   const app = express()
   if (trustProxyHops > 0) app.set('trust proxy', trustProxyHops)
@@ -120,6 +127,8 @@ export function createApp({
   )
   app.use(requireDeviceKey(database.db))
   app.use(express.json({ limit: MAX_BODY_BYTES }))
+
+  app.use('/api/push', createPushRoutes(pushSender))
 
   app.use((_req, res) => sendProblem(res, 404, 'No such route.'))
   app.use(handleError)

@@ -4,7 +4,6 @@
   "version": "0.0.0",
   "workspaces": [
     "contract",
-    "push-sender",
     "server"
   ],
   "type": "module",

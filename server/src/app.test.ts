@@ -1,64 +1,9 @@
-import { mkdtemp, rm } from 'node:fs/promises'
-import type { AddressInfo } from 'node:net'
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
 import { PROBLEM_CONTENT_TYPE, problemSchema } from '@quit/contract/problem'
 import { afterEach, describe, expect, it } from 'vitest'
-import { AUTH_FAILURES_PER_WINDOW, createApp, MAX_BODY_BYTES } from './app.ts'
-import { openDatabase } from './database.ts'
-import { issueDeviceKey } from './device-keys.ts'
-import { createLogger } from './logger.ts'
+import { AUTH_FAILURES_PER_WINDOW, MAX_BODY_BYTES } from './app.ts'
+import { closeTestApis, openTestApi } from './test-api.ts'
 
-const T0 = new Date('2026-10-01T08:00:00Z')
-
-const cleanups: (() => Promise<void>)[] = []
-
-afterEach(async () => {
-  for (const cleanup of cleanups.splice(0).reverse()) await cleanup()
-})
-
-interface RequestOptions {
-  key?: string | null
-  /** Sent as is, with a JSON content type. */
-  body?: string
-  authorization?: string
-  /** The client address a proxy in front would forward. */
-  forwardedFor?: string
-}
-
-async function setup({ trustProxyHops = 0 } = {}) {
-  const dir = await mkdtemp(join(tmpdir(), 'quit-server-'))
-  cleanups.push(() => rm(dir, { recursive: true, force: true }))
-  const database = openDatabase(dir)
-  cleanups.push(async () => database.close())
-  const logs: string[] = []
-  const logger = createLogger('info', { write: (line: string) => void logs.push(line) })
-  const server = createApp({ database, logger, trustProxyHops }).listen(0, '127.0.0.1')
-  await new Promise((resolve) => server.once('listening', resolve))
-  cleanups.push(() => new Promise((resolve) => server.close(() => resolve())))
-  const { port } = server.address() as AddressInfo
-
-  function request(method: string, path: string, options: RequestOptions = {}) {
-    const headers: Record<string, string> = {}
-    if (options.body !== undefined) headers['content-type'] = 'application/json'
-    if (options.authorization !== undefined) headers.authorization = options.authorization
-    else if (options.key) headers.authorization = `Bearer ${options.key}`
-    if (options.forwardedFor) headers['x-forwarded-for'] = options.forwardedFor
-    return fetch(`http://127.0.0.1:${port}${path}`, {
-      method,
-      headers,
-      ...(options.body === undefined ? {} : { body: options.body }),
-    })
-  }
-
-  return {
-    database,
-    logs,
-    request,
-    /** What the issue command does, at T0. */
-    issueKey: () => issueDeviceKey(database.db, T0),
-  }
-}
+afterEach(closeTestApis)
 
 /** Asserts a problem+json answer with this status, and returns the problem. */
 async function expectProblem(response: Response, status: number) {
@@ -71,7 +16,7 @@ async function expectProblem(response: Response, status: number) {
 
 describe('health', () => {
   it('answers 200 without a device key while the database is reachable', async () => {
-    const api = await setup()
+    const api = await openTestApi()
 
     const response = await api.request('GET', '/api/health')
 
@@ -80,7 +25,7 @@ describe('health', () => {
   })
 
   it('answers 503 once the database is unreachable', async () => {
-    const api = await setup()
+    const api = await openTestApi()
 
     api.database.close()
     const response = await api.request('GET', '/api/health')
@@ -91,7 +36,7 @@ describe('health', () => {
 
 describe('device key', () => {
   it('lets a request with the active key through', async () => {
-    const api = await setup()
+    const api = await openTestApi()
     const key = api.issueKey()
 
     const response = await api.request('GET', '/api/nothing-here', { key })
@@ -105,7 +50,7 @@ describe('device key', () => {
     ['another scheme', { authorization: 'Basic dXNlcjpwYXNz' }],
     ['an empty bearer', { authorization: 'Bearer ' }],
   ])('answers 401 to a request with %s', async (_, options) => {
-    const api = await setup()
+    const api = await openTestApi()
     api.issueKey()
 
     const response = await api.request('GET', '/api/nothing-here', options)
@@ -115,7 +60,7 @@ describe('device key', () => {
   })
 
   it('answers 401 while no key was ever issued', async () => {
-    const api = await setup()
+    const api = await openTestApi()
 
     const response = await api.request('GET', '/api/nothing-here', {
       key: 'not-the-device-key-not-the-device-key-000',
@@ -125,7 +70,7 @@ describe('device key', () => {
   })
 
   it('revokes the previous key when a new one is issued', async () => {
-    const api = await setup()
+    const api = await openTestApi()
     const first = api.issueKey()
     const second = api.issueKey()
 
@@ -138,7 +83,7 @@ describe('device key', () => {
   })
 
   it('checks the key before the route: an unknown route without a key answers 401', async () => {
-    const api = await setup()
+    const api = await openTestApi()
 
     const response = await api.request('POST', '/anywhere', { body: '{}' })
 
@@ -148,7 +93,7 @@ describe('device key', () => {
 
 describe('errors', () => {
   it('answers 400 to malformed JSON', async () => {
-    const api = await setup()
+    const api = await openTestApi()
     const key = api.issueKey()
 
     const response = await api.request('PUT', '/api/nothing-here', { key, body: '{"at": 1' })
@@ -157,7 +102,7 @@ describe('errors', () => {
   })
 
   it('answers 413 to a body over the size limit', async () => {
-    const api = await setup()
+    const api = await openTestApi()
     const key = api.issueKey()
     const body = JSON.stringify({ padding: 'x'.repeat(MAX_BODY_BYTES) })
 
@@ -167,7 +112,7 @@ describe('errors', () => {
   })
 
   it('answers 404 to an unknown route', async () => {
-    const api = await setup()
+    const api = await openTestApi()
     const key = api.issueKey()
 
     const response = await api.request('PUT', '/api/nothing-here', { key, body: '{}' })
@@ -178,7 +123,7 @@ describe('errors', () => {
 
 describe('rate limit', () => {
   it('refuses every request with 429 once failed attempts reach the limit', async () => {
-    const api = await setup()
+    const api = await openTestApi()
     const key = api.issueKey()
     const wrong = 'not-the-device-key-not-the-device-key-000'
 
@@ -191,7 +136,7 @@ describe('rate limit', () => {
   })
 
   it('does not count requests with the right key', async () => {
-    const api = await setup()
+    const api = await openTestApi()
     const key = api.issueKey()
 
     for (let attempt = 0; attempt < AUTH_FAILURES_PER_WINDOW; attempt++) {
@@ -203,7 +148,7 @@ describe('rate limit', () => {
   })
 
   it('counts per client behind a proxy: one client failing does not lock out another', async () => {
-    const api = await setup({ trustProxyHops: 1 })
+    const api = await openTestApi({ trustProxyHops: 1 })
     const key = api.issueKey()
     const wrong = 'not-the-device-key-not-the-device-key-000'
 
@@ -224,7 +169,7 @@ describe('rate limit', () => {
   })
 
   it('keeps the health check out of it', async () => {
-    const api = await setup()
+    const api = await openTestApi()
 
     for (let attempt = 0; attempt < AUTH_FAILURES_PER_WINDOW; attempt++) {
       await api.request('GET', '/api/nothing-here')
@@ -237,7 +182,7 @@ describe('rate limit', () => {
 
 describe('logs', () => {
   it('log each request with an id, never its body, its query nor the device key', async () => {
-    const api = await setup()
+    const api = await openTestApi()
     const key = api.issueKey()
     const secret = 'craving-note-that-must-stay-private'
 

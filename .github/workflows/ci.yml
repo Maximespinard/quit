@@ -21,12 +21,12 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with:
-          # The push sender runs its TypeScript sources directly: Node 24 for every workspace.
+          # The server runs its TypeScript sources directly: Node 24 for every workspace.
           node-version: 24
           cache: npm
       - run: npm ci
       # The same gate as locally, kept as one script so the two never drift; it ends with
-      # every workspace's own verify (contract, push sender, server).
+      # every workspace's own verify (contract, server).
       - run: npm run verify
 
   e2e:
@@ -61,15 +61,6 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
-
-  push-sender:
-    name: push sender (image)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      # Its lint, typecheck and tests run in verify; publishing belongs to the deploy. Here the
-      # image only has to build, from the root: the workspaces share one lockfile.
-      - run: docker build -f push-sender/Dockerfile -t quit-push-sender .
 
   secret-scan:
     name: leak scan
