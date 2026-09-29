@@ -8,8 +8,8 @@ import { CigaretteMark, CravingMark, PatchMark } from './DayMarks'
 const copy = strings.calendar
 
 /**
- * Three fixed rows — date, marks, tag — so every cell of a week lines up whatever it holds. The
- * marks sit right under their date; the tag row, empty most days, is the gap to the next week.
+ * Three fixed rows — date, marks, step label — so every cell of a week lines up whatever it holds. The
+ * marks sit right under their date; the label row, empty most days, is the gap to the next week.
  */
 const cellLayout = 'flex h-17 flex-col items-center gap-1 pt-1'
 const dateLayout = 'grid size-6 place-items-center rounded-full text-label tabular-nums'
@@ -31,7 +31,7 @@ export function DayCell({ cell, todayStart }: DayCellProps) {
   if (calendarDay === null) {
     return (
       <td className="p-0.5 align-top">
-        {/* Outside the calendar: a bare date, dimmer than any day to come yet still 3.7:1. */}
+        {/* Outside the calendar: a bare date, dimmer than any day to come, still above 3:1 on the card. */}
         <div className={cn(cellLayout, 'text-muted/65')}>
           <span aria-hidden="true" className={dateLayout}>
             {date}
@@ -43,7 +43,7 @@ export function DayCell({ cell, todayStart }: DayCellProps) {
   }
 
   const { startingStep, isEnd, isToday, patch, cigarettes, cravings } = calendarDay
-  const tag =
+  const stepLabel =
     startingStep !== null ? copy.dose(formatDose(startingStep.doseMg)) : isEnd ? copy.end : null
 
   return (
@@ -62,9 +62,9 @@ export function DayCell({ cell, todayStart }: DayCellProps) {
           {cravings > 0 ? <CravingMark /> : null}
         </span>
         <span aria-hidden="true" className="flex h-4 items-center">
-          {tag === null ? null : (
+          {stepLabel === null ? null : (
             <span className="whitespace-nowrap rounded-full bg-ghost px-1.5 font-medium text-detail text-ink leading-4">
-              {tag}
+              {stepLabel}
             </span>
           )}
         </span>

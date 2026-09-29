@@ -6,7 +6,7 @@ import { formatWeekdayDate } from '../utils/calendar-dates'
 
 const copy = strings.calendar
 
-/** One statement per row, label left and value right, split by a hairline — the home cards' row. */
+/** One statement per row, label left and value right, split by a hairline. */
 const row = 'grid grid-cols-[1fr_auto] items-baseline gap-x-4 border-line border-t py-3 last:pb-0'
 
 type CalendarSummaryProps = Pick<PatchCalendar, 'position' | 'nextStepChange' | 'plannedEnd'>
