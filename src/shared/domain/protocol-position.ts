@@ -1,5 +1,5 @@
+import type { Protocol, Step } from '@quit/contract/settings'
 import { DAY_MS } from '@/shared/utils/duration'
-import type { Protocol, Step } from './protocol'
 
 /** Where the taper stands: a step and a day within it, or past the last step. */
 export type ProtocolPosition =

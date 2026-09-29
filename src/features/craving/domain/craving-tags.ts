@@ -1,4 +1,5 @@
-import { CRAVING, normalizeTag, tagKey, uniqueTags } from '@/shared/domain/facts/craving'
+import { CRAVING } from '@quit/contract/facts'
+import { normalizeTag, tagKey, uniqueTags } from '@/shared/domain/facts/craving'
 import type { Journal } from '@/shared/domain/journal'
 
 /** The tags always offered, stored by id. Their French labels live in the strings module. */

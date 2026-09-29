@@ -1,5 +1,5 @@
+import { CRAVING_INTENSITIES } from '@quit/contract/facts'
 import type { CravingTrend } from '@/shared/domain/craving-stats'
-import { CRAVING_INTENSITIES } from '@/shared/domain/facts/craving'
 import { formatDose, formatShortDate } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
 import type { ChartMark } from '../types/charts'

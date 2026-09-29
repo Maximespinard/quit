@@ -18,12 +18,14 @@ Design context lives in `PRODUCT.md` + `DESIGN.md` (impeccable's own files), not
 - Biome v2 (format + lint) + ESLint (boundaries rule only)
 - Vitest 5 + Testing Library (jsdom)
 - Storage: IndexedDB on the device · Deploy: none yet (VPS `lab`, late milestone)
+- npm workspaces: the app at the root, `contract/` (zod 4 **mini** schemas — facts, settings, journal
+  file; types inferred, never hand-written; imported as `@quit/contract/<module>`), `push-sender/`
 
 ## Commandes
 
 ```bash
 npm run dev       # vite --port 3000
-npm run verify    # lint && typecheck && test && build — GREEN before every commit, zero warning
+npm run verify    # lint && typecheck && test && build, then each workspace's verify — GREEN before every commit, zero warning
 npm run test      # vitest run (watch: test:watch)
 npm run test:e2e  # Playwright (WebKit iPhone; offline spec in Chromium) against the preview build — mandatory on UI tickets
                   # parallel worktrees: one unique E2E_PORT per session (E2E_PORT=4174 npm run test:e2e)

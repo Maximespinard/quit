@@ -1,5 +1,6 @@
+import { PATCH_APPLICATION } from '@quit/contract/facts'
 import { DAY_MS } from '@/shared/utils/duration'
-import { PATCH_APPLICATION, type PatchApplicationInput } from './facts/patch-application'
+import type { PatchApplicationInput } from './facts/patch-application'
 import type { Journal } from './journal'
 import { type ProtocolPosition, protocolDayIndex } from './protocol-position'
 

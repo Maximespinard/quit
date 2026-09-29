@@ -1,8 +1,8 @@
+import type { CravingFact, CravingIntensity } from '@quit/contract/facts'
+import type { Protocol } from '@quit/contract/settings'
 import { DAY_MS } from '@/shared/utils/duration'
 import { derive } from './derive'
-import type { CravingFact, CravingIntensity } from './facts/craving'
 import { emptyJournal, type Journal } from './journal'
-import type { Protocol } from './protocol'
 import { scenarioById } from './scenarios'
 
 /** A local wall-clock instant in 2026, in the pinned Europe/Paris zone; `month` is 1-based. */

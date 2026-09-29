@@ -1,10 +1,12 @@
+import { baselineSmokesPerDaySchema, weeklySpendCentsSchema } from '@quit/contract/settings'
 import type { Journal } from './journal'
 
 /** Integer cents, above zero: money saved is computed from it. */
-export const isValidWeeklySpend = (cents: number) => Number.isInteger(cents) && cents > 0
+export const isValidWeeklySpend = (cents: number) => weeklySpendCentsSchema.safeParse(cents).success
 
 /** Whole smokes, at least one a day: cigarettes not smoked are counted from it. */
-export const isValidBaseline = (perDay: number) => Number.isInteger(perDay) && perDay > 0
+export const isValidBaseline = (perDay: number) =>
+  baselineSmokesPerDaySchema.safeParse(perDay).success
 
 export type SetWeeklySpendResult =
   | { readonly ok: true; readonly journal: Journal }

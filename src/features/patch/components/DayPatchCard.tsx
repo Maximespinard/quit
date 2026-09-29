@@ -1,6 +1,6 @@
+import type { ApplicationSite } from '@quit/contract/facts'
 import { Link } from '@tanstack/react-router'
 import { useId, useState } from 'react'
-import type { ApplicationSite } from '@/shared/domain/application-site'
 import {
   type RecordPatchApplicationResult,
   recordPatchApplication,

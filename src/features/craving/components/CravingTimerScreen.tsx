@@ -1,4 +1,5 @@
-import { type CravingIntensity, recordCraving } from '@/shared/domain/facts/craving'
+import type { CravingIntensity } from '@quit/contract/facts'
+import { recordCraving } from '@/shared/domain/facts/craving'
 import type { Journal } from '@/shared/domain/journal'
 import { AppShell } from '@/shared/ui/app-shell'
 import { strings } from '@/shared/utils/strings'

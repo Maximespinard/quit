@@ -1,5 +1,4 @@
-import type { QuitMomentFact } from '@/shared/domain/facts/quit-moment'
-import type { Fact } from '@/shared/domain/facts/registry'
+import type { Fact, QuitMomentFact } from '@quit/contract/facts'
 import type { Journal } from '@/shared/domain/journal'
 import { localMidnight } from '@/shared/domain/local-day'
 

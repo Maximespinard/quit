@@ -1,5 +1,5 @@
-import { emptyJournal } from './journal'
-import { decodeProtocol, defaultProtocol, isSameProtocol, setProtocol } from './protocol'
+import { decodeJournal, emptyJournal } from './journal'
+import { defaultProtocol, isSameProtocol, setProtocol } from './protocol'
 
 describe('defaultProtocol', () => {
   it('tapers 21, 14 then 7 mg', () => {
@@ -88,11 +88,11 @@ describe('isSameProtocol', () => {
   })
 })
 
-describe('decodeProtocol', () => {
+describe('decodeJournal, protocol', () => {
   it('reads back a stored protocol', () => {
     const stored = [{ doseMg: 21, durationDays: 28, brand: 'Nicotinell' }]
 
-    expect(decodeProtocol(stored)).toEqual(stored)
+    expect(decodeJournal({ facts: [], protocol: stored }).protocol).toEqual(stored)
   })
 
   it.each([
@@ -100,6 +100,6 @@ describe('decodeProtocol', () => {
     ['an empty list', []],
     ['a malformed step', [{ doseMg: '21', durationDays: 28 }]],
   ])('falls back to the default protocol from %s', (_, raw) => {
-    expect(decodeProtocol(raw)).toEqual(defaultProtocol)
+    expect(decodeJournal({ facts: [], protocol: raw }).protocol).toEqual(defaultProtocol)
   })
 })

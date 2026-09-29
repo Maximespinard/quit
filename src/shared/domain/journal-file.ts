@@ -1,25 +1,19 @@
-import { LAPSE } from './facts/lapse'
-import { PATCH_APPLICATION } from './facts/patch-application'
+import { type Fact, factTypeSchema, LAPSE, PATCH_APPLICATION } from '@quit/contract/facts'
+import {
+  JOURNAL_FILE_FORMAT,
+  JOURNAL_FILE_VERSION,
+  type JournalFile,
+  type JournalOrigin,
+  journalFileSchema,
+} from '@quit/contract/journal-file'
 import { latestQuitMoment } from './facts/quit-moment'
-import { decodeFact, type Fact, factModules } from './facts/registry'
-import { decodeGoal } from './goal'
 import type { Journal } from './journal'
-import { isValidBaseline, isValidWeeklySpend } from './journal-settings'
-import { decodeStrictProtocol } from './protocol'
 
 /**
- * The export file, the user's only backup (ADR-0001). A new fact type is read through its
- * registry module, and brings its own checks here if it has more than its shape; a change
- * to the shape of the file itself bumps the version.
+ * The export file, the user's only backup (ADR-0001). Its shape is the contract's
+ * `journalFileSchema`; this module adds the refusal reasons and the domain rules an import
+ * checks on top of the shape.
  */
-const FORMAT = 'quit-journal'
-const VERSION = 1
-
-/** Which journal a file was exported from, or is imported into. */
-export type JournalOrigin = 'device' | 'sandbox'
-
-const isOrigin = (value: unknown): value is JournalOrigin =>
-  value === 'device' || value === 'sandbox'
 
 /**
  * The journal as one JSON file: facts and settings only, never a derived value (ADR-0002).
@@ -27,13 +21,14 @@ const isOrigin = (value: unknown): value is JournalOrigin =>
  */
 export function exportJournal(journal: Journal, now: number, origin: JournalOrigin): string {
   const { facts, protocol, weeklySpendCents, baselineSmokesPerDay, goal } = journal
-  return JSON.stringify({
-    format: FORMAT,
-    version: VERSION,
+  const file: JournalFile = {
+    format: JOURNAL_FILE_FORMAT,
+    version: JOURNAL_FILE_VERSION,
     exportedAt: now,
     origin,
     journal: { facts, protocol, weeklySpendCents, baselineSmokesPerDay, goal },
-  })
+  }
+  return JSON.stringify(file)
 }
 
 export type ImportRefusal =
@@ -54,48 +49,48 @@ export type ImportJournalResult =
   | { readonly ok: true; readonly journal: Journal; readonly exportedAt: number }
   | { readonly ok: false; readonly reason: ImportRefusal }
 
-const notAnExport = { ok: false, reason: 'not-an-export' } as const
+/** Where the schema found a problem, in the file's own keys. */
+type IssuePath = readonly PropertyKey[]
 
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null && !Array.isArray(value)
+/** The value at `key`, or `undefined` when `value` holds none. */
+const child = (value: unknown, key: PropertyKey): unknown =>
+  typeof value === 'object' && value !== null && key in value ? Reflect.get(value, key) : undefined
 
-/** A fact of a type added by a later version (check-in, say), as opposed to a malformed one. */
-const isUnknownFactType = (raw: unknown) =>
-  isRecord(raw) &&
-  typeof raw.type === 'string' &&
-  !factModules.some((factModule) => factModule.type === raw.type)
+/**
+ * The problem with the file itself, before its content: another format first, then another
+ * version, then a missing export time, origin or journal.
+ */
+function envelopeRefusal(paths: readonly IssuePath[]): ImportRefusal | null {
+  if (paths.some((path) => path.length === 0 || path[0] === 'format')) return 'not-an-export'
+  if (paths.some((path) => path[0] === 'version')) return 'unsupported-version'
+  if (paths.some((path) => path[0] !== 'journal' || path.length === 1)) return 'not-an-export'
+  return null
+}
 
-/** Unset, or valid: a setting is never silently reset by an import. */
-const settingOrNull = (value: unknown, isValid: (value: number) => boolean) =>
-  value === null ? null : typeof value === 'number' && isValid(value) ? value : undefined
+/**
+ * The problem with the journal a well-formed file holds: its settings first, then its first
+ * malformed fact — of a type added by a later version (check-in, say), or broken.
+ */
+function contentRefusal(paths: readonly IssuePath[], raw: unknown): ImportRefusal {
+  if (paths.some((path) => path[1] !== 'facts')) return 'invalid-settings'
+  const factIndexes = paths.flatMap((path) => (typeof path[2] === 'number' ? [path[2]] : []))
+  // Facts that are not a list: no index to look at.
+  if (factIndexes.length < paths.length) return 'invalid-fact'
+  const firstBroken = ['journal', 'facts', Math.min(...factIndexes), 'type'].reduce(child, raw)
+  return typeof firstBroken === 'string' && !factTypeSchema.safeParse(firstBroken).success
+    ? 'unknown-fact-type'
+    : 'invalid-fact'
+}
 
 /** Facts recording refuses before the quit moment in force; a craving may predate it. */
 const needsQuitMoment = (fact: Fact) => fact.type === LAPSE || fact.type === PATCH_APPLICATION
 
-function readJournal(raw: Record<string, unknown>): Journal | ImportRefusal {
-  const protocol = decodeStrictProtocol(raw.protocol)
-  const weeklySpendCents = settingOrNull(raw.weeklySpendCents, isValidWeeklySpend)
-  const baselineSmokesPerDay = settingOrNull(raw.baselineSmokesPerDay, isValidBaseline)
-  // No goal is a valid answer; a goal that does not read back is not.
-  const goal = raw.goal == null ? null : decodeGoal(raw.goal)
-  if (protocol === null || weeklySpendCents === undefined || baselineSmokesPerDay === undefined)
-    return 'invalid-settings'
-  if (raw.goal != null && goal === null) return 'invalid-settings'
-
-  if (!Array.isArray(raw.facts)) return 'invalid-fact'
-  const facts: Fact[] = []
-  for (const rawFact of raw.facts) {
-    const fact = decodeFact(rawFact)
-    if (fact === null) return isUnknownFactType(rawFact) ? 'unknown-fact-type' : 'invalid-fact'
-    facts.push(fact)
-  }
-
-  const journal: Journal = { facts, protocol, weeklySpendCents, baselineSmokesPerDay, goal }
+function domainRefusal(journal: Journal): ImportRefusal | null {
   const quitMoment = latestQuitMoment(journal)
   if (quitMoment === null) return 'no-quit-moment'
-  if (facts.some((fact) => needsQuitMoment(fact) && fact.at < quitMoment))
+  if (journal.facts.some((fact) => needsQuitMoment(fact) && fact.at < quitMoment))
     return 'before-quit-moment'
-  return journal
+  return null
 }
 
 /**
@@ -110,15 +105,16 @@ export function importJournal(text: string, into: JournalOrigin): ImportJournalR
   } catch {
     return { ok: false, reason: 'unreadable' }
   }
-  if (!isRecord(raw) || raw.format !== FORMAT) return notAnExport
-  if (raw.version !== VERSION) return { ok: false, reason: 'unsupported-version' }
-  const { exportedAt, origin, journal: rawJournal } = raw
-  if (typeof exportedAt !== 'number' || !Number.isFinite(exportedAt)) return notAnExport
-  if (!isOrigin(origin) || !isRecord(rawJournal)) return notAnExport
-  if (origin === 'sandbox' && into === 'device') return { ok: false, reason: 'sandbox-file' }
+  const file = journalFileSchema.safeParse(raw)
+  const paths = file.success ? [] : file.error.issues.map((issue) => issue.path)
+  const envelope = envelopeRefusal(paths)
+  if (envelope !== null) return { ok: false, reason: envelope }
+  // Past the envelope the origin is known good, whatever the journal holds.
+  if (child(raw, 'origin') === 'sandbox' && into === 'device')
+    return { ok: false, reason: 'sandbox-file' }
+  if (!file.success) return { ok: false, reason: contentRefusal(paths, raw) }
 
-  const journal = readJournal(rawJournal)
-  return typeof journal === 'string'
-    ? { ok: false, reason: journal }
-    : { ok: true, journal, exportedAt }
+  const { journal, exportedAt } = file.data
+  const refusal = domainRefusal(journal)
+  return refusal === null ? { ok: true, journal, exportedAt } : { ok: false, reason: refusal }
 }

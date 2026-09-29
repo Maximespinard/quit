@@ -1,5 +1,4 @@
-import { APPLICATION_SITES, type ApplicationSite } from './application-site'
-import { PATCH_APPLICATION } from './facts/patch-application'
+import { APPLICATION_SITES, type ApplicationSite, PATCH_APPLICATION } from '@quit/contract/facts'
 import type { Journal } from './journal'
 
 /** Where the next patch goes, and the site it may not take. */

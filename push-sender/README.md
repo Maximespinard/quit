@@ -31,10 +31,11 @@ State is one JSON file (`DATA_FILE`), written atomically, so it survives a resta
 ## Run
 
 ```bash
-npm ci
-npm run verify   # lint · typecheck · tests
-node --env-file=.env src/main.ts   # needs .env, see .env.example
-docker build -t quit-push-sender .
+npm ci                            # at the repository root: one install for every workspace
+npm run verify -w push-sender     # lint · typecheck · tests
+node --env-file=.env src/main.ts  # from push-sender/; needs .env, see .env.example
+docker build -f push-sender/Dockerfile -t quit-push-sender .   # from the repository root
 ```
 
-Node ≥ 24 runs the TypeScript sources directly: there is no build step.
+Node ≥ 24 runs the TypeScript sources directly: there is no build step. The push sender is an
+npm workspace of the repository, sharing its one lockfile.

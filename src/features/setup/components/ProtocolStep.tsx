@@ -1,5 +1,5 @@
+import type { Protocol } from '@quit/contract/settings'
 import { useId } from 'react'
-import type { Protocol } from '@/shared/domain/protocol'
 import { Button } from '@/shared/ui/base/button'
 import { formatDose } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'

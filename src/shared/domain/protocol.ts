@@ -1,15 +1,6 @@
+import { doseMgSchema } from '@quit/contract/facts'
+import { durationDaysSchema, type Protocol, type Step } from '@quit/contract/settings'
 import type { Journal } from './journal'
-
-/** One step of the protocol: a 24 h patch dose and how many days it lasts. */
-export type Step = {
-  readonly doseMg: number
-  readonly durationDays: number
-  /** Free-text brand, noted by the user. */
-  readonly brand?: string
-}
-
-/** The user-defined taper, in order. Never empty; a lapse never alters it. */
-export type Protocol = readonly Step[]
 
 /**
  * Every new journal starts on this taper. Each step lasts 4 weeks, the upper bound of the
@@ -22,11 +13,11 @@ export const defaultProtocol: Protocol = [
 ]
 
 /** Any positive dose: a cut patch gives a half dose. */
-export const isValidDose = (doseMg: number) => Number.isFinite(doseMg) && doseMg > 0
+export const isValidDose = (doseMg: number) => doseMgSchema.safeParse(doseMg).success
 
 /** Whole days only: every patch is a 24 h patch. */
 export const isValidDuration = (durationDays: number) =>
-  Number.isInteger(durationDays) && durationDays > 0
+  durationDaysSchema.safeParse(durationDays).success
 
 const isValidStep = ({ doseMg, durationDays }: Step) =>
   isValidDose(doseMg) && isValidDuration(durationDays)
@@ -61,26 +52,3 @@ export function isSameProtocol(inForce: Protocol, steps: readonly Step[]): boole
     )
   })
 }
-
-function decodeStep(raw: unknown): Step | null {
-  if (typeof raw !== 'object' || raw === null) return null
-  const { doseMg, durationDays, brand } = raw as Record<string, unknown>
-  if (typeof doseMg !== 'number' || typeof durationDays !== 'number') return null
-  const step = normaliseStep({
-    doseMg,
-    durationDays,
-    ...(typeof brand === 'string' ? { brand } : {}),
-  })
-  return isValidStep(step) ? step : null
-}
-
-/** Rebuilds a protocol only if every step is valid, else `null`: an import refuses what storage forgives. */
-export function decodeStrictProtocol(raw: unknown): Protocol | null {
-  if (!Array.isArray(raw) || raw.length === 0) return null
-  const steps = raw.map(decodeStep)
-  return steps.every((step) => step !== null) ? steps : null
-}
-
-/** Rebuilds a stored protocol; anything missing or malformed yields the default protocol. */
-export const decodeProtocol = (raw: unknown): Protocol =>
-  decodeStrictProtocol(raw) ?? defaultProtocol

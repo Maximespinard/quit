@@ -1,14 +1,9 @@
+import { CRAVING, type CravingFact, type CravingIntensity } from '@quit/contract/facts'
+import type { Protocol } from '@quit/contract/settings'
 import { DAY_MS } from '@/shared/utils/duration'
-import {
-  CRAVING,
-  type CravingFact,
-  type CravingIntensity,
-  tagKey,
-  uniqueTags,
-} from './facts/craving'
+import { tagKey, uniqueTags } from './facts/craving'
 import type { Journal } from './journal'
 import { localMidnight } from './local-day'
-import type { Protocol } from './protocol'
 
 /** Below this many cravings the stats screen explains itself instead of drawing charts. */
 export const MIN_CRAVINGS_FOR_STATS = 5

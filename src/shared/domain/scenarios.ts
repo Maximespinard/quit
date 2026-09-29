@@ -1,10 +1,14 @@
+import type {
+  CravingFact,
+  CravingIntensity,
+  Fact,
+  LapseFact,
+  PatchApplicationFact,
+} from '@quit/contract/facts'
+import type { Protocol } from '@quit/contract/settings'
 import { DAY_MS, HOUR_MS, MINUTE_MS } from '@/shared/utils/duration'
-import type { CravingFact, CravingIntensity } from './facts/craving'
-import type { LapseFact } from './facts/lapse'
-import type { PatchApplicationFact } from './facts/patch-application'
-import type { Fact } from './facts/registry'
 import type { Journal } from './journal'
-import { defaultProtocol, type Protocol } from './protocol'
+import { defaultProtocol } from './protocol'
 
 /**
  * A named journal paired with a value of the current time: one precise situation of the app.

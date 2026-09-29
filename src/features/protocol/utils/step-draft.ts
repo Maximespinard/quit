@@ -1,4 +1,4 @@
-import type { Step } from '@/shared/domain/protocol'
+import type { Step } from '@quit/contract/settings'
 import { fromDecimalText, toDecimalText } from '@/shared/utils/decimal-text'
 
 /** A step as the editor holds it: raw field text, with a stable id for list keys. */

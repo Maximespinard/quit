@@ -220,6 +220,45 @@ describe('importJournal', () => {
     })
   })
 
+  it('names the first broken fact: an unknown type after a malformed fact is still invalid', () => {
+    const malformed = { type: 'lapse', at: QUIT + DAY, count: 0 }
+    const checkIn = { type: 'mood-check', at: QUIT + DAY, mood: 4 }
+
+    expect(importJournal(withFacts(...journal.facts, malformed, checkIn), 'device')).toEqual({
+      ok: false,
+      reason: 'invalid-fact',
+    })
+    expect(importJournal(withFacts(...journal.facts, checkIn, malformed), 'device')).toEqual({
+      ok: false,
+      reason: 'unknown-fact-type',
+    })
+  })
+
+  it('refuses a fact without a type as invalid, not as unknown', () => {
+    expect(importJournal(withFacts(...journal.facts, { at: QUIT + DAY }), 'device')).toEqual({
+      ok: false,
+      reason: 'invalid-fact',
+    })
+  })
+
+  it('reports broken settings before broken facts', () => {
+    const text = withJournal({ weeklySpendCents: 48.9, facts: [...journal.facts, 'lapse'] })
+
+    expect(importJournal(text, 'device')).toEqual({ ok: false, reason: 'invalid-settings' })
+  })
+
+  it('refuses a sandbox export over the real journal before reading what it holds', () => {
+    const text = JSON.stringify({ ...exported(), origin: 'sandbox', journal: { facts: 'none' } })
+
+    expect(importJournal(text, 'device')).toEqual({ ok: false, reason: 'sandbox-file' })
+  })
+
+  it('refuses another format before looking at its version', () => {
+    const text = JSON.stringify({ ...exported(), format: 'other-app', version: 7 })
+
+    expect(importJournal(text, 'device')).toEqual({ ok: false, reason: 'not-an-export' })
+  })
+
   it.each([
     ['a weekly spend in euros', { weeklySpendCents: 48.9 }],
     ['a missing weekly spend', { weeklySpendCents: undefined }],
