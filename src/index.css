@@ -53,6 +53,7 @@
   --radius-card: 0.875rem;
   --radius-control: 0.75rem;
   --radius-step: 0.625rem;
+  --radius-mark: 0.25rem;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 

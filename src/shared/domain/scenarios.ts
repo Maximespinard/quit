@@ -85,6 +85,45 @@ const firstMonthCravings = [
   craving(sinceQuit(20, 11), 2, false, ['evening-out']),
 ]
 
+/**
+ * Two months of cravings that fade: three a day the first two weeks, two the next two, one
+ * the next two, then one every other day. They come most often at 18:00 and over a coffee,
+ * each hour and each situation taken in turn from a fixed round, and weaken month after month.
+ */
+function fadingCravings(): CravingFact[] {
+  const hours = [18, 8, 13, 18, 21, 10, 18, 16]
+  const tags: readonly (readonly string[])[] = [
+    ['coffee'],
+    ['stress'],
+    ['coffee', 'break'],
+    [],
+    ['meal'],
+    ['coffee'],
+    ['evening-out'],
+    ['boredom'],
+  ]
+  // One in three is a notch below the day's usual: not every craving is the worst.
+  const notchLower: Record<CravingIntensity, CravingIntensity> = { 1: 1, 2: 1, 3: 2 }
+  const perDay = (day: number) => (day < 15 ? 3 : day < 29 ? 2 : day < 43 ? 1 : 1 - (day % 2))
+  const cravings: CravingFact[] = []
+  for (let day = 1; day < 59; day += 1) {
+    const intensity: CravingIntensity = day < 21 ? 3 : day < 42 ? 2 : 1
+    for (let nth = 0; nth < perDay(day); nth += 1) {
+      const round = cravings.length
+      const hour = hours[round % hours.length] ?? 18
+      cravings.push(
+        craving(
+          local(5, 4 + day, hour, 10),
+          round % 3 === 2 ? notchLower[intensity] : intensity,
+          round % 4 !== 3,
+          tags[round % tags.length] ?? [],
+        ),
+      )
+    }
+  }
+  return cravings
+}
+
 const scenario = <Id extends string>(id: Id, now: number, journal: Journal) => ({
   id,
   now,
@@ -137,6 +176,12 @@ export const scenarios = [
       craving(sinceQuit(29, 10), 2, true, ['stress']),
       craving(sinceQuit(60, 8), 1, true, ['boredom']),
     ]),
+  ),
+  // Thursday 2 July, 18:00: two months of cravings, fading, across both step-downs.
+  scenario(
+    'day-60-cravings',
+    sinceQuit(59, 9),
+    journalOf(dailyPatches(defaultProtocol, 60), fadingCravings()),
   ),
 ] as const
 

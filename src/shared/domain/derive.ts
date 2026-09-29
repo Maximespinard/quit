@@ -1,4 +1,5 @@
 import type { ApplicationSite } from './application-site'
+import { type CravingStats, cravingStats } from './craving-stats'
 import { lapsesUntil } from './facts/lapse'
 import { latestQuitMoment } from './facts/quit-moment'
 import type { Journal } from './journal'
@@ -10,7 +11,7 @@ import { siteRotation } from './site-rotation'
 import { smokeFreeDays } from './smoke-free-days'
 import { type Elapsed, type Streak, streaks } from './streak'
 
-export type { Elapsed, GoalProgress, Relapse, Streak }
+export type { CravingStats, Elapsed, GoalProgress, Relapse, Streak }
 
 /**
  * Without a quit moment nothing is derived; with one, every figure exists, the personal best
@@ -33,6 +34,7 @@ export type DerivedState =
       readonly patch: null
       readonly suggestedSite: null
       readonly previousSite: null
+      readonly cravingStats: null
     }
   | {
       readonly quitMoment: number
@@ -62,6 +64,8 @@ export type DerivedState =
       readonly suggestedSite: ApplicationSite
       /** The previous patch application's site, which the next one may not take; `null` if none. */
       readonly previousSite: ApplicationSite | null
+      /** When and why cravings happen, and whether they fade. */
+      readonly cravingStats: CravingStats
     }
 
 /**
@@ -87,6 +91,7 @@ export function derive(journal: Journal, now: number): DerivedState {
       patch: null,
       suggestedSite: null,
       previousSite: null,
+      cravingStats: null,
     }
   }
   const lapses = lapsesUntil(journal, quitMoment, now)
@@ -108,5 +113,6 @@ export function derive(journal: Journal, now: number): DerivedState {
     protocol,
     patch: protocolDayPatch(journal, quitMoment, protocol, now),
     ...siteRotation(journal, now),
+    cravingStats: cravingStats(journal, quitMoment, now),
   }
 }

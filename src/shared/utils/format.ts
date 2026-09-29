@@ -18,5 +18,9 @@ export function formatTime(ms: number): string {
 export const formatDate = (ms: number) =>
   new Date(ms).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
 
+/** A local calendar date, short, as chart axes show it: `4 mai`. */
+export const formatShortDate = (ms: number) =>
+  new Date(ms).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
+
 /** A whole count as French copy shows it, thousands apart: `1 250`. */
 export const formatCount = (count: number) => count.toLocaleString('fr-FR')

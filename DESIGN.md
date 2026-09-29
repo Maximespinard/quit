@@ -59,6 +59,7 @@ rounded:
   card: "0.875rem"
   control: "0.75rem"
   step: "0.625rem"
+  mark: "0.25rem"
   pill: "9999px"
 spacing:
   gutter: "1.25rem"
@@ -385,7 +386,7 @@ c'est la couleur du texte qui est fausse.
 
 ## Shapes
 
-Quatre rayons nommés, plus la pilule. Ils descendent avec la taille de l'objet :
+Quatre rayons nommés, plus la pilule, et un rayon réservé aux marques de données. Ils descendent avec la taille de l'objet :
 
 | Token | Valeur | Où |
 |---|---|---|
@@ -394,6 +395,7 @@ Quatre rayons nommés, plus la pilule. Ils descendent avec la taille de l'objet 
 | `rounded-control` | 0.75rem / 12px | boutons, plateau `Tabs`, item d'onglet |
 | `rounded-step` | 0.625rem / 10px | crans de multiplicateur, `Toggle`, puce de `Tabs` |
 | `rounded-full` | pilule | `Envie`, barre XP, piste de slider, pouce, `Switch` |
+| `rounded-mark` | 0.25rem / 4px | bout de donnée d'une barre de graphique, jamais côté base |
 
 Les contours sont toujours des filets de 1px en `line` (2px seulement sur le pouce du slider,
 en `action`). Pas de coins vifs, pas de découpe, pas de biseau. Le carré parfait n'existe
@@ -559,6 +561,18 @@ au-dessus du libellé `tab`, hauteur d'item 48px, filet supérieur `line`, fond 
 - **Drawer :** feuille `page` pleine largeur, `rounded-t-hero` (28px) sur le bord d'attaque,
   voile `ink/40`, poignée de swipe en `line` (4px × 96px). La mécanique Base UI est intacte ;
   seules les couleurs et les rayons sont retokenisés.
+
+### Graphiques (statistiques d'envies)
+
+Une série = une teinte : colonnes et barres en `action`, aucune autre couleur de donnée.
+Colonnes de 24px au plus, 2px d'écart, `rounded-mark` au bout de donnée, carrées sur un
+filet de base `line` ; barres horizontales de 8px, même règle, filet de base à gauche.
+Changement d'étape = filet 1px `ink` sur toute la hauteur, dose en `detail` `ink` au-dessus.
+Axe en `detail` `ink-soft`. Une ligne de lecture (`label`) au-dessus de chaque graphique
+nomme une colonne ; le doigt glissé en choisit une autre et les autres passent à 35 %.
+Jamais deux échelles sur un graphique : le nombre et l'intensité sont deux graphiques.
+Chaque graphique a son jumeau `table` en `sr-only`. Sous 5 envies, une phrase et une action,
+jamais un graphique vide.
 
 ### Level bar (`ProgressBar`)
 

@@ -38,6 +38,7 @@ describe('derive', () => {
       patch: null,
       suggestedSite: null,
       previousSite: null,
+      cravingStats: null,
     })
   })
 
