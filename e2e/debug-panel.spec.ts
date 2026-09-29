@@ -21,6 +21,10 @@ test('the sandbox clock moves by an hour and a day, and the streak follows', asy
   await page.goto(sandboxAt(NOW))
   await startNow(page)
   await marker(page).click()
+  // Day, date, hour and minutes, no seconds — the device's time zone sets the rest.
+  await expect(page.getByRole('dialog').locator('time')).toHaveText(
+    /^\S+ \d{1,2} \S+ 2026, \d\d:\d\d$/,
+  )
 
   await tap(page, '+1 h')
   await expectStreak(page, 0, '01:00:00')
