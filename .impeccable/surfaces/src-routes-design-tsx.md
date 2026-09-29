@@ -12,7 +12,7 @@ Visitor mode: Operate. Audience: the single user and the agents building later U
 Must show: tokens, type, buttons and states, streak, level bar, streak multiplier, badges (locked / unlocked), bottom tab bar (Accueil · Calendrier · Progression · Historique), the permanent Envie control, the hero haze, and the reskinned shadcn pieces (Drawer, Dialog, Switch, Tabs, Slider, segmented ToggleGroup).
 Constraints: look-only redesign (IA, UX, copy and behaviour unchanged); French UI strings, `CONTEXT.md` vocabulary, iPhone standalone PWA, one-hand reach, legible outdoors at night and in daylight, open-source self-hosted fonts, reduced-motion support.
 Agreed screen inventory: home, calendar, progress (stats inside), fact history, settings (icon from home). Craving timer is a permanent thumb control outside the tabs.
-Visual target: `docs/design/mocks/nocturne-chaude.html` (home + craving timer, demo data; published at https://claude.ai/artifact/AgLBg9A9qtCYi7zJjC1nTC).
+Visual target: `docs/design/mocks/nocturne-chaude.html` (home + craving timer, demo data).
 Rejected worlds (evidence, anti-reference): the navy flat world "Le relevé" (functional, not striking); "Grand air" (Air-based cloud sky, two mocks); pinball machine (cartoon, saturated, over-ornamented); prototype variants Instrument / Affiche / Registre (cold, AI-looking); material metaphors (work jacket, stamped passbook, acetate manual).
 Hero: the code haze (3 radial glows + fractal-noise grain) is the final hero, not a placeholder (user-provided image SYR-54 canceled 2026-09-29).
 Decided in the final audit (SYR-66, 2026-09-29):
