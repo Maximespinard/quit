@@ -20,7 +20,7 @@ export function FactHistory({ days, now }: FactHistoryProps) {
     return <p className="text-body text-muted">{strings.history.empty}</p>
   }
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-7">
       {days.map(({ day, items }) => (
         <HistoryDaySection key={day} heading={dayHeading(day, now)} items={items} />
       ))}
@@ -36,12 +36,12 @@ type HistoryDaySectionProps = {
 function HistoryDaySection({ heading, items }: HistoryDaySectionProps) {
   const headingId = useId()
   return (
-    <section aria-labelledby={headingId} className="flex flex-col gap-1">
+    <section aria-labelledby={headingId} className="flex flex-col gap-2">
       <h3 id={headingId} className="font-medium text-body first-letter:uppercase">
         {heading}
       </h3>
-      {/* A statement, not tiles: rows split by a 1px rule, like the totals card's columns. */}
-      <ul className="flex flex-col divide-y divide-line">
+      {/* One card a day, its facts split by hairlines, like the list card on the home. */}
+      <ul className="flex flex-col divide-y divide-line overflow-hidden rounded-card bg-surface">
         {items.map(({ index, fact }) => {
           const { title, detail } = describeFact(fact)
           return (
@@ -51,17 +51,17 @@ function HistoryDaySection({ heading, items }: HistoryDaySectionProps) {
                 params={{ factIndex: String(index) }}
                 search={keepSearch}
                 // The time sits on the title's baseline; the chevron centres on the row. Pressed, the row
-                // turns `surface`; `muted` keeps its contrast there too.
-                className="group -mx-2 flex min-h-16 items-baseline gap-4 rounded-control px-2 py-3 transition-colors duration-150 ease-out-expo active:bg-surface motion-reduce:transition-none"
+                // lifts to `ghost`; `muted` keeps its contrast there too.
+                className="flex min-h-16 items-baseline gap-4 px-4 py-3 transition-colors duration-150 ease-out-expo focus-visible:-outline-offset-2 active:bg-ghost motion-reduce:transition-none"
               >
-                <span className="w-12 shrink-0 font-medium text-body text-muted tabular-nums">
+                <span className="w-11 shrink-0 text-body text-muted tabular-nums">
                   {formatTime(fact.at)}
                 </span>
-                <span className="flex min-w-0 flex-1 flex-col">
+                <span className="flex min-w-0 flex-1 flex-col gap-0.5">
                   <span className="font-medium text-body">{title}</span>
-                  <span className="truncate text-muted text-label">{detail}</span>
+                  <span className="truncate text-label text-muted">{detail}</span>
                 </span>
-                <ChevronRight aria-hidden className="size-5 shrink-0 self-center text-muted" />
+                <ChevronRight aria-hidden className="size-4.5 shrink-0 self-center text-muted" />
               </Link>
             </li>
           )

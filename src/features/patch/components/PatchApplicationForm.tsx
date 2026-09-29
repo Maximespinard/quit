@@ -123,6 +123,8 @@ export function PatchApplicationForm({
         </div>
         <SitePicker
           value={site}
+          // Editing, the fact keeps its own site: the rotation's suggestion is not second-guessed.
+          suggested={initial ? null : rotation.suggestedSite}
           previous={previous}
           onValueChange={(next) => setChoice({ kind: 'picked', site: next })}
         />
