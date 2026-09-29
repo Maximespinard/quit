@@ -28,8 +28,8 @@ const clock = (hours: number, minutes: number) =>
 /**
  * The block that opens the home screen: the top bar, one huge white figure, one label line.
  * It sits on the haze its parent draws. During the entrance the days and the clock count up
- * together and land on the same step: one gesture. The figure is sized to the hero's width
- * (an `@container` ancestor), smaller from a third digit so it never runs past the insets.
+ * together and land on the same step: one gesture. The figure is sized to the hero's width,
+ * smaller from a third digit so it never runs past the insets.
  */
 export function StreakHero({
   duration,
@@ -43,15 +43,16 @@ export function StreakHero({
   const { days, hours, minutes } = duration
 
   return (
-    <section aria-label={regionLabel} className="px-safe pt-safe text-ink">
-      <div className="flex min-h-14 items-center justify-between gap-3 pt-2">
+    // Its own size container, padding-free: the figure's `cqi` is a share of the full column.
+    <section aria-label={regionLabel} className="@container pt-safe text-ink">
+      <div className="flex min-h-14 items-center justify-between gap-3 px-safe pt-2">
         <h1 className="text-brand">{brand}</h1>
         <span className="-mr-2.5 flex items-center gap-2 text-body">
           {context}
           {action}
         </span>
       </div>
-      <div className="flex flex-col items-center gap-3 pt-16 text-center">
+      <div className="flex flex-col items-center gap-3 px-safe pt-16 text-center">
         <p className="text-display text-white" style={{ fontSize: streakFigureSize(days) }}>
           <span className="sr-only">{days} </span>
           <span aria-hidden="true">{countUpAt(days, entrance)}</span>

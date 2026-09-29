@@ -41,10 +41,10 @@
   --text-brand--line-height: 1;
   --text-brand--letter-spacing: -0.03em;
   --text-brand--font-weight: 600;
-  --text-envie: 1.4375rem;
-  --text-envie--line-height: 1;
-  --text-envie--letter-spacing: -0.03em;
-  --text-envie--font-weight: 600;
+  --text-craving: 1.4375rem;
+  --text-craving--line-height: 1;
+  --text-craving--letter-spacing: -0.03em;
+  --text-craving--font-weight: 600;
   --text-figure: 1.875rem;
   --text-figure--line-height: 1;
   --text-figure--letter-spacing: -0.035em;
@@ -123,10 +123,10 @@
 }
 
 /* Envie's fill and pink glow: the pink → yellow gradient belongs to Envie alone. */
-@utility bg-envie {
+@utility bg-craving {
   background-image: linear-gradient(90deg, var(--color-pink), var(--color-yellow));
   box-shadow:
-    0 14px 40px -10px rgb(253 66 156 / 0.6),
+    0 14px 40px -10px color-mix(in srgb, var(--color-pink) 60%, transparent),
     inset 0 0 0 1px rgb(255 255 255 / 0.12);
 }
 

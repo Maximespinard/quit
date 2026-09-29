@@ -29,7 +29,7 @@ export function StreakScreen({ streak, brand, context, action, children }: Strea
   return (
     <div className="relative isolate">
       <HeroHaze />
-      <div className="@container mx-auto max-w-md">
+      <div className="mx-auto max-w-md">
         <StreakHero
           duration={duration}
           daysLabel={strings.streak.days(duration.days)}

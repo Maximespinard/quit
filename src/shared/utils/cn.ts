@@ -13,7 +13,7 @@ const twMerge = extendTailwindMerge({
       text: [
         'display',
         'brand',
-        'envie',
+        'craving',
         'figure',
         'title',
         'lead',

@@ -28,8 +28,8 @@ export function HomeSpecimen() {
 
   return (
     <>
-      {/* The home hero as it ships: the haze behind, the figure sized to the column. */}
-      <div className="@container relative isolate">
+      {/* The home hero as it ships, the haze behind it. */}
+      <div className="relative isolate">
         <HeroHaze />
         <StreakHero
           duration={duration}

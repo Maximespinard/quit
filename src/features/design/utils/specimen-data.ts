@@ -111,8 +111,8 @@ export const TYPE_TOKENS: readonly TypeToken[] = [
     role: 'La marque, en haut à gauche',
   },
   {
-    token: 'envie',
-    className: 'text-envie',
+    token: 'craving',
+    className: 'text-craving',
     px: '23 px',
     sample: 'Envie',
     role: 'Le bouton Envie, seul',

@@ -15,7 +15,7 @@ export function CravingButton({ label, className, type = 'button', ...rest }: Cr
     <button
       type={type}
       className={cn(
-        'inline-flex h-16 min-w-5/8 items-center justify-center rounded-full bg-envie px-7 text-envie text-page transition-transform duration-150 ease-out-expo active:scale-[0.97] disabled:bg-none disabled:bg-ghost disabled:text-muted disabled:shadow-none motion-reduce:transition-none',
+        'inline-flex h-16 min-w-5/8 items-center justify-center rounded-full bg-craving px-7 text-craving text-page transition-transform duration-150 ease-out-expo active:scale-[0.97] disabled:bg-none disabled:bg-ghost disabled:text-muted disabled:shadow-none motion-reduce:transition-none',
         className,
       )}
       {...rest}
