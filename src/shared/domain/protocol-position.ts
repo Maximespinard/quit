@@ -28,7 +28,7 @@ export const protocolDayIndex = (quitMoment: number, now: number) =>
 
 /**
  * The protocol starts at the quit moment and runs in whole 24 h blocks from it; every patch
- * is a 24 h patch. Only reachable through `derive`.
+ * is a 24 h patch. Only reachable through `derive`, and the patch calendar that shows it.
  */
 export function protocolPosition(
   protocol: Protocol,

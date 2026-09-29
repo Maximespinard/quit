@@ -82,11 +82,12 @@ One step of the protocol: a patch dose in mg and a duration in protocol days, bo
 _Avoid_: Phase, stage, level
 
 **Protocol day**:
-One of the successive 24 h blocks that start at the quit moment; the protocol is counted in them, and one patch application is expected per protocol day. Unlike a smoke-free day, it is not a calendar day.
+One of the successive 24 h blocks that start at the quit moment; the protocol and its steps are counted in them. Unlike a smoke-free day, it is not a calendar day, and it does not set when a patch application is expected.
 _Avoid_: Patch day, cycle, today
 
 **Patch application**:
 The recorded fact that a patch was put on, at a given time and dose, optionally with its application site.
+One patch application is expected per local calendar day of the protocol. The quit day and the end day, when the last patch comes off, ask for none, but one put on during either still counts.
 _Avoid_: Patch log, dose taken
 
 **Application site**:

@@ -140,6 +140,13 @@ function HomePage() {
                 {strings.stats.open}
               </Link>
               <Link
+                to="/calendar"
+                search={appSearch}
+                className={buttonVariants({ variant: 'ghost' })}
+              >
+                {strings.calendar.open}
+              </Link>
+              <Link
                 to="/history"
                 search={appSearch}
                 className={buttonVariants({ variant: 'ghost' })}
