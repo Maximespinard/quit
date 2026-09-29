@@ -1,5 +1,5 @@
 import { QUIT_MOMENT } from '@quit/contract/facts'
-import type { Journal } from '../journal'
+import { type Journal, keptId } from '../journal'
 
 /** The quit moment in force: the latest one recorded, a correction replacing the earlier. */
 export function latestQuitMoment(journal: Journal): number | null {
@@ -36,7 +36,11 @@ export function quitMomentRefusal(
   return null
 }
 
-/** Records the quit moment, or its correction: the latest one recorded is in force. */
+/**
+ * Records the quit moment, or its correction: the latest one recorded is in force. A
+ * correction is the same fact, recorded again last under its id; a quit moment left before
+ * it by an earlier correction stays as it was.
+ */
 export function recordQuitMoment(
   journal: Journal,
   at: number,
@@ -44,5 +48,11 @@ export function recordQuitMoment(
 ): RecordQuitMomentResult {
   const refusal = quitMomentRefusal(journal, at, now)
   if (refusal !== null) return { ok: false, ...refusal }
-  return { ok: true, journal: { ...journal, facts: [...journal.facts, { type: QUIT_MOMENT, at }] } }
+  const index = journal.facts.findLastIndex((fact) => fact.type === QUIT_MOMENT)
+  const inForce = journal.facts[index]
+  const others = index === -1 ? journal.facts : journal.facts.toSpliced(index, 1)
+  return {
+    ok: true,
+    journal: { ...journal, facts: [...others, { type: QUIT_MOMENT, ...keptId(inForce), at }] },
+  }
 }

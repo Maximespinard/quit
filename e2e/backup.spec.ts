@@ -1,5 +1,6 @@
 import { readFile } from 'node:fs/promises'
 import { expect, type Page, test } from '@playwright/test'
+import { expectIdentified, type IdentifiedFact, withoutIds } from './fact-ids'
 import { expectStreak, sandboxWith, startNow } from './sandbox'
 
 const tap = (page: Page, name: string) => page.getByRole('button', { name, exact: true }).click()
@@ -9,6 +10,8 @@ const protocolSummary = (page: Page) => page.getByRole('region', { name: 'Protoc
 const reminder = (page: Page) => page.getByRole('region', { name: 'Rappel de sauvegarde' })
 const backupSection = (page: Page) => page.getByRole('region', { name: 'Sauvegarde' })
 const factCount = (page: Page) => page.getByText(/^\d+ faits?$/)
+
+type ExportFile = { version: number; journal: { facts: IdentifiedFact[] } }
 
 async function openSettings(page: Page) {
   await page.getByRole('link', { name: 'Réglages' }).click()
@@ -54,9 +57,10 @@ test('export, wipe, import: every figure comes back as it was', async ({ page })
   expect(file.name).toMatch(/^quit-bac-a-sable-\d{4}-\d\d-\d\d\.json$/)
   expect(JSON.parse(file.text)).toMatchObject({
     format: 'quit-journal',
-    version: 1,
+    version: 2,
     journal: { weeklySpendCents: 3500, baselineSmokesPerDay: 15 },
   })
+  expectIdentified((JSON.parse(file.text) as ExportFile).journal.facts)
   await expect(backupSection(page).getByRole('status')).toHaveText('Journal exporté.')
 
   await marker(page).click()
@@ -69,6 +73,33 @@ test('export, wipe, import: every figure comes back as it was', async ({ page })
 
   await expect(page.getByText('Journal restauré.')).toBeVisible()
   await expectDay45(page)
+})
+
+test('a version 1 file, exported before facts had an id, imports and its facts get ids', async ({
+  page,
+}) => {
+  await page.goto(sandboxWith('day-45-lapse'))
+  await openSettings(page)
+  const current: ExportFile = JSON.parse((await exportFile(page, 'Exporter le bac à sable')).text)
+  const facts = withoutIds(current.journal.facts)
+  const v1 = { ...current, version: 1, journal: { ...current.journal, facts } }
+
+  await marker(page).click()
+  await tap(page, 'Vider')
+  await tap(page, 'Fermer')
+  await importFile(page, 'Restaurer une sauvegarde', {
+    name: 'quit-journal.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from(JSON.stringify(v1)),
+  })
+  await expect(page.getByText('Journal restauré.')).toBeVisible()
+  await expectDay45(page)
+
+  await openSettings(page)
+  const again: ExportFile = JSON.parse((await exportFile(page, 'Exporter le bac à sable')).text)
+  expect(again.version).toBe(2)
+  expectIdentified(again.journal.facts)
+  expect(withoutIds(again.journal.facts)).toEqual(facts)
 })
 
 test('a corrupted file is refused and the journal stays as it was', async ({ page }) => {

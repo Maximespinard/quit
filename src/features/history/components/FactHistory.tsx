@@ -44,13 +44,13 @@ function HistoryDaySection({ heading, items }: HistoryDaySectionProps) {
       {/* One card a day, its facts split by hairlines, like the list card on the home. */}
       <Card padding="none" className="overflow-hidden">
         <ul className="flex flex-col divide-y divide-line">
-          {items.map(({ index, fact }) => {
+          {items.map(({ id, fact }) => {
             const { title, detail } = describeFact(fact)
             return (
-              <li key={index}>
+              <li key={id}>
                 <Link
-                  to="/history/$factIndex"
-                  params={{ factIndex: String(index) }}
+                  to="/history/$factId"
+                  params={{ factId: id }}
                   search={keepSearch}
                   // The time sits on the title's baseline; the chevron centres on the row. Pressed, the row
                   // lifts to `ghost`; `muted` keeps its contrast there too.

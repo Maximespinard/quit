@@ -1,5 +1,6 @@
+import { factId, factIdSequence } from '@/shared/test/fact-ids'
 import { derive } from './derive'
-import { emptyJournal, type Journal } from './journal'
+import { emptyJournal, type Journal, withFactIds } from './journal'
 import { exportJournal, importJournal } from './journal-file'
 import { scenarios } from './scenarios'
 
@@ -10,16 +11,17 @@ const QUIT = NOW - 10 * DAY
 
 const journal: Journal = {
   facts: [
-    { type: 'quit-moment', at: QUIT },
-    { type: 'patch-application', at: QUIT + HOUR, doseMg: 21, site: 'arm-left' },
+    { type: 'quit-moment', id: factId(1), at: QUIT },
+    { type: 'patch-application', id: factId(2), at: QUIT + HOUR, doseMg: 21, site: 'arm-left' },
     {
       type: 'craving',
+      id: factId(3),
       at: QUIT + 2 * DAY,
       intensity: 3,
       heldToEnd: true,
       tags: ['coffee', 'Yoga'],
     },
-    { type: 'lapse', at: QUIT + 4 * DAY, count: 2 },
+    { type: 'lapse', id: factId(4), at: QUIT + 4 * DAY, count: 2 },
   ],
   protocol: [
     { doseMg: 21, durationDays: 30, brand: 'Nicopatch' },
@@ -39,10 +41,10 @@ const withJournal = (changes: Record<string, unknown>) =>
 const withFacts = (...facts: readonly unknown[]) => withJournal({ facts })
 
 describe('exportJournal', () => {
-  it('writes one versioned file holding every fact and every setting, money in integer cents', () => {
+  it('writes one version 2 file holding every fact with its id and every setting, money in integer cents', () => {
     expect(JSON.parse(exportJournal(journal, NOW, 'device'))).toEqual({
       format: 'quit-journal',
-      version: 1,
+      version: 2,
       exportedAt: NOW,
       origin: 'device',
       journal: {
@@ -88,7 +90,29 @@ describe('importJournal, from the sandbox', () => {
 })
 
 describe('importJournal', () => {
-  it('reads an export back into the journal it was made from', () => {
+  /** `journal` as a version 1 file wrote it, before facts had an id. */
+  const v1Facts = journal.facts.map(({ id: _id, ...fact }) => fact)
+  const v1File = JSON.stringify({
+    ...exported(),
+    version: 1,
+    journal: { ...journal, facts: v1Facts },
+  })
+
+  it('reads a version 1 file, exported before facts had an id, its facts as they were', () => {
+    expect(importJournal(v1File, 'device')).toEqual({
+      ok: true,
+      journal: { ...journal, facts: v1Facts },
+      exportedAt: NOW,
+    })
+  })
+
+  it('gives the facts of a version 1 import their ids once stored, nothing else changed', () => {
+    const imported = importJournal(v1File, 'device')
+
+    expect(imported.ok && withFactIds(imported.journal, factIdSequence())).toEqual(journal)
+  })
+
+  it('reads an export back into the journal it was made from, ids included', () => {
     expect(importJournal(exportJournal(journal, NOW, 'device'), 'device')).toEqual({
       ok: true,
       journal,
@@ -150,7 +174,7 @@ describe('importJournal', () => {
   })
 
   it.each([
-    ['a later version', 2],
+    ['a later version', 3],
     ['version zero', 0],
     ['no version', undefined],
     ['a version as text', '1'],
