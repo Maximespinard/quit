@@ -4,7 +4,7 @@ import {
   type QuitMomentRefusal,
   recordQuitMoment,
 } from '@/shared/domain/facts/quit-moment'
-import type { Journal } from '@/shared/domain/journal'
+import type { Journal, JournalOutcome } from '@/shared/domain/journal'
 import { setBaselineSmokesPerDay, setWeeklySpend } from '@/shared/domain/journal-settings'
 import { fromDatetimeLocal, toDatetimeLocal } from '@/shared/utils/datetime-local'
 import { baselineInput, spendInput } from './value-inputs'
@@ -22,10 +22,6 @@ export type SettingsRefusals = {
   readonly spend?: true
   readonly baseline?: true
 }
-
-export type SaveSettingsResult =
-  | { readonly ok: true; readonly journal: Journal }
-  | { readonly ok: false; readonly refusals: SettingsRefusals }
 
 /** What is in force, as the fields show it. An unset value is an empty field, never a zero. */
 export function settingsInForce(journal: Journal, now: number): SettingsFields {
@@ -55,7 +51,7 @@ export function saveSettings(
   fields: SettingsFields,
   now: number,
   newId: () => FactId,
-): SaveSettingsResult {
+): JournalOutcome<{ readonly refusals: SettingsRefusals }> {
   let next = journal
   let refusals: SettingsRefusals = {}
 

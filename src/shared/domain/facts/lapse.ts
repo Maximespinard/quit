@@ -1,5 +1,5 @@
 import { LAPSE, type LapseFact, lapseCountSchema } from '@quit/contract/facts'
-import type { Journal } from '../journal'
+import type { Journal, JournalOutcome } from '../journal'
 import { latestQuitMoment } from './quit-moment'
 
 /** A lapse as the user reports it: when, and how many cigarettes it held. */
@@ -10,11 +10,7 @@ export type LapseInput = Omit<LapseFact, 'type'>
 
 const isValidCount = (count: number): boolean => lapseCountSchema.safeParse(count).success
 
-export type RecordLapseResult =
-  | { readonly ok: true; readonly journal: Journal }
-  | { readonly ok: false; readonly reason: 'future' | 'before-quit-moment' | 'invalid-count' }
-
-type LapseRefusal = Extract<RecordLapseResult, { ok: false }>['reason']
+type LapseRefusal = 'future' | 'before-quit-moment' | 'invalid-count'
 
 /**
  * Why a lapse cannot be recorded, or `null` when it can: without a whole number of
@@ -30,7 +26,11 @@ export function lapseRefusal(journal: Journal, lapse: Lapse, now: number): Lapse
 }
 
 /** Records a lapse, unless {@link lapseRefusal} refuses it. */
-export function recordLapse(journal: Journal, lapse: LapseInput, now: number): RecordLapseResult {
+export function recordLapse(
+  journal: Journal,
+  lapse: LapseInput,
+  now: number,
+): JournalOutcome<LapseRefusal> {
   const reason = lapseRefusal(journal, lapse, now)
   if (reason !== null) return { ok: false, reason }
   return { ok: true, journal: { ...journal, facts: [...journal.facts, { type: LAPSE, ...lapse }] } }

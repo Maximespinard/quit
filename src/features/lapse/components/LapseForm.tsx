@@ -1,6 +1,6 @@
 import { type FormEvent, type ReactNode, useId, useState } from 'react'
-import { type LapseInput, type RecordLapseResult, recordLapse } from '@/shared/domain/facts/lapse'
-import type { Journal } from '@/shared/domain/journal'
+import { type LapseInput, recordLapse } from '@/shared/domain/facts/lapse'
+import type { Journal, RefusalOf } from '@/shared/domain/journal'
 import { triggersRelapse } from '@/shared/domain/relapse'
 import { Button } from '@/shared/ui/base/button'
 import { Input } from '@/shared/ui/base/input'
@@ -23,7 +23,7 @@ type LapseFormProps = {
   secondary?: ReactNode
 }
 
-type LapseError = Extract<RecordLapseResult, { ok: false }>['reason'] | 'invalid'
+type LapseError = RefusalOf<ReturnType<typeof recordLapse>> | 'invalid'
 
 /**
  * Declares a lapse, now or backdated, with its cigarettes. Reaching this screen is the first

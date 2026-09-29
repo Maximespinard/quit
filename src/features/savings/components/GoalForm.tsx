@@ -1,8 +1,8 @@
 import { GOAL_LABEL_MAX_LENGTH } from '@quit/contract/settings'
 import { type FormEvent, type ReactNode, useId, useState } from 'react'
 import type { GoalProgress } from '@/shared/domain/derive'
-import { type SetGoalResult, setGoal } from '@/shared/domain/goal'
-import type { Journal } from '@/shared/domain/journal'
+import { setGoal } from '@/shared/domain/goal'
+import type { Journal, RefusalOf } from '@/shared/domain/journal'
 import { Button } from '@/shared/ui/base/button'
 import { Input } from '@/shared/ui/base/input'
 import { FormScreen } from '@/shared/ui/FormScreen'
@@ -21,7 +21,7 @@ type GoalFormProps = {
   secondary?: ReactNode
 }
 
-type Refusal = Extract<SetGoalResult, { ok: false }>['reason']
+type Refusal = RefusalOf<ReturnType<typeof setGoal>>
 
 const copy = strings.goal.form
 

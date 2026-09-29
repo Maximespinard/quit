@@ -1,5 +1,5 @@
 import { type FactId, QUIT_MOMENT } from '@quit/contract/facts'
-import type { Journal } from '../journal'
+import type { Journal, JournalOutcome } from '../journal'
 
 /** The quit moment in force: the latest one recorded, a correction replacing the earlier. */
 export function latestQuitMoment(journal: Journal): number | null {
@@ -10,10 +10,6 @@ export type QuitMomentRefusal =
   | { readonly reason: 'future' }
   /** `earliestFact`: the first fact the moment would leave before it. */
   | { readonly reason: 'after-facts'; readonly earliestFact: number }
-
-export type RecordQuitMomentResult =
-  | { readonly ok: true; readonly journal: Journal }
-  | ({ readonly ok: false } & QuitMomentRefusal)
 
 /** The earliest fact other than a quit moment, or `null` when there is none. */
 function earliestFact(journal: Journal): number | null {
@@ -46,7 +42,7 @@ export function recordQuitMoment(
   at: number,
   now: number,
   newId: () => FactId,
-): RecordQuitMomentResult {
+): JournalOutcome<QuitMomentRefusal> {
   const refusal = quitMomentRefusal(journal, at, now)
   if (refusal !== null) return { ok: false, ...refusal }
   const index = journal.facts.findLastIndex((fact) => fact.type === QUIT_MOMENT)

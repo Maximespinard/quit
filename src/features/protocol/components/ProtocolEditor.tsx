@@ -1,14 +1,8 @@
 import type { Step } from '@quit/contract/settings'
 import { Plus } from 'lucide-react'
 import { type FormEvent, useId, useState } from 'react'
-import type { Journal } from '@/shared/domain/journal'
-import {
-  isSameProtocol,
-  isValidDose,
-  isValidDuration,
-  type SetProtocolResult,
-  setProtocol,
-} from '@/shared/domain/protocol'
+import type { Journal, RefusalOf } from '@/shared/domain/journal'
+import { isSameProtocol, isValidDose, isValidDuration, setProtocol } from '@/shared/domain/protocol'
 import type { ProtocolPosition } from '@/shared/domain/protocol-position'
 import { Button } from '@/shared/ui/base/button'
 import { strings } from '@/shared/utils/strings'
@@ -19,7 +13,7 @@ import { StepFields } from './StepFields'
 
 const copy = strings.protocol
 
-type Refusal = Extract<SetProtocolResult, { ok: false }>['reason']
+type Refusal = RefusalOf<ReturnType<typeof setProtocol>>
 
 /** Fields are flagged only once a save was refused, then follow the edits live. */
 const invalidFields = (step: Step | undefined, refused: Refusal | null) => ({
