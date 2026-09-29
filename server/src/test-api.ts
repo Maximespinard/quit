@@ -80,7 +80,8 @@ export async function openTestApi({
     },
   }
 
-  async function start() {
+  /** Starts the server on `port`, a free one by default. */
+  async function start(atPort = 0) {
     const database = openDatabase(dir)
     const pushSender = createPushSender({
       db: database.db,
@@ -95,7 +96,10 @@ export async function openTestApi({
       appDir,
       now: () => new Date(clock.now),
       pushSender,
-    }).listen(0, '127.0.0.1')
+    }).listen(atPort, '127.0.0.1')
+    // No keep-alive: a server started again on the same port must never meet a client socket
+    // pooled from its previous run, closed since.
+    server.prependListener('request', (_req, res) => res.setHeader('connection', 'close'))
     await once(server, 'listening')
     const { port } = server.address() as AddressInfo
     const stop = async () => {
@@ -106,7 +110,12 @@ export async function openTestApi({
   }
 
   let current = await start()
-  cleanups.push(() => current.stop())
+  let running = true
+  cleanups.push(async () => {
+    if (running) await current.stop()
+  })
+  /** Where the server listens, stopped or not: a stopped server is unreachable there. */
+  const url = `http://127.0.0.1:${current.port}`
 
   function request(method: string, path: string, options: RequestOptions = {}) {
     const headers: Record<string, string> = {}
@@ -114,7 +123,7 @@ export async function openTestApi({
     if (options.authorization !== undefined) headers.authorization = options.authorization
     else if (options.key) headers.authorization = `Bearer ${options.key}`
     if (options.forwardedFor) headers['x-forwarded-for'] = options.forwardedFor
-    return fetch(`http://127.0.0.1:${current.port}${path}`, {
+    return fetch(`${url}${path}`, {
       method,
       headers,
       ...(options.body === undefined ? {} : { body: options.body }),
@@ -134,10 +143,21 @@ export async function openTestApi({
     issueKey: () => issueDeviceKey(current.database.db, T0),
     /** Runs the send loop once, as its interval would. */
     tick: () => current.pushSender.tick(),
-    /** Stops the server and starts a new one on the same data directory. */
+    url,
+    /** Stops the server and starts a new one on the same data directory and port. */
     restart: async () => {
       await current.stop()
-      current = await start()
+      current = await start(current.port)
+    },
+    /** Stops the server: requests to `url` fail until `resume`. */
+    stop: async () => {
+      await current.stop()
+      running = false
+    },
+    /** Starts the server again, on the same data directory and port. */
+    resume: async () => {
+      current = await start(current.port)
+      running = true
     },
   }
 }
