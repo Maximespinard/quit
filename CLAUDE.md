@@ -8,7 +8,6 @@ Single user, single device, no accounts, no data backend.
 UI work → propose the fitting `impeccable` command and wait; do not design ad hoc.
 Exception — in `/implement`, when the ticket asks for an impeccable pass, run it yourself on the
 screens it touches (overrides the global "propose skills first" rule), then e2e, code-review, PR.
-Mostly-visual tickets still stop before the push.
 Design context lives in `PRODUCT.md` + `DESIGN.md` (impeccable's own files), not here.
 
 ## Stack
