@@ -76,7 +76,8 @@ export function LapseForm({ journal, now, initial, onRecorded }: LapseFormProps)
         <CountStepper value={count} onChange={setCount} />
         <div aria-live="polite">
           {relapse ? (
-            <div className="flex flex-col gap-1 rounded-card bg-surface p-4">
+            // Said, not sounded: a card like any other, never the alert colour.
+            <div className="flex flex-col gap-1.5 rounded-card bg-surface p-5">
               <p className="font-medium text-body">{copy.relapseTitle}</p>
               <p className="text-body text-muted">{copy.relapseCost}</p>
             </div>

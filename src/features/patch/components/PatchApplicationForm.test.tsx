@@ -66,6 +66,17 @@ it('bars the previous patch application’s site, named as such, a press changin
   )
 })
 
+it('keeps the suggested site named as such once another is pressed', async () => {
+  renderForm(undefined, journalWith(applied(21, 9, 'arm-left')))
+
+  expect(site(sites['arm-right'])).toHaveAccessibleDescription(strings.patch.site.suggested)
+  await userEvent.click(site(sites['hip-left']))
+
+  expect(site(sites['arm-right'])).toHaveAttribute('aria-pressed', 'false')
+  expect(site(sites['arm-right'])).toHaveAccessibleDescription(strings.patch.site.suggested)
+  expect(site(sites['hip-left'])).not.toHaveAccessibleDescription(strings.patch.site.suggested)
+})
+
 it('bars nothing when the previous patch application has no site', () => {
   renderForm(undefined, journalWith(applied(20, 9, 'arm-left'), applied(21, 9)))
 
@@ -172,6 +183,10 @@ it('edits a patch application whose site differs: the one before it is barred', 
 
   expect(site(sites['hip-left'])).toHaveAttribute('aria-disabled', 'true')
   expect(site(sites['chest-left'])).toHaveAttribute('aria-pressed', 'true')
+  // The fact's own site stands: no other one is put forward.
+  for (const name of Object.values(sites)) {
+    expect(site(name)).not.toHaveAccessibleDescription(strings.patch.site.suggested)
+  }
 })
 
 it('edits a patch application from its own site, not the suggested one', async () => {

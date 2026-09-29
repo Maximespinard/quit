@@ -442,6 +442,8 @@ export const strings = {
       hint: 'Facultatif · jamais deux fois de suite au même site',
       /** Under the previous patch application's site, which the next one may not take. */
       previous: 'la dernière fois',
+      /** Under the suggested site, pressed or not. */
+      suggested: 'suggéré',
     },
     sites: {
       'arm-left': 'Bras gauche',

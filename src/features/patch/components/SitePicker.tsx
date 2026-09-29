@@ -13,6 +13,8 @@ type SitePickerProps = {
   /** `null` logs the patch application without a site. */
   value: ApplicationSite | null
   onValueChange: (site: ApplicationSite | null) => void
+  /** The site the rotation suggests: named as such, pressed or not. */
+  suggested: ApplicationSite | null
   /** The previous patch application's site: shown, marked, never pressable. */
   previous: ApplicationSite | null
 }
@@ -20,13 +22,16 @@ type SitePickerProps = {
 /**
  * The application site, one of the fixed list: one site pressed at most. Another site is one
  * tap; pressing the pressed one again leaves the site out. Two columns, left and right, one
- * row per body area. The previous site stays in its place, greyed and named as such: it is
- * `aria-disabled` rather than `disabled`, so it keeps its focus and its description.
+ * row per body area. Three states stay apart at a glance: pressed is the cream pill, the
+ * suggestion is the outlined pill named as such, the previous site is struck through and
+ * dimmed. The previous one is `aria-disabled` rather than `disabled`, so it keeps its focus
+ * and its description.
  */
-export function SitePicker({ value, onValueChange, previous }: SitePickerProps) {
+export function SitePicker({ value, onValueChange, suggested, previous }: SitePickerProps) {
   const labelId = useId()
   const hintId = useId()
   const previousId = useId()
+  const suggestedId = useId()
 
   const change = (sites: string[]) => {
     const next = sites.find(isApplicationSite) ?? null
@@ -43,7 +48,6 @@ export function SitePicker({ value, onValueChange, previous }: SitePickerProps) 
       <ToggleGroup
         aria-labelledby={labelId}
         aria-describedby={hintId}
-        variant="outline"
         className="grid w-full grid-cols-2"
         value={value === null ? [] : [value]}
         onValueChange={change}
@@ -55,16 +59,32 @@ export function SitePicker({ value, onValueChange, previous }: SitePickerProps) 
               value={site}
               aria-disabled
               aria-describedby={previousId}
-              // Disabled fill: `ghost` / `muted`, no outline, no pointer.
-              className="pointer-events-none h-11 w-full flex-col gap-0 border-transparent bg-ghost text-muted"
+              className="pointer-events-none h-12 w-full flex-col gap-0.5"
             >
-              {copy.sites[site]}
-              <span id={previousId} aria-hidden className="font-medium text-detail">
+              <span className="text-ink/35 line-through decoration-ink/35">{copy.sites[site]}</span>
+              <span id={previousId} aria-hidden className="font-normal text-detail text-muted">
                 {copy.site.previous}
               </span>
             </ToggleGroupItem>
+          ) : site === suggested ? (
+            <ToggleGroupItem
+              key={site}
+              value={site}
+              aria-describedby={suggestedId}
+              variant="outline"
+              className="h-12 w-full flex-col gap-0.5"
+            >
+              {copy.sites[site]}
+              <span
+                id={suggestedId}
+                aria-hidden
+                className="font-normal text-detail text-muted group-data-pressed/toggle:text-page/70"
+              >
+                {copy.site.suggested}
+              </span>
+            </ToggleGroupItem>
           ) : (
-            <ToggleGroupItem key={site} value={site} className="h-11 w-full text-muted">
+            <ToggleGroupItem key={site} value={site} className="h-12 w-full">
               {copy.sites[site]}
             </ToggleGroupItem>
           ),
