@@ -12,8 +12,8 @@ export function SpecimenSection({ title, aside, children }: SpecimenSectionProps
   return (
     <section className="flex flex-col gap-2.5">
       <div className="flex items-baseline justify-between text-label">
-        <h2 className="font-semibold text-body text-ink">{title}</h2>
-        {aside ? <span className="text-ink-soft">{aside}</span> : null}
+        <h2 className="font-medium text-body text-ink">{title}</h2>
+        {aside ? <span className="text-muted">{aside}</span> : null}
       </div>
       {children}
     </section>

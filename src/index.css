@@ -1,58 +1,68 @@
 @import "tailwindcss";
-@import "@fontsource-variable/bricolage-grotesque/opsz.css";
+@import "@fontsource-variable/host-grotesk/wght.css";
 
 /* Base UI exposes orientation as data-orientation; shadcn classes expect these variants. */
 @custom-variant data-horizontal (&[data-orientation="horizontal"]);
 @custom-variant data-vertical (&[data-orientation="vertical"]);
 
-/* Tokens are documented in DESIGN.md. Every value here is a decision, not a default. */
+/*
+ * Tokens of the "Nocturne chaude" world (contract: .impeccable/surfaces/src-routes-design-tsx.md).
+ * Every value here is a decision, not a default. Class names must land on a token declared here:
+ * `--color-*: initial` drops Tailwind's palette, so a class on a missing token renders nothing.
+ */
 @theme {
   --color-*: initial;
-  --color-page: #fafafa;
-  --color-ink: #1b3c53;
-  --color-ink-soft: #5e6c78;
-  --color-ink-dim: #4a5a66;
-  --color-on-ink: #e3e3e3;
-  --color-action: #234c6a;
-  --color-reached: #456882;
-  --color-surface: #e3e3e3;
-  --color-surface-locked: #d4d4d4;
-  --color-line: #d4d4d4;
-  --color-alert: #a6392f;
+  --color-page: #101012;
+  --color-surface: #17171a;
+  --color-ink: #f7f4ef;
+  --color-muted: #a3a3a3;
   --color-white: #ffffff;
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-ghost: rgb(255 255 255 / 0.05);
+  --color-ghost-line: rgb(255 255 255 / 0.3);
+  --color-alert: #ff6b72;
+  --color-amber: #b8730f;
+  --color-ember: #8d2a1a;
+  --color-plum: #7a1b5f;
+  --color-pink: #fd429c;
+  --color-yellow: #f5d907;
+  --color-moss: #33402c;
+  --color-bronze: #b88a4f;
   --color-transparent: transparent;
   --color-current-color: currentColor;
 
-  --font-sans: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Host Grotesk Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
 
   --text-display: 11rem;
-  --text-display--line-height: 0.9;
-  --text-display--letter-spacing: -0.02em;
-  --text-display--font-weight: 800;
-  --text-figure: 1.375rem;
+  --text-display--line-height: 0.86;
+  --text-display--letter-spacing: -0.055em;
+  --text-display--font-weight: 500;
+  --text-figure: 1.875rem;
   --text-figure--line-height: 1;
-  --text-figure--font-weight: 600;
-  --text-title: 1.1875rem;
+  --text-figure--letter-spacing: -0.035em;
+  --text-figure--font-weight: 500;
+  --text-title: 1.25rem;
   --text-title--line-height: 1.2;
-  --text-title--font-weight: 600;
-  --text-cta: 1.0625rem;
+  --text-title--letter-spacing: -0.02em;
+  --text-title--font-weight: 500;
+  --text-cta: 1rem;
   --text-cta--line-height: 1;
-  --text-cta--font-weight: 700;
+  --text-cta--letter-spacing: -0.02em;
+  --text-cta--font-weight: 500;
   --text-body: 0.9375rem;
-  --text-body--line-height: 1.35;
+  --text-body--line-height: 1.4;
   --text-label: 0.8125rem;
-  --text-label--line-height: 1.25;
-  --text-label--font-weight: 500;
-  --text-detail: 0.6875rem;
+  --text-label--line-height: 1.3;
+  --text-detail: 0.75rem;
   --text-detail--line-height: 1.2;
-  --text-tab: 0.65625rem;
+  --text-tab: 0.6875rem;
   --text-tab--line-height: 1;
-  --text-tab--font-weight: 600;
+  --text-tab--font-weight: 500;
 
   --radius-hero: 1.75rem;
-  --radius-card: 0.875rem;
-  --radius-control: 0.75rem;
-  --radius-step: 0.625rem;
+  --radius-card: 0.75rem;
+  --radius-control: 0.625rem;
+  --radius-step: 0.5rem;
   --radius-mark: 0.25rem;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -87,28 +97,29 @@
 @layer base {
   html {
     background-color: var(--color-page);
-    color-scheme: light;
+    color-scheme: dark;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
   }
 
   body {
     font-family: var(--font-sans);
-    font-optical-sizing: auto;
     font-variant-numeric: tabular-nums;
+    -webkit-font-smoothing: antialiased;
+    background-color: var(--color-page);
     color: var(--color-ink);
     overscroll-behavior-y: none;
-    caret-color: var(--color-action);
+    caret-color: var(--color-ink);
     scrollbar-color: var(--color-line) var(--color-page);
   }
 
   ::selection {
-    background-color: var(--color-action);
+    background-color: var(--color-ink);
     color: var(--color-page);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-action);
+    outline: 2px solid var(--color-ink);
     outline-offset: 3px;
   }
 }

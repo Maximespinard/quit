@@ -22,26 +22,21 @@ export function CravingTimerRunning({ remainingMs, onStop }: CravingTimerRunning
   return (
     <section
       aria-label={copy.region}
-      className="relative isolate flex min-h-dvh flex-col overflow-hidden bg-ink px-safe pt-safe text-on-ink"
+      className="relative isolate flex min-h-dvh flex-col overflow-hidden bg-page px-safe pt-safe text-ink"
     >
       <HeroBackdrop />
       <div className="flex min-h-14 items-center pt-3">
-        <h1 className="font-semibold text-label">{strings.app.name}</h1>
+        <h1 className="font-medium text-label">{strings.app.name}</h1>
       </div>
       <div className="flex flex-1 flex-col items-center justify-center gap-7 text-center">
-        <p role="timer" aria-label={copy.remaining} className="text-display">
+        <p role="timer" aria-label={copy.remaining} className="text-display text-white">
           {formatCountdown(remainingMs)}
         </p>
         <MinuteSteps total={CRAVING_TIMER_MS / MINUTE_MS} held={heldMinutes} />
-        <p className="max-w-64 text-body text-on-ink/85">{copy.lead}</p>
+        <p className="max-w-64 text-body text-ink/85">{copy.lead}</p>
       </div>
       <div className="pt-6 pb-safe-4">
-        <Button
-          variant="outline"
-          size="lg"
-          className="w-full border-on-ink/40 text-on-ink active:bg-on-ink/15"
-          onClick={onStop}
-        >
+        <Button variant="secondary" size="lg" className="w-full" onClick={onStop}>
           {copy.stop}
         </Button>
       </div>

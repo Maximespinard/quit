@@ -13,7 +13,7 @@ const SIZES = '(min-width: 448px) 448px, 100vw'
 
 /**
  * The night seascape behind the streak figure. Decorative, so it is hidden from
- * assistive tech; `bg-ink` on the hero stays the floor if the image never arrives.
+ * assistive tech; `bg-page` on the hero stays the floor if the image never arrives.
  * Eager and high priority on purpose: it paints with the first viewport.
  */
 export function HeroBackdrop() {
@@ -34,7 +34,7 @@ export function HeroBackdrop() {
         />
       </picture>
       {/* Contrast scrim, not decoration: the waves lighten the band the label and clock sit in. */}
-      <div className="absolute inset-x-0 bottom-0 h-28 bg-linear-to-t from-ink/75 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-28 bg-linear-to-t from-page/75 to-transparent" />
     </div>
   )
 }

@@ -26,8 +26,8 @@ export function SavingsTotals({ moneySavedCents, cigarettesNotSmoked }: SavingsT
       {moneySavedCents === null || cigarettesNotSmoked === null ? (
         // Only a journal started before first launch asked for them lands here.
         <div className="flex flex-col items-start gap-2 rounded-card bg-surface p-4">
-          <p className="text-body text-ink-dim">{copy.unset}</p>
-          <Link to="/settings" search={keepSearch} className="font-semibold text-action text-body">
+          <p className="text-body text-muted">{copy.unset}</p>
+          <Link to="/settings" search={keepSearch} className="font-medium text-ink text-body">
             {copy.openSettings}
           </Link>
         </div>
@@ -35,11 +35,11 @@ export function SavingsTotals({ moneySavedCents, cigarettesNotSmoked }: SavingsT
         // The same statement card as the totals above: one rule between equal columns.
         <dl className="grid auto-cols-fr grid-flow-col divide-x divide-line rounded-card bg-surface py-4">
           <div className="flex flex-col justify-between gap-1 px-4">
-            <dt className="text-ink-dim text-label">{copy.moneySaved}</dt>
+            <dt className="text-muted text-label">{copy.moneySaved}</dt>
             <dd className="text-figure tabular-nums">{formatEuros(moneySavedCents)}</dd>
           </div>
           <div className="flex flex-col justify-between gap-1 px-4">
-            <dt className="text-ink-dim text-label">{copy.cigarettesNotSmoked}</dt>
+            <dt className="text-muted text-label">{copy.cigarettesNotSmoked}</dt>
             <dd className="text-figure tabular-nums">{formatCount(cigarettesNotSmoked)}</dd>
           </div>
         </dl>

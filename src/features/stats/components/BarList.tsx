@@ -19,10 +19,10 @@ export function BarList({ rows, max }: BarListProps) {
       {rows.map((row) => (
         <li key={row.key} className="flex flex-col gap-1.5">
           <p className="flex items-baseline justify-between gap-3 text-body">
-            <span className={cn('min-w-0 truncate', row.muted === true && 'text-ink-soft')}>
+            <span className={cn('min-w-0 truncate', row.muted === true && 'text-muted')}>
               {row.label}
             </span>
-            <span className="shrink-0 text-ink-soft text-label tabular-nums">
+            <span className="shrink-0 text-muted text-label tabular-nums">
               <span aria-hidden>{row.count}</span>
               <span className="sr-only">{strings.stats.cravings(row.count)}</span>
             </span>
@@ -30,7 +30,7 @@ export function BarList({ rows, max }: BarListProps) {
           {/* Grown from a hairline baseline, rounded only at its data end. */}
           <div aria-hidden className="h-2 border-line border-l">
             <div
-              className="h-full rounded-r-mark bg-action"
+              className="h-full rounded-r-mark bg-ink"
               // A row holding anything keeps a visible stub; an empty one draws nothing.
               style={{
                 width:

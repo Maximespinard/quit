@@ -76,19 +76,19 @@ export function FirstLaunch({ journal, now, onStarted, restore }: FirstLaunchPro
           // Holds the chevron's place: the rail must not jump when it appears.
           <span aria-hidden="true" className="-ml-3 size-11 shrink-0" />
         )}
-        {/* Crans, like the multiplier: answered in ink, current in steel, ahead as a filet. */}
+        {/* Crans, like the multiplier: answered in cream, current in muted, ahead as a ghost line. */}
         <div aria-hidden="true" className="flex flex-1 gap-1.5">
           {STEPS.map((number) => (
             <span
               key={number}
               className={cn(
                 'h-1.5 flex-1 rounded-full transition-colors duration-240 ease-out-expo motion-reduce:transition-none',
-                number < step ? 'bg-ink' : number === step ? 'bg-reached' : 'bg-line',
+                number < step ? 'bg-ink' : number === step ? 'bg-muted' : 'bg-ghost-line',
               )}
             />
           ))}
         </div>
-        <p className="text-ink-soft text-label tabular-nums">{copy.progress(step, STEP_COUNT)}</p>
+        <p className="text-muted text-label tabular-nums">{copy.progress(step, STEP_COUNT)}</p>
       </div>
 
       {step === 1 ? (

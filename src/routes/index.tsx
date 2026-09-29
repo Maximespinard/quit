@@ -70,7 +70,7 @@ function HomePage() {
                   to="/settings"
                   search={appSearch}
                   aria-label={strings.nav.settings}
-                  className="grid size-11 place-items-center rounded-control text-on-ink active:bg-on-ink/15"
+                  className="grid size-11 place-items-center rounded-full text-ink active:bg-ghost"
                 >
                   <Settings className="size-5" strokeWidth={1.75} aria-hidden="true" />
                 </Link>
@@ -112,24 +112,24 @@ function HomePage() {
             </StreakScreen>
             <div className="mx-auto flex max-w-md flex-col items-start gap-3 px-safe pt-5">
               {cravingRecorded === true ? (
-                <p role="status" className="text-body text-ink-soft">
+                <p role="status" className="text-body text-muted">
                   {strings.craving.recorded}
                 </p>
               ) : null}
               {journalImported === true ? (
-                <p role="status" className="text-body text-ink-soft">
+                <p role="status" className="text-body text-muted">
                   {strings.backup.imported}
                 </p>
               ) : null}
               {lapseRecorded === true ? (
-                <p role="status" className="text-body text-ink-soft">
+                <p role="status" className="text-body text-muted">
                   {strings.lapse.recorded}
                 </p>
               ) : null}
               <Link
                 to="/craving/past"
                 search={appSearch}
-                className={buttonVariants({ variant: 'outline' })}
+                className={buttonVariants({ variant: 'secondary' })}
               >
                 {strings.craving.logPast}
               </Link>

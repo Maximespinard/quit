@@ -8,6 +8,7 @@ import {
 import type { Journal } from '@/shared/domain/journal'
 import type { ProtocolPosition } from '@/shared/domain/protocol-position'
 import { Button } from '@/shared/ui/base/button'
+import { Input } from '@/shared/ui/base/input'
 import { fromDatetimeLocal, toDatetimeLocal } from '@/shared/utils/datetime-local'
 import { fromDecimalText, toDecimalText } from '@/shared/utils/decimal-text'
 import { strings } from '@/shared/utils/strings'
@@ -15,9 +16,6 @@ import { applicationAt, chosenSite, type SiteChoice, untouched } from '../utils/
 import { SitePicker } from './SitePicker'
 
 const copy = strings.patch.form
-
-const fieldClass =
-  'h-12 w-full min-w-0 rounded-control border border-line bg-white px-4 font-medium text-cta text-ink tabular-nums'
 
 /** The domain's refusals, plus a date the browser could not give. */
 type FormError = Extract<RecordPatchApplicationResult, { ok: false }>['reason'] | 'invalid'
@@ -86,7 +84,7 @@ export function PatchApplicationForm({
     <section className="flex flex-col gap-6 pt-6">
       <div className="flex flex-col gap-2">
         <h2 className="text-title">{initial ? copy.edit.title : copy.title}</h2>
-        <p className="text-body text-ink-soft">{initial ? copy.edit.lead : copy.lead}</p>
+        <p className="text-body text-muted">{initial ? copy.edit.lead : copy.lead}</p>
       </div>
 
       <form noValidate onSubmit={submit} className="flex flex-col gap-4">
@@ -94,7 +92,7 @@ export function PatchApplicationForm({
           <label htmlFor={`${id}-dose`} className="text-label">
             {copy.doseLabel}
           </label>
-          <input
+          <Input
             id={`${id}-dose`}
             inputMode="decimal"
             value={dose}
@@ -104,14 +102,13 @@ export function PatchApplicationForm({
             }}
             aria-invalid={doseInvalid}
             aria-describedby={doseInvalid ? errorId : undefined}
-            className={fieldClass}
           />
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor={`${id}-date`} className="text-label">
             {copy.dateLabel}
           </label>
-          <input
+          <Input
             id={`${id}-date`}
             type="datetime-local"
             required
@@ -122,7 +119,6 @@ export function PatchApplicationForm({
             }}
             aria-invalid={dateInvalid}
             aria-describedby={dateInvalid ? errorId : undefined}
-            className={fieldClass}
           />
         </div>
         <SitePicker

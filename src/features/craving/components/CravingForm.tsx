@@ -63,7 +63,7 @@ export function CravingForm({ tagOptions, initial, onSubmit, children }: Craving
             </ToggleGroupItem>
           ))}
         </ToggleGroup>
-        <p id={hintId} className="text-ink-soft text-label">
+        <p id={hintId} className="text-muted text-label">
           {copy.hint}
         </p>
       </div>

@@ -9,7 +9,7 @@ type MultiplierStepsProps = {
   label: string
 }
 
-/** Five flat steps: acquired in ink, the current one in steel, the rest outlined. */
+/** Five flat steps: acquired filled in cream, the current one ringed in cream, the rest ghosted. */
 export function MultiplierSteps({ steps, current, label }: MultiplierStepsProps) {
   return (
     <ol aria-label={label} className="grid grid-cols-5 gap-1.5">
@@ -22,10 +22,10 @@ export function MultiplierSteps({ steps, current, label }: MultiplierStepsProps)
             data-state={state}
             style={{ animationDelay: `${index * 60}ms` }}
             className={cn(
-              'grid h-10.5 place-items-center rounded-step border font-semibold text-body motion-safe:animate-step-in',
-              state === 'acquired' && 'border-ink bg-ink text-on-ink',
-              state === 'current' && 'border-reached bg-reached text-white',
-              state === 'locked' && 'border-line bg-transparent text-ink-soft',
+              'grid h-10.5 place-items-center rounded-step border font-medium text-body motion-safe:animate-step-in',
+              state === 'acquired' && 'border-ink bg-ink text-page',
+              state === 'current' && 'border-ink bg-transparent text-ink',
+              state === 'locked' && 'border-transparent bg-ghost text-muted',
             )}
           >
             ×{step}

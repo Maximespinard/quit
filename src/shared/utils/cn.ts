@@ -2,16 +2,16 @@ import { type ClassValue, clsx } from 'clsx'
 import { extendTailwindMerge } from 'tailwind-merge'
 
 /**
- * `@theme` adds font sizes under names tailwind-merge cannot know about, so it reads
- * `text-tab` as a colour and drops it whenever a `text-<colour>` sits in the same call.
- * Registering the size keys keeps size and colour in their own conflict groups.
+ * `@theme` declares sizes and radii under names tailwind-merge cannot know about: it would read
+ * `text-tab` as a colour and drop it next to a `text-<colour>`, and keep both `rounded-control`
+ * and `rounded-full`. Registering the names puts each class in its own conflict group.
+ * `cn.test.ts` fails when a token is added to `src/index.css` and not here.
  */
 const twMerge = extendTailwindMerge({
   extend: {
-    classGroups: {
-      'font-size': [
-        { text: ['display', 'figure', 'title', 'cta', 'body', 'label', 'detail', 'tab'] },
-      ],
+    theme: {
+      text: ['display', 'figure', 'title', 'cta', 'body', 'label', 'detail', 'tab'],
+      radius: ['hero', 'card', 'control', 'step', 'mark'],
     },
   },
 })

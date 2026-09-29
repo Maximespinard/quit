@@ -23,15 +23,15 @@ export function SettingsScreen({ journal, now, onSaved }: SettingsScreenProps) {
       <Link
         to="/protocol"
         search={keepSearch}
-        className="flex min-h-12 items-center justify-between gap-3 rounded-card bg-surface p-4 active:bg-surface-locked"
+        className="flex min-h-12 items-center justify-between gap-3 rounded-card bg-surface p-4 active:bg-ghost"
       >
         <span className="flex flex-col gap-1">
-          <span className="font-semibold text-body">{copy.protocol.open}</span>
-          <span className="text-ink-dim text-label">
+          <span className="font-medium text-body">{copy.protocol.open}</span>
+          <span className="text-muted text-label">
             {copy.protocol.doses(journal.protocol.map((step) => formatDose(step.doseMg)))}
           </span>
         </span>
-        <ChevronRight className="size-5 text-ink-soft" strokeWidth={1.75} aria-hidden="true" />
+        <ChevronRight className="size-5 text-muted" strokeWidth={1.75} aria-hidden="true" />
       </Link>
     </div>
   )

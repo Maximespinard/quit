@@ -3,6 +3,7 @@ import type { GoalProgress } from '@/shared/domain/derive'
 import { GOAL_LABEL_MAX_LENGTH, type SetGoalResult, setGoal } from '@/shared/domain/goal'
 import type { Journal } from '@/shared/domain/journal'
 import { Button } from '@/shared/ui/base/button'
+import { Input } from '@/shared/ui/base/input'
 import { fromEuroText, toEuroText } from '@/shared/utils/euros'
 import { strings } from '@/shared/utils/strings'
 
@@ -18,9 +19,6 @@ type GoalFormProps = {
 type Refusal = Extract<SetGoalResult, { ok: false }>['reason']
 
 const copy = strings.goal.form
-
-const fieldClass =
-  'h-12 w-full rounded-control border border-line bg-white px-4 font-medium text-cta text-ink placeholder:font-normal placeholder:text-ink-soft'
 
 /** Names the one thing to save for and its price. */
 export function GoalForm({ journal, now, goal, onSaved }: GoalFormProps) {
@@ -45,14 +43,14 @@ export function GoalForm({ journal, now, goal, onSaved }: GoalFormProps) {
     <section className="flex flex-col gap-6 pt-6">
       <div className="flex flex-col gap-2">
         <h2 className="text-title">{copy.title}</h2>
-        <p className="text-body text-ink-soft">{replacesReached ? copy.restart : copy.lead}</p>
+        <p className="text-body text-muted">{replacesReached ? copy.restart : copy.lead}</p>
       </div>
       <form noValidate onSubmit={submit} className="flex flex-col gap-5">
         <div className="flex flex-col gap-3">
           <label htmlFor={labelId} className="text-label">
             {copy.label}
           </label>
-          <input
+          <Input
             id={labelId}
             type="text"
             autoComplete="off"
@@ -65,7 +63,6 @@ export function GoalForm({ journal, now, goal, onSaved }: GoalFormProps) {
             }}
             aria-invalid={refusal === 'invalid-label'}
             aria-describedby={refusal === 'invalid-label' ? errorId : undefined}
-            className={fieldClass}
           />
         </div>
         <div className="flex flex-col gap-3">
@@ -73,7 +70,7 @@ export function GoalForm({ journal, now, goal, onSaved }: GoalFormProps) {
             {copy.price}
           </label>
           <div className="relative">
-            <input
+            <Input
               id={priceId}
               type="text"
               inputMode="decimal"
@@ -85,11 +82,11 @@ export function GoalForm({ journal, now, goal, onSaved }: GoalFormProps) {
               }}
               aria-invalid={refusal === 'invalid-price'}
               aria-describedby={refusal === 'invalid-price' ? errorId : undefined}
-              className={`${fieldClass} pr-10 tabular-nums`}
+              className="pr-10"
             />
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute inset-y-0 right-4 flex items-center font-medium text-cta text-ink-soft"
+              className="pointer-events-none absolute inset-y-0 right-4 flex items-center font-medium text-cta text-muted"
             >
               {copy.suffix}
             </span>

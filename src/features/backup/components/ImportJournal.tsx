@@ -21,7 +21,7 @@ type ImportJournalProps = {
   journal: Journal
   /** The button's words: import from settings, restore from first launch. */
   label: string
-  variant?: 'outline' | 'ghost'
+  variant?: 'secondary' | 'ghost'
   className?: string
   /** Commits the imported journal; the backup record is already updated. */
   onImported: (journal: Journal) => void
@@ -43,7 +43,7 @@ const copy = strings.backup
 export function ImportJournal({
   journal,
   label,
-  variant = 'outline',
+  variant = 'secondary',
   className,
   onImported,
 }: ImportJournalProps) {

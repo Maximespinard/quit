@@ -1,6 +1,7 @@
 import { ChevronDown, ChevronUp, Trash2 } from 'lucide-react'
 import { useId } from 'react'
 import { Button } from '@/shared/ui/base/button'
+import { Input } from '@/shared/ui/base/input'
 import { strings } from '@/shared/utils/strings'
 import type { DraftField, StepDraft } from '../utils/step-draft'
 
@@ -8,9 +9,6 @@ const copy = strings.protocol
 
 /** A disabled place control fades out instead of taking the disabled fill, which reads as selected here. */
 const placeControl = 'disabled:bg-transparent disabled:opacity-30'
-
-const fieldClass =
-  'h-12 w-full min-w-0 rounded-control border border-line bg-white px-4 font-medium text-cta text-ink tabular-nums'
 
 type StepFieldsProps = {
   draft: StepDraft
@@ -52,7 +50,7 @@ export function StepFields({
       className="flex min-w-0 flex-col gap-3 rounded-card border border-line p-4"
     >
       <div className="-my-1 -mr-2 flex items-center justify-between">
-        <h3 id={`${id}-title`} className="font-semibold text-body">
+        <h3 id={`${id}-title`} className="font-medium text-body">
           {copy.step(number)}
         </h3>
         <div className="flex">
@@ -94,28 +92,26 @@ export function StepFields({
           <label htmlFor={`${id}-dose`} className="text-label">
             {copy.doseLabel}
           </label>
-          <input
+          <Input
             id={`${id}-dose`}
             inputMode="decimal"
             value={draft.dose}
             onChange={(event) => onChange('dose', event.target.value)}
             aria-invalid={invalid.dose}
             aria-describedby={describedBy(invalid.dose)}
-            className={fieldClass}
           />
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor={`${id}-duration`} className="text-label">
             {copy.durationLabel}
           </label>
-          <input
+          <Input
             id={`${id}-duration`}
             inputMode="numeric"
             value={draft.duration}
             onChange={(event) => onChange('duration', event.target.value)}
             aria-invalid={invalid.duration}
             aria-describedby={describedBy(invalid.duration)}
-            className={fieldClass}
           />
         </div>
       </div>
@@ -124,12 +120,11 @@ export function StepFields({
         <label htmlFor={`${id}-brand`} className="text-label">
           {copy.brandLabel}
         </label>
-        <input
+        <Input
           id={`${id}-brand`}
           value={draft.brand}
           autoComplete="off"
           onChange={(event) => onChange('brand', event.target.value)}
-          className={fieldClass}
         />
       </div>
     </fieldset>

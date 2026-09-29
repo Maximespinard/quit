@@ -18,11 +18,11 @@ export function CalendarSummary({ position, nextStepChange, plannedEnd }: Calend
   return (
     <section aria-labelledby={titleId} className="flex flex-col gap-2.5">
       <div className="flex items-baseline justify-between text-label">
-        <h3 id={titleId} className="font-semibold text-body text-ink">
+        <h3 id={titleId} className="font-medium text-body text-ink">
           {strings.protocol.title}
         </h3>
         {position.status === 'running' ? (
-          <span className="text-ink-soft">
+          <span className="text-muted">
             {strings.protocol.stepOf(position.stepNumber, position.stepCount)}
           </span>
         ) : null}
@@ -34,7 +34,7 @@ export function CalendarSummary({ position, nextStepChange, plannedEnd }: Calend
             <p className="text-figure tabular-nums">
               {strings.protocol.day(position.dayInStep, position.step.durationDays)}
             </p>
-            <p className="text-ink-dim text-label">
+            <p className="text-muted text-label">
               {strings.protocol.detail(
                 formatDose(position.step.doseMg),
                 position.nextStep === null
@@ -50,23 +50,23 @@ export function CalendarSummary({ position, nextStepChange, plannedEnd }: Calend
           <dl className="grid auto-cols-fr grid-flow-col divide-x divide-line py-4">
             {nextStepChange !== null && position.nextStep !== null ? (
               <div className="flex flex-col gap-1 px-4">
-                <dt className="text-ink-dim text-label">{copy.nextChange}</dt>
-                <dd className="font-semibold text-body">{formatWeekdayDate(nextStepChange)}</dd>
-                <dd className="text-ink-dim text-label">
+                <dt className="text-muted text-label">{copy.nextChange}</dt>
+                <dd className="font-medium text-body">{formatWeekdayDate(nextStepChange)}</dd>
+                <dd className="text-muted text-label">
                   {copy.nextDose(formatDose(position.nextStep.doseMg))}
                 </dd>
               </div>
             ) : null}
             <div className="flex flex-col gap-1 px-4">
-              <dt className="text-ink-dim text-label">{copy.plannedEnd}</dt>
-              <dd className="font-semibold text-body">{formatWeekdayDate(plannedEnd)}</dd>
+              <dt className="text-muted text-label">{copy.plannedEnd}</dt>
+              <dd className="font-medium text-body">{formatWeekdayDate(plannedEnd)}</dd>
             </div>
           </dl>
         </div>
       ) : (
         <div className="flex flex-col gap-1 rounded-card bg-surface p-4">
           <p className="text-title">{strings.protocol.over}</p>
-          <p className="text-ink-dim text-label">{copy.endedOn(formatDate(plannedEnd))}</p>
+          <p className="text-muted text-label">{copy.endedOn(formatDate(plannedEnd))}</p>
         </div>
       )}
     </section>

@@ -40,7 +40,7 @@ function CalendarPage() {
               <h2 className="text-title">{copy.title}</h2>
             </div>
             {calendar === null ? (
-              <p className="text-body text-ink-soft">{copy.empty}</p>
+              <p className="text-body text-muted">{copy.empty}</p>
             ) : (
               <div className="flex flex-col gap-8">
                 <CalendarSummary

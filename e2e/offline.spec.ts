@@ -24,4 +24,10 @@ test('after one online load, the app launches and works offline', async ({ page,
 
   await page.reload()
   await expect(streakRegion(page)).toBeVisible()
+
+  // The typeface carries the identity: it comes from the precache, not a system fallback.
+  const loaded = await page.evaluate(async () =>
+    (await document.fonts.load('500 16px "Host Grotesk Variable"')).map((face) => face.status),
+  )
+  expect(loaded).toContain('loaded')
 })

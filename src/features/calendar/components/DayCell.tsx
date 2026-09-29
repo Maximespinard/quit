@@ -25,7 +25,7 @@ export function DayCell({ cell, todayStart }: DayCellProps) {
     return (
       <td className="p-0.5 align-top">
         {/* Outside the calendar: a bare date, before the quit day or after the last one. */}
-        <div className="flex h-14 justify-center pt-1.5 text-ink-soft/50 text-label tabular-nums">
+        <div className="flex h-14 justify-center pt-1.5 text-muted/50 text-label tabular-nums">
           <span aria-hidden="true">{date}</span>
           <span className="sr-only">{formatWeekdayDate(day)}</span>
         </div>
@@ -43,19 +43,16 @@ export function DayCell({ cell, todayStart }: DayCellProps) {
         className={cn(
           'flex h-14 flex-col items-center justify-between rounded-step pt-1.5 pb-2',
           isToday && 'bg-surface',
-          day > todayStart ? 'text-ink-soft' : 'text-ink',
+          day > todayStart ? 'text-muted' : 'text-ink',
         )}
       >
-        <span aria-hidden="true" className={cn('text-label tabular-nums', isToday && 'font-bold')}>
-          {date}
-        </span>
         <span
           aria-hidden="true"
-          className={cn(
-            'whitespace-nowrap font-semibold text-detail',
-            isToday ? 'text-ink-dim' : 'text-ink-soft',
-          )}
+          className={cn('text-label tabular-nums', isToday && 'font-medium')}
         >
+          {date}
+        </span>
+        <span aria-hidden="true" className="whitespace-nowrap font-medium text-detail text-muted">
           {tag}
         </span>
         <span aria-hidden="true" className="flex h-3 items-center gap-0.5 text-ink">

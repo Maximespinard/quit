@@ -49,12 +49,12 @@ export function SandboxActions({ journal, now, commit, sandbox }: SandboxActions
         {running?.nextStep === null ? copy.jumpToEnd : copy.jumpToNextStep}
       </Button>
       <fieldset>
-        <legend className="mb-2 text-ink-soft text-label">{copy.inject}</legend>
+        <legend className="mb-2 text-muted text-label">{copy.inject}</legend>
         <div className="grid grid-cols-2 gap-2">
-          <Button variant="outline" disabled={!canInject} onClick={injectCraving}>
+          <Button variant="secondary" disabled={!canInject} onClick={injectCraving}>
             {copy.injectCraving}
           </Button>
-          <Button variant="outline" disabled={!canInject} onClick={injectLapse}>
+          <Button variant="secondary" disabled={!canInject} onClick={injectLapse}>
             {copy.injectLapse}
           </Button>
         </div>

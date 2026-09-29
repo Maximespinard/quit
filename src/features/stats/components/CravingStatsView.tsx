@@ -24,7 +24,7 @@ export function CravingStatsView({ stats }: { stats: CravingStats }) {
   if (stats.count < MIN_CRAVINGS_FOR_STATS) {
     return (
       <div className="flex flex-col items-start gap-3">
-        <p className="text-body text-ink-soft">
+        <p className="text-body text-muted">
           {stats.count === 0
             ? copy.empty(MIN_CRAVINGS_FOR_STATS)
             : copy.sparse(stats.count, MIN_CRAVINGS_FOR_STATS)}
@@ -33,7 +33,7 @@ export function CravingStatsView({ stats }: { stats: CravingStats }) {
         <Link
           to="/craving/past"
           search={keepSearch}
-          className={buttonVariants({ variant: 'outline' })}
+          className={buttonVariants({ variant: 'secondary' })}
         >
           {strings.craving.logPast}
         </Link>
@@ -86,7 +86,7 @@ function StatsSection({ title, children }: { title: string; children: ReactNode 
   const titleId = useId()
   return (
     <section aria-labelledby={titleId} className="flex flex-col gap-2.5">
-      <h2 id={titleId} className="font-semibold text-body">
+      <h2 id={titleId} className="font-medium text-body">
         {title}
       </h2>
       {children}

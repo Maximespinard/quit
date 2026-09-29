@@ -20,7 +20,7 @@ export function StepSpans({ steps, position }: StepSpansProps) {
 
   return (
     <section aria-labelledby={titleId} className="flex flex-col gap-2.5">
-      <h3 id={titleId} className="font-semibold text-body">
+      <h3 id={titleId} className="font-medium text-body">
         {copy.steps}
       </h3>
       <ol className="flex flex-col divide-y divide-line border-line border-y">
@@ -28,13 +28,13 @@ export function StepSpans({ steps, position }: StepSpansProps) {
           const running = span.number === current
           return (
             <li key={span.number} className="flex min-h-12 items-center justify-between gap-3">
-              <span className={cn('text-body', running && 'font-semibold')}>
+              <span className={cn('text-body', running && 'font-medium')}>
                 {copy.step(span.number, formatDose(span.step.doseMg))}
                 {running ? (
-                  <span className="font-normal text-ink-soft text-label">{copy.current}</span>
+                  <span className="font-normal text-muted text-label">{copy.current}</span>
                 ) : null}
               </span>
-              <span className="text-ink-soft text-label tabular-nums">
+              <span className="text-muted text-label tabular-nums">
                 {copy.span(formatShortDate(span.firstDay), formatShortDate(span.lastDay))}
               </span>
             </li>

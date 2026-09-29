@@ -21,14 +21,14 @@ export function ProtocolStep({ protocol, onStart }: ProtocolStepProps) {
         <h2 id={titleId} className="text-title">
           {copy.title}
         </h2>
-        <p className="text-body text-ink-soft">{copy.lead}</p>
+        <p className="text-body text-muted">{copy.lead}</p>
       </div>
       <ol className="flex flex-col gap-2 rounded-card bg-surface p-4">
         {protocol.map((step, index) => (
           // The default protocol never changes while shown: its order is its identity.
           // biome-ignore lint/suspicious/noArrayIndexKey: steps have no id of their own
           <li key={index} className="flex items-baseline justify-between gap-3">
-            <span className="text-ink-soft text-label">{strings.protocol.step(index + 1)}</span>
+            <span className="text-muted text-label">{strings.protocol.step(index + 1)}</span>
             <span className="font-medium text-body tabular-nums">
               {copy.step(formatDose(step.doseMg), step.durationDays)}
             </span>

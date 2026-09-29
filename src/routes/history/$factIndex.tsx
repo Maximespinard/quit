@@ -82,7 +82,7 @@ function EditFactPage() {
         return (
           <AppShell>
             {fact === null ? (
-              <p className="pt-6 text-body text-ink-soft">{copy.missing}</p>
+              <p className="pt-6 text-body text-muted">{copy.missing}</p>
             ) : (
               <>
                 {editForm(fact, {

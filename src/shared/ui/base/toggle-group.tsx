@@ -20,7 +20,7 @@ const ToggleGroupContext = React.createContext<ToggleGroupSettings>({
 
 /**
  * shadcn `toggle-group`, reskinned. With `spacing={0}` and `variant="outline"` it is the
- * segmented control: one hairline frame, the pressed segment filled in ink.
+ * segmented control: one hairline pill tray, the pressed segment a cream pill inside it.
  */
 function ToggleGroup({
   className,
@@ -40,7 +40,7 @@ function ToggleGroup({
       data-orientation={orientation}
       style={{ '--gap': spacing } as React.CSSProperties}
       className={cn(
-        'group/toggle-group flex w-fit flex-row items-center gap-[--spacing(var(--gap))] rounded-step data-[spacing=0]:overflow-hidden data-[spacing=0]:border data-[spacing=0]:border-line data-vertical:flex-col data-vertical:items-stretch',
+        'group/toggle-group flex w-fit flex-row items-center gap-[--spacing(var(--gap))] rounded-full data-[spacing=0]:border data-[spacing=0]:border-line data-[spacing=0]:p-1 data-vertical:flex-col data-vertical:items-stretch',
         className,
       )}
       {...props}
@@ -68,7 +68,7 @@ function ToggleGroupItem({
       data-size={context.size || size}
       data-spacing={context.spacing}
       className={cn(
-        'shrink-0 focus:z-10 focus-visible:z-10 group-data-[spacing=0]/toggle-group:h-12 group-data-[spacing=0]/toggle-group:flex-1 group-data-[spacing=0]/toggle-group:rounded-none group-data-[spacing=0]/toggle-group:border-0 group-data-[spacing=0]/toggle-group:[&:not(:first-child)]:border-line group-data-[spacing=0]/toggle-group:[&:not(:first-child)]:border-l',
+        'shrink-0 focus:z-10 focus-visible:z-10 group-data-[spacing=0]/toggle-group:h-10 group-data-[spacing=0]/toggle-group:flex-1 group-data-[spacing=0]/toggle-group:border-0',
         toggleVariants({
           variant: context.variant || variant,
           size: context.size || size,

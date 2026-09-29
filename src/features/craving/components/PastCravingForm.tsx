@@ -5,6 +5,7 @@ import {
   recordCraving,
 } from '@/shared/domain/facts/craving'
 import type { Journal } from '@/shared/domain/journal'
+import { Input } from '@/shared/ui/base/input'
 import { fromDatetimeLocal, toDatetimeLocal } from '@/shared/utils/datetime-local'
 import { strings } from '@/shared/utils/strings'
 import { tagOptions } from '../utils/tag-options'
@@ -51,7 +52,7 @@ export function PastCravingForm({ journal, now, initial, onRecorded }: PastCravi
     <section className="flex flex-col gap-6 pt-6">
       <div className="flex flex-col gap-2">
         <h2 className="text-title">{initial ? copy.edit.title : copy.title}</h2>
-        <p className="text-body text-ink-soft">{initial ? copy.edit.lead : copy.lead}</p>
+        <p className="text-body text-muted">{initial ? copy.edit.lead : copy.lead}</p>
       </div>
       <CravingForm
         tagOptions={tagOptions(journal, initial?.tags)}
@@ -62,7 +63,7 @@ export function PastCravingForm({ journal, now, initial, onRecorded }: PastCravi
           <label htmlFor={inputId} className="text-label">
             {copy.dateLabel}
           </label>
-          <input
+          <Input
             id={inputId}
             type="datetime-local"
             required
@@ -74,7 +75,6 @@ export function PastCravingForm({ journal, now, initial, onRecorded }: PastCravi
             }}
             aria-invalid={error !== null}
             aria-describedby={error !== null ? errorId : undefined}
-            className="h-12 rounded-control border border-line bg-white px-4 font-medium text-cta text-ink"
           />
           {error !== null ? (
             <p id={errorId} role="alert" className="text-alert text-label">

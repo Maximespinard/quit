@@ -1,5 +1,6 @@
 import { type KeyboardEvent, useId, useState } from 'react'
 import { Button } from '@/shared/ui/base/button'
+import { Input } from '@/shared/ui/base/input'
 import { ToggleGroup, ToggleGroupItem } from '@/shared/ui/base/toggle-group'
 import { strings } from '@/shared/utils/strings'
 import { type CravingTagOption, resolveTypedTag } from '../domain/craving-tags'
@@ -77,7 +78,7 @@ export function CravingTagPicker({
             </ToggleGroupItem>
           ))}
         </ToggleGroup>
-        <p id={hintId} className="text-ink-soft text-label">
+        <p id={hintId} className="text-muted text-label">
           {copy.hint}
         </p>
       </div>
@@ -86,7 +87,7 @@ export function CravingTagPicker({
           {copy.customLabel}
         </label>
         <div className="flex gap-2">
-          <input
+          <Input
             id={inputId}
             type="text"
             enterKeyHint="done"
@@ -95,9 +96,9 @@ export function CravingTagPicker({
             value={typed}
             onChange={(event) => type(event.target.value)}
             onKeyDown={addOnEnter}
-            className="h-12 min-w-0 flex-1 rounded-control border border-line bg-white px-4 font-medium text-cta text-ink placeholder:text-ink-soft"
+            className="flex-1"
           />
-          <Button type="button" variant="outline" size="lg" onClick={add}>
+          <Button type="button" variant="secondary" size="lg" onClick={add}>
             {copy.add}
           </Button>
         </div>

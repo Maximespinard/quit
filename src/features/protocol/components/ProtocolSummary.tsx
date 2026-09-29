@@ -3,7 +3,6 @@ import { useId } from 'react'
 import type { ProtocolPosition } from '@/shared/domain/protocol-position'
 import { buttonVariants } from '@/shared/ui/base/button'
 import { keepSearch } from '@/shared/utils/app-search'
-import { cn } from '@/shared/utils/cn'
 import { formatDose } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
 
@@ -16,13 +15,11 @@ export function ProtocolSummary({ position }: { position: ProtocolPosition }) {
   return (
     <section aria-labelledby={titleId} className="flex flex-col gap-2.5">
       <div className="flex items-baseline justify-between text-label">
-        <h2 id={titleId} className="font-semibold text-body text-ink">
+        <h2 id={titleId} className="font-medium text-body text-ink">
           {copy.title}
         </h2>
         {position.status === 'running' ? (
-          <span className="text-ink-soft">
-            {copy.stepOf(position.stepNumber, position.stepCount)}
-          </span>
+          <span className="text-muted">{copy.stepOf(position.stepNumber, position.stepCount)}</span>
         ) : null}
       </div>
 
@@ -32,7 +29,7 @@ export function ProtocolSummary({ position }: { position: ProtocolPosition }) {
             <p className="text-figure tabular-nums">
               {copy.day(position.dayInStep, position.step.durationDays)}
             </p>
-            <p className="text-ink-dim text-label">
+            <p className="text-muted text-label">
               {copy.detail(
                 formatDose(position.step.doseMg),
                 position.nextStep === null
@@ -41,23 +38,19 @@ export function ProtocolSummary({ position }: { position: ProtocolPosition }) {
               )}
             </p>
             {position.step.brand !== undefined ? (
-              <p className="truncate text-ink-dim text-label">{position.step.brand}</p>
+              <p className="truncate text-muted text-label">{position.step.brand}</p>
             ) : null}
           </div>
         ) : (
           <div className="flex flex-col gap-1">
             <p className="text-title">{copy.over}</p>
-            <p className="text-ink-dim text-label">{copy.overLead}</p>
+            <p className="text-muted text-label">{copy.overLead}</p>
           </div>
         )}
         <Link
           to="/protocol"
           search={keepSearch}
-          // On the surface card the outline's own press fill would not show.
-          className={cn(
-            buttonVariants({ variant: 'outline', size: 'sm' }),
-            'active:bg-surface-locked',
-          )}
+          className={buttonVariants({ variant: 'secondary', size: 'sm' })}
         >
           {copy.edit}
         </Link>

@@ -21,11 +21,7 @@ type GoalSummaryProps = {
 
 const copy = strings.goal
 
-// On the surface card the outline's own press fill would not show.
-const cardAction = cn(
-  buttonVariants({ variant: 'outline', size: 'sm' }),
-  'shrink-0 active:bg-surface-locked',
-)
+const cardAction = cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'shrink-0')
 
 /** Home screen block: the goal and the money saved towards it, or the way to set one. */
 export function GoalSummary({ journal, goal, onCelebrated }: GoalSummaryProps) {
@@ -39,21 +35,21 @@ export function GoalSummary({ journal, goal, onCelebrated }: GoalSummaryProps) {
   return (
     <section aria-labelledby={titleId} className="flex flex-col gap-2.5">
       <div className="flex items-baseline justify-between text-label">
-        <h2 id={titleId} className="font-semibold text-body text-ink">
+        <h2 id={titleId} className="font-medium text-body text-ink">
           {copy.title}
         </h2>
         {goal === null ? null : goal.reached ? (
-          <span className={cn('text-ink-soft', celebrating && 'motion-safe:animate-step-in')}>
+          <span className={cn('text-muted', celebrating && 'motion-safe:animate-step-in')}>
             {copy.reached}
           </span>
         ) : (
-          <span className="text-ink-soft">{copy.percent(percent)}</span>
+          <span className="text-muted">{copy.percent(percent)}</span>
         )}
       </div>
 
       {goal === null ? (
         <div className="flex flex-col items-start gap-3 rounded-card bg-surface p-4">
-          <p className="text-body text-ink-dim">{copy.none}</p>
+          <p className="text-body text-muted">{copy.none}</p>
           <Link to="/goal" search={keepSearch} className={cardAction}>
             {copy.choose}
           </Link>
@@ -72,8 +68,8 @@ export function GoalSummary({ journal, goal, onCelebrated }: GoalSummaryProps) {
         <div className="flex flex-col gap-3 rounded-card bg-surface p-4">
           <div className="flex items-start justify-between gap-3">
             <div className="flex min-w-0 flex-col gap-1">
-              <p className="truncate font-semibold text-body">{goal.label}</p>
-              <p className="text-ink-dim text-label">{progress}</p>
+              <p className="truncate font-medium text-body">{goal.label}</p>
+              <p className="text-muted text-label">{progress}</p>
             </div>
             <Link to="/goal" search={keepSearch} className={cardAction}>
               {copy.edit}
