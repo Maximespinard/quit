@@ -189,8 +189,8 @@ test('the real journal survives a storage wipe through its export', async ({ pag
   await page.reload()
   await expectStreak(page, 0, '00:\\d\\d:\\d\\d')
   await openSettings(page)
-  await expect(
-    page.getByRole('form', { name: 'Dépense en tabac par semaine' }).getByRole('textbox'),
-  ).toHaveValue('35')
+  await expect(page.getByRole('textbox', { name: 'Dépense en tabac par semaine' })).toHaveValue(
+    '35',
+  )
   await expect(backupSection(page)).toContainText('Dernière sauvegarde le')
 })

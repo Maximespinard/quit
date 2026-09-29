@@ -106,7 +106,6 @@ export const strings = {
     title: 'Réglages',
     back: 'Retour',
     save: 'Enregistrer',
-    saved: 'Enregistré.',
     unset: 'À renseigner',
     quitMoment: {
       label: 'Moment de l’arrêt',
