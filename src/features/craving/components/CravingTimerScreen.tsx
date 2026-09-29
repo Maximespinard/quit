@@ -1,12 +1,12 @@
 import { type CravingIntensity, recordCraving } from '@/shared/domain/facts/craving'
 import type { Journal } from '@/shared/domain/journal'
-import { AppShell } from '@/shared/ui/app-shell'
 import { strings } from '@/shared/utils/strings'
 import { cravingTimer } from '../domain/craving-timer'
 import { tagOptions } from '../utils/tag-options'
 import { CravingForm } from './CravingForm'
 import { CravingHeld } from './CravingHeld'
 import { CravingTimerRunning } from './CravingTimerRunning'
+import { CravingTopBar } from './CravingTopBar'
 
 type CravingTimerScreenProps = {
   journal: Journal
@@ -59,7 +59,14 @@ export function CravingTimerScreen({
     </section>
   )
 
-  if (!heldToEnd) return <AppShell>{rating}</AppShell>
+  if (!heldToEnd) {
+    return (
+      <div className="mx-auto max-w-md px-safe pt-safe">
+        <CravingTopBar />
+        {rating}
+      </div>
+    )
+  }
   return (
     <div className="mx-auto max-w-md">
       <CravingHeld />

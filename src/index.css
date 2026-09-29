@@ -28,6 +28,7 @@
   --color-yellow: #f5d907;
   --color-moss: #33402c;
   --color-bronze: #b88a4f;
+  --color-series: #d08a2a;
   --color-transparent: transparent;
   --color-current-color: currentColor;
 
@@ -82,6 +83,19 @@
       transform: scale(1);
       opacity: 1;
     }
+  }
+}
+
+/* The craving timer's liquid haze: two slow drifts, played under `motion-safe:` only. */
+@keyframes haze-drift-a {
+  to {
+    transform: translate(18%, 10%) scale(1.15);
+  }
+}
+
+@keyframes haze-drift-b {
+  to {
+    transform: translate(-15%, -8%) scale(0.9);
   }
 }
 

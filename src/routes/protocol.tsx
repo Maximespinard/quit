@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { ChevronLeft } from 'lucide-react'
 import { ProtocolEditor } from '@/features/protocol/components/ProtocolEditor'
+import { derive } from '@/shared/domain/derive'
 import type { Journal } from '@/shared/domain/journal'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
 import { AppShell } from '@/shared/ui/app-shell'
@@ -14,7 +15,7 @@ export const Route = createFileRoute('/protocol')({
 })
 
 function ProtocolPage() {
-  const { state, commit } = useJournalSource()
+  const { state, commit, now } = useJournalSource()
   const navigate = useNavigate()
   const copy = strings.protocol
 
@@ -45,7 +46,11 @@ function ProtocolPage() {
           {strings.journal.error}
         </p>
       ) : (
-        <ProtocolEditor journal={state.journal} onSaved={save} />
+        <ProtocolEditor
+          journal={state.journal}
+          position={derive(state.journal, now).protocol}
+          onSaved={save}
+        />
       )}
     </AppShell>
   )

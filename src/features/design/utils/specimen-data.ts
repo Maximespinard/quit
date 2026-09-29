@@ -45,9 +45,14 @@ export const COLOR_TOKENS: readonly ColorToken[] = [
     token: 'ink',
     swatch: 'bg-ink',
     value: '#f7f4ef',
-    role: 'Texte ; crème des boutons pleins, sélections et barres',
+    role: 'Texte ; crème des boutons pleins et sélections',
   },
-  { token: 'muted', swatch: 'bg-muted', value: '#a3a3a3', role: 'Texte secondaire, partout' },
+  {
+    token: 'muted',
+    swatch: 'bg-muted',
+    value: '#a3a3a3',
+    role: 'Texte secondaire, repères d’étape des graphiques',
+  },
   {
     token: 'white',
     swatch: 'bg-white',
@@ -70,7 +75,7 @@ export const COLOR_TOKENS: readonly ColorToken[] = [
     token: 'ghost-line',
     swatch: 'bg-ghost-line',
     value: 'rgb(255 255 255 / 0.3)',
-    role: 'Filet du bouton fantôme',
+    role: 'Filet du bouton fantôme, ligne de base des graphiques',
   },
   {
     token: 'alert',
@@ -85,6 +90,12 @@ export const COLOR_TOKENS: readonly ColorToken[] = [
   { token: 'yellow', swatch: 'bg-yellow', value: '#f5d907', role: 'Dégradé d’Envie, et lui seul' },
   { token: 'moss', swatch: 'bg-moss', value: '#33402c', role: 'Halo du minuteur d’envie' },
   { token: 'bronze', swatch: 'bg-bronze', value: '#b88a4f', role: 'Halo du minuteur d’envie' },
+  {
+    token: 'series',
+    swatch: 'bg-series',
+    value: '#d08a2a',
+    role: 'Barres des graphiques — 6,3:1 sur carte, 3:1 estompées',
+  },
 ]
 
 export type TypeToken = {
