@@ -88,7 +88,7 @@ function StatsSection({ title, children }: { title: string; children: ReactNode 
   return (
     <section
       aria-labelledby={titleId}
-      className="flex flex-col gap-3.5 rounded-card bg-surface p-5"
+      className="flex flex-col gap-3.5 rounded-card bg-surface p-4"
     >
       <h2 id={titleId} className="text-label text-muted">
         {title}
