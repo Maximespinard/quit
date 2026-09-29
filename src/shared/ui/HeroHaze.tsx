@@ -6,7 +6,9 @@ const LOOK = {
   band: 'h-48 bg-haze-band opacity-70',
 } as const
 
-type HeroHazeProps = { look?: keyof typeof LOOK }
+export type HazeLook = keyof typeof LOOK
+
+type HeroHazeProps = { look?: HazeLook }
 
 /**
  * The warm grainy haze, drawn in CSS: no image, so it paints offline and on the first frame. It

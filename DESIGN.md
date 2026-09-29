@@ -372,7 +372,7 @@ Aucun autre bouton, badge, graphique ou fond ne les emprunte, même en partie.
 texte, un contrôle ou une donnée.
 
 **The Alert Is Not a Fill Rule.** `alert` écrit un texte d'erreur (`text-alert`), borde un champ
-invalide, et dessine le bouton destructif en pilule fantôme à filet (1 px `alert` à 50 %,
+invalide, et dessine le bouton destructif en pilule fantôme à filet (1 px `alert` à 70 %, 3,8:1,
 libellé `alert`, appui à 10 %). Jamais d'aplat teinté, jamais de rouge sur un écart : un écart
 est un fait, pas une erreur.
 
@@ -553,7 +553,7 @@ Calmes, en pilule, `cta` 500, aucune ombre.
 - **Primary :** aplat crème, texte `page` ; appui → crème à 85 %.
 - **Secondary :** pilule fantôme, filet 1 px `ghost-line`, texte crème ; appui → `ghost`.
 - **Ghost :** transparent, texte crème ; appui → `ghost`. Sert « Annuler » et le retour.
-- **Destructive :** pilule fantôme à filet `alert` 50 %, libellé `alert` ; appui → `alert` 10 %.
+- **Destructive :** pilule fantôme à filet `alert` 70 % (3,8:1), libellé `alert` ; appui → `alert` 10 %.
   Placée dans un `Dialog` de confirmation ou sous un filet, jamais collée à « Enregistrer ».
 - **Link :** texte `body` crème souligné en `ghost-line` (décalage 4 px), cible 44 px gardée.
 - **Disabled :** aplat `ghost`, texte `muted`, bord effacé.
@@ -667,7 +667,7 @@ ne jouent que sous `motion-safe:` — la brume devient une image fixe ; toute tr
 - **Do** marquer toute sélection en aplat crème avec un texte `page`.
 - **Do** placer la brume selon The Haze Placement Rule : pleine sur l'accueil et au premier lancement (texte secondaire en `ink` dessus), bande basse sans ambre partout ailleurs, brume mousse et bronze au minuteur, immobile et atténuée quand il est arrêté.
 - **Do** construire tout bloc sur la carte unique : `surface`, rayon 12 px, 20 px de retrait.
-- **Do** ouvrir tout écran sous l'accueil par la barre haute puis `PageHeader` (chevron à côté du titre) ; fermer un formulaire par un `ghost` « Annuler ».
+- **Do** ouvrir tout écran de consultation sous l'accueil (calendrier, statistiques, historique, réglages, protocole) par la barre haute puis `PageHeader` (chevron à côté du titre) ; un formulaire n'a pas de chevron et se ferme par un `ghost` « Annuler » (la fiche d'un fait, par un `ghost` « Retour »).
 - **Do** poser les unités d'un chiffre petites et sourdes via `Figure`.
 - **Do** border tout contrôle en `ghost-line` (≥ 3:1) et séparer la structure en `line`.
 - **Do** écrire les erreurs en `alert` sous leur champ, et le destructif en pilule fantôme à filet `alert`.

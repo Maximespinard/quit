@@ -85,5 +85,9 @@ export function CravingStatsView({ stats }: { stats: CravingStats }) {
 
 /** One chart in its card, named in the card's muted label like the home's blocks. */
 function StatsSection({ title, children }: { title: string; children: ReactNode }) {
-  return <Card title={title}>{children}</Card>
+  return (
+    <Card title={title} headingLevel={3}>
+      {children}
+    </Card>
+  )
 }

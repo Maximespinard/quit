@@ -12,15 +12,26 @@ const PADDING = {
   none: '',
 } as const
 
-type CardProps = {
-  /** The card's name, shown small and muted at its top: the region's accessible name too. */
-  title?: string
-  /** The title's heading level: 2 on the home, 3 under a screen's own heading. */
-  headingLevel?: 2 | 3
-  /** Shown across from the title, e.g. a status or a percentage. */
-  aside?: ReactNode
-  /** The region's accessible name when the card shows no title. */
-  label?: string
+/** A card is named by a visible title, by a label alone, or not at all: never both. */
+type CardName =
+  | {
+      /** The card's name, shown small and muted at its top: the region's accessible name too. */
+      title: string
+      /** The title's heading level: 2 on the home, 3 under a screen's own heading. */
+      headingLevel?: 2 | 3
+      /** Shown across from the title, e.g. a status or a percentage. */
+      aside?: ReactNode
+      label?: never
+    }
+  | {
+      title?: never
+      headingLevel?: never
+      aside?: never
+      /** The region's accessible name when the card shows no title. */
+      label?: string
+    }
+
+type CardProps = CardName & {
   padding?: keyof typeof PADDING
   /** Layout inside the card (gap, direction). Never its surface or its padding. */
   className?: string

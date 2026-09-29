@@ -16,13 +16,13 @@ Visual target: `docs/design/mocks/nocturne-chaude.html` (home + craving timer, d
 Rejected worlds (evidence, anti-reference): the navy flat world "Le relevé" (functional, not striking); "Grand air" (Air-based cloud sky, two mocks); pinball machine (cartoon, saturated, over-ornamented); prototype variants Instrument / Affiche / Registre (cold, AI-looking); material metaphors (work jacket, stamped passbook, acetate manual).
 Hero: the code haze (3 radial glows + fractal-noise grain) is the final hero, not a placeholder (user-provided image SYR-54 canceled 2026-09-29).
 Decided in the final audit (SYR-66, 2026-09-29):
-- Destructive / error colour: `alert` #ff6b72, 6.9:1 on the page, 6.5:1 on a card, far lighter than the haze's ember #8d2a1a. Error text in alert; the destructive button is a hairline ghost pill (1px alert at 50 %, alert label), never a tinted fill.
+- Destructive / error colour: `alert` #ff6b72, 6.9:1 on the page, 6.5:1 on a card, far lighter than the haze's ember #8d2a1a. Error text in alert; the destructive button is a hairline ghost pill (1px alert at 70 %, 3.8:1, alert label), never a tinted fill.
 - Tab bar: its look is fixed in the /design specimen (page ground, hairline top, 11px labels, cream active). It ships with M2, when Progression exists; until then the home's list card of rows is the navigation.
 - Badges: 12px-radius squares, unlocked on the surface, locked as a hairline outline in muted with a lock glyph.
 - Charts: series amber #d08a2a bars on a card, `ghost-line` baseline, 3:1 when dimmed, a screen-reader table under each. Amber series never shares a screen with the timer's bronze.
 - Dialog: a surface card, radius 12, hairline border, over `page` at 80 %. Drawer: surface, radius 28 on its open edge, a `ghost-line` grab handle.
 - Beyond home: every other screen wears the haze's low band (plum and ember, no amber under text) behind its top bar and title; first launch wears the full hero haze; a timer stopped early keeps its haze, dimmed and still.
-- One top bar everywhere (`text-brand` 21px), one card (surface, radius 12, 20px inset), one back affordance (chevron beside the title) on screens below home; forms close with a ghost "Annuler".
+- One top bar everywhere (`text-brand` 21px), one card (surface, radius 12, 20px inset), one back affordance (chevron beside the title) on the reading screens below home (calendar, stats, history, settings, protocol); forms close with a ghost "Annuler".
 
 ## Direction contract
 

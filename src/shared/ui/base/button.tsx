@@ -14,7 +14,8 @@ const buttonVariants = cva(
         primary: 'bg-ink text-page active:bg-ink/85',
         secondary: 'border border-ghost-line bg-transparent text-ink active:bg-ghost',
         ghost: 'bg-transparent text-ink active:bg-ghost',
-        destructive: 'border border-alert/50 bg-transparent text-alert active:bg-alert/10',
+        // A hairline in alert at 70 %: 3.8:1, an edge that clears 3:1 like every control's.
+        destructive: 'border border-alert/70 bg-transparent text-alert active:bg-alert/10',
         // An underlined text action inside a card, its 44px target kept.
         link: 'justify-start bg-transparent font-normal text-body text-ink underline decoration-ghost-line underline-offset-4',
       },

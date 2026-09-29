@@ -1,13 +1,13 @@
 import type { ReactNode } from 'react'
 import { strings } from '@/shared/utils/strings'
-import { HeroHaze } from './HeroHaze'
+import { type HazeLook, HeroHaze } from './HeroHaze'
 import { TopBar } from './TopBar'
 
 type AppShellProps = {
   /** The brand mark; defaults to the app name. */
   brand?: ReactNode
   /** `band` behind the top bar and title; `hero`, the full haze, for first launch. */
-  haze?: 'band' | 'hero'
+  haze?: HazeLook
   children: ReactNode
 }
 
