@@ -6,6 +6,7 @@ import { pinoHttp } from 'pino-http'
 import type { Database, Db } from './database.ts'
 import { isActiveDeviceKey } from './device-keys.ts'
 import type { Logger } from './logger.ts'
+import { mirrorRoutes } from './mirror-routes.ts'
 import { sendProblem } from './problem.ts'
 
 /** A fact or the settings weigh a few hundred bytes; a whole journal stays far below. */
@@ -65,11 +66,14 @@ export function createApp({
   database,
   logger,
   trustProxyHops,
+  now,
 }: {
   database: Database
   logger: Logger
   /** Reverse proxies in front (the tunnel): the rate limit then counts per client address. */
   trustProxyHops: number
+  /** The server's clock: when the mirror received or replaced what it stores. */
+  now: () => Date
 }) {
   const app = express()
   if (trustProxyHops > 0) app.set('trust proxy', trustProxyHops)
@@ -120,6 +124,7 @@ export function createApp({
   )
   app.use(requireDeviceKey(database.db))
   app.use(express.json({ limit: MAX_BODY_BYTES }))
+  app.use(mirrorRoutes({ db: database.db, now }))
 
   app.use((_req, res) => sendProblem(res, 404, 'No such route.'))
   app.use(handleError)

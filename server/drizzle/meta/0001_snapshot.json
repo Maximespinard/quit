@@ -1,0 +1,357 @@
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "16cdffde-e4b0-4726-93d5-86c82cfcd770",
+  "prevId": "f445597c-58e9-4348-87ca-06251548186c",
+  "tables": {
+    "craving_tags": {
+      "name": "craving_tags",
+      "columns": {
+        "fact_id": {
+          "name": "fact_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "position": {
+          "name": "position",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "tag": {
+          "name": "tag",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "craving_tags_fact_id_facts_id_fk": {
+          "name": "craving_tags_fact_id_facts_id_fk",
+          "tableFrom": "craving_tags",
+          "tableTo": "facts",
+          "columnsFrom": ["fact_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "craving_tags_fact_id_position_pk": {
+          "columns": ["fact_id", "position"],
+          "name": "craving_tags_fact_id_position_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "device_keys": {
+      "name": "device_keys",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "hash": {
+          "name": "hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "issued_at": {
+          "name": "issued_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "revoked_at": {
+          "name": "revoked_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "device_keys_hash_unique": {
+          "name": "device_keys_hash_unique",
+          "columns": ["hash"],
+          "isUnique": true
+        },
+        "device_keys_one_active": {
+          "name": "device_keys_one_active",
+          "columns": ["(\"revoked_at\" IS NULL)"],
+          "isUnique": true,
+          "where": "\"device_keys\".\"revoked_at\" IS NULL"
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "facts": {
+      "name": "facts",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "at": {
+          "name": "at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "received_at": {
+          "name": "received_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "intensity": {
+          "name": "intensity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "held_to_end": {
+          "name": "held_to_end",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "dose_mg": {
+          "name": "dose_mg",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "site": {
+          "name": "site",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "count": {
+          "name": "count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "facts_type": {
+          "name": "facts_type",
+          "value": "\"facts\".\"type\" IN ('quit-moment', 'craving', 'patch-application', 'lapse')"
+        },
+        "facts_quit_moment": {
+          "name": "facts_quit_moment",
+          "value": "\"facts\".\"type\" <> 'quit-moment' OR (\"facts\".\"intensity\" IS NULL AND \"facts\".\"held_to_end\" IS NULL AND \"facts\".\"dose_mg\" IS NULL AND \"facts\".\"site\" IS NULL AND \"facts\".\"count\" IS NULL)"
+        },
+        "facts_craving": {
+          "name": "facts_craving",
+          "value": "\"facts\".\"type\" <> 'craving' OR (\"facts\".\"intensity\" IS NOT NULL AND \"facts\".\"intensity\" IN (1, 2, 3) AND \"facts\".\"held_to_end\" IS NOT NULL AND \"facts\".\"held_to_end\" IN (0, 1) AND \"facts\".\"dose_mg\" IS NULL AND \"facts\".\"site\" IS NULL AND \"facts\".\"count\" IS NULL)"
+        },
+        "facts_patch_application": {
+          "name": "facts_patch_application",
+          "value": "\"facts\".\"type\" <> 'patch-application' OR (\"facts\".\"dose_mg\" IS NOT NULL AND \"facts\".\"dose_mg\" > 0 AND (\"facts\".\"site\" IS NULL OR \"facts\".\"site\" IN ('arm-left', 'arm-right', 'chest-left', 'chest-right', 'hip-left', 'hip-right')) AND \"facts\".\"intensity\" IS NULL AND \"facts\".\"held_to_end\" IS NULL AND \"facts\".\"count\" IS NULL)"
+        },
+        "facts_lapse": {
+          "name": "facts_lapse",
+          "value": "\"facts\".\"type\" <> 'lapse' OR (\"facts\".\"count\" IS NOT NULL AND \"facts\".\"count\" >= 1 AND \"facts\".\"intensity\" IS NULL AND \"facts\".\"held_to_end\" IS NULL AND \"facts\".\"dose_mg\" IS NULL AND \"facts\".\"site\" IS NULL)"
+        }
+      }
+    },
+    "protocol_steps": {
+      "name": "protocol_steps",
+      "columns": {
+        "position": {
+          "name": "position",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "dose_mg": {
+          "name": "dose_mg",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "duration_days": {
+          "name": "duration_days",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "brand": {
+          "name": "brand",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "protocol_steps_position": {
+          "name": "protocol_steps_position",
+          "value": "\"protocol_steps\".\"position\" >= 0"
+        },
+        "protocol_steps_dose_mg": {
+          "name": "protocol_steps_dose_mg",
+          "value": "\"protocol_steps\".\"dose_mg\" > 0"
+        },
+        "protocol_steps_duration_days": {
+          "name": "protocol_steps_duration_days",
+          "value": "\"protocol_steps\".\"duration_days\" > 0"
+        }
+      }
+    },
+    "settings": {
+      "name": "settings",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "weekly_spend_cents": {
+          "name": "weekly_spend_cents",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "baseline_smokes_per_day": {
+          "name": "baseline_smokes_per_day",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "goal_label": {
+          "name": "goal_label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "goal_price_cents": {
+          "name": "goal_price_cents",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "goal_counts_from": {
+          "name": "goal_counts_from",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "goal_celebrated": {
+          "name": "goal_celebrated",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "settings_single_row": {
+          "name": "settings_single_row",
+          "value": "\"settings\".\"id\" = 1"
+        },
+        "settings_weekly_spend_cents": {
+          "name": "settings_weekly_spend_cents",
+          "value": "\"settings\".\"weekly_spend_cents\" IS NULL OR \"settings\".\"weekly_spend_cents\" > 0"
+        },
+        "settings_baseline_smokes_per_day": {
+          "name": "settings_baseline_smokes_per_day",
+          "value": "\"settings\".\"baseline_smokes_per_day\" IS NULL OR \"settings\".\"baseline_smokes_per_day\" > 0"
+        },
+        "settings_goal": {
+          "name": "settings_goal",
+          "value": "(\"settings\".\"goal_label\" IS NULL AND \"settings\".\"goal_price_cents\" IS NULL AND \"settings\".\"goal_counts_from\" IS NULL AND \"settings\".\"goal_celebrated\" IS NULL) OR (\"settings\".\"goal_label\" IS NOT NULL AND \"settings\".\"goal_price_cents\" IS NOT NULL AND \"settings\".\"goal_price_cents\" > 0 AND \"settings\".\"goal_celebrated\" IS NOT NULL AND \"settings\".\"goal_celebrated\" IN (0, 1))"
+        }
+      }
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {
+      "device_keys_one_active": {
+        "columns": {
+          "(\"revoked_at\" IS NULL)": {
+            "isExpression": true
+          }
+        }
+      }
+    }
+  }
+}
