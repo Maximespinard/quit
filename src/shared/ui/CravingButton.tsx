@@ -7,15 +7,14 @@ type CravingButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'childre
 
 /**
  * The permanent thumb control, Envie: the one lit object on the screen. A 64px pill in the
- * pink → yellow gradient with its pink glow, which nothing else wears; at least 5/8 of the
- * column wide, the mock's 62 %.
+ * pink → yellow gradient with its pink glow, which nothing else wears; it hugs its label.
  */
 export function CravingButton({ label, className, type = 'button', ...rest }: CravingButtonProps) {
   return (
     <button
       type={type}
       className={cn(
-        'inline-flex h-16 min-w-5/8 items-center justify-center rounded-full bg-craving px-7 text-craving text-page transition-transform duration-150 ease-out-expo active:scale-[0.97] disabled:bg-none disabled:bg-ghost disabled:text-muted disabled:shadow-none motion-reduce:transition-none',
+        'inline-flex h-16 min-w-16 items-center justify-center rounded-full bg-craving px-7 text-craving text-page transition-transform duration-150 ease-out-expo active:scale-[0.97] disabled:bg-none disabled:bg-ghost disabled:text-muted disabled:shadow-none motion-reduce:transition-none',
         className,
       )}
       {...rest}

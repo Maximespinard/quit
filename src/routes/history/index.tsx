@@ -1,4 +1,5 @@
 import { createFileRoute, useLocation } from '@tanstack/react-router'
+import { CravingLauncher } from '@/features/craving/components/CravingLauncher'
 import { FactHistory } from '@/features/history/components/FactHistory'
 import { historyDays } from '@/features/history/utils/history-days'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
@@ -37,6 +38,7 @@ function HistoryPage() {
               </p>
             ) : null}
             <FactHistory days={days} now={now} />
+            <CravingLauncher journal={journal} now={now} />
           </AppShell>
         )
       }}

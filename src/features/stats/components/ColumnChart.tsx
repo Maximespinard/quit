@@ -30,7 +30,8 @@ const labelStyle = (from: number, to: number) =>
 /**
  * One series in columns of one hue: thin bars, 2px apart, grown from a hairline baseline.
  * A finger dragged across (or a pointer over) the plot names one column in the readout;
- * the other columns step back while it does, never below 3:1 against the card. Every value
+ * the other columns step back while it does, never below 3:1 against the card (cream at 60 %,
+ * dimmed to 60 % of that: 3.15:1 on the surface — lowering either breaks the floor). Every value
  * is also in a table for screen readers.
  */
 export function ColumnChart({
@@ -94,7 +95,7 @@ export function ColumnChart({
               >
                 <div
                   className={cn(
-                    'w-full max-w-6 rounded-t-mark bg-series transition-opacity duration-150 ease-out-expo motion-reduce:transition-none',
+                    'w-full max-w-6 rounded-t-mark bg-ink/60 transition-opacity duration-150 ease-out-expo motion-reduce:transition-none',
                     active !== null && index !== active && 'opacity-60',
                   )}
                   // A column holding anything stays visible, however small beside the tallest.

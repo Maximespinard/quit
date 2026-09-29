@@ -45,7 +45,7 @@ export const COLOR_TOKENS: readonly ColorToken[] = [
     token: 'ink',
     swatch: 'bg-ink',
     value: '#f7f4ef',
-    role: 'Texte ; crème des boutons pleins et sélections',
+    role: 'Texte ; crème des boutons pleins, sélections et barres (60 %)',
   },
   {
     token: 'muted',
@@ -97,12 +97,6 @@ export const COLOR_TOKENS: readonly ColorToken[] = [
   { token: 'yellow', swatch: 'bg-yellow', value: '#f5d907', role: 'Dégradé d’Envie, et lui seul' },
   { token: 'moss', swatch: 'bg-moss', value: '#33402c', role: 'Halo du minuteur d’envie' },
   { token: 'bronze', swatch: 'bg-bronze', value: '#b88a4f', role: 'Halo du minuteur d’envie' },
-  {
-    token: 'series',
-    swatch: 'bg-series',
-    value: '#d08a2a',
-    role: 'Barres des graphiques — 6,3:1 sur carte, 3:1 estompées',
-  },
 ]
 
 export type TypeToken = {
@@ -140,9 +134,9 @@ export const TYPE_TOKENS: readonly TypeToken[] = [
   {
     token: 'craving',
     className: 'text-craving',
-    px: '23 px',
+    px: '16 px',
     sample: 'Envie',
-    role: 'Le bouton Envie, seul',
+    role: 'Le bouton Envie, seul : la taille de cta, en 600',
   },
   {
     token: 'figure',

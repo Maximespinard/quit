@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { CalendarSummary } from '@/features/calendar/components/CalendarSummary'
 import { MonthCalendar } from '@/features/calendar/components/MonthCalendar'
 import { StepSpans } from '@/features/calendar/components/StepSpans'
+import { CravingLauncher } from '@/features/craving/components/CravingLauncher'
 import { patchCalendar } from '@/shared/domain/patch-calendar'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
 import { AppShell } from '@/shared/ui/app-shell'
@@ -42,6 +43,7 @@ function CalendarPage() {
                 <StepSpans steps={calendar.steps} position={calendar.position} />
               </div>
             )}
+            <CravingLauncher journal={journal} now={now} />
           </AppShell>
         )
       }}

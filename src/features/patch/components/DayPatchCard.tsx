@@ -31,8 +31,6 @@ type DayPatchCardProps = {
   previousSite: ApplicationSite | null
   /** Injected clock: a one-tap log records at this instant. */
   now: number
-  /** Set on arrival from the form: the header confirms it, even for another day. */
-  recorded: boolean
   onRecorded: (journal: Journal) => void
 }
 
@@ -46,7 +44,6 @@ export function DayPatchCard({
   suggestedSite,
   previousSite,
   now,
-  recorded,
   onRecorded,
 }: DayPatchCardProps) {
   // Reachable in the sandbox only: a clock moved before the quit moment refuses the tap.
@@ -68,16 +65,7 @@ export function DayPatchCard({
   }
 
   return (
-    <Card
-      title={copy.title}
-      aside={
-        recorded ? (
-          <p role="status" className="text-muted">
-            {copy.recorded}
-          </p>
-        ) : null
-      }
-    >
+    <Card title={copy.title}>
       {patch.status === 'logged' ? (
         // The figure that changes, then its detail.
         <p className="flex flex-col gap-1">

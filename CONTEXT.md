@@ -99,7 +99,7 @@ Something the user recorded as having happened: the quit moment, a patch applica
 _Avoid_: Event, entry, record
 
 **Journal**:
-The whole set of facts recorded by one person, plus the settings that shape what is derived from them: the protocol, the weekly spend, the baseline smokes per day, the goal and the reminder preferences. It is the only thing exported, imported and mirrored; on the device, beside the backup record and the pending changes, it is the only thing stored.
+The whole set of facts recorded by one person, plus the settings that shape what is derived from them: the protocol, the weekly spend, the baseline smokes per day, the goal and the reminder preferences. It is the only thing exported, imported and mirrored; on the device, beside the backup record, the pending changes and the device key, it is the only thing stored.
 _Avoid_: History, database, log, diary
 
 **Backup record**:

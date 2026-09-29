@@ -27,10 +27,11 @@ Design context lives in `PRODUCT.md` + `DESIGN.md` (impeccable's own files), not
 ## Commands
 
 ```bash
-npm run dev       # vite --port 3000
+npm run dev       # vite --port 3000 — proxies /api to QUIT_API_URL (default the server on :8080)
 npm run verify    # lint && typecheck && test && build, then each workspace's verify — GREEN before every commit, zero warning
 npm run test      # vitest run (watch: test:watch)
-npm run test:e2e  # Playwright (WebKit iPhone; offline spec in Chromium) against the preview build — mandatory on UI tickets
+npm run test:e2e  # Playwright (WebKit iPhone; offline spec in Chromium) against the preview build, the API started beside it
+                  # (empty data dir per run, port E2E_PORT + 1000) — mandatory on UI tickets
 ```
 
 `test:e2e` may first wait for one of the machine's e2e slots (`scripts/e2e-slot.sh`: own port,
@@ -76,7 +77,9 @@ never a synonym it lists under _Avoid_.
 **Components** — ≤ ~220 lines, else split; no inline schema/type/constant; explicit loading/error/empty states.
 
 **Tests** — colocated `X.test.ts(x)`; concrete data (integer cents); domain tested as "facts in, state out".
-E2e specs are the exception: Playwright, root `e2e/`, `X.spec.ts`.
+E2e specs are the exception: Playwright, root `e2e/`, `X.spec.ts`. A client test against the real
+server is `X.server.test.ts`: Node environment, its own `tsconfig.server-tests.json`, the server
+started in the test through `quit-server/src/test-api.ts`.
 
 **Naming** — components `PascalCase.tsx` · hooks `useX.ts` · other modules `kebab-case.ts` · features lowercase.
 

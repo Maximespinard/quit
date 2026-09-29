@@ -20,7 +20,6 @@ colors:
   yellow: "#f5d907"
   moss: "#33402c"
   bronze: "#b88a4f"
-  series: "#d08a2a"
   transparent: "transparent"
   current-color: "currentColor"
 typography:
@@ -55,10 +54,10 @@ typography:
     letterSpacing: "-0.025em"
   craving:
     fontFamily: "Host Grotesk Variable, ui-sans-serif, system-ui, -apple-system, sans-serif"
-    fontSize: "1.4375rem"
+    fontSize: "1rem"
     fontWeight: 600
     lineHeight: 1
-    letterSpacing: "-0.03em"
+    letterSpacing: "-0.02em"
   brand:
     fontFamily: "Host Grotesk Variable, ui-sans-serif, system-ui, -apple-system, sans-serif"
     fontSize: "1.3125rem"
@@ -164,7 +163,6 @@ components:
     rounded: "9999px"
     height: "4rem"
     padding: "0 1.75rem"
-    width: "62.5%"
   craving-button-disabled:
     backgroundColor: "{colors.ghost}"
     textColor: "{colors.muted}"
@@ -252,7 +250,7 @@ components:
   tab-item-active:
     textColor: "{colors.ink}"
   chart-series:
-    backgroundColor: "{colors.series}"
+    backgroundColor: "rgb(247 244 239 / 0.6)"
     rounded: "{rounded.mark}"
     width: "1.5rem"
   dialog:
@@ -307,7 +305,7 @@ red.
 - **Nocturne cream** (`ink`): all running text, and **every selection**: solid primary button,
   pressed chip and segment, active tab, checked `Switch`, bar fill, acquired multiplier notch,
   today's date in the calendar, focus ring, caret, text selection. On cream, text switches to
-  `page`.
+  `page`. Chart bars carry it at 60%.
 - **Pure white** (`white`): the key figures only (streak, countdown, minutes held), plus the
   timer's minute notches and the thumb of the `Switch` and the `Slider`. White is the light of
   the figure; text stays cream.
@@ -323,7 +321,6 @@ red.
   component.
 - **The timer haze**: **Moss** (`moss`) and **Bronze** (`bronze`), as drifting blurred blobs.
   They belong to the craving timer screens only.
-- **Series amber** (`series`): the only data color in charts. One series = one hue.
 
 ### Neutral
 - **Page** (`page`): the background of the whole app, text set on cream and on `Envie`, the
@@ -373,8 +370,9 @@ field, and draws the destructive button as a ghost pill with a hairline (1 px `a
 3.8:1, `alert` label, 10% on press). Never a tinted fill, never red on a lapse: a lapse is a
 fact, not an error.
 
-**The One Series Rule.** Charts have a single hue, `series`. Series amber never shares a screen
-with the timer's bronze.
+**The One Series Rule.** Charts have a single hue: cream at 60% (6.5:1 on the card), below
+running text. Never amber or an accent on a bar: the most data-heavy screen stays calmer than
+home and its only lit object, `Envie`.
 
 ## Typography
 
@@ -397,7 +395,7 @@ Figures at 500, interface at 400 / 500, 600 only for the brand and `Envie`.
   screen.
 - **prompt** (400, 1.5rem / 24 px, 1.2, -0.025em): the running timer's sentence (« Respire… »),
   15 characters wide at most.
-- **craving** (600, 1.4375rem / 23 px, 1, -0.03em): the `Envie` label.
+- **craving** (600, 1rem / 16 px, 1, -0.02em): the `Envie` label; the size of `cta`, at 600.
 - **brand** (600, 1.3125rem / 21 px, 1, -0.03em): « quit » in the top bar, on every
   screen.
 - **title** (500, 1.25rem / 20 px, 1.2, -0.02em): the title of a screen below home, the
@@ -444,20 +442,23 @@ width behind the column.
   the cards start 64 px below the `lead` line, 12 px from the edges (`px-3`, wider
   than the text gutter), 10 px apart.
 - **Screens below home (`AppShell`):** screen height (`min-h-svh`), a stack at 16 px
-  intervals: top bar, `PageHeader`, content. A form screen keeps its action
-  at the bottom (`mt-auto`), in the thumb zone.
+  intervals: top bar, `PageHeader`, content. A form screen (`FormScreen`) or a first-launch
+  step keeps its action at the bottom (`ThumbZone`, `mt-auto`), in the thumb zone; « Annuler »,
+  « Retour » or « Supprimer » follow below it. Taller than the screen, the column scrolls and the
+  action comes last.
 - **Touch targets:** 44 px minimum (`h-11`, `size-11`); 48 px for a field, an `lg`
   button, a tab item; 52 px for a list row.
 
 ### Named Rules
 
-**The Fixed Pill Rule.** `Envie` is fixed at the bottom right, over a fade to `page` at 92%;
-scrolling content reserves bottom clearance (`pb-32` on home) so no information
-stays under the pill.
+**The Fixed Pill Rule.** `Envie` is fixed at the bottom right, over a fade to `page` at 92%,
+on every screen that is neither a form nor the timer: home, calendar, statistics, history,
+settings. Scrolling content reserves bottom clearance (`pb-32` on home, `pb-page` elsewhere,
+which grows while the pill is mounted) so no information stays under the pill or its fade.
 
 **The Thumb Zone Rule.** The main action of a decision screen (first-launch question,
 `Arrêter`, `Enregistrer` on a craving) lives at the bottom of the screen, over a fade to the
-page when it sticks (`sticky`).
+page when it sticks (`ThumbZone sticky`, offset by `--page-clearance` above the bottom edge).
 
 ## Elevation & Depth
 
@@ -558,10 +559,10 @@ Calm, pill-shaped, `cta` 500, no shadow.
   dedicated `hover` state: the target is a finger.
 
 ### Envie (signature)
-The permanent pill, the only lit object: 64 px high, at least 62.5% of the column, a horizontal
-`pink` → `yellow` gradient, `craving` label in `page`, pink glow. Fixed at the bottom right over
-its fade. Sinks to `scale(0.97)`. Disabled, it loses gradient and glow: `ghost` fill,
-`muted` text.
+The permanent pill, the only lit object: 64 px high, hugging its label (64 px wide at least), a
+horizontal `pink` → `yellow` gradient, `craving` label in `page`, pink glow. Fixed at the bottom
+right over its fade, outside forms and the timer. Sinks to `scale(0.97)`. Disabled, it loses
+gradient and glow: `ghost` fill, `muted` text.
 
 ### Chips and segmented control
 - **Chip (`Toggle`, `ToggleGroup`):** 44 px `ghost` pill, cream `body` text; pressed →
@@ -630,12 +631,12 @@ missed = `muted` dash, due = cream ring, planned = small `muted` dot; lapse = ci
 craving = timer. First day of a step: a `ghost` pill in `detail`.
 
 ### Charts
-On a card, a single series in `series`. Columns 24 px wide at most, 2 px apart,
+On a card, a single series in cream at 60%. Columns 24 px wide at most, 2 px apart,
 `rounded-mark` at the data end, sitting on a `ghost-line` baseline; horizontal bars
 8 px thick, same rule, baseline on the left. A step change = a 1 px `muted` hairline across the full
 height, dose in cream `detail` above it. Axes in `detail` `muted`. A readout line in
 `label` names one column (name in cream 500); a sliding finger picks another and the others
-drop to 60%, never below 3:1 against the card. Every chart has its `table` twin in
+drop to 60% (3.15:1 against the card, never below 3:1). Every chart has its `table` twin in
 `sr-only` (as `block`, so it never widens the page).
 
 ### Overlays
@@ -680,7 +681,7 @@ play only under `motion-safe:`, so the haze becomes a still image; every transit
 - **Don't** switch off a screen's haze, nor the stopped timer's.
 - **Don't** add a drop shadow, a `ring-*` or a per-component focus ring: the only `box-shadow` is `Envie`'s glow, and focus is the global `outline`.
 - **Don't** give a destructive button a tinted fill, nor color a lapse in `alert`.
-- **Don't** put series amber and the timer's bronze on the same screen, nor add a second series color.
+- **Don't** color a chart bar (amber, accent, a second series): they all stay cream at 60%.
 - **Don't** turn progress into a ring or a gauge: an 8 px bar with its numeric bounds, or a row of notches.
 - **Don't** add a decorative raster: hazes, grain and icons are code.
 - **Don't** create a second top bar, a second card or a second back gesture.

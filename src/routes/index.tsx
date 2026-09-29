@@ -15,12 +15,13 @@ import { StreakScreen } from '@/features/streak/components/StreakScreen'
 import { StreakTotals } from '@/features/streak/components/StreakTotals'
 import { derive } from '@/shared/domain/derive'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
-import { useRecordedThenHome } from '@/shared/hooks/useRecordedThenHome'
+import { recordedNotice, useRecordedThenHome } from '@/shared/hooks/useRecordedThenHome'
 import { AppShell } from '@/shared/ui/app-shell'
 import { buttonVariants } from '@/shared/ui/base/button'
 import { Card } from '@/shared/ui/Card'
 import { ReadyJournal } from '@/shared/ui/ReadyJournal'
 import { RowLink } from '@/shared/ui/RowLink'
+import { StatusLine } from '@/shared/ui/StatusLine'
 import { validateAppSearch } from '@/shared/utils/app-search'
 import { strings } from '@/shared/utils/strings'
 
@@ -32,9 +33,7 @@ function HomePage() {
   const { state, commit, now } = useJournalSource()
   const appSearch = validateAppSearch(Route.useSearch())
   const imported = useRecordedThenHome(appSearch, 'journalImported')
-  const { cravingRecorded, patchRecorded, lapseRecorded, journalImported } = useLocation({
-    select: (location) => location.state,
-  })
+  const notice = useLocation({ select: (location) => recordedNotice(location.state) })
   const brand = <SandboxEntry>{strings.app.name}</SandboxEntry>
 
   return (
@@ -67,6 +66,7 @@ function HomePage() {
               streak={derived.streak}
               brand={brand}
               context={protocolContext(derived.protocol)}
+              status={<StatusLine message={notice} />}
               action={
                 <Link
                   to="/settings"
@@ -100,7 +100,6 @@ function HomePage() {
                   suggestedSite={derived.suggestedSite}
                   previousSite={derived.previousSite}
                   now={now}
-                  recorded={patchRecorded === true}
                   onRecorded={commit}
                 />
               )}
@@ -109,21 +108,6 @@ function HomePage() {
                 <GoalSummary journal={journal} goal={derived.goal} onCelebrated={commit} />
               )}
               <ProtocolSummary position={derived.protocol} />
-              {cravingRecorded === true ? (
-                <p role="status" className="px-2 text-body text-muted">
-                  {strings.craving.recorded}
-                </p>
-              ) : null}
-              {journalImported === true ? (
-                <p role="status" className="px-2 text-body text-muted">
-                  {strings.backup.imported}
-                </p>
-              ) : null}
-              {lapseRecorded === true ? (
-                <p role="status" className="px-2 text-body text-muted">
-                  {strings.lapse.recorded}
-                </p>
-              ) : null}
               <Link
                 to="/craving/past"
                 search={appSearch}
@@ -146,7 +130,7 @@ function HomePage() {
                 </RowLink>
               </Card>
             </StreakScreen>
-            <CravingLauncher now={now} />
+            <CravingLauncher journal={journal} now={now} />
           </div>
         )
       }}

@@ -1,8 +1,9 @@
 import type { CravingIntensity } from '@quit/contract/facts'
-import { useId, useState } from 'react'
+import { type ReactNode, useId, useState } from 'react'
 import { type CravingInput, recordCraving } from '@/shared/domain/facts/craving'
 import type { Journal } from '@/shared/domain/journal'
 import { Input } from '@/shared/ui/base/input'
+import { FormScreen } from '@/shared/ui/FormScreen'
 import { fromDatetimeLocal, toDatetimeLocal } from '@/shared/utils/datetime-local'
 import { newFactId } from '@/shared/utils/fact-id'
 import { strings } from '@/shared/utils/strings'
@@ -16,13 +17,21 @@ type PastCravingFormProps = {
   /** The craving being edited, the journal then holding everything but it; absent to log one. */
   initial?: CravingInput
   onRecorded: (journal: Journal) => void
+  /** Under the primary action: the way out, and on a fact's page its deletion. */
+  secondary?: ReactNode
 }
 
 /**
  * Logs a craving after the fact, without the timer: never marked as held to the end. Editing
  * one keeps its held mark, and its exact instant while the date is left untouched.
  */
-export function PastCravingForm({ journal, now, initial, onRecorded }: PastCravingFormProps) {
+export function PastCravingForm({
+  journal,
+  now,
+  initial,
+  onRecorded,
+  secondary,
+}: PastCravingFormProps) {
   const inputId = useId()
   const errorId = useId()
   const [value, setValue] = useState(() => toDatetimeLocal(initial?.at ?? now))
@@ -53,15 +62,15 @@ export function PastCravingForm({ journal, now, initial, onRecorded }: PastCravi
   }
 
   return (
-    <section className="flex flex-col gap-6 pt-6">
-      <div className="flex flex-col gap-2">
-        <h2 className="text-title">{initial ? copy.edit.title : copy.title}</h2>
-        <p className="text-body text-muted">{initial ? copy.edit.lead : copy.lead}</p>
-      </div>
+    <FormScreen
+      title={initial ? copy.edit.title : copy.title}
+      lead={initial ? copy.edit.lead : copy.lead}
+    >
       <CravingForm
         tagOptions={tagOptions(journal, initial?.tags)}
         initial={initial}
         onSubmit={record}
+        secondary={secondary}
       >
         <div className="flex flex-col gap-2">
           <label htmlFor={inputId} className="text-label">
@@ -87,6 +96,6 @@ export function PastCravingForm({ journal, now, initial, onRecorded }: PastCravi
           ) : null}
         </div>
       </CravingForm>
-    </section>
+    </FormScreen>
   )
 }

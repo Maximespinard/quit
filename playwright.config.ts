@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test'
+import { apiEnv, apiUrl } from './e2e/mirror-server'
 
 // Two worktrees run their e2e suites at the same time — each picks its own port
 // (`scripts/e2e-slot.sh` gives one per slot).
@@ -16,7 +17,8 @@ export default defineConfig({
   reporter: [['html', { open: 'never' }]],
   use: {
     baseURL,
-    trace: 'on-first-retry',
+    // No retries: a failure's only trace is the one kept from its single run.
+    trace: 'retain-on-failure',
   },
   // Real bundle + service worker: the production preview build, not the dev server.
   // `--host 127.0.0.1` is load-bearing: left to its `localhost` default, Vite binds
@@ -24,14 +26,27 @@ export default defineConfig({
   ...(externalURL
     ? {}
     : {
-        webServer: {
-          command: `npm run preview -- --host 127.0.0.1 --port ${port} --strictPort`,
-          url: baseURL,
-          reuseExistingServer: !process.env.CI,
-          timeout: 120 * 1000,
-          stdout: 'pipe',
-          stderr: 'pipe',
-        },
+        webServer: [
+          // The mirror's API, empty at each start; the preview proxies `/api` to it.
+          {
+            command: `rm -rf "${apiEnv.DATA_DIR}" && node server/src/main.ts`,
+            url: `${apiUrl}/api/health`,
+            env: apiEnv,
+            reuseExistingServer: !process.env.CI,
+            timeout: 60 * 1000,
+            stdout: 'pipe',
+            stderr: 'pipe',
+          },
+          {
+            command: `npm run preview -- --host 127.0.0.1 --port ${port} --strictPort`,
+            url: baseURL,
+            env: { QUIT_API_URL: apiUrl },
+            reuseExistingServer: !process.env.CI,
+            timeout: 120 * 1000,
+            stdout: 'pipe',
+            stderr: 'pipe',
+          },
+        ],
       }),
   projects: [
     {

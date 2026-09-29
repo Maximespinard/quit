@@ -2,6 +2,7 @@ import { createContext, useContext } from 'react'
 import type { Journal } from '@/shared/domain/journal'
 import type { Scenario, ScenarioId } from '@/shared/domain/scenarios'
 import type { BackupSource } from './useBackupRecord'
+import type { MirrorControls } from './useDeviceMirroring'
 import type { JournalState } from './useJournal'
 
 /**
@@ -29,6 +30,8 @@ export type JournalSource = {
   readonly backup: BackupSource
   /** Present only while the sandbox is active. */
   readonly sandbox: SandboxControls | null
+  /** Present only on the real journal: the sandbox and demo mode never reach the mirror. */
+  readonly mirror: MirrorControls | null
 }
 
 export const JournalSourceContext = createContext<JournalSource | null>(null)
