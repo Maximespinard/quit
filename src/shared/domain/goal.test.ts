@@ -1,4 +1,6 @@
+import { factIdSequence } from '@/shared/test/fact-ids'
 import { DAY_MS } from '@/shared/utils/duration'
+import { factId } from '@/shared/utils/fact-id'
 import { derive } from './derive'
 import { markGoalCelebrated, setGoal } from './goal'
 import { decodeJournal, emptyJournal, type Journal } from './journal'
@@ -10,7 +12,7 @@ const quitDaysAgo = (days: number): Journal => ({
   ...emptyJournal,
   weeklySpendCents: 3_500,
   baselineSmokesPerDay: 15,
-  facts: [{ type: 'quit-moment', at: NOW - days * DAY_MS }],
+  facts: [{ type: 'quit-moment', id: factId(1), at: NOW - days * DAY_MS }],
 })
 
 function withGoal(journal: Journal, label: string, priceCents: number, now = NOW): Journal {
@@ -98,7 +100,7 @@ describe('derive, goal', () => {
     const journal = withGoal(quitDaysAgo(24), 'Un casque', 12_000)
     const lapsed: Journal = {
       ...journal,
-      facts: [...journal.facts, { type: 'lapse', at: NOW - DAY_MS, count: 3 }],
+      facts: [...journal.facts, { type: 'lapse', id: factId(2), at: NOW - DAY_MS, count: 3 }],
     }
 
     expect(derive(lapsed, NOW).goal).toMatchObject({ savedCents: 11_900, reached: false })
@@ -131,7 +133,10 @@ describe('derive, goal reached then a lapse', () => {
   const reachedThenLapsed = (seen: boolean): Journal => {
     const set = withGoal(quitDaysAgo(24), 'Un casque', 12_000)
     const journal = seen ? markGoalCelebrated(set) : set
-    return { ...journal, facts: [...journal.facts, { type: 'lapse', at: NOW - DAY_MS, count: 3 }] }
+    return {
+      ...journal,
+      facts: [...journal.facts, { type: 'lapse', id: factId(2), at: NOW - DAY_MS, count: 3 }],
+    }
   }
 
   it('stays reached once its celebration was seen: the money went on it', () => {
@@ -152,11 +157,11 @@ describe('decodeJournal, goal', () => {
   it('reads back a stored goal', () => {
     const goal = { label: 'Un vélo', priceCents: 40_000, countsFrom: NOW, celebrated: true }
 
-    expect(decodeJournal({ facts: [], goal }).goal).toEqual(goal)
+    expect(decodeJournal({ facts: [], goal }, factIdSequence()).goal).toEqual(goal)
   })
 
   it('reads a journal stored before goals existed as having none', () => {
-    expect(decodeJournal({ facts: [] }).goal).toBeNull()
+    expect(decodeJournal({ facts: [] }, factIdSequence()).goal).toBeNull()
   })
 
   it.each([
@@ -170,6 +175,6 @@ describe('decodeJournal, goal', () => {
       { label: 'Un vélo', priceCents: 400, countsFrom: 'x', celebrated: false },
     ],
   ])('drops a goal %s', (_, goal) => {
-    expect(decodeJournal({ facts: [], goal }).goal).toBeNull()
+    expect(decodeJournal({ facts: [], goal }, factIdSequence()).goal).toBeNull()
   })
 })

@@ -13,6 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/ui/base/dialog'
+import { newFactId } from '@/shared/utils/fact-id'
 import { formatDate } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
 
@@ -65,7 +66,7 @@ export function ImportJournal({
     event.target.value = ''
     if (file === undefined) return
     const text = await file.text().catch(() => '')
-    const result = importJournal(text, sandbox === null ? 'device' : 'sandbox')
+    const result = importJournal(text, sandbox === null ? 'device' : 'sandbox', newFactId)
     if (!result.ok) setState({ step: 'refused', reason: result.reason })
     else if (journal.facts.length === 0) await replace(result.journal)
     else setState({ step: 'confirming', journal: result.journal, exportedAt: result.exportedAt })

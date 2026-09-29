@@ -4,6 +4,7 @@ import { recordLapse } from '@/shared/domain/facts/lapse'
 import type { Journal } from '@/shared/domain/journal'
 import type { SandboxControls } from '@/shared/hooks/useJournalSource'
 import { Button } from '@/shared/ui/base/button'
+import { newFactId } from '@/shared/utils/fact-id'
 import { strings } from '@/shared/utils/strings'
 
 const copy = strings.debug
@@ -34,8 +35,10 @@ export function SandboxActions({ journal, now, commit, sandbox }: SandboxActions
   const inject = (result: RecordResult) => {
     if (result.ok) void commit(result.journal)
   }
-  const injectCraving = () => inject(recordCraving(journal, { at: now, ...INJECTED_CRAVING }, now))
-  const injectLapse = () => inject(recordLapse(journal, { at: now, ...INJECTED_LAPSE }, now))
+  const injectCraving = () =>
+    inject(recordCraving(journal, { id: newFactId(), at: now, ...INJECTED_CRAVING }, now))
+  const injectLapse = () =>
+    inject(recordLapse(journal, { id: newFactId(), at: now, ...INJECTED_LAPSE }, now))
 
   return (
     <>

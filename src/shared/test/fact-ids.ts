@@ -1,14 +1,19 @@
 import type { FactId } from '@quit/contract/facts'
+import { factId } from '@/shared/utils/fact-id'
 
-/** The `n`th fixed fact id: a valid UUIDv7, readable in a failing test. */
-export const factId = (n: number): FactId =>
-  `00000000-0000-7000-8000-${n.toString(16).padStart(12, '0')}`
-
-/** An id source handing out `factId(1)`, `factId(2)`, … in turn: where the device would make new ones. */
-export function factIdSequence(): () => FactId {
-  let n = 0
+/**
+ * An id source handing out `factId(first)`, `factId(first + 1)`, … in turn: where the device
+ * would make new ones.
+ */
+export function factIdSequence(first = 1): () => FactId {
+  let n = first - 1
   return () => {
     n += 1
     return factId(n)
   }
 }
+
+/** Any UUIDv7: the id the device made for a fact a test recorded, unknown in advance. */
+export const anyFactId = expect.stringMatching(
+  /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
+)

@@ -1,27 +1,21 @@
-import { factId, factIdSequence } from '@/shared/test/fact-ids'
+import { factIdSequence } from '@/shared/test/fact-ids'
+import { factId } from '@/shared/utils/fact-id'
 import { derive } from './derive'
 import { recordLapse } from './facts/lapse'
-import {
-  decodeJournal,
-  emptyJournal,
-  giveStoredFactsIds,
-  type Journal,
-  removeFact,
-  withFactIds,
-} from './journal'
+import { decodeJournal, emptyJournal, identifyFacts, type Journal, removeFact } from './journal'
 import { defaultProtocol } from './protocol'
 
 describe('decodeJournal', () => {
   it('reads nothing stored as a new journal', () => {
-    expect(decodeJournal(undefined)).toEqual(emptyJournal)
+    expect(decodeJournal(undefined, factIdSequence())).toEqual(emptyJournal)
   })
 
   it('gives a journal stored before the protocol existed the default protocol, facts kept', () => {
-    const stored = { facts: [{ type: 'quit-moment', at: 1_000 }] }
+    const stored = { facts: [{ type: 'quit-moment', id: factId(1), at: 1_000 }] }
 
-    expect(decodeJournal(stored)).toEqual({
+    expect(decodeJournal(stored, factIdSequence())).toEqual({
       ...emptyJournal,
-      facts: [{ type: 'quit-moment', at: 1_000 }],
+      facts: [{ type: 'quit-moment', id: factId(1), at: 1_000 }],
       protocol: defaultProtocol,
     })
   })
@@ -29,40 +23,16 @@ describe('decodeJournal', () => {
   it('reads back an edited protocol', () => {
     const protocol = [{ doseMg: 14, durationDays: 21, brand: 'Nicopatch' }]
 
-    expect(decodeJournal({ facts: [], protocol })).toEqual({ ...emptyJournal, protocol })
-  })
-})
-
-describe('decodeJournal, settings', () => {
-  it('reads back the weekly spend and the baseline', () => {
-    const stored = { facts: [], weeklySpendCents: 3_550, baselineSmokesPerDay: 15 }
-
-    expect(decodeJournal(stored)).toEqual({
+    expect(decodeJournal({ facts: [], protocol }, factIdSequence())).toEqual({
       ...emptyJournal,
-      weeklySpendCents: 3_550,
-      baselineSmokesPerDay: 15,
+      protocol,
     })
   })
-
-  it('reads a journal stored before the settings existed as not set yet', () => {
-    const decoded = decodeJournal({ facts: [] })
-
-    expect(decoded.weeklySpendCents).toBeNull()
-    expect(decoded.baselineSmokesPerDay).toBeNull()
-  })
-
-  it('drops a malformed spend or baseline rather than trusting it', () => {
-    const decoded = decodeJournal({ facts: [], weeklySpendCents: 12.5, baselineSmokesPerDay: -2 })
-
-    expect(decoded.weeklySpendCents).toBeNull()
-    expect(decoded.baselineSmokesPerDay).toBeNull()
-  })
 })
 
-describe('withFactIds', () => {
-  it('gives every fact without an id a new one, in order, and keeps the ids already there', () => {
-    const journal: Journal = {
-      ...emptyJournal,
+describe('decodeJournal, fact ids', () => {
+  it('gives every fact stored without an id a new one, in order, and keeps the ids already there', () => {
+    const stored = {
       facts: [
         { type: 'quit-moment', at: 1_000 },
         { type: 'lapse', id: factId(90), at: 2_000, count: 1 },
@@ -70,7 +40,7 @@ describe('withFactIds', () => {
       ],
     }
 
-    expect(withFactIds(journal, factIdSequence()).facts).toEqual([
+    expect(decodeJournal(stored, factIdSequence()).facts).toEqual([
       { type: 'quit-moment', id: factId(1), at: 1_000 },
       { type: 'lapse', id: factId(90), at: 2_000, count: 1 },
       { type: 'lapse', id: factId(2), at: 3_000, count: 2 },
@@ -78,32 +48,57 @@ describe('withFactIds', () => {
   })
 
   it('gives a new id to a fact sharing the id of one before it: two facts are never one', () => {
-    const journal: Journal = {
-      ...emptyJournal,
+    const stored = {
       facts: [
         { type: 'lapse', id: factId(90), at: 2_000, count: 1 },
         { type: 'lapse', id: factId(90), at: 3_000, count: 2 },
       ],
     }
 
-    expect(withFactIds(journal, factIdSequence()).facts.map((fact) => fact.id)).toEqual([
+    expect(decodeJournal(stored, factIdSequence()).facts.map((fact) => fact.id)).toEqual([
       factId(90),
       factId(1),
     ])
   })
 
-  it('leaves a journal whose facts all have an id as it is', () => {
-    const journal: Journal = {
-      ...emptyJournal,
-      facts: [{ type: 'quit-moment', id: factId(90), at: 1_000 }],
-    }
+  it('drops a fact whose id is not a UUIDv7, as any malformed fact', () => {
+    const stored = { facts: [{ type: 'lapse', id: 'fact-1', at: 2_000, count: 1 }] }
 
-    expect(withFactIds(journal, factIdSequence())).toBe(journal)
+    expect(decodeJournal(stored, factIdSequence()).facts).toEqual([])
   })
 })
 
-describe('giveStoredFactsIds', () => {
-  it('gives every stored fact without an id one, keeping everything else as stored', () => {
+describe('decodeJournal, settings', () => {
+  it('reads back the weekly spend and the baseline', () => {
+    const stored = { facts: [], weeklySpendCents: 3_550, baselineSmokesPerDay: 15 }
+
+    expect(decodeJournal(stored, factIdSequence())).toEqual({
+      ...emptyJournal,
+      weeklySpendCents: 3_550,
+      baselineSmokesPerDay: 15,
+    })
+  })
+
+  it('reads a journal stored before the settings existed as not set yet', () => {
+    const decoded = decodeJournal({ facts: [] }, factIdSequence())
+
+    expect(decoded.weeklySpendCents).toBeNull()
+    expect(decoded.baselineSmokesPerDay).toBeNull()
+  })
+
+  it('drops a malformed spend or baseline rather than trusting it', () => {
+    const decoded = decodeJournal(
+      { facts: [], weeklySpendCents: 12.5, baselineSmokesPerDay: -2 },
+      factIdSequence(),
+    )
+
+    expect(decoded.weeklySpendCents).toBeNull()
+    expect(decoded.baselineSmokesPerDay).toBeNull()
+  })
+})
+
+describe('identifyFacts', () => {
+  it('gives every fact without an id one, keeping everything else as stored', () => {
     const stored = {
       facts: [
         { type: 'quit-moment', at: 1_000 },
@@ -115,7 +110,7 @@ describe('giveStoredFactsIds', () => {
       protocol: 'kept as stored',
     }
 
-    expect(giveStoredFactsIds(stored, factIdSequence())).toEqual({
+    expect(identifyFacts(stored, factIdSequence())).toEqual({
       facts: [
         { type: 'quit-moment', id: factId(1), at: 1_000 },
         { type: 'lapse', id: factId(90), at: 2_000 },
@@ -127,12 +122,18 @@ describe('giveStoredFactsIds', () => {
     })
   })
 
+  it('leaves facts that all have their own id as they are', () => {
+    const stored = { facts: [{ type: 'quit-moment', id: factId(90), at: 1_000 }] }
+
+    expect(identifyFacts(stored, factIdSequence())).toEqual(stored)
+  })
+
   it.each([
     ['nothing stored', undefined],
     ['a value that is not a journal', 'journal'],
     ['facts that are not a list', { facts: 'none' }],
   ])('leaves %s as it is', (_case, stored) => {
-    expect(giveStoredFactsIds(stored, factIdSequence())).toEqual(stored)
+    expect(identifyFacts(stored, factIdSequence())).toEqual(stored)
   })
 })
 
@@ -176,11 +177,11 @@ describe('removeFact', () => {
   it('edits a fact as removing it then recording it again, under the same rules', () => {
     const without = removeFact(journal, factId(2))
 
-    expect(recordLapse(without, { at: QUIT - HOUR, count: 1 }, now)).toEqual({
+    expect(recordLapse(without, { id: factId(2), at: QUIT - HOUR, count: 1 }, now)).toEqual({
       ok: false,
       reason: 'before-quit-moment',
     })
-    expect(recordLapse(without, { at: now + HOUR, count: 1 }, now)).toEqual({
+    expect(recordLapse(without, { id: factId(2), at: now + HOUR, count: 1 }, now)).toEqual({
       ok: false,
       reason: 'future',
     })

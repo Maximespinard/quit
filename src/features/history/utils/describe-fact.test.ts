@@ -1,14 +1,17 @@
+import { factId } from '@/shared/utils/fact-id'
 import { describeFact } from './describe-fact'
 
 it('says a patch application with its dose', () => {
-  expect(describeFact({ type: 'patch-application', at: 0, doseMg: 10.5 })).toEqual({
+  expect(describeFact({ type: 'patch-application', id: factId(1), at: 0, doseMg: 10.5 })).toEqual({
     title: 'Patch posé',
     detail: '10,5 mg',
   })
 })
 
 it('says a patch application’s site after its dose', () => {
-  expect(describeFact({ type: 'patch-application', at: 0, doseMg: 14, site: 'hip-left' })).toEqual({
+  expect(
+    describeFact({ type: 'patch-application', id: factId(2), at: 0, doseMg: 14, site: 'hip-left' }),
+  ).toEqual({
     title: 'Patch posé',
     detail: '14 mg · Hanche gauche',
   })
@@ -18,6 +21,7 @@ it('says a craving with its intensity and its tags, default ones by their label'
   expect(
     describeFact({
       type: 'craving',
+      id: factId(3),
       at: 0,
       intensity: 3,
       heldToEnd: false,
@@ -27,15 +31,24 @@ it('says a craving with its intensity and its tags, default ones by their label'
 })
 
 it('says when a craving was held to the end of the timer', () => {
-  expect(describeFact({ type: 'craving', at: 0, intensity: 1, heldToEnd: true, tags: [] })).toEqual(
-    { title: 'Envie tenue jusqu’au bout', detail: 'Intensité 1' },
-  )
+  expect(
+    describeFact({
+      type: 'craving',
+      id: factId(4),
+      at: 0,
+      intensity: 1,
+      heldToEnd: true,
+      tags: [],
+    }),
+  ).toEqual({ title: 'Envie tenue jusqu’au bout', detail: 'Intensité 1' })
 })
 
 it('says a lapse with its cigarettes', () => {
-  expect(describeFact({ type: 'lapse', at: 0, count: 1 })).toEqual({
+  expect(describeFact({ type: 'lapse', id: factId(5), at: 0, count: 1 })).toEqual({
     title: 'J’ai fumé',
     detail: '1 cigarette',
   })
-  expect(describeFact({ type: 'lapse', at: 0, count: 4 }).detail).toBe('4 cigarettes')
+  expect(describeFact({ type: 'lapse', id: factId(6), at: 0, count: 4 }).detail).toBe(
+    '4 cigarettes',
+  )
 })

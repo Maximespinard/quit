@@ -1,5 +1,6 @@
 import { patchCalendar } from '@/shared/domain/patch-calendar'
 import { defaultProtocol } from '@/shared/domain/protocol'
+import { factId } from '@/shared/utils/fact-id'
 import { calendarMonths, monthIndexAt } from './calendar-months'
 
 const local = (month: number, day: number, hour = 0) =>
@@ -9,7 +10,7 @@ const local = (month: number, day: number, hour = 0) =>
 const daysFrom = (now: number) => {
   const calendar = patchCalendar(
     {
-      facts: [{ type: 'quit-moment', at: local(1, 30, 9) }],
+      facts: [{ type: 'quit-moment', id: factId(1), at: local(1, 30, 9) }],
       protocol: defaultProtocol,
       weeklySpendCents: null,
       baselineSmokesPerDay: null,

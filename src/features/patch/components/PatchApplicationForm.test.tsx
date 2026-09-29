@@ -4,13 +4,17 @@ import userEvent from '@testing-library/user-event'
 import type { PatchApplicationInput } from '@/shared/domain/facts/patch-application'
 import { emptyJournal, type Journal } from '@/shared/domain/journal'
 import { protocolPosition } from '@/shared/domain/protocol-position'
-import { factId } from '@/shared/test/fact-ids'
+import { anyFactId } from '@/shared/test/fact-ids'
+import { factId } from '@/shared/utils/fact-id'
 import { strings } from '@/shared/utils/strings'
 import { PatchApplicationForm } from './PatchApplicationForm'
 
 const QUIT_MOMENT = new Date(2026, 8, 20, 8, 0).getTime()
 const NOW = new Date(2026, 8, 22, 10, 0).getTime()
-const journal: Journal = { ...emptyJournal, facts: [{ type: 'quit-moment', at: QUIT_MOMENT }] }
+const journal: Journal = {
+  ...emptyJournal,
+  facts: [{ type: 'quit-moment', id: factId(1), at: QUIT_MOMENT }],
+}
 const position = protocolPosition(journal.protocol, QUIT_MOMENT, NOW)
 const copy = strings.patch.form
 const initial = { id: factId(7), at: new Date(2026, 8, 21, 23, 40, 12).getTime(), doseMg: 10.5 }
@@ -35,11 +39,16 @@ const site = (name: string) => screen.getByRole('button', { name })
 const barred = strings.patch.site.previous
 
 /** A patch application on September `day` at `hour`, with a site or without. */
-const applied = (day: number, hour: number, site?: ApplicationSite): PatchApplicationFact => {
+const applied = (
+  n: number,
+  day: number,
+  hour: number,
+  site?: ApplicationSite,
+): PatchApplicationFact => {
   const at = new Date(2026, 8, day, hour, 0).getTime()
   return site === undefined
-    ? { type: 'patch-application', at, doseMg: 21 }
-    : { type: 'patch-application', at, doseMg: 21, site }
+    ? { type: 'patch-application', id: factId(n), at, doseMg: 21 }
+    : { type: 'patch-application', id: factId(n), at, doseMg: 21, site }
 }
 const journalWith = (...applications: PatchApplicationFact[]): Journal => ({
   ...journal,
@@ -47,7 +56,7 @@ const journalWith = (...applications: PatchApplicationFact[]): Journal => ({
 })
 
 it('bars the previous patch application’s site, named as such, a press changing nothing', async () => {
-  const onRecorded = renderForm(undefined, journalWith(applied(21, 9, 'arm-left')))
+  const onRecorded = renderForm(undefined, journalWith(applied(2, 21, 9, 'arm-left')))
 
   const previous = site(sites['arm-left'])
   expect(previous).toHaveAttribute('aria-disabled', 'true')
@@ -60,12 +69,15 @@ it('bars the previous patch application’s site, named as such, a press changin
   await userEvent.click(screen.getByRole('button', { name: copy.submit }))
 
   expect(onRecorded).toHaveBeenLastCalledWith(
-    journalWith(applied(21, 9, 'arm-left'), { ...applied(22, 10, 'arm-right') }),
+    journalWith(applied(2, 21, 9, 'arm-left'), {
+      ...applied(3, 22, 10, 'arm-right'),
+      id: anyFactId,
+    }),
   )
 })
 
 it('keeps the suggested site named as such once another is pressed', async () => {
-  renderForm(undefined, journalWith(applied(21, 9, 'arm-left')))
+  renderForm(undefined, journalWith(applied(2, 21, 9, 'arm-left')))
 
   expect(site(sites['arm-right'])).toHaveAccessibleDescription(strings.patch.site.suggested)
   await userEvent.click(site(sites['hip-left']))
@@ -76,7 +88,7 @@ it('keeps the suggested site named as such once another is pressed', async () =>
 })
 
 it('bars nothing when the previous patch application has no site', () => {
-  renderForm(undefined, journalWith(applied(20, 9, 'arm-left'), applied(21, 9)))
+  renderForm(undefined, journalWith(applied(2, 20, 9, 'arm-left'), applied(3, 21, 9)))
 
   for (const name of Object.values(sites)) {
     expect(site(name)).not.toHaveAttribute('aria-disabled', 'true')
@@ -96,7 +108,7 @@ it('logs a patch application at the suggested site unless another or none is pre
     ...journal,
     facts: [
       ...journal.facts,
-      { type: 'patch-application', at: NOW, doseMg: 21, site: 'hip-right' },
+      { type: 'patch-application', id: anyFactId, at: NOW, doseMg: 21, site: 'hip-right' },
     ],
   })
 })
@@ -109,7 +121,7 @@ it('logs a patch application without a site once the pressed one is pressed agai
 
   expect(onRecorded).toHaveBeenLastCalledWith({
     ...journal,
-    facts: [...journal.facts, { type: 'patch-application', at: NOW, doseMg: 21 }],
+    facts: [...journal.facts, { type: 'patch-application', id: anyFactId, at: NOW, doseMg: 21 }],
   })
 })
 
@@ -120,12 +132,14 @@ it('suggests the site for the date entered when catching up a day', async () => 
       ...journal.facts,
       {
         type: 'patch-application',
+        id: factId(2),
         at: new Date(2026, 8, 20, 9, 0).getTime(),
         doseMg: 21,
         site: 'arm-right',
       },
       {
         type: 'patch-application',
+        id: factId(3),
         at: new Date(2026, 8, 22, 9, 0).getTime(),
         doseMg: 21,
         site: 'hip-left',
@@ -151,6 +165,7 @@ it('suggests the site for the date entered when catching up a day', async () => 
       ...withSites.facts,
       {
         type: 'patch-application',
+        id: anyFactId,
         at: new Date(2026, 8, 21, 9, 0).getTime(),
         doseMg: 21,
         site: 'chest-left',
@@ -161,14 +176,14 @@ it('suggests the site for the date entered when catching up a day', async () => 
 
 it('edits a patch application: its own site stays open, the one before it is barred', async () => {
   // The fact edited shares its site with the one before it, as recorded before the rule.
-  const before = journalWith(applied(20, 9, 'hip-left'))
+  const before = journalWith(applied(2, 20, 9, 'hip-left'))
   const onRecorded = renderForm({ ...initial, site: 'hip-left' }, before)
 
   expect(site(sites['hip-left'])).toHaveAttribute('aria-pressed', 'true')
   expect(site(sites['hip-left'])).not.toHaveAttribute('aria-disabled', 'true')
   await userEvent.click(screen.getByRole('button', { name: copy.edit.submit }))
   expect(onRecorded).toHaveBeenLastCalledWith(
-    journalWith(applied(20, 9, 'hip-left'), {
+    journalWith(applied(2, 20, 9, 'hip-left'), {
       type: 'patch-application',
       ...initial,
       site: 'hip-left',
@@ -177,7 +192,7 @@ it('edits a patch application: its own site stays open, the one before it is bar
 })
 
 it('edits a patch application whose site differs: the one before it is barred', () => {
-  renderForm({ ...initial, site: 'chest-left' }, journalWith(applied(20, 9, 'hip-left')))
+  renderForm({ ...initial, site: 'chest-left' }, journalWith(applied(2, 20, 9, 'hip-left')))
 
   expect(site(sites['hip-left'])).toHaveAttribute('aria-disabled', 'true')
   expect(site(sites['chest-left'])).toHaveAttribute('aria-pressed', 'true')

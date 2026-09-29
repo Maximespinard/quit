@@ -1,6 +1,7 @@
 import type { CravingIntensity } from '@quit/contract/facts'
 import { recordCraving } from '@/shared/domain/facts/craving'
 import type { Journal } from '@/shared/domain/journal'
+import { newFactId } from '@/shared/utils/fact-id'
 import { strings } from '@/shared/utils/strings'
 import { cravingTimer } from '../domain/craving-timer'
 import { tagOptions } from '../utils/tag-options'
@@ -44,7 +45,11 @@ export function CravingTimerScreen({
   }
 
   const record = (intensity: CravingIntensity, tags: readonly string[]) => {
-    const result = recordCraving(journal, { at: startedAt, intensity, heldToEnd, tags }, now)
+    const result = recordCraving(
+      journal,
+      { id: newFactId(), at: startedAt, intensity, heldToEnd, tags },
+      now,
+    )
     if (result.ok) onRecorded(result.journal)
     return result.ok
   }

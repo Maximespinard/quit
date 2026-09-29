@@ -3,6 +3,10 @@ import type { Journal } from '../journal'
 import { isValidDose } from '../protocol'
 import { latestQuitMoment } from './quit-moment'
 
+/** A patch application as the user reports it: when, at what dose, where. */
+export type PatchApplication = Omit<PatchApplicationFact, 'type' | 'id'>
+
+/** A patch application to record: a new one under a new id, a corrected one under its own. */
 export type PatchApplicationInput = Omit<PatchApplicationFact, 'type'>
 
 export type RecordPatchApplicationResult =

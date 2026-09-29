@@ -1,3 +1,4 @@
+import type { FactId } from '@quit/contract/facts'
 import {
   latestQuitMoment,
   type QuitMomentRefusal,
@@ -45,20 +46,22 @@ export const isChanged = (inForce: SettingsFields, fields: SettingsFields) =>
 
 /**
  * Applies every changed field to one journal, or refuses them all: one save, one outcome.
- * An untouched field is left alone, so an untouched quit moment keeps its seconds.
+ * An untouched field is left alone, so an untouched quit moment keeps its seconds. A first
+ * quit moment gets its id from `newId`.
  */
 export function saveSettings(
   journal: Journal,
   inForce: SettingsFields,
   fields: SettingsFields,
   now: number,
+  newId: () => FactId,
 ): SaveSettingsResult {
   let next = journal
   let refusals: SettingsRefusals = {}
 
   if (fields.quitMoment !== inForce.quitMoment) {
     const at = fromDatetimeLocal(fields.quitMoment)
-    const result = at === null ? null : recordQuitMoment(next, at, now)
+    const result = at === null ? null : recordQuitMoment(next, at, now, newId)
     if (result === null) refusals = { ...refusals, quitMoment: { reason: 'invalid' } }
     else if (result.ok) next = result.journal
     else {
