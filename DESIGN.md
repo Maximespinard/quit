@@ -54,10 +54,10 @@ typography:
     letterSpacing: "-0.025em"
   craving:
     fontFamily: "Host Grotesk Variable, ui-sans-serif, system-ui, -apple-system, sans-serif"
-    fontSize: "1.4375rem"
+    fontSize: "1rem"
     fontWeight: 600
     lineHeight: 1
-    letterSpacing: "-0.03em"
+    letterSpacing: "-0.02em"
   brand:
     fontFamily: "Host Grotesk Variable, ui-sans-serif, system-ui, -apple-system, sans-serif"
     fontSize: "1.3125rem"
@@ -163,7 +163,6 @@ components:
     rounded: "9999px"
     height: "4rem"
     padding: "0 1.75rem"
-    width: "62.5%"
   craving-button-disabled:
     backgroundColor: "{colors.ghost}"
     textColor: "{colors.muted}"
@@ -398,7 +397,8 @@ Chiffres en 500, interface en 400 / 500, 600 seulement pour la marque et `Envie`
   écran.
 - **prompt** (400, 1.5rem / 24 px, 1,2, -0,025em) : la phrase du minuteur en cours (« Respire… »),
   15 caractères de large au plus.
-- **craving** (600, 1.4375rem / 23 px, 1, -0,03em) : le libellé d'`Envie`.
+- **craving** (600, 1rem / 16 px, 1, -0,02em) : le libellé d'`Envie` ; la taille de `cta`, en
+  600.
 - **brand** (600, 1.3125rem / 21 px, 1, -0,03em) : « quit » dans la barre haute, sur tous les
   écrans.
 - **title** (500, 1.25rem / 20 px, 1,2, -0,02em) : titre d'écran sous l'accueil, titre de
@@ -454,9 +454,11 @@ largeur derrière la colonne.
 
 ### Named Rules
 
-**The Fixed Pill Rule.** `Envie` est fixe en bas à droite, sur un fondu vers `page` à 92 % ; le
-contenu défilant réserve un dégagement bas (`pb-32` sur l'accueil) pour qu'aucune information
-ne reste sous la pilule.
+**The Fixed Pill Rule.** `Envie` est fixe en bas à droite, sur un fondu vers `page` à 92 %, sur
+chaque écran qui n'est ni un formulaire ni le minuteur : accueil, calendrier, statistiques,
+historique, réglages. Le contenu défilant réserve un dégagement bas (`pb-32` sur l'accueil,
+`pb-page` ailleurs, qui s'allonge tant que la pilule est montée) pour qu'aucune information ne
+reste sous la pilule ni sous son fondu.
 
 **The Thumb Zone Rule.** L'action principale d'un écran à décision (question du premier
 lancement, `Arrêter`, `Enregistrer` d'une envie) vit en bas de l'écran, sur un fondu vers la
@@ -561,10 +563,10 @@ Calmes, en pilule, `cta` 500, aucune ombre.
   d'état `hover` dédié : la cible est le doigt.
 
 ### Envie (signature)
-La pilule permanente, seul objet allumé : 64 px de haut, au moins 62,5 % de la colonne, dégradé
-horizontal `pink` → `yellow`, libellé `craving` en `page`, lueur rose. Fixe en bas à droite sur
-son fondu. S'enfonce à `scale(0.97)`. Désactivée, elle perd dégradé et lueur : aplat `ghost`,
-texte `muted`.
+La pilule permanente, seul objet allumé : 64 px de haut, serrée sur son libellé (64 px de large
+au moins), dégradé horizontal `pink` → `yellow`, libellé `craving` en `page`, lueur rose. Fixe
+en bas à droite sur son fondu, hors des formulaires et du minuteur. S'enfonce à `scale(0.97)`.
+Désactivée, elle perd dégradé et lueur : aplat `ghost`, texte `muted`.
 
 ### Chips et segmented control
 - **Puce (`Toggle`, `ToggleGroup`) :** pilule `ghost` 44 px, texte `body` crème ; pressée →

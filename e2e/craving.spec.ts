@@ -160,6 +160,24 @@ test('a craving is tagged, and the typed tag is offered again on the next one', 
   expect(await storedCravingTags(page)).toEqual([['coffee', 'Voiture'], [], ['Métro']])
 })
 
+// Real journal: the craving started away from home must land in IndexedDB like any other.
+test('a craving started from the calendar runs and records like one started from home', async ({
+  page,
+}) => {
+  await page.goto('/')
+  await startNow(page)
+  await page.getByRole('link', { name: 'Calendrier' }).click()
+  await expect(page.getByRole('heading', { name: 'Calendrier' })).toBeVisible()
+
+  await tap(page, 'Envie')
+  await expect(timer(page)).toBeVisible()
+  await tap(page, 'Arrêter')
+  await rateAndRecord(page, '2')
+
+  await expect(recordedNotice(page)).toBeVisible()
+  expect(await storedCravingTags(page)).toEqual([[]])
+})
+
 /** The animation each blob of the timer haze plays, as the browser computed it. */
 const hazeAnimations = (page: Page) =>
   page.evaluate(() =>

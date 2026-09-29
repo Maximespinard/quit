@@ -1,5 +1,6 @@
 import { createFileRoute, Navigate, useNavigate } from '@tanstack/react-router'
 import { BackupSection } from '@/features/backup/components/BackupSection'
+import { CravingLauncher } from '@/features/craving/components/CravingLauncher'
 import { DeviceKeySection } from '@/features/mirror/components/DeviceKeySection'
 import { SettingsScreen } from '@/features/setup/components/SettingsScreen'
 import { latestQuitMoment } from '@/shared/domain/facts/quit-moment'
@@ -46,6 +47,7 @@ function SettingsPage() {
           <SettingsScreen journal={state.journal} now={now} onSaved={saved} />
           {mirror === null ? null : <DeviceKeySection mirror={mirror} />}
           <BackupSection journal={state.journal} onImported={imported} />
+          <CravingLauncher journal={state.journal} now={now} />
         </>
       )}
     </AppShell>

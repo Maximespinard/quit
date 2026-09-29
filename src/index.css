@@ -50,9 +50,9 @@
   --text-brand--line-height: 1;
   --text-brand--letter-spacing: -0.03em;
   --text-brand--font-weight: 600;
-  --text-craving: 1.4375rem;
+  --text-craving: 1rem;
   --text-craving--line-height: 1;
-  --text-craving--letter-spacing: -0.03em;
+  --text-craving--letter-spacing: -0.02em;
   --text-craving--font-weight: 600;
   --text-figure: 1.875rem;
   --text-figure--line-height: 1;
@@ -234,9 +234,16 @@
   padding-bottom: calc(1rem + env(safe-area-inset-bottom));
 }
 
-/* A page's bottom edge: clears the home indicator, and the sandbox marker while it floats there. */
+/*
+ * A page's bottom edge: clears the home indicator, and whatever floats there — the sandbox
+ * marker, Envie. Both sit on the same row, so the taller one sets the clearance.
+ */
 :root {
-  --page-clearance: calc(1rem + env(safe-area-inset-bottom) + var(--sandbox-clearance, 0px));
+  --page-clearance: calc(
+    1rem +
+    env(safe-area-inset-bottom) +
+    max(var(--sandbox-clearance, 0px), var(--craving-clearance, 0px))
+  );
 }
 
 @utility pb-page {
@@ -246,4 +253,9 @@
 :root:has([data-sandbox-marker]) {
   /* The marker's 44px (`min-h-11`) plus the 1rem gap `pb-safe-4` leaves under it, in DebugPanel. */
   --sandbox-clearance: 3.75rem;
+}
+
+:root:has([data-craving-launcher]) {
+  /* Envie's 64px (`h-16`) plus the 2.5rem of fade above it (`pt-10`), in CravingLauncher. */
+  --craving-clearance: 6.5rem;
 }
