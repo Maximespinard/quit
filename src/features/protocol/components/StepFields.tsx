@@ -2,16 +2,41 @@ import { ChevronDown, ChevronUp, Trash2 } from 'lucide-react'
 import { useId } from 'react'
 import { Button } from '@/shared/ui/base/button'
 import { Input } from '@/shared/ui/base/input'
+import { cn } from '@/shared/utils/cn'
 import { strings } from '@/shared/utils/strings'
 import type { DraftField, StepDraft } from '../utils/step-draft'
+import type { StepStatus } from '../utils/step-status'
 
 const copy = strings.protocol
 
 /** A disabled place control fades out instead of taking the disabled fill, which reads as selected here. */
 const placeControl = 'disabled:bg-transparent disabled:opacity-30'
 
+/**
+ * The running step is the lit card with a cream chip; past steps recede to a hairline, a muted
+ * title and a ghost chip; upcoming ones sit on the surface, unmarked.
+ */
+const lookByStatus: Record<
+  StepStatus,
+  { card: string; title: string; mark: { label: string; tone: string } | null }
+> = {
+  current: {
+    card: 'border-ghost-line bg-surface',
+    title: '',
+    mark: { label: copy.status.current, tone: 'bg-ink text-page' },
+  },
+  past: {
+    card: 'border-line',
+    title: 'text-muted',
+    mark: { label: copy.status.past, tone: 'bg-ghost text-muted' },
+  },
+  upcoming: { card: 'border-transparent bg-surface', title: '', mark: null },
+}
+
 type StepFieldsProps = {
   draft: StepDraft
+  /** Read from the protocol in force, so it stays put while the draft is edited. */
+  status: StepStatus
   /** 1-based position in the protocol. */
   number: number
   isFirst: boolean
@@ -29,6 +54,7 @@ type StepFieldsProps = {
 /** One step of the protocol editor: dose, duration, brand, and its place in the list. */
 export function StepFields({
   draft,
+  status,
   number,
   isFirst,
   isLast,
@@ -41,18 +67,33 @@ export function StepFields({
 }: StepFieldsProps) {
   const id = useId()
   const describedBy = (isInvalid: boolean) => (isInvalid ? errorId : undefined)
+  const look = lookByStatus[status]
 
   return (
     // No legend: WebKit lets a legend cut the card's border whatever its styling. The heading
     // names the group instead.
     <fieldset
       aria-labelledby={`${id}-title`}
-      className="flex min-w-0 flex-col gap-3 rounded-card border border-line p-4"
+      aria-describedby={look.mark === null ? undefined : `${id}-status`}
+      className={cn('flex min-w-0 flex-col gap-3 rounded-card border p-4', look.card)}
     >
       <div className="-my-1 -mr-2 flex items-center justify-between">
-        <h3 id={`${id}-title`} className="font-medium text-body">
-          {copy.step(number)}
-        </h3>
+        <div className="flex items-center gap-2.5">
+          <h3 id={`${id}-title`} className={cn('font-medium text-body', look.title)}>
+            {copy.step(number)}
+          </h3>
+          {look.mark === null ? null : (
+            <span
+              id={`${id}-status`}
+              className={cn(
+                'inline-flex h-6 items-center rounded-full px-2.5 font-medium text-detail',
+                look.mark.tone,
+              )}
+            >
+              {look.mark.label}
+            </span>
+          )}
+        </div>
         <div className="flex">
           <Button
             variant="ghost"
