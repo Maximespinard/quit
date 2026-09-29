@@ -38,6 +38,14 @@
   --text-display--line-height: 0.86;
   --text-display--letter-spacing: -0.055em;
   --text-display--font-weight: 500;
+  --text-brand: 1.3125rem;
+  --text-brand--line-height: 1;
+  --text-brand--letter-spacing: -0.03em;
+  --text-brand--font-weight: 600;
+  --text-craving: 1.4375rem;
+  --text-craving--line-height: 1;
+  --text-craving--letter-spacing: -0.03em;
+  --text-craving--font-weight: 600;
   --text-figure: 1.875rem;
   --text-figure--line-height: 1;
   --text-figure--letter-spacing: -0.035em;
@@ -50,6 +58,9 @@
   --text-title--line-height: 1.2;
   --text-title--letter-spacing: -0.02em;
   --text-title--font-weight: 500;
+  --text-lead: 1.125rem;
+  --text-lead--line-height: 1.3;
+  --text-lead--letter-spacing: -0.01em;
   --text-cta: 1rem;
   --text-cta--line-height: 1;
   --text-cta--letter-spacing: -0.02em;
@@ -110,6 +121,31 @@
 @utility px-safe {
   padding-left: max(1.25rem, env(safe-area-inset-left));
   padding-right: max(1.25rem, env(safe-area-inset-right));
+}
+
+/*
+ * The home hero's haze, drawn in code (no raster): amber, plum and ember glows over a warm
+ * floor that fades into the page. Only the home hero wears it.
+ */
+@utility bg-haze {
+  background-image:
+    radial-gradient(60% 42% at 12% 6%, var(--color-amber), transparent 70%),
+    radial-gradient(55% 40% at 86% 12%, var(--color-plum), transparent 72%),
+    radial-gradient(80% 50% at 50% 34%, var(--color-ember), transparent 75%),
+    linear-gradient(180deg, #3a1a10 0%, #1c1011 55%, var(--color-page) 100%);
+}
+
+/* Fine fractal noise laid over a haze (with `mix-blend-overlay`): an inline SVG, no request. */
+@utility bg-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Envie's fill and pink glow: the pink → yellow gradient belongs to Envie alone. */
+@utility bg-craving {
+  background-image: linear-gradient(90deg, var(--color-pink), var(--color-yellow));
+  box-shadow:
+    0 14px 40px -10px color-mix(in srgb, var(--color-pink) 60%, transparent),
+    inset 0 0 0 1px rgb(255 255 255 / 0.12);
 }
 
 @layer base {

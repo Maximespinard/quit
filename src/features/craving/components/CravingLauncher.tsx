@@ -8,7 +8,10 @@ type CravingLauncherProps = {
   now: number
 }
 
-/** The fixed `Envie` pill in the thumb zone: one tap starts the timer, nothing asked first. */
+/**
+ * The fixed `Envie` pill under the right thumb: one tap starts the timer, nothing asked first.
+ * It sits on a fade to the page, so the content scrolling under it never fights its label.
+ */
 export function CravingLauncher({ now }: CravingLauncherProps) {
   const navigate = useNavigate()
 
@@ -19,8 +22,8 @@ export function CravingLauncher({ now }: CravingLauncherProps) {
     })
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-30">
-      <div className="mx-auto flex max-w-md justify-end px-safe pb-safe-4">
+    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-30 bg-linear-to-b from-transparent to-55% to-page/92 pt-10">
+      <div className="mx-auto flex max-w-md justify-end px-4 pb-safe-4">
         <CravingButton
           label={strings.craving.launch}
           onClick={start}

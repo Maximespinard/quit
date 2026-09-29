@@ -56,7 +56,7 @@ test('deleting the only lapse gives back its smoke-free day, behind a confirmati
   await expect(rows(page, /J’ai fumé/)).toHaveCount(0)
 
   await home(page)
-  await expectStreak(page, 4, '00:00:00')
+  await expectStreak(page, 4, '00 h 00')
   await expect(page.getByText(/Dernière cigarette/)).toHaveCount(0)
   await expect(totals(page).getByRole('definition').first()).toHaveText('3')
 })
@@ -70,7 +70,7 @@ test('deleting a lapse of a relapse restarts the streak from the quit moment and
   await declareLapse(page)
   await shiftClock(page, '+1 j')
   await declareLapse(page)
-  await expectStreak(page, 0, '00:00:00')
+  await expectStreak(page, 0, '00 h 00')
   await expect(totals(page).getByText('Plus long streak')).toBeVisible()
 
   await openHistory(page)
@@ -82,7 +82,7 @@ test('deleting a lapse of a relapse restarts the streak from the quit moment and
   await tap(page, 'Oui, supprimer')
 
   await home(page)
-  await expectStreak(page, 5, '00:00:00')
+  await expectStreak(page, 5, '00 h 00')
   await expect(totals(page).getByText('Plus long streak')).toHaveCount(0)
 })
 

@@ -18,26 +18,26 @@ const shown = () =>
     .map((figure) => figure.textContent)
     .filter((text) => text !== '')
 
-it('reads the full day count and pads the clock', () => {
+it('reads the full day count and the hours and minutes past it, padded', () => {
   render(hero(0))
 
   expect(screen.getByRole('region', { name: 'Streak' })).toHaveTextContent('12')
-  expect(screen.getByText('07:04:09', { selector: '.sr-only' })).toBeInTheDocument()
+  expect(screen.getByText('07 h 04', { selector: '.sr-only' })).toBeInTheDocument()
 })
 
 it('shows the final values without an entrance', () => {
   render(hero())
 
-  expect(shown()).toEqual(['12', '07:04:09'])
+  expect(shown()).toEqual(['12', '07\u00a0h\u00a004'])
 })
 
 it('counts days and clock up together through the entrance', () => {
   const { rerender } = render(hero(0))
-  expect(shown()).toEqual(['0', '00:00:00'])
+  expect(shown()).toEqual(['0', '00\u00a0h\u00a000'])
 
   rerender(hero(0.5))
-  expect(shown()).toEqual(['6', '03:02:04'])
+  expect(shown()).toEqual(['6', '03\u00a0h\u00a002'])
 
   rerender(hero(1))
-  expect(shown()).toEqual(['12', '07:04:09'])
+  expect(shown()).toEqual(['12', '07\u00a0h\u00a004'])
 })

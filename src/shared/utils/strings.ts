@@ -186,6 +186,8 @@ export const strings = {
     totals: 'Ce qui reste acquis',
     smokeFreeDays: 'Jours sans fumer',
     personalBest: 'Plus long streak',
+    /** The hours and minutes past the streak's whole days, padded: `07 h 42`. */
+    clock: (hours: string, minutes: string) => `${hours}\u00a0h\u00a0${minutes}`,
     /** A streak as whole days and the hours past them. */
     duration: (days: number, hours: string) => `${days}\u00a0j ${hours}\u00a0h`,
   },
@@ -535,6 +537,7 @@ export const strings = {
       secondary: 'Plus tard',
       ghost: 'Annuler',
       destructive: 'Supprimer ce fait',
+      link: 'Autre dose ou autre date',
       disabled: 'Indisponible',
     },
     switchLabel: 'Rappel du patch',

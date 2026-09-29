@@ -16,7 +16,7 @@ const rateAndRecord = async (page: Page, intensity: string) => {
 const homeWithStreak = async (page: Page) => {
   await page.goto(sandboxAt(NOW))
   await startNow(page)
-  await expectStreak(page, 0, '00:00:00')
+  await expectStreak(page, 0, '00 h 00')
 }
 
 test('a craving held to the end is celebrated, rated and recorded', async ({ page }) => {
@@ -36,7 +36,7 @@ test('a craving held to the end is celebrated, rated and recorded', async ({ pag
   await rateAndRecord(page, '3')
 
   await expect(recordedNotice(page)).toBeVisible()
-  await expectStreak(page, 0, '01:00:00')
+  await expectStreak(page, 0, '01 h 00')
 })
 
 test('a craving stopped early is still recorded, without the celebration', async ({ page }) => {

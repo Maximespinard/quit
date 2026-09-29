@@ -20,7 +20,7 @@ test('after one online load, the app launches and works offline', async ({ page,
   await page.reload()
 
   await startNow(page)
-  await expectStreak(page, 0, '00:00:\\d\\d')
+  await expectStreak(page, 0, '00 h 00')
 
   await page.reload()
   await expect(streakRegion(page)).toBeVisible()

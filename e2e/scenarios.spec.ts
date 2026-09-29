@@ -13,7 +13,7 @@ const factCount = (page: Page) => page.getByText(/^\d+ faits?$/)
 test('a scenario in the url seeds the sandbox: day 45 shows yesterday’s slip', async ({ page }) => {
   await page.goto(sandboxWith('day-45-lapse'))
 
-  await expectStreak(page, 44, '02:00:00')
+  await expectStreak(page, 44, '02 h 00')
   await expect(page.getByText('Dernière cigarette il y a 12 h 20 min.')).toBeVisible()
   await expect(page.getByText('Un jour avec un écart.', { exact: false })).toBeVisible()
   await expect(totals(page).getByRole('definition').first()).toHaveText('42')
@@ -27,7 +27,7 @@ test('the panel loads a scenario, marks it current, and the real journal is unto
 }) => {
   await page.goto('/')
   await startNow(page)
-  await expectStreak(page, 0, '00:00:\\d\\d')
+  await expectStreak(page, 0, '00 h 00')
 
   await page.goto(sandboxAt(NOW))
   await marker(page).click()
@@ -42,7 +42,7 @@ test('the panel loads a scenario, marks it current, and the real journal is unto
   )
   await tap(page, 'Fermer')
 
-  await expectStreak(page, 28, '01:15:00')
+  await expectStreak(page, 28, '01 h 15')
   await expect(protocolSummary(page)).toContainText('Étape 2 / 3')
   await expect(protocolSummary(page)).toContainText('Jour 1 sur 28')
   await expect(page.getByRole('button', { name: /^Poser le patch · 14\smg$/ })).toBeVisible()
@@ -60,7 +60,7 @@ test('the panel loads a scenario, marks it current, and the real journal is unto
   // The real journal still holds its own quit moment, and nothing else.
   await page.goto('/')
   await expect(marker(page)).toHaveCount(0)
-  await expectStreak(page, 0, '00:00:\\d\\d')
+  await expectStreak(page, 0, '00 h 00')
 })
 
 test('a craving and a lapse are injected at the sandbox’s current time', async ({ page }) => {
@@ -77,7 +77,7 @@ test('a craving and a lapse are injected at the sandbox’s current time', async
 
   // A slip at the sandbox's clock: the streak keeps running from the quit moment.
   await expect(page.getByText('Dernière cigarette il y a moins d’une minute.')).toBeVisible()
-  await expectStreak(page, 28, '01:15:00')
+  await expectStreak(page, 28, '01 h 15')
 })
 
 test('nothing can be injected before a quit moment exists', async ({ page }) => {
@@ -100,7 +100,7 @@ test('the clock jumps to the next step change, then to the end of the protocol',
   await tap(page, 'Sauter à l’étape suivante')
   await tap(page, 'Fermer')
 
-  await expectStreak(page, 28, '00:00:00')
+  await expectStreak(page, 28, '00 h 00')
   await expect(protocolSummary(page)).toContainText('Étape 2 / 3')
   await expect(protocolSummary(page)).toContainText('Jour 1 sur 28')
   await expect(page.getByRole('button', { name: /^Poser le patch · 14\smg$/ })).toBeVisible()
@@ -111,7 +111,7 @@ test('the clock jumps to the next step change, then to the end of the protocol',
   await expect(page.getByRole('button', { name: 'Sauter à l’étape suivante' })).toBeDisabled()
   await tap(page, 'Fermer')
 
-  await expectStreak(page, 84, '00:00:00')
+  await expectStreak(page, 84, '00 h 00')
   await expect(protocolSummary(page)).toContainText('Protocole terminé')
   await expect(patchCard(page)).toHaveCount(0)
 })

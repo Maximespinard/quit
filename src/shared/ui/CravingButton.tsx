@@ -1,4 +1,3 @@
-import { Timer } from 'lucide-react'
 import type { ButtonHTMLAttributes } from 'react'
 import { cn } from '@/shared/utils/cn'
 
@@ -6,18 +5,21 @@ type CravingButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'childre
   label: string
 }
 
-/** The permanent thumb control: a 64px cream pill, the one fill nothing else shares at that size. */
+/**
+ * The permanent thumb control, Envie: the one lit object on the screen. A 64px pill in the
+ * pink → yellow gradient with its pink glow, which nothing else wears; at least 5/8 of the
+ * column wide, the mock's 62 %.
+ */
 export function CravingButton({ label, className, type = 'button', ...rest }: CravingButtonProps) {
   return (
     <button
       type={type}
       className={cn(
-        'inline-flex h-16 min-w-16 items-center justify-center gap-2 rounded-full bg-ink px-6 text-cta text-page transition-transform duration-150 ease-out-expo active:scale-[0.97] disabled:bg-ghost disabled:text-muted motion-reduce:transition-none',
+        'inline-flex h-16 min-w-5/8 items-center justify-center rounded-full bg-craving px-7 text-craving text-page transition-transform duration-150 ease-out-expo active:scale-[0.97] disabled:bg-none disabled:bg-ghost disabled:text-muted disabled:shadow-none motion-reduce:transition-none',
         className,
       )}
       {...rest}
     >
-      <Timer aria-hidden="true" className="size-5" strokeWidth={1.75} />
       {label}
     </button>
   )

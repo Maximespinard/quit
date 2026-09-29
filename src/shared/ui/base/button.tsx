@@ -15,6 +15,8 @@ const buttonVariants = cva(
         secondary: 'border border-ghost-line bg-transparent text-ink active:bg-ghost',
         ghost: 'bg-transparent text-ink active:bg-ghost',
         destructive: 'bg-alert/15 text-alert active:bg-alert/25',
+        // An underlined text action inside a card, its 44px target kept.
+        link: 'justify-start bg-transparent font-normal text-body text-ink underline decoration-ghost-line underline-offset-4',
       },
       size: {
         default: 'h-11 gap-2 px-4',
@@ -24,6 +26,8 @@ const buttonVariants = cva(
         'icon-sm': 'size-9',
       },
     },
+    // Listed after the sizes, so the merge keeps the link flush with the text around it.
+    compoundVariants: [{ variant: 'link', className: 'px-0' }],
     defaultVariants: {
       variant: 'primary',
       size: 'default',
