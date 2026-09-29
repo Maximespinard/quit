@@ -85,6 +85,12 @@ export const COLOR_TOKENS: readonly ColorToken[] = [
   { token: 'yellow', swatch: 'bg-yellow', value: '#f5d907', role: 'Dégradé d’Envie, et lui seul' },
   { token: 'moss', swatch: 'bg-moss', value: '#33402c', role: 'Halo du minuteur d’envie' },
   { token: 'bronze', swatch: 'bg-bronze', value: '#b88a4f', role: 'Halo du minuteur d’envie' },
+  {
+    token: 'series',
+    swatch: 'bg-series',
+    value: '#d08a2a',
+    role: 'Barres des graphiques — 6,3:1 sur carte, 3:1 estompées',
+  },
 ]
 
 export type TypeToken = {

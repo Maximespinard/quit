@@ -30,7 +30,7 @@ const labelStyle = (from: number, to: number) =>
 /**
  * One series in columns of one hue: thin bars, 2px apart, grown from a hairline baseline.
  * A finger dragged across (or a pointer over) the plot names one column in the readout;
- * the other columns step back while it does. Every value is also in a table for screen readers.
+ * the other columns step back while it does, never below 3:1 against the card. Every value is also in a table for screen readers.
  */
 export function ColumnChart({
   label,
@@ -80,7 +80,7 @@ export function ColumnChart({
           </div>
         ) : null}
         <div
-          className="relative h-28 touch-pan-y select-none border-line border-b"
+          className="relative h-28 touch-pan-y select-none border-ghost-line border-b"
           onPointerDown={pick}
           onPointerMove={pick}
           onPointerLeave={leave}
@@ -88,7 +88,7 @@ export function ColumnChart({
           {markers.map((marker) => (
             <span
               key={marker.index}
-              className="absolute inset-y-0 w-px bg-ghost-line"
+              className="absolute inset-y-0 w-px bg-muted"
               style={{ left: `${(marker.index / count) * 100}%` }}
             />
           ))}
@@ -100,8 +100,8 @@ export function ColumnChart({
               >
                 <div
                   className={cn(
-                    'w-full max-w-6 rounded-t-mark bg-ink transition-opacity duration-150 ease-out-expo motion-reduce:transition-none',
-                    active !== null && index !== active && 'opacity-35',
+                    'w-full max-w-6 rounded-t-mark bg-series transition-opacity duration-150 ease-out-expo motion-reduce:transition-none',
+                    active !== null && index !== active && 'opacity-60',
                   )}
                   // A column holding anything stays visible, however small beside the tallest.
                   style={{
