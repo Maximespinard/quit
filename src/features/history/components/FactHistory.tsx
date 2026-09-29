@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { ChevronRight } from 'lucide-react'
 import { useId } from 'react'
+import { Card } from '@/shared/ui/Card'
 import { keepSearch } from '@/shared/utils/app-search'
 import { formatTime } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
@@ -41,32 +42,34 @@ function HistoryDaySection({ heading, items }: HistoryDaySectionProps) {
         {heading}
       </h3>
       {/* One card a day, its facts split by hairlines, like the list card on the home. */}
-      <ul className="flex flex-col divide-y divide-line overflow-hidden rounded-card bg-surface">
-        {items.map(({ id, fact }) => {
-          const { title, detail } = describeFact(fact)
-          return (
-            <li key={id}>
-              <Link
-                to="/history/$factId"
-                params={{ factId: id }}
-                search={keepSearch}
-                // The time sits on the title's baseline; the chevron centres on the row. Pressed, the row
-                // lifts to `ghost`; `muted` keeps its contrast there too.
-                className="flex min-h-16 items-baseline gap-4 px-4 py-3 transition-colors duration-150 ease-out-expo focus-visible:-outline-offset-2 active:bg-ghost motion-reduce:transition-none"
-              >
-                <span className="w-11 shrink-0 text-body text-muted tabular-nums">
-                  {formatTime(fact.at)}
-                </span>
-                <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-                  <span className="font-medium text-body">{title}</span>
-                  <span className="truncate text-label text-muted">{detail}</span>
-                </span>
-                <ChevronRight aria-hidden className="size-4.5 shrink-0 self-center text-muted" />
-              </Link>
-            </li>
-          )
-        })}
-      </ul>
+      <Card padding="none" className="overflow-hidden">
+        <ul className="flex flex-col divide-y divide-line">
+          {items.map(({ id, fact }) => {
+            const { title, detail } = describeFact(fact)
+            return (
+              <li key={id}>
+                <Link
+                  to="/history/$factId"
+                  params={{ factId: id }}
+                  search={keepSearch}
+                  // The time sits on the title's baseline; the chevron centres on the row. Pressed, the row
+                  // lifts to `ghost`; `muted` keeps its contrast there too.
+                  className="flex min-h-16 items-baseline gap-4 px-5 py-3 transition-colors duration-150 ease-out-expo focus-visible:-outline-offset-2 active:bg-ghost motion-reduce:transition-none"
+                >
+                  <span className="w-11 shrink-0 text-body text-muted tabular-nums">
+                    {formatTime(fact.at)}
+                  </span>
+                  <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                    <span className="font-medium text-body">{title}</span>
+                    <span className="truncate text-label text-muted">{detail}</span>
+                  </span>
+                  <ChevronRight aria-hidden className="size-4.5 shrink-0 self-center text-muted" />
+                </Link>
+              </li>
+            )
+          })}
+        </ul>
+      </Card>
     </section>
   )
 }

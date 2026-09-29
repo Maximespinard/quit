@@ -1,5 +1,6 @@
 import type { Protocol } from '@quit/contract/settings'
 import { Button } from '@/shared/ui/base/button'
+import { Card } from '@/shared/ui/Card'
 import { formatDose } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
 import { SetupQuestion } from './SetupQuestion'
@@ -23,18 +24,20 @@ export function ProtocolStep({ protocol, onStart }: ProtocolStepProps) {
         </Button>
       }
     >
-      <ol className="flex flex-col divide-y divide-line rounded-card bg-surface px-4">
-        {protocol.map((step, index) => (
-          // The default protocol never changes while shown: its order is its identity.
-          // biome-ignore lint/suspicious/noArrayIndexKey: steps have no id of their own
-          <li key={index} className="flex items-baseline justify-between gap-3 py-3.5">
-            <span className="text-label text-muted">{strings.protocol.step(index + 1)}</span>
-            <span className="font-medium text-body tabular-nums">
-              {copy.step(formatDose(step.doseMg), step.durationDays)}
-            </span>
-          </li>
-        ))}
-      </ol>
+      <Card padding="rows">
+        <ol className="flex flex-col divide-y divide-line">
+          {protocol.map((step, index) => (
+            // The default protocol never changes while shown: its order is its identity.
+            // biome-ignore lint/suspicious/noArrayIndexKey: steps have no id of their own
+            <li key={index} className="flex items-baseline justify-between gap-3 py-3.5">
+              <span className="text-label text-muted">{strings.protocol.step(index + 1)}</span>
+              <span className="font-medium text-body tabular-nums">
+                {copy.step(formatDose(step.doseMg), step.durationDays)}
+              </span>
+            </li>
+          ))}
+        </ol>
+      </Card>
     </SetupQuestion>
   )
 }

@@ -31,8 +31,8 @@ export function DayCell({ cell, todayStart }: DayCellProps) {
   if (calendarDay === null) {
     return (
       <td className="p-0.5 align-top">
-        {/* Outside the calendar: a bare date, dimmer than any day to come, still above 3:1 on the card. */}
-        <div className={cn(cellLayout, 'text-muted/65')}>
+        {/* Outside the calendar: a bare date, dimmer than any day to come, still 4.5:1 on the card. */}
+        <div className={cn(cellLayout, 'text-muted/80')}>
           <span aria-hidden="true" className={dateLayout}>
             {date}
           </span>

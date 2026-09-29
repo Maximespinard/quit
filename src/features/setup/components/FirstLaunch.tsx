@@ -88,7 +88,8 @@ export function FirstLaunch({ journal, now, onStarted, restore }: FirstLaunchPro
             />
           ))}
         </div>
-        <p className="text-muted text-label tabular-nums">{copy.progress(step, STEP_COUNT)}</p>
+        {/* On the haze: ink, like the question's lead. */}
+        <p className="text-ink text-label tabular-nums">{copy.progress(step, STEP_COUNT)}</p>
       </div>
 
       {step === 1 ? (

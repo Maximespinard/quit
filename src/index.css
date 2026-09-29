@@ -19,9 +19,13 @@
   --color-white: #ffffff;
   --color-line: rgb(255 255 255 / 0.08);
   --color-ghost: rgb(255 255 255 / 0.05);
-  --color-ghost-line: rgb(255 255 255 / 0.3);
+  /* A control's edge: 36 % white clears 3:1 on the page and on a card (WCAG 1.4.11). */
+  --color-ghost-line: rgb(255 255 255 / 0.36);
   --color-alert: #ff6b72;
   --color-amber: #b8730f;
+  /* The haze's warm floor, from under the glows down to where it meets the page. */
+  --color-floor: #3a1a10;
+  --color-floor-deep: #1c1011;
   --color-ember: #8d2a1a;
   --color-plum: #7a1b5f;
   --color-pink: #fd429c;
@@ -34,10 +38,15 @@
 
   --font-sans: "Host Grotesk Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
 
-  --text-display: 11rem;
+  /* Container-relative: the giant figures (streak, minutes held) are a share of their column. */
+  --text-display: 62cqi;
   --text-display--line-height: 0.86;
   --text-display--letter-spacing: -0.055em;
   --text-display--font-weight: 500;
+  --text-countdown: 33cqi;
+  --text-countdown--line-height: 0.86;
+  --text-countdown--letter-spacing: -0.05em;
+  --text-countdown--font-weight: 500;
   --text-brand: 1.3125rem;
   --text-brand--line-height: 1;
   --text-brand--letter-spacing: -0.03em;
@@ -54,6 +63,9 @@
   --text-headline--line-height: 1.1;
   --text-headline--letter-spacing: -0.03em;
   --text-headline--font-weight: 500;
+  --text-prompt: 1.5rem;
+  --text-prompt--line-height: 1.2;
+  --text-prompt--letter-spacing: -0.025em;
   --text-title: 1.25rem;
   --text-title--line-height: 1.2;
   --text-title--letter-spacing: -0.02em;
@@ -71,6 +83,10 @@
   --text-label--line-height: 1.3;
   --text-detail: 0.75rem;
   --text-detail--line-height: 1.2;
+  /* A figure's unit (€, %, j, h), relative to the figure it follows. */
+  --text-unit: 0.55em;
+  --text-unit--line-height: 1;
+  --text-unit--letter-spacing: 0;
   --text-tab: 0.6875rem;
   --text-tab--line-height: 1;
   --text-tab--font-weight: 500;
@@ -124,18 +140,47 @@
 }
 
 /*
- * The home hero's haze, drawn in code (no raster): amber, plum and ember glows over a warm
- * floor that fades into the page. Only the home hero wears it.
+ * The hero haze, drawn in code (no raster): amber, plum and ember glows over a warm floor that
+ * fades into the page. The home hero and first launch wear it. The amber sits between the
+ * brand and the figure: both keep 3:1 at their worst pixel (large text).
  */
 @utility bg-haze {
   background-image:
-    radial-gradient(60% 42% at 12% 6%, var(--color-amber), transparent 70%),
+    radial-gradient(60% 42% at 10% 12%, var(--color-amber), transparent 70%),
     radial-gradient(55% 40% at 86% 12%, var(--color-plum), transparent 72%),
     radial-gradient(80% 50% at 50% 34%, var(--color-ember), transparent 75%),
-    linear-gradient(180deg, #3a1a10 0%, #1c1011 55%, var(--color-page) 100%);
+    linear-gradient(
+      180deg,
+      var(--color-floor) 0%,
+      var(--color-floor-deep) 55%,
+      var(--color-page) 100%
+    );
 }
 
-/* Fine fractal noise laid over a haze (with `mix-blend-overlay`): an inline SVG, no request. */
+/*
+ * The haze's low band, behind every other screen's top bar and title: plum and ember only
+ * (no amber under text), so the world never switches off below home.
+ */
+@utility bg-haze-band {
+  background-image:
+    radial-gradient(60% 100% at 88% 0%, var(--color-plum), transparent 72%),
+    radial-gradient(80% 100% at 24% 0%, var(--color-ember), transparent 75%),
+    linear-gradient(180deg, var(--color-floor-deep) 0%, var(--color-page) 100%);
+}
+
+/*
+ * A haze's lower edge: glows and grain fade out together, so the haze meets the page without a
+ * step (the grain alone would lift the last pixels above the page).
+ */
+@utility mask-haze {
+  mask-image: linear-gradient(to bottom, #000 65%, transparent);
+}
+
+/*
+ * Fine fractal noise laid over a haze (with `mix-blend-overlay`): an inline SVG, no request.
+ * The one grain of the world, home and timer alike. Its alpha (0.9) feeds the timer's contrast
+ * model as `GRAIN_NOISE_ALPHA`: change both together.
+ */
 @utility bg-grain {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
 }
