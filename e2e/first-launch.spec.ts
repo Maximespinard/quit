@@ -90,10 +90,8 @@ test('every first-launch answer survives a reload', async ({ page }) => {
   await page.reload()
   await page.getByRole('link', { name: 'Réglages' }).click()
 
-  await expect(
-    page.getByRole('form', { name: 'Dépense en tabac par semaine' }).getByRole('textbox'),
-  ).toHaveValue('35')
-  await expect(
-    page.getByRole('form', { name: 'Cigarettes par jour, avant' }).getByRole('textbox'),
-  ).toHaveValue('15')
+  await expect(page.getByRole('textbox', { name: 'Dépense en tabac par semaine' })).toHaveValue(
+    '35',
+  )
+  await expect(page.getByRole('textbox', { name: 'Cigarettes par jour, avant' })).toHaveValue('15')
 })

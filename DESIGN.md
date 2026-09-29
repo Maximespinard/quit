@@ -486,6 +486,15 @@ pas de fête, pas de reproche.
 - **Écran d'un fait :** le formulaire qui l'a enregistré, prérempli ; `Supprimer` (destructif,
   `lg`) vient **sous un filet `line`**, jamais collé à `Enregistrer`. Supprimer une cigarette
   passe par un `Dialog` (`Oui, supprimer` / `Garder`) ; les autres faits partent en un tap.
+- **Réglages :** **un seul formulaire, un seul `Enregistrer`** (`lg`, pleine largeur) pour le
+  moment de l'arrêt, la dépense et les cigarettes par jour — pas une carte ni un bouton par
+  valeur. Les champs sont posés sur la page comme ceux de l'objectif, libellé `label` au-dessus.
+  `Enregistrer` dort tant que rien ne diffère de ce qui est en vigueur. Tout passe ou rien :
+  chaque refus s'affiche **sous son propre champ** (exception à l'alerte unique près du bouton,
+  car trois valeurs indépendantes peuvent être refusées ensemble). L'enregistrement réussi
+  ramène à l'accueil, comme le protocole et l'objectif : c'est l'accueil, qui montre déjà
+  l'effet, qui acquitte. Jamais de libellé « Enregistré » à côté du bouton. Dessous, à 32px :
+  `Modifier le protocole` puis la sauvegarde, chacun dans sa carte `surface`.
 ### Bloc héros (signature)
 
 Le seul objet illustré de l'app. Une `section` en `relative isolate overflow-hidden`, fond
@@ -540,7 +549,8 @@ au-dessus du libellé `tab`, hauteur d'item 48px, filet supérieur `line`, fond 
 - **Champ texte / nombre :** même peau que le champ date. Les nombres sont des `input` texte
   avec `inputMode` (`decimal` pour une dose, qui accepte la virgule ; `numeric` pour des
   jours), jamais `type="number"`. Erreur : même mécanique, un seul `<p role="alert">` pour le
-  formulaire, près du bouton d'enregistrement, et `aria-invalid` sur chaque champ fautif.
+  formulaire, près du bouton d'enregistrement, et `aria-invalid` sur chaque champ fautif —
+  sauf dans les réglages, où chaque refus vit sous son champ (voir _Réglages_).
 
 ### Overlays
 

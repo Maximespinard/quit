@@ -1,45 +1,25 @@
 import { Link } from '@tanstack/react-router'
 import { ChevronRight } from 'lucide-react'
 import type { Journal } from '@/shared/domain/journal'
-import { setBaselineSmokesPerDay, setWeeklySpend } from '@/shared/domain/journal-settings'
 import { keepSearch } from '@/shared/utils/app-search'
 import { formatDose } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
-import { baselineInput, spendInput } from '../utils/value-inputs'
-import { QuitMomentSetting } from './QuitMomentSetting'
-import { ValueSetting } from './ValueSetting'
+import { SettingsForm } from './SettingsForm'
 
 type SettingsScreenProps = {
   journal: Journal
   /** Injected clock: the screen never reads the system time itself. */
   now: number
-  onSaved: (journal: Journal) => Promise<void>
+  onSaved: (journal: Journal) => void
 }
 
 const copy = strings.settings
 
-const okOrNull = (result: { ok: true; journal: Journal } | { ok: false }) =>
-  result.ok ? result.journal : null
-
-/** Everything first launch asked, editable again; each setting saves on its own. */
+/** The settings form, then the way to the protocol editor, which has its own save. */
 export function SettingsScreen({ journal, now, onSaved }: SettingsScreenProps) {
   return (
-    <div className="flex flex-col gap-5">
-      <QuitMomentSetting journal={journal} now={now} onSaved={onSaved} />
-      <ValueSetting
-        label={copy.spend.label}
-        input={spendInput}
-        value={journal.weeklySpendCents}
-        apply={(cents) => okOrNull(setWeeklySpend(journal, cents))}
-        onSaved={onSaved}
-      />
-      <ValueSetting
-        label={copy.baseline.label}
-        input={baselineInput}
-        value={journal.baselineSmokesPerDay}
-        apply={(perDay) => okOrNull(setBaselineSmokesPerDay(journal, perDay))}
-        onSaved={onSaved}
-      />
+    <div className="flex flex-col gap-8">
+      <SettingsForm journal={journal} now={now} onSaved={onSaved} />
       <Link
         to="/protocol"
         search={keepSearch}
