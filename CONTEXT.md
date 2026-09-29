@@ -95,16 +95,32 @@ The body area where a patch is put on. Two consecutive patch applications never 
 _Avoid_: Location, spot, zone
 
 **Fact**:
-Something the user recorded as having happened: the quit moment, a patch application, a craving, a lapse, a check-in. Everything else the app shows is derived from facts.
+Something the user recorded as having happened: the quit moment, a patch application, a craving, a lapse, a check-in. Everything else the app shows is derived from facts. A corrected fact stays the same fact.
 _Avoid_: Event, entry, record
 
 **Journal**:
-The whole set of facts recorded by one person, plus the settings that shape what is derived from them: the protocol, the weekly spend, the baseline smokes per day, the goal and the reminder preferences. It is the only thing exported and imported, and beside the backup record, the only thing stored.
+The whole set of facts recorded by one person, plus the settings that shape what is derived from them: the protocol, the weekly spend, the baseline smokes per day, the goal and the reminder preferences. It is the only thing exported, imported and mirrored; on the device, beside the backup record and the pending changes, it is the only thing stored.
 _Avoid_: History, database, log, diary
 
 **Backup record**:
-What the device keeps about its own backups: when the journal was last exported (or imported) and when the export reminder was last dismissed. It is neither a fact nor a setting, belongs to the device rather than the journey, and is never exported. The sandbox keeps its own, in memory.
+What the device keeps about its own exports: when the journal was last exported (or imported). It is neither a fact nor a setting, belongs to the device rather than the journey, and is never exported or mirrored. The sandbox keeps its own, in memory.
 _Avoid_: Backup history, export log, sync state
+
+**Mirror**:
+The server's copy of the journal, brought up to date with every change the device records. The device's journal stays the reference: the mirror follows it and is read back only by a restore. Only the real journal is mirrored, never the sandbox nor demo mode.
+_Avoid_: Backup, cloud, replica, remote copy, sync
+
+**Pending change**:
+A change recorded in the device's journal that the mirror has not received yet. It waits on the device and leaves as soon as the server can be reached.
+_Avoid_: Outbox item, queue, unsynced change
+
+**Restore**:
+Replacing the device's journal with the mirror's content, after confirmation when the device's journal already holds facts.
+_Avoid_: Sync, download, import (an import reads a file)
+
+**Device key**:
+The secret that lets a device keep the mirror and receive push reminders. Only one exists at a time: issuing a new one revokes the previous.
+_Avoid_: Password, token, account, API key, login
 
 **Scenario**:
 A named journal paired with a value of the current time, describing one precise situation of the app. The same scenarios are reused by the tests, by the debug panel and by demo mode.
