@@ -61,6 +61,15 @@ test('a declared lapse is confirmed under the hero', async ({ page }) => {
   await expectUnderHero(page, 'C’est noté.')
 })
 
+test('a patch logged from its form is confirmed under the hero', async ({ page }) => {
+  await homeWithStreak(page)
+
+  await page.getByRole('link', { name: 'Autre dose ou autre date' }).click()
+  await tap(page, 'Enregistrer le patch')
+
+  await expectUnderHero(page, 'Patch noté.')
+})
+
 test('an imported journal is confirmed under the hero', async ({ page }) => {
   await page.goto(sandboxWith('day-45-lapse'))
   await page.getByRole('link', { name: 'Réglages' }).click()

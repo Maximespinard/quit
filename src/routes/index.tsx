@@ -1,4 +1,4 @@
-import { createFileRoute, type HistoryState, Link, useLocation } from '@tanstack/react-router'
+import { createFileRoute, Link, useLocation } from '@tanstack/react-router'
 import { Settings } from 'lucide-react'
 import { BackupReminder } from '@/features/backup/components/BackupReminder'
 import { ImportJournal } from '@/features/backup/components/ImportJournal'
@@ -15,7 +15,7 @@ import { StreakScreen } from '@/features/streak/components/StreakScreen'
 import { StreakTotals } from '@/features/streak/components/StreakTotals'
 import { derive } from '@/shared/domain/derive'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
-import { useRecordedThenHome } from '@/shared/hooks/useRecordedThenHome'
+import { recordedNotice, useRecordedThenHome } from '@/shared/hooks/useRecordedThenHome'
 import { AppShell } from '@/shared/ui/app-shell'
 import { buttonVariants } from '@/shared/ui/base/button'
 import { Card } from '@/shared/ui/Card'
@@ -29,19 +29,11 @@ export const Route = createFileRoute('/')({
   component: HomePage,
 })
 
-/** What home confirms after a craving, a lapse or an import; the patch card confirms its own. */
-function confirmation(state: HistoryState): string | null {
-  if (state.cravingRecorded === true) return strings.craving.recorded
-  if (state.lapseRecorded === true) return strings.lapse.recorded
-  if (state.journalImported === true) return strings.backup.imported
-  return null
-}
-
 function HomePage() {
   const { state, commit, now } = useJournalSource()
   const appSearch = validateAppSearch(Route.useSearch())
   const imported = useRecordedThenHome(appSearch, 'journalImported')
-  const notices = useLocation({ select: (location) => location.state })
+  const notice = useLocation({ select: (location) => recordedNotice(location.state) })
   const brand = <SandboxEntry>{strings.app.name}</SandboxEntry>
 
   return (
@@ -74,7 +66,7 @@ function HomePage() {
               streak={derived.streak}
               brand={brand}
               context={protocolContext(derived.protocol)}
-              status={<StatusLine message={confirmation(notices)} />}
+              status={<StatusLine message={notice} />}
               action={
                 <Link
                   to="/settings"
@@ -108,7 +100,6 @@ function HomePage() {
                   suggestedSite={derived.suggestedSite}
                   previousSite={derived.previousSite}
                   now={now}
-                  recorded={notices.patchRecorded === true}
                   onRecorded={commit}
                 />
               )}
