@@ -1,10 +1,12 @@
 import { GOAL_LABEL_MAX_LENGTH } from '@quit/contract/settings'
-import { type FormEvent, useId, useState } from 'react'
+import { type FormEvent, type ReactNode, useId, useState } from 'react'
 import type { GoalProgress } from '@/shared/domain/derive'
 import { type SetGoalResult, setGoal } from '@/shared/domain/goal'
 import type { Journal } from '@/shared/domain/journal'
 import { Button } from '@/shared/ui/base/button'
 import { Input } from '@/shared/ui/base/input'
+import { FormScreen } from '@/shared/ui/FormScreen'
+import { ThumbZone } from '@/shared/ui/ThumbZone'
 import { fromEuroText, toEuroText } from '@/shared/utils/euros'
 import { strings } from '@/shared/utils/strings'
 
@@ -15,6 +17,8 @@ type GoalFormProps = {
   /** The goal in force: one still to reach is edited, one reached is replaced from blank. */
   goal: GoalProgress | null
   onSaved: (journal: Journal) => void
+  /** Under the primary action: the way out. */
+  secondary?: ReactNode
 }
 
 type Refusal = Extract<SetGoalResult, { ok: false }>['reason']
@@ -22,7 +26,7 @@ type Refusal = Extract<SetGoalResult, { ok: false }>['reason']
 const copy = strings.goal.form
 
 /** Names the one thing to save for and its price. */
-export function GoalForm({ journal, now, goal, onSaved }: GoalFormProps) {
+export function GoalForm({ journal, now, goal, onSaved, secondary }: GoalFormProps) {
   const replacesReached = goal?.reached === true
   const initial = goal === null || replacesReached ? null : goal
   const labelId = useId()
@@ -41,12 +45,8 @@ export function GoalForm({ journal, now, goal, onSaved }: GoalFormProps) {
   }
 
   return (
-    <section className="flex flex-col gap-6 pt-6">
-      <div className="flex flex-col gap-2">
-        <h2 className="text-title">{copy.title}</h2>
-        <p className="text-body text-muted">{replacesReached ? copy.restart : copy.lead}</p>
-      </div>
-      <form noValidate onSubmit={submit} className="flex flex-col gap-5">
+    <FormScreen title={copy.title} lead={replacesReached ? copy.restart : copy.lead}>
+      <form noValidate onSubmit={submit} className="flex flex-1 flex-col gap-5">
         <div className="flex flex-col gap-3">
           <label htmlFor={labelId} className="text-label">
             {copy.label}
@@ -100,10 +100,12 @@ export function GoalForm({ journal, now, goal, onSaved }: GoalFormProps) {
               : copy['invalid-price']}
           </p>
         ) : null}
-        <Button type="submit" size="lg">
-          {copy.submit}
-        </Button>
+        <ThumbZone secondary={secondary}>
+          <Button type="submit" size="lg">
+            {copy.submit}
+          </Button>
+        </ThumbZone>
       </form>
-    </section>
+    </FormScreen>
   )
 }

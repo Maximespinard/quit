@@ -1,10 +1,12 @@
-import { type FormEvent, useId, useState } from 'react'
+import { type FormEvent, type ReactNode, useId, useState } from 'react'
 import { type LapseInput, type RecordLapseResult, recordLapse } from '@/shared/domain/facts/lapse'
 import type { Journal } from '@/shared/domain/journal'
 import { triggersRelapse } from '@/shared/domain/relapse'
 import { Button } from '@/shared/ui/base/button'
 import { Input } from '@/shared/ui/base/input'
 import { Card } from '@/shared/ui/Card'
+import { FormScreen } from '@/shared/ui/FormScreen'
+import { ThumbZone } from '@/shared/ui/ThumbZone'
 import { fromDatetimeLocal, toDatetimeLocal } from '@/shared/utils/datetime-local'
 import { newFactId } from '@/shared/utils/fact-id'
 import { strings } from '@/shared/utils/strings'
@@ -17,6 +19,8 @@ type LapseFormProps = {
   /** The lapse being edited, the journal then holding everything but it; absent to declare one. */
   initial?: LapseInput
   onRecorded: (journal: Journal) => void
+  /** Under the primary action: the way out, and on a fact's page its deletion. */
+  secondary?: ReactNode
 }
 
 type LapseError = Extract<RecordLapseResult, { ok: false }>['reason'] | 'invalid'
@@ -26,7 +30,7 @@ type LapseError = Extract<RecordLapseResult, { ok: false }>['reason'] | 'invalid
  * deliberate step; the explicit confirm button is the second, so a stray tap never logs one.
  * When the lapse would make a relapse, its cost is said before it lands.
  */
-export function LapseForm({ journal, now, initial, onRecorded }: LapseFormProps) {
+export function LapseForm({ journal, now, initial, onRecorded, secondary }: LapseFormProps) {
   const inputId = useId()
   const errorId = useId()
   const [value, setValue] = useState(() => toDatetimeLocal(initial?.at ?? now))
@@ -51,12 +55,8 @@ export function LapseForm({ journal, now, initial, onRecorded }: LapseFormProps)
   }
 
   return (
-    <section className="flex flex-col gap-6 pt-6">
-      <div className="flex flex-col gap-2">
-        <h2 className="text-title">{initial ? copy.edit.title : copy.title}</h2>
-        <p className="text-body text-muted">{copy.lead}</p>
-      </div>
-      <form noValidate onSubmit={submit} className="flex flex-col gap-5">
+    <FormScreen title={initial ? copy.edit.title : copy.title} lead={copy.lead}>
+      <form noValidate onSubmit={submit} className="flex flex-1 flex-col gap-5">
         <div className="flex flex-col gap-3">
           <label htmlFor={inputId} className="text-label">
             {copy.dateLabel}
@@ -90,10 +90,12 @@ export function LapseForm({ journal, now, initial, onRecorded }: LapseFormProps)
             {copy[error]}
           </p>
         ) : null}
-        <Button type="submit" size="lg">
-          {initial ? copy.edit.confirm : copy.confirm}
-        </Button>
+        <ThumbZone secondary={secondary}>
+          <Button type="submit" size="lg">
+            {initial ? copy.edit.confirm : copy.confirm}
+          </Button>
+        </ThumbZone>
       </form>
-    </section>
+    </FormScreen>
   )
 }

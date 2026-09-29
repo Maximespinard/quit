@@ -6,6 +6,7 @@ import { useRecordedThenHome } from '@/shared/hooks/useRecordedThenHome'
 import { AppShell } from '@/shared/ui/app-shell'
 import { buttonVariants } from '@/shared/ui/base/button'
 import { ReadyJournal } from '@/shared/ui/ReadyJournal'
+import { ThumbZone } from '@/shared/ui/ThumbZone'
 import { validateAppSearch } from '@/shared/utils/app-search'
 import { strings } from '@/shared/utils/strings'
 
@@ -22,23 +23,28 @@ function PatchApplicationPage() {
     <ReadyJournal state={state}>
       {(journal) => {
         const { protocol } = derive(journal, now)
+        const cancel = (
+          <Link
+            to="/"
+            search={appSearch}
+            className={buttonVariants({ variant: 'ghost', size: 'lg' })}
+          >
+            {strings.patch.form.cancel}
+          </Link>
+        )
         return (
           <AppShell>
-            {protocol === null ? null : (
+            {protocol === null ? (
+              <ThumbZone>{cancel}</ThumbZone>
+            ) : (
               <PatchApplicationForm
                 journal={journal}
                 position={protocol}
                 now={now}
                 onRecorded={recorded}
+                secondary={cancel}
               />
             )}
-            <Link
-              to="/"
-              search={appSearch}
-              className={buttonVariants({ variant: 'ghost', size: 'lg' })}
-            >
-              {strings.patch.form.cancel}
-            </Link>
           </AppShell>
         )
       }}

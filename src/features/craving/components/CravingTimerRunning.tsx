@@ -1,9 +1,11 @@
 import { useId } from 'react'
 import { Button } from '@/shared/ui/base/button'
 import { TopBar } from '@/shared/ui/TopBar'
+import { cn } from '@/shared/utils/cn'
 import { MINUTE_MS } from '@/shared/utils/duration'
 import { strings } from '@/shared/utils/strings'
 import { CRAVING_TIMER_MS } from '../domain/craving-timer'
+import { useStopReady } from '../hooks/useStopReady'
 import { formatCountdown } from '../utils/format-countdown'
 import { CravingHaze } from './CravingHaze'
 import { MinuteSteps } from './MinuteSteps'
@@ -15,13 +17,16 @@ type CravingTimerRunningProps = {
 
 /**
  * The running timer: the screen turns to slow moss and bronze around one white countdown,
- * and `Arrêter` sits in the thumb zone. Only the seconds and the haze move.
+ * and `Arrêter` sits in the thumb zone. `Arrêter` fades in and answers only once fully in
+ * (`useStopReady`), so the tap on Envie that opened the timer cannot also stop it; reduced
+ * motion skips the fade, not the wait. After that, only the seconds and the haze move.
  */
 export function CravingTimerRunning({ remainingMs, onStop }: CravingTimerRunningProps) {
   const labelId = useId()
   const regionId = useId()
   const copy = strings.craving.timer
   const heldMinutes = Math.floor((CRAVING_TIMER_MS - remainingMs) / MINUTE_MS)
+  const stopReady = useStopReady()
 
   return (
     <section
@@ -44,8 +49,21 @@ export function CravingTimerRunning({ remainingMs, onStop }: CravingTimerRunning
         </div>
         <MinuteSteps total={CRAVING_TIMER_MS / MINUTE_MS} held={heldMinutes} />
       </div>
-      <div className="pt-6 pb-safe-4">
-        <Button variant="secondary" size="lg" className="w-full" onClick={onStop}>
+      <div
+        className={cn(
+          'pt-6 pb-safe-4 motion-safe:animate-stop-in',
+          !stopReady && 'motion-reduce:opacity-0',
+        )}
+      >
+        {/* Focusable while waiting: `aria-disabled` keeps the secondary look through the fade. */}
+        <Button
+          variant="secondary"
+          size="lg"
+          className="w-full"
+          disabled={!stopReady}
+          focusableWhenDisabled
+          onClick={onStop}
+        >
           {copy.stop}
         </Button>
       </div>
