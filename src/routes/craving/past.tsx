@@ -25,7 +25,7 @@ function PastCravingPage() {
           <Link
             to="/"
             search={appSearch}
-            className={buttonVariants({ variant: 'ghost', size: 'lg' })}
+            className={buttonVariants({ variant: 'secondary', size: 'lg' })}
           >
             {strings.craving.past.cancel}
           </Link>
