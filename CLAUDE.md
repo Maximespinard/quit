@@ -22,7 +22,7 @@ Design context lives in `PRODUCT.md` + `DESIGN.md` (impeccable's own files), not
 - npm workspaces: the app at the root, `contract/` (zod 4 **mini** schemas — facts, settings, journal
   file, API bodies; types inferred, never hand-written; imported as `@quit/contract/<module>`),
   `server/` (Express 5, SQLite through Drizzle, also the push sender; runs its TypeScript directly on Node 24)
-- Deploy: one image behind a Cloudflare Tunnel, a merge to `main` is live within ~2 min (`docs/deploy.md`)
+- Deploy: one image behind a Cloudflare Tunnel, a merge to `main` is live ~2 min after CI publishes its image (`docs/deploy.md`)
 
 ## Commands
 

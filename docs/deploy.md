@@ -1,8 +1,8 @@
 # Deploy
 
 Production runs on one VPS, public at `https://quit.atelierspinard.com` through a Cloudflare
-Tunnel. A merge to `main` is a deploy: it is live within about two minutes, and a release that
-fails its health check is rolled back by itself.
+Tunnel. A merge to `main` is a deploy: once CI has published its image, it is live within about
+two minutes, and a release that fails its health check is rolled back by itself.
 
 ## How it works
 
@@ -15,13 +15,17 @@ fails its health check is rolled back by itself.
 - **Data.** The SQLite database lives on the `quit_data` volume; it is the mirror of the
   device's journal (`docs/adr/0003`), and survives every deploy.
 - **Secrets stay on the host**, in `/etc/quit/` (mode 600, root only): `tunnel.env` holds the
-  tunnel token, `quit.env` the VAPID key pair and subject. None is in the repository or the image.
+  tunnel token, `quit.env` the VAPID key pair and subject. None is in the repository or the
+  image. Once started, each container holds its own in its environment, like any process.
 - **Continuous deploy.** CI publishes `ghcr.io/maximespinard/quit:main` on every merge. Every
-  minute `quit-update.timer` runs `/opt/quit/update.sh`: it pulls `main` and, when it changed,
-  moves the local `quit:current` tag to it, recreates the app and asks it `/api/health` on the
-  private network. Without an answer within 60 s, it puts the previous image back and
-  remembers the rejected one, so the timer does not retry it; the next image on `main` is
-  tried as usual.
+  minute `quit-update.timer` runs `/opt/quit/update.sh`: it pulls `main` and, when it differs
+  from `quit:live` (the last image that passed its check), points `quit:current` at it,
+  recreates the app and asks it `/api/health` on the private network. It passes: it becomes
+  `quit:live`. No answer within 60 s: `quit:live` goes back, and the rejected image is
+  remembered so the timer does not retry it; the next image on `main` is tried as usual. A
+  deploy cut short (reboot, failed start) is simply tried again at the next tick.
+- **The very first deploy has nothing to roll back to**: if it fails, the app stays down until
+  a fixed image is published.
 
 | Installed file | Role |
 | --- | --- |
@@ -29,7 +33,7 @@ fails its health check is rolled back by itself.
 | `/opt/quit/update.sh` | deploy and rollback |
 | `/etc/systemd/system/quit-update.{service,timer}` | runs `update.sh` every minute |
 | `/etc/quit/{tunnel,quit}.env` | secrets |
-| `/var/lib/quit/` | the rejected image, the lock, the firewall and port snapshot |
+| `/var/lib/quit/` | the rejected image, the deploy lock, the firewall and port snapshot |
 
 The timer only ever runs the installed copies, owned by root, never a checkout: a change
 under `deploy/` reaches the host when `setup.sh` runs again.
@@ -58,11 +62,22 @@ sudo docker compose -f /opt/quit/compose.yaml ps      # both containers
 sudo docker exec quit node src/issue-device-key.ts    # a new device key; the previous one stops working
 ```
 
-**Try a rollback** once after the install, then whenever `update.sh` changes:
+**Try a rollback** once after the install, then whenever `update.sh` changes. It redeploys the
+live image, treats it as failed and rolls back: about a minute of downtime, no foreign image.
 
 ```bash
-sudo /opt/quit/update.sh --image nginx:alpine   # fails its health check: must print "rolled back"
+sudo /opt/quit/update.sh --simulate-failure   # must end with "rolled back to sha256:…"
 ```
+
+**Go back to an older release** when `main` passes its check but misbehaves:
+
+```bash
+sudo /opt/quit/update.sh --image ghcr.io/maximespinard/quit:<commit sha>
+```
+
+It takes quit images only, since compose hands the secrets and the data to whatever it runs.
+Once it passes, the current `main` is marked rejected, so the timer keeps the older release
+until a new image lands on `main`.
 
 **Rotate the tunnel token**: refresh it in the Cloudflare dashboard, run `setup.sh` again and
 paste the new one, then `sudo docker compose -f /opt/quit/compose.yaml up -d tunnel`.

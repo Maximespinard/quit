@@ -110,8 +110,8 @@ E2E_BASE_URL=http://127.0.0.1:8080 npm run test:e2e -- smoke.spec.ts offline.spe
 ## Deploy
 
 The image runs on a VPS behind a Cloudflare Tunnel: no inbound port, secrets kept on the host.
-A merge to `main` is live within about two minutes, and a release that fails its health check
-is rolled back by itself. Install, operations and rollback: [`docs/deploy.md`](docs/deploy.md).
+A merge to `main` goes live about two minutes after CI publishes its image, and a release that
+fails its health check is rolled back by itself. Install, operations and rollback: [`docs/deploy.md`](docs/deploy.md).
 
 ## Docs
 

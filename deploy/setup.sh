@@ -263,7 +263,8 @@ else
   step "pulling $IMAGE"
   docker pull -q "$IMAGE" >/dev/null
   vapid_public="" vapid_private=""
-  read -r vapid_public vapid_private < <(docker run --rm --entrypoint node "$IMAGE" -e \
+  # --log-driver none: the private key is printed on the container's stdout, never logged.
+  read -r vapid_public vapid_private < <(docker run --rm --log-driver none --entrypoint node "$IMAGE" -e \
     "const k = require('web-push').generateVAPIDKeys(); console.log(k.publicKey, k.privateKey)") || true
   if [[ -z $vapid_public || -z $vapid_private ]]; then
     warn "the key pair could not be generated; nothing was written"
@@ -292,16 +293,19 @@ install -m 755 "$DEPLOY_DIR/update.sh" /opt/quit/update.sh
 install -m 644 "$DEPLOY_DIR/quit-update.service" "$DEPLOY_DIR/quit-update.timer" /etc/systemd/system/
 systemctl daemon-reload
 step "files installed"
+docker image rm quit:previous >/dev/null 2>&1 || true # the tag of an earlier update.sh
 step "deploying the app (up to a minute)"
-if ! /opt/quit/update.sh; then
+# update.sh exits 0 as well when there was nothing to deploy: --check says whether the app is up.
+if ! /opt/quit/update.sh || ! /opt/quit/update.sh --check; then
   warn "the app did not pass its health check. Its last lines:"
   docker logs --tail 30 quit 2>&1 | sed 's/^/    /' || true
   exit 1
 fi
-"${COMPOSE[@]}" up -d
+# Waits for a deploy the timer may be running, so the two never recreate the app at once.
+flock -w 300 "$STATE/update.lock" "${COMPOSE[@]}" up -d
 step "app and tunnel running"
 systemctl enable --now quit-update.timer >/dev/null 2>&1
-step "timer on: a merge to main is live within about two minutes"
+step "timer on: each image CI publishes on main is live within about two minutes"
 "${COMPOSE[@]}" ps
 pause
 
@@ -341,8 +345,9 @@ fi
 printf '\n'
 say "Next, by hand:"
 note "  install the app: open https://$PUBLIC_HOST in Safari → Share → Add to Home Screen"
-note "  try a rollback once: sudo /opt/quit/update.sh --image nginx:alpine  (it must roll back)"
+note "  try a rollback once: sudo /opt/quit/update.sh --simulate-failure  (it must roll back)"
 note "  device key, once the app can link (SYR-75): sudo docker exec quit node src/issue-device-key.ts"
 pause "Press Enter to finish"
 
+ENV_FILE="$CONFIG_DIR/ (tunnel.env, quit.env)" # the summary names one file; the values went to both
 finish
