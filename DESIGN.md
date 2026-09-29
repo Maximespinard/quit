@@ -549,7 +549,8 @@ au-dessus du libellé `tab`, hauteur d'item 48px, filet supérieur `line`, fond 
 - **Champ texte / nombre :** même peau que le champ date. Les nombres sont des `input` texte
   avec `inputMode` (`decimal` pour une dose, qui accepte la virgule ; `numeric` pour des
   jours), jamais `type="number"`. Erreur : même mécanique, un seul `<p role="alert">` pour le
-  formulaire, près du bouton d'enregistrement, et `aria-invalid` sur chaque champ fautif.
+  formulaire, près du bouton d'enregistrement, et `aria-invalid` sur chaque champ fautif —
+  sauf dans les réglages, où chaque refus vit sous son champ (voir _Réglages_).
 
 ### Overlays
 
