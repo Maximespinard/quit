@@ -1,7 +1,7 @@
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto'
 import { isNull } from 'drizzle-orm'
-import type { Db } from './database.ts'
-import { deviceKeys } from './schema.ts'
+import type { Db } from '../db/database.ts'
+import { deviceKeys } from '../db/schema.ts'
 
 /** 256 bits of randomness, far beyond any guessing through a rate-limited API. */
 const KEY_BYTES = 32

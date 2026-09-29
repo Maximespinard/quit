@@ -7,11 +7,11 @@ import type { FactId } from '@quit/contract/facts'
 import { PROBLEM_CONTENT_TYPE, problemSchema } from '@quit/contract/problem'
 import { type PushNotification, pushNotificationSchema } from '@quit/contract/push'
 import { expect } from 'vitest'
-import { createApp } from './app.ts'
-import { openDatabase } from './database.ts'
-import { issueDeviceKey } from './device-keys.ts'
-import { createLogger } from './logger.ts'
-import { createPushSender, type SendOutcome, type Transport } from './push-sender.ts'
+import { createApp } from '../app.ts'
+import { issueDeviceKey } from '../auth/device-keys.ts'
+import { openDatabase } from '../db/database.ts'
+import { createLogger } from '../logger.ts'
+import { createPushSender, type SendOutcome, type Transport } from '../push/push-sender.ts'
 
 /**
  * The server as the tests drive it: the real app on a free port, backed by a real SQLite file

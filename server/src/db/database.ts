@@ -11,7 +11,7 @@ export const DATABASE_FILE = 'quit.db'
 /** How long a write waits for another connection's lock (the issue command) before failing. */
 const BUSY_TIMEOUT_MS = 5_000
 
-const MIGRATIONS_FOLDER = fileURLToPath(new URL('../drizzle', import.meta.url))
+const MIGRATIONS_FOLDER = fileURLToPath(new URL('../../drizzle', import.meta.url))
 
 export type Db = BetterSQLite3Database<typeof schema>
 

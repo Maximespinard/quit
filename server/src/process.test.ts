@@ -9,7 +9,7 @@ import { createInterface } from 'node:readline'
 import { promisify } from 'node:util'
 import { afterEach, describe, expect, it } from 'vitest'
 import webPush from 'web-push'
-import { DATABASE_FILE } from './database.ts'
+import { DATABASE_FILE } from './db/database.ts'
 
 /**
  * The entry points as the container runs them: `node src/main.ts` and the issue command, in

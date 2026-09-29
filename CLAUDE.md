@@ -8,22 +8,23 @@ Single user, single device, no accounts. The device's journal is the reference; 
 
 UI work → propose the fitting `impeccable` command and wait; do not design ad hoc.
 Exception — in `/implement`, when the ticket asks for an impeccable pass, run it yourself on the
-screens it touches (overrides the global "propose skills first" rule), then e2e, code-review, PR.
+screens it touches (this overrides any rule to propose skills first), then e2e, code-review, PR.
 Design context lives in `PRODUCT.md` + `DESIGN.md` (impeccable's own files), not here.
 
 ## Stack
 
-- React 19 · TypeScript 6 strict complet (`noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`) · Vite 8
+- React 19 · TypeScript 6, fully strict (`noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`) · Vite 8
 - TanStack Router 1.x — file-based routes, SPA, no SSR (its plugin must stay first in `vite.config.ts`)
 - Tailwind v4 (`@theme` in `src/index.css`, no `tailwind.config.js`) · vite-plugin-pwa 1.x (`generateSW`, `autoUpdate`)
 - Biome v2 (format + lint) + ESLint (boundaries rule only)
 - Vitest 5 + Testing Library (jsdom)
-- Storage: IndexedDB on the device (the reference); `server/` keeps a mirror in SQLite · Deploy: none yet (VPS `lab`, late milestone)
+- Storage: IndexedDB on the device (the reference); `server/` keeps a mirror in SQLite
 - npm workspaces: the app at the root, `contract/` (zod 4 **mini** schemas — facts, settings, journal
   file, API bodies; types inferred, never hand-written; imported as `@quit/contract/<module>`),
   `server/` (Express 5, SQLite through Drizzle, also the push sender; runs its TypeScript directly on Node 24)
+- Deploy: one image behind a Cloudflare Tunnel, a merge to `main` is live ~2 min after CI publishes its image (`docs/deploy.md`)
 
-## Commandes
+## Commands
 
 ```bash
 npm run dev       # vite --port 3000 — proxies /api to QUIT_API_URL (default the server on :8080)
@@ -31,10 +32,11 @@ npm run verify    # lint && typecheck && test && build, then each workspace's ve
 npm run test      # vitest run (watch: test:watch)
 npm run test:e2e  # Playwright (WebKit iPhone; offline spec in Chromium) against the preview build, the API started beside it
                   # (empty data dir per run, port E2E_PORT + 1000) — mandatory on UI tickets
-                  # on the VPS it waits for one of 3 machine-wide slots (scripts/e2e-slot.sh), each with its own
-                  # port and 2 workers: "waiting for an e2e slot" is expected — never kill it, run it in the
-                  # background if it outlasts the Bash timeout. E2E_SLOTS / E2E_WORKERS / E2E_PORT override.
 ```
+
+`test:e2e` may first wait for one of the machine's e2e slots (`scripts/e2e-slot.sh`: own port,
+2 workers each). "waiting for an e2e slot" is expected: never kill the wait; run it in the
+background if it outlasts your command timeout. `E2E_SLOTS` / `E2E_WORKERS` / `E2E_PORT` override.
 
 ## Structure (feature-based, one-way flow `shared → features → routes`)
 
@@ -54,15 +56,14 @@ src/
 Cross-feature import = documented ADR + scoped boundaries rule, never implicit.
 No barrel files (`index.ts` re-export): import the real module.
 
-## Conventions code
+## Code conventions
 
 **Domain** — all state is derived from a journal of facts (`docs/adr/0002`). Only facts are
 persisted; streak, XP, level, badges and money saved are pure functions of `(journal, now)`.
 `now` is always an explicit parameter — never read the system clock inside domain code.
 
-**Language** — UI strings are **French** (deliberate exception to the global English-strings rule),
-centralised in one strings module, no i18n lib. Everything else — code, identifiers, comments,
-commits, branches, tickets — is English.
+**Language** — UI strings are **French**, centralised in one strings module, no i18n lib.
+Everything else — code, identifiers, comments, commits, branches, tickets — is English.
 
 **Vocabulary** — `CONTEXT.md` is the glossary and it is binding. Use its terms in code and copy;
 never a synonym it lists under _Avoid_.
@@ -73,16 +74,16 @@ never a synonym it lists under _Avoid_.
 
 **Routes** — `createFileRoute` + component in the same file, zero domain logic (it lives in the feature).
 
-**Composants** — ≤ ~220 lines, else split; no inline schema/type/constant; explicit loading/error/empty states.
+**Components** — ≤ ~220 lines, else split; no inline schema/type/constant; explicit loading/error/empty states.
 
 **Tests** — colocated `X.test.ts(x)`; concrete data (integer cents); domain tested as "facts in, state out".
 E2e specs are the exception: Playwright, root `e2e/`, `X.spec.ts`. A client test against the real
 server is `X.server.test.ts`: Node environment, its own `tsconfig.server-tests.json`, the server
-started in the test through `quit-server/src/test-api.ts`.
+started in the test through `quit-server/src/test/test-api.ts`.
 
-**Nommage** — components `PascalCase.tsx` · hooks `useX.ts` · other modules `kebab-case.ts` · features lowercase.
+**Naming** — components `PascalCase.tsx` · hooks `useX.ts` · other modules `kebab-case.ts` · features lowercase.
 
-## Interdits
+## Never
 
 - `any` (Biome error, no exception); `as` to dodge strict mode
 - Cross-feature import outside a documented ADR exception
@@ -109,8 +110,6 @@ The five canonical roles, each label string equal to its name. See `docs/agents/
 
 Single-context: `CONTEXT.md` + `docs/adr/` at the root. See `docs/agents/domain.md`.
 
-## Gouvernance
+## References
 
-Global rules (workflow, commits, permission prompts): `~/.claude/CLAUDE.md` — common code
-conventions: `~/work/code/CLAUDE.md`. Not duplicated here.
-Architecture decisions: `docs/adr/`. Domain vocabulary: `CONTEXT.md`.
+Architecture decisions: `docs/adr/`. Domain vocabulary: `CONTEXT.md`. Deploy runbook: `docs/deploy.md`.

@@ -5,9 +5,9 @@ import {
   toPushPayload,
 } from '@quit/contract/push'
 import { and, asc, eq, lte } from 'drizzle-orm'
-import type { Db } from './database.ts'
-import type { Logger } from './logger.ts'
-import { pushSubscription, scheduledNotifications } from './schema.ts'
+import type { Db } from '../db/database.ts'
+import { pushSubscription, scheduledNotifications } from '../db/schema.ts'
+import type { Logger } from '../logger.ts'
 
 /**
  * The dumb push sender of ADR-0001: it stores one subscription and one schedule of ready-made

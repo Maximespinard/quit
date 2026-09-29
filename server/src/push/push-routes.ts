@@ -4,7 +4,7 @@ import {
   pushSubscriptionSchema,
 } from '@quit/contract/push'
 import { Router } from 'express'
-import { sendProblem } from './problem.ts'
+import { sendProblem } from '../problem.ts'
 import type { PushSender, SendNowResult } from './push-sender.ts'
 
 /** How a test push that did not go out is answered. */

@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
 import { AUTH_FAILURES_PER_WINDOW, MAX_BODY_BYTES } from './app.ts'
-import { closeTestApis, expectProblem, onCleanup, openTestApi } from './test-api.ts'
+import { closeTestApis, expectProblem, onCleanup, openTestApi } from './test/test-api.ts'
 
 afterEach(closeTestApis)
 

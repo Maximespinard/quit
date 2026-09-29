@@ -2,9 +2,9 @@ import { factIdSchema, factSchema } from '@quit/contract/facts'
 import { settingsSchema } from '@quit/contract/settings'
 import { Router } from 'express'
 import type * as z from 'zod/mini'
-import type { Db } from './database.ts'
+import type { Db } from '../db/database.ts'
+import { sendProblem } from '../problem.ts'
 import { deleteFact, putFact, putSettings, readMirror } from './mirror.ts'
-import { sendProblem } from './problem.ts'
 
 /**
  * What a body that fails its schema gets told: the fields at fault, as dotted paths

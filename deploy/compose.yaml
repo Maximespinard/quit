@@ -1,0 +1,44 @@
+# Production on the VPS: the app and the Cloudflare tunnel in front of it. No port is
+# published: the tunnel dials out to Cloudflare and reaches the app as `quit:8080` on the
+# project network, so nothing listens on the host and the firewall stays as it is.
+# Installed to /opt/quit by setup.sh. update.sh moves the local `quit:current` tag to each new
+# `main` image and recreates the app; compose never pulls it.
+
+name: quit
+
+x-hardening: &hardening
+  restart: unless-stopped
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  logging:
+    driver: json-file
+    options: { max-size: 10m, max-file: '3' }
+  networks: [quit]
+
+services:
+  quit:
+    <<: *hardening
+    image: quit:current
+    pull_policy: never
+    container_name: quit
+    # VAPID keys and subject; the image sets DATA_DIR and APP_DIR.
+    env_file: /etc/quit/quit.env
+    environment:
+      TRUST_PROXY: '1' # the tunnel: the rate limit counts per client, not per tunnel
+    volumes:
+      - data:/data
+
+  tunnel:
+    <<: *hardening
+    image: cloudflare/cloudflared:2026.9.3
+    container_name: quit-tunnel
+    command: tunnel --no-autoupdate run
+    # TUNNEL_TOKEN; the public hostname and its route to quit:8080 live in the Cloudflare dashboard.
+    env_file: /etc/quit/tunnel.env
+    depends_on: [quit]
+
+volumes:
+  data:
+
+networks:
+  quit:
