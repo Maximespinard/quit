@@ -132,6 +132,18 @@ describe('every change reaches the mirror', () => {
     expect(held.settings?.baselineSmokesPerDay).toBe(20)
   })
 
+  it('resumes after a stop, even when the send joins the run the stop cut short', async () => {
+    const { launch, mirror } = await openDevice()
+    const app = launch()
+    await app.journal.save(withCraving(await app.journal.load(), 2))
+    await app.journal.save(withCraving(await app.journal.load(), 3))
+
+    app.stop()
+    await app.send()
+
+    expect((await mirror()).facts.map((fact) => fact.id)).toEqual([factId(2), factId(3)])
+  })
+
   it('never sends an unlinked journal, nor keeps its changes for later', async () => {
     const { launch, device, requests } = await openDevice({ linked: false })
     const app = launch()

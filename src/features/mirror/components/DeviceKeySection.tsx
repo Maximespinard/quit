@@ -22,6 +22,7 @@ export function DeviceKeySection({ mirror }: DeviceKeySectionProps) {
   const [pasted, setPasted] = useState('')
   const [empty, setEmpty] = useState(false)
   const [linking, setLinking] = useState(false)
+  const [failed, setFailed] = useState(false)
 
   // Nothing while the link loads: never a false "not linked".
   if (mirror.state === 'loading') return null
@@ -33,9 +34,15 @@ export function DeviceKeySection({ mirror }: DeviceKeySectionProps) {
       return
     }
     setLinking(true)
-    await mirror.link(pasted).catch(() => {})
+    setFailed(false)
+    try {
+      await mirror.link(pasted)
+      setPasted('')
+    } catch {
+      // The key stays in the field: one more tap tries again.
+      setFailed(true)
+    }
     setLinking(false)
-    setPasted('')
   }
 
   return (
@@ -76,9 +83,9 @@ export function DeviceKeySection({ mirror }: DeviceKeySectionProps) {
             aria-invalid={empty}
             aria-describedby={empty ? errorId : undefined}
           />
-          {empty ? (
+          {empty || failed ? (
             <p id={errorId} role="alert" className="text-alert text-label">
-              {copy.empty}
+              {empty ? copy.empty : copy.linkFailed}
             </p>
           ) : null}
           <Button type="submit" variant="secondary" size="lg" disabled={linking}>

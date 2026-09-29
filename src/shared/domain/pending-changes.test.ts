@@ -3,10 +3,10 @@ import { factId } from '@/shared/utils/fact-id'
 import { emptyJournal, type Journal } from './journal'
 import {
   acknowledgeChange,
+  addPendingChanges,
   decodePendingChanges,
   journalChanges,
   type PendingChange,
-  queueChanges,
 } from './pending-changes'
 
 const quit: Fact = { type: 'quit-moment', id: factId(1), at: 1_000 }
@@ -89,9 +89,9 @@ describe('journalChanges', () => {
   })
 })
 
-describe('queueChanges', () => {
-  it('appends changes in order, each stamped with when it was queued', () => {
-    const queued = queueChanges(
+describe('addPendingChanges', () => {
+  it('appends changes in order, each stamped with when it was added', () => {
+    const pending = addPendingChanges(
       [],
       [
         { kind: 'put-fact', fact: quit },
@@ -100,14 +100,14 @@ describe('queueChanges', () => {
       5_000,
     )
 
-    expect(queued).toEqual([
-      { seq: 1, queuedAt: 5_000, change: { kind: 'put-fact', fact: quit } },
-      { seq: 2, queuedAt: 5_000, change: { kind: 'put-fact', fact: craving } },
+    expect(pending).toEqual([
+      { seq: 1, pendingSince: 5_000, change: { kind: 'put-fact', fact: quit } },
+      { seq: 2, pendingSince: 5_000, change: { kind: 'put-fact', fact: craving } },
     ])
   })
 
   it('collapses changes to the same fact into the latest, where and since the first waited', () => {
-    const first = queueChanges(
+    const first = addPendingChanges(
       [],
       [
         { kind: 'put-fact', fact: craving },
@@ -116,28 +116,28 @@ describe('queueChanges', () => {
       5_000,
     )
     const corrected = { ...craving, intensity: 1 as const }
-    const second = queueChanges(first, [{ kind: 'put-fact', fact: corrected }], 6_000)
-    const third = queueChanges(second, [{ kind: 'delete-fact', id: craving.id }], 7_000)
+    const second = addPendingChanges(first, [{ kind: 'put-fact', fact: corrected }], 6_000)
+    const third = addPendingChanges(second, [{ kind: 'delete-fact', id: craving.id }], 7_000)
 
     expect(third).toEqual([
-      { seq: 4, queuedAt: 5_000, change: { kind: 'delete-fact', id: craving.id } },
-      { seq: 2, queuedAt: 5_000, change: { kind: 'put-fact', fact: lapse } },
+      { seq: 4, pendingSince: 5_000, change: { kind: 'delete-fact', id: craving.id } },
+      { seq: 2, pendingSince: 5_000, change: { kind: 'put-fact', fact: lapse } },
     ])
   })
 
   it('collapses settings changes into the latest settings', () => {
     const before = settingsOf(emptyJournal)
     const after = { ...before, weeklySpendCents: 9_000 }
-    const first = queueChanges([], [{ kind: 'put-settings', settings: before }], 5_000)
+    const first = addPendingChanges([], [{ kind: 'put-settings', settings: before }], 5_000)
 
-    expect(queueChanges(first, [{ kind: 'put-settings', settings: after }], 6_000)).toEqual([
-      { seq: 2, queuedAt: 5_000, change: { kind: 'put-settings', settings: after } },
+    expect(addPendingChanges(first, [{ kind: 'put-settings', settings: after }], 6_000)).toEqual([
+      { seq: 2, pendingSince: 5_000, change: { kind: 'put-settings', settings: after } },
     ])
   })
 })
 
 describe('acknowledgeChange', () => {
-  const pending: readonly PendingChange[] = queueChanges(
+  const pending: readonly PendingChange[] = addPendingChanges(
     [],
     [
       { kind: 'put-fact', fact: quit },
@@ -148,12 +148,12 @@ describe('acknowledgeChange', () => {
 
   it('removes the change the mirror acknowledged', () => {
     expect(acknowledgeChange(pending, 1)).toEqual([
-      { seq: 2, queuedAt: 5_000, change: { kind: 'put-fact', fact: craving } },
+      { seq: 2, pendingSince: 5_000, change: { kind: 'put-fact', fact: craving } },
     ])
   })
 
   it('keeps a change replaced while its previous version was on its way', () => {
-    const replaced = queueChanges(pending, [{ kind: 'delete-fact', id: quit.id }], 6_000)
+    const replaced = addPendingChanges(pending, [{ kind: 'delete-fact', id: quit.id }], 6_000)
 
     expect(acknowledgeChange(replaced, 1)).toEqual(replaced)
   })
@@ -165,7 +165,7 @@ describe('decodePendingChanges', () => {
   })
 
   it('reads back what was stored', () => {
-    const pending = queueChanges(
+    const pending = addPendingChanges(
       [],
       [
         { kind: 'put-fact', fact: craving },
@@ -180,12 +180,12 @@ describe('decodePendingChanges', () => {
 
   it('drops a change it cannot read, keeping the others', () => {
     const stored = [
-      { seq: 1, queuedAt: 5_000, change: { kind: 'put-fact', fact: { type: 'unknown' } } },
-      { seq: 2, queuedAt: 5_000, change: { kind: 'delete-fact', id: lapse.id } },
+      { seq: 1, pendingSince: 5_000, change: { kind: 'put-fact', fact: { type: 'unknown' } } },
+      { seq: 2, pendingSince: 5_000, change: { kind: 'delete-fact', id: lapse.id } },
     ]
 
     expect(decodePendingChanges(stored)).toEqual([
-      { seq: 2, queuedAt: 5_000, change: { kind: 'delete-fact', id: lapse.id } },
+      { seq: 2, pendingSince: 5_000, change: { kind: 'delete-fact', id: lapse.id } },
     ])
   })
 })

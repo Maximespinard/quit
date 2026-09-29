@@ -7,7 +7,7 @@ import type { MirrorChange } from '@/shared/domain/pending-changes'
  */
 export type Delivery = 'acknowledged' | 'refused' | 'revoked' | 'unreachable'
 
-/** A request still unanswered after this long is given up: the queue must not hang on it. */
+/** A request still unanswered after this long is given up: the pending changes must not hang on it. */
 const REQUEST_TIMEOUT_MS = 15_000
 
 export type MirrorApi = {

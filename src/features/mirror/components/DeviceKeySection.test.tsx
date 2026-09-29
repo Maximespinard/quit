@@ -33,6 +33,20 @@ describe('DeviceKeySection', () => {
     expect(mirror.link).not.toHaveBeenCalled()
   })
 
+  it('says when the key could not be kept, and keeps it in the field', async () => {
+    const mirror: MirrorControls = {
+      state: 'unlinked',
+      link: vi.fn().mockRejectedValue(new Error('storage')),
+    }
+    render(<DeviceKeySection mirror={mirror} />)
+
+    await userEvent.type(screen.getByLabelText(copy.keyLabel), 'k3y')
+    await userEvent.click(screen.getByRole('button', { name: copy.link }))
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(copy.linkFailed)
+    expect(screen.getByLabelText(copy.keyLabel)).toHaveValue('k3y')
+  })
+
   it('says a linked phone is linked, with no field left', () => {
     render(<DeviceKeySection mirror={mirrorIn('linked')} />)
 

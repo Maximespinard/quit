@@ -1,5 +1,5 @@
 import { factIdSchema, factSchema } from '@quit/contract/facts'
-import { settingsSchema } from '@quit/contract/settings'
+import { type Settings, settingsSchema } from '@quit/contract/settings'
 import * as z from 'zod/mini'
 import type { Journal } from './journal'
 
@@ -16,11 +16,11 @@ export type MirrorChange = z.infer<typeof mirrorChangeSchema>
 
 /**
  * A change recorded on the device that the mirror has not acknowledged yet. `seq` names this
- * version of it; `queuedAt` is since when the mirror has lacked it.
+ * version of it; `pendingSince` is when the mirror started lacking it.
  */
 const pendingChangeSchema = z.object({
   seq: z.int(),
-  queuedAt: z.number(),
+  pendingSince: z.number(),
   change: mirrorChangeSchema,
 })
 export type PendingChange = z.infer<typeof pendingChangeSchema>
@@ -49,12 +49,8 @@ function sameValue(a: unknown, b: unknown): boolean {
   return aEntries.every(([key, value]) => bValues.has(key) && sameValue(value, bValues.get(key)))
 }
 
-const settingsOf = ({ protocol, weeklySpendCents, baselineSmokesPerDay, goal }: Journal) => ({
-  protocol,
-  weeklySpendCents,
-  baselineSmokesPerDay,
-  goal,
-})
+/** Everything the journal holds but its facts: a setting added later is mirrored with the rest. */
+const settingsOf = ({ facts: _facts, ...settings }: Journal): Settings => settings
 
 /**
  * What the mirror needs to go from `before` to `after`: the facts deleted, then those recorded
@@ -78,28 +74,28 @@ export function journalChanges(before: Journal, after: Journal): MirrorChange[] 
 }
 
 /**
- * `pending` with `changes` queued at `now`. A change to a fact, or to the settings, already
+ * `pending` with `changes` added at `now`. A change to a fact, or to the settings, already
  * waiting replaces the one before it where it stands, under a new `seq` and keeping its
- * `queuedAt`: the mirror has lacked it since then, and only its latest version ever leaves.
+ * `pendingSince`: the mirror has lacked it since then, and only its latest version ever leaves.
  */
-export function queueChanges(
+export function addPendingChanges(
   pending: readonly PendingChange[],
   changes: readonly MirrorChange[],
   now: number,
 ): PendingChange[] {
-  let queue = [...pending]
-  let seq = Math.max(0, ...queue.map((change) => change.seq))
+  let waiting = [...pending]
+  let seq = Math.max(0, ...waiting.map((change) => change.seq))
   for (const change of changes) {
     seq += 1
-    const index = queue.findIndex((waiting) => target(waiting.change) === target(change))
-    const waiting = queue[index]
-    if (waiting === undefined) {
-      queue = [...queue, { seq, queuedAt: now, change }]
+    const index = waiting.findIndex((older) => target(older.change) === target(change))
+    const older = waiting[index]
+    if (older === undefined) {
+      waiting = [...waiting, { seq, pendingSince: now, change }]
     } else {
-      queue = queue.with(index, { seq, queuedAt: waiting.queuedAt, change })
+      waiting = waiting.with(index, { seq, pendingSince: older.pendingSince, change })
     }
   }
-  return queue
+  return waiting
 }
 
 /**

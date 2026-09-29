@@ -185,6 +185,7 @@ export const strings = {
     revokedLead:
       'Colle la nouvelle : les changements en attente sont gardés et partiront avec elle.',
     empty: 'Colle d’abord la clé de l’appareil.',
+    linkFailed: 'La clé n’a pas pu être enregistrée sur ce téléphone. Réessaie.',
   },
   money: {
     'invalid-spend': 'Indique un montant en euros, plus grand que zéro.',
