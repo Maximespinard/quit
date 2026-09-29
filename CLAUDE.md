@@ -26,7 +26,9 @@ npm run dev       # vite --port 3000
 npm run verify    # lint && typecheck && test && build — GREEN before every commit, zero warning
 npm run test      # vitest run (watch: test:watch)
 npm run test:e2e  # Playwright (WebKit iPhone; offline spec in Chromium) against the preview build — mandatory on UI tickets
-                  # parallel worktrees: one unique E2E_PORT per session (E2E_PORT=4174 npm run test:e2e)
+                  # on the VPS it waits for one of 3 machine-wide slots (scripts/e2e-slot.sh), each with its own
+                  # port and 2 workers: "waiting for an e2e slot" is expected — never kill it, run it in the
+                  # background if it outlasts the Bash timeout. E2E_SLOTS / E2E_WORKERS / E2E_PORT override.
 ```
 
 ## Structure (feature-based, one-way flow `shared → features → routes`)
