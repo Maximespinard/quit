@@ -68,7 +68,8 @@ jobs:
       - name: Run the image
         run: |
           docker run -d --name quit -p 8080:8080 -v quit-data:/data quit:ci
-          curl --retry 20 --retry-connrefused --retry-delay 1 -fsS http://127.0.0.1:8080/api/health
+          # Until the server listens, Docker's port proxy accepts and then resets the connection.
+          curl --retry 20 --retry-all-errors --retry-delay 1 -fsS http://127.0.0.1:8080/api/health
           test "$(docker exec quit id -u)" != 0
       # The shell and the offline launch, served by the server with its headers and CSP on.
       - run: npm run test:e2e -- smoke.spec.ts offline.spec.ts
