@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { emptyJournal } from '@/shared/domain/journal'
+import { factId } from '@/shared/test/fact-ids'
 import { strings } from '@/shared/utils/strings'
 import { PastCravingForm } from './PastCravingForm'
 
@@ -71,13 +72,14 @@ it('says so when the date is empty instead of doing nothing', async () => {
 
 describe('editing a craving', () => {
   const initial = {
+    id: factId(7),
     at: new Date(2026, 8, 22, 7, 45, 30).getTime(),
     intensity: 2 as const,
     heldToEnd: true,
     tags: ['coffee', 'Voiture'],
   }
 
-  it('starts from the craving and keeps its instant and its held mark when untouched', async () => {
+  it('starts from the craving and keeps its id, instant and held mark when untouched', async () => {
     const onRecorded = vi.fn()
     render(
       <PastCravingForm

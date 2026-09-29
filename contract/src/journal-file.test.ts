@@ -5,13 +5,13 @@ const AT = Date.UTC(2026, 8, 29, 10, 0, 0)
 
 const file = {
   format: 'quit-journal',
-  version: 1,
+  version: 2,
   exportedAt: AT,
   origin: 'device',
   journal: {
     facts: [
-      { type: 'quit-moment', at: AT - 1_000 },
-      { type: 'lapse', at: AT, count: 1 },
+      { type: 'quit-moment', id: '0199a6f2-4c00-7abc-8def-0123456789ab', at: AT - 1_000 },
+      { type: 'lapse', id: '0199a6f2-4c01-7abc-8def-0123456789ab', at: AT, count: 1 },
     ],
     protocol: [{ doseMg: 21, durationDays: 28 }],
     weeklySpendCents: 4_890,
@@ -25,9 +25,16 @@ describe('journalFileSchema', () => {
     expect(journalFileSchema.parse(file)).toEqual(file)
   })
 
+  it('reads a version 1 file, written before facts had an id', () => {
+    const facts = [{ type: 'quit-moment', at: AT - 1_000 }]
+    const v1 = { ...file, version: 1, journal: { ...file.journal, facts } }
+
+    expect(journalFileSchema.parse(v1)).toEqual(v1)
+  })
+
   it.each([
     ['another format', { format: 'other-app' }],
-    ['a later version', { version: 2 }],
+    ['a later version', { version: 3 }],
     ['an unknown origin', { origin: 'server' }],
     ['no export time', { exportedAt: undefined }],
     ['no journal', { journal: undefined }],

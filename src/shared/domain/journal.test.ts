@@ -1,6 +1,14 @@
+import { factId, factIdSequence } from '@/shared/test/fact-ids'
 import { derive } from './derive'
 import { recordLapse } from './facts/lapse'
-import { decodeJournal, emptyJournal, type Journal, removeFact } from './journal'
+import {
+  decodeJournal,
+  emptyJournal,
+  giveStoredFactsIds,
+  type Journal,
+  removeFact,
+  withFactIds,
+} from './journal'
 import { defaultProtocol } from './protocol'
 
 describe('decodeJournal', () => {
@@ -51,6 +59,83 @@ describe('decodeJournal, settings', () => {
   })
 })
 
+describe('withFactIds', () => {
+  it('gives every fact without an id a new one, in order, and keeps the ids already there', () => {
+    const journal: Journal = {
+      ...emptyJournal,
+      facts: [
+        { type: 'quit-moment', at: 1_000 },
+        { type: 'lapse', id: factId(90), at: 2_000, count: 1 },
+        { type: 'lapse', at: 3_000, count: 2 },
+      ],
+    }
+
+    expect(withFactIds(journal, factIdSequence()).facts).toEqual([
+      { type: 'quit-moment', id: factId(1), at: 1_000 },
+      { type: 'lapse', id: factId(90), at: 2_000, count: 1 },
+      { type: 'lapse', id: factId(2), at: 3_000, count: 2 },
+    ])
+  })
+
+  it('gives a new id to a fact sharing the id of one before it: two facts are never one', () => {
+    const journal: Journal = {
+      ...emptyJournal,
+      facts: [
+        { type: 'lapse', id: factId(90), at: 2_000, count: 1 },
+        { type: 'lapse', id: factId(90), at: 3_000, count: 2 },
+      ],
+    }
+
+    expect(withFactIds(journal, factIdSequence()).facts.map((fact) => fact.id)).toEqual([
+      factId(90),
+      factId(1),
+    ])
+  })
+
+  it('leaves a journal whose facts all have an id as it is', () => {
+    const journal: Journal = {
+      ...emptyJournal,
+      facts: [{ type: 'quit-moment', id: factId(90), at: 1_000 }],
+    }
+
+    expect(withFactIds(journal, factIdSequence())).toBe(journal)
+  })
+})
+
+describe('giveStoredFactsIds', () => {
+  it('gives every stored fact without an id one, keeping everything else as stored', () => {
+    const stored = {
+      facts: [
+        { type: 'quit-moment', at: 1_000 },
+        { type: 'lapse', id: factId(90), at: 2_000 },
+        { type: 'mood', at: 3_000, level: 4 },
+        'not a fact',
+      ],
+      weeklySpendCents: 3_550,
+      protocol: 'kept as stored',
+    }
+
+    expect(giveStoredFactsIds(stored, factIdSequence())).toEqual({
+      facts: [
+        { type: 'quit-moment', id: factId(1), at: 1_000 },
+        { type: 'lapse', id: factId(90), at: 2_000 },
+        { type: 'mood', id: factId(2), at: 3_000, level: 4 },
+        'not a fact',
+      ],
+      weeklySpendCents: 3_550,
+      protocol: 'kept as stored',
+    })
+  })
+
+  it.each([
+    ['nothing stored', undefined],
+    ['a value that is not a journal', 'journal'],
+    ['facts that are not a list', { facts: 'none' }],
+  ])('leaves %s as it is', (_case, stored) => {
+    expect(giveStoredFactsIds(stored, factIdSequence())).toEqual(stored)
+  })
+})
+
 describe('removeFact', () => {
   const HOUR = 3_600_000
   const DAY = 24 * HOUR
@@ -58,31 +143,30 @@ describe('removeFact', () => {
   const journal: Journal = {
     ...emptyJournal,
     facts: [
-      { type: 'quit-moment', at: QUIT },
-      { type: 'lapse', at: QUIT + 3 * DAY, count: 1 },
-      { type: 'lapse', at: QUIT + 4 * DAY, count: 2 },
-      { type: 'lapse', at: QUIT + 5 * DAY, count: 1 },
+      { type: 'quit-moment', id: factId(1), at: QUIT },
+      { type: 'lapse', id: factId(2), at: QUIT + 3 * DAY, count: 1 },
+      { type: 'lapse', id: factId(3), at: QUIT + 4 * DAY, count: 2 },
+      { type: 'lapse', id: factId(4), at: QUIT + 5 * DAY, count: 1 },
     ],
   }
   const now = QUIT + 6 * DAY
 
-  it('takes out the fact at that index and nothing else', () => {
-    expect(removeFact(journal, 2).facts).toEqual([
-      { type: 'quit-moment', at: QUIT },
-      { type: 'lapse', at: QUIT + 3 * DAY, count: 1 },
-      { type: 'lapse', at: QUIT + 5 * DAY, count: 1 },
+  it('takes out the fact with that id and nothing else', () => {
+    expect(removeFact(journal, factId(3)).facts).toEqual([
+      { type: 'quit-moment', id: factId(1), at: QUIT },
+      { type: 'lapse', id: factId(2), at: QUIT + 3 * DAY, count: 1 },
+      { type: 'lapse', id: factId(4), at: QUIT + 5 * DAY, count: 1 },
     ])
   })
 
-  it('leaves the journal as it is for an index holding no fact', () => {
-    expect(removeFact(journal, 9)).toBe(journal)
-    expect(removeFact(journal, -1)).toBe(journal)
+  it('leaves the journal as it is for an id no fact has', () => {
+    expect(removeFact(journal, factId(9))).toBe(journal)
   })
 
   it('breaks the relapse a removed lapse completed: the streak runs from the quit moment again', () => {
     expect(derive(journal, now).personalBest).not.toBeNull()
 
-    const state = derive(removeFact(journal, 2), now)
+    const state = derive(removeFact(journal, factId(3)), now)
 
     expect(state.streak?.elapsedMs).toBe(now - QUIT)
     expect(state.personalBest).toBeNull()
@@ -90,7 +174,7 @@ describe('removeFact', () => {
   })
 
   it('edits a fact as removing it then recording it again, under the same rules', () => {
-    const without = removeFact(journal, 1)
+    const without = removeFact(journal, factId(2))
 
     expect(recordLapse(without, { at: QUIT - HOUR, count: 1 }, now)).toEqual({
       ok: false,
@@ -100,5 +184,14 @@ describe('removeFact', () => {
       ok: false,
       reason: 'future',
     })
+  })
+
+  it('keeps the id of a corrected fact: recorded again with it, it stays the same fact', () => {
+    const without = removeFact(journal, factId(2))
+    const corrected = recordLapse(without, { id: factId(2), at: QUIT + 3 * DAY, count: 3 }, now)
+
+    expect(corrected.ok && corrected.journal.facts.filter((fact) => fact.id === factId(2))).toEqual(
+      [{ type: 'lapse', id: factId(2), at: QUIT + 3 * DAY, count: 3 }],
+    )
   })
 })

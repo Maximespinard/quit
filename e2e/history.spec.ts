@@ -1,4 +1,5 @@
 import { expect, type Page, test } from '@playwright/test'
+import { UUID_V7 } from './fact-ids'
 import { expectStreak, sandboxAt, startNow } from './sandbox'
 
 // Times on screen are local: the timezone is pinned so the times below are fixed.
@@ -146,4 +147,28 @@ test('a craving is edited and deleted in one tap, and the history empties', asyn
   await tap(page, 'Supprimer')
   await expect(page.getByRole('status')).toHaveText('Supprimé.')
   await expect(page.getByText('Rien de noté pour l’instant.', { exact: false })).toBeVisible()
+})
+
+test('a fact opens by its id, keeps it through an edit, and an unknown id finds nothing', async ({
+  page,
+}) => {
+  await daysIn(page, 1)
+  await declareLapse(page)
+  await openHistory(page)
+  // Retried until the history row replaces home's own « J’ai fumé » link.
+  await expect(rows(page, /J’ai fumé/)).toHaveAttribute(
+    'href',
+    new RegExp(`/history/${UUID_V7.source}\\?`),
+  )
+  const href = await rows(page, /J’ai fumé/).getAttribute('href')
+
+  await rows(page, /J’ai fumé/).click()
+  await tap(page, 'Une de plus')
+  await tap(page, 'Enregistrer')
+  await expect(rows(page, /J’ai fumé/)).toContainText('2 cigarettes')
+  await expect(rows(page, /J’ai fumé/)).toHaveAttribute('href', href ?? '')
+
+  // A link from before ids, by position: it no longer points to any fact.
+  await page.goto(`/history/1?debug=true&clock=${NOW}`)
+  await expect(page.getByText('Ce fait n’est plus dans le journal.')).toBeVisible()
 })
