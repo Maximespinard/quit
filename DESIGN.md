@@ -572,6 +572,11 @@ une interpolation fluide image par image. La valeur réelle reste lisible pour l
 d'écran (`sr-only`) pendant que le chiffre animé est `aria-hidden`. Sous
 `prefers-reduced-motion: reduce`, la cible est rendue dès le premier paint.
 
+Sur le héros, le compteur est l'entrée de l'app : il joue **une fois par lancement**
+(`useLaunchEntrance`), pas à chaque retour sur l'accueil. Les jours et l'horloge `hh:mm:ss`
+montent **ensemble**, sur les mêmes crans, et se posent au même cran : un seul geste de
+240 ms, jamais une cascade. Une fois posés, les chiffres suivent le temps sans rejouer.
+
 Le reste du vocabulaire est court et unique : `--ease-out-expo`
 (`cubic-bezier(0.16, 1, 0.3, 1)`) pour tout ; 150 ms pour un retour tactile, 200 ms pour un
 dialogue, 240 ms pour la signature, 500 ms pour le remplissage XP. Le tiroir garde ses
