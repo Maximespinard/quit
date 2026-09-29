@@ -261,6 +261,59 @@ export const strings = {
         : 'Deux jours de suite avec un écart. Un troisième ferait une rechute.',
   },
 
+  calendar: {
+    title: 'Calendrier',
+    open: 'Calendrier',
+    back: 'Retour',
+    empty: 'Le calendrier commence à ton arrêt.',
+    summary: 'Où en est le protocole',
+    nextChange: 'Prochaine étape',
+    /** Under the date of the next step change: the box to buy before it. */
+    nextDose: (doseMg: string) => `passage à ${doseMg} mg`,
+    plannedEnd: 'Fin prévue',
+    endedOn: (date: string) => `Terminé le ${date}.`,
+    steps: 'Les étapes',
+    step: (number: number, doseMg: string) => `Étape ${number} · ${doseMg} mg`,
+    span: (from: string, to: string) => `${from} → ${to}`,
+    current: 'en cours',
+    previousMonth: 'Mois précédent',
+    nextMonth: 'Mois suivant',
+    /** Monday first: the letter shown, then the name read out. */
+    weekdays: [
+      ['L', 'lundi'],
+      ['M', 'mardi'],
+      ['M', 'mercredi'],
+      ['J', 'jeudi'],
+      ['V', 'vendredi'],
+      ['S', 'samedi'],
+      ['D', 'dimanche'],
+    ],
+    legend: {
+      label: 'Légende',
+      logged: 'Patch posé',
+      missing: 'Pas noté',
+      due: 'À poser',
+      planned: 'Prévu',
+      cigarette: 'Cigarette',
+      craving: 'Envie',
+    },
+    /** What a screen reader hears for one day, after its date. */
+    day: {
+      today: 'aujourd’hui',
+      logged: 'patch posé',
+      missing: 'patch pas noté',
+      due: 'patch à poser',
+      planned: 'patch prévu',
+      stepStart: (number: number, doseMg: string) => `début de l’étape ${number} à ${doseMg} mg`,
+      end: 'fin du protocole',
+      cigarettes: (count: number) => (count <= 1 ? `${count} cigarette` : `${count} cigarettes`),
+      cravings: (count: number) => (count <= 1 ? `${count} envie` : `${count} envies`),
+    },
+    /** The dose shown on a step's first day. */
+    dose: (doseMg: string) => `${doseMg} mg`,
+    end: 'Fin',
+  },
+
   history: {
     title: 'Historique',
     open: 'Historique',
