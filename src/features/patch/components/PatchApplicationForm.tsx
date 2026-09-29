@@ -1,4 +1,5 @@
 import { type FormEvent, useId, useState } from 'react'
+import { derive } from '@/shared/domain/derive'
 import {
   type PatchApplicationInput,
   type RecordPatchApplicationResult,
@@ -10,6 +11,8 @@ import { Button } from '@/shared/ui/base/button'
 import { fromDatetimeLocal, toDatetimeLocal } from '@/shared/utils/datetime-local'
 import { fromDecimalText, toDecimalText } from '@/shared/utils/decimal-text'
 import { strings } from '@/shared/utils/strings'
+import { applicationAt, chosenSite, type SiteChoice, untouched } from '../utils/site-choice'
+import { SitePicker } from './SitePicker'
 
 const copy = strings.patch.form
 
@@ -49,16 +52,29 @@ export function PatchApplicationForm({
     return position.status === 'running' ? toDecimalText(position.step.doseMg) : ''
   })
   const [date, setDate] = useState(() => toDatetimeLocal(openedAt))
+  // Editing, the application's own site; logging one, the suggestion for the date entered,
+  // so a day caught up rotates from the patch application before it, not from the latest.
+  const [choice, setChoice] = useState<SiteChoice>(() =>
+    initial ? { kind: 'picked', site: initial.site ?? null } : untouched,
+  )
   const [error, setError] = useState<FormError | null>(null)
+  const at = date === toDatetimeLocal(openedAt) ? openedAt : fromDatetimeLocal(date)
+  // The site before the date entered is barred; editing, the application's own site never is.
+  const rotation = derive(journal, at ?? openedAt)
+  const previous = rotation.previousSite === initial?.site ? null : rotation.previousSite
+  const site = chosenSite(choice, rotation.suggestedSite, previous)
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const at = date === toDatetimeLocal(openedAt) ? openedAt : fromDatetimeLocal(date)
     if (at === null) {
       setError('invalid')
       return
     }
-    const result = recordPatchApplication(journal, { at, doseMg: fromDecimalText(dose) }, now)
+    const result = recordPatchApplication(
+      journal,
+      applicationAt(at, fromDecimalText(dose), site),
+      now,
+    )
     if (result.ok) onRecorded(result.journal)
     else setError(result.reason)
   }
@@ -109,6 +125,11 @@ export function PatchApplicationForm({
             className={fieldClass}
           />
         </div>
+        <SitePicker
+          value={site}
+          previous={previous}
+          onValueChange={(next) => setChoice({ kind: 'picked', site: next })}
+        />
         {error !== null ? (
           <p id={errorId} role="alert" className="text-alert text-label">
             {copy[error]}

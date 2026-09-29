@@ -1,3 +1,4 @@
+import type { ApplicationSite } from '@/shared/domain/application-site'
 import type { ImportRefusal } from '@/shared/domain/journal-file'
 import type { ScenarioId } from '@/shared/domain/scenarios'
 
@@ -321,11 +322,26 @@ export const strings = {
     /** A protocol day runs 24 h from the quit moment's time, so it may have begun yesterday. */
     due: 'Pas encore posé',
     logged: (time: string) => `Posé à ${time}`,
-    loggedDetail: (sameDay: boolean, doseMg: string) =>
-      `${sameDay ? 'aujourd’hui' : 'hier'} · ${doseMg}\u00a0mg`,
+    loggedDetail: (sameDay: boolean, doseMg: string, site: string | null) =>
+      [sameDay ? 'aujourd’hui' : 'hier', `${doseMg}\u00a0mg`, site].filter(Boolean).join(' · '),
     /** The one-tap log: the dose is the running step's. */
     apply: (doseMg: string) => `Poser le patch · ${doseMg}\u00a0mg`,
     other: 'Autre dose ou autre date',
+    site: {
+      label: 'Où le poser',
+      /** Pressing the chosen site again leaves it out. */
+      hint: 'Facultatif · jamais deux fois de suite au même site',
+      /** Under the previous patch application's site, which the next one may not take. */
+      previous: 'la dernière fois',
+    },
+    sites: {
+      'arm-left': 'Bras gauche',
+      'arm-right': 'Bras droit',
+      'chest-left': 'Torse gauche',
+      'chest-right': 'Torse droit',
+      'hip-left': 'Hanche gauche',
+      'hip-right': 'Hanche droite',
+    } satisfies Record<ApplicationSite, string>,
     recorded: 'Patch noté.',
     form: {
       title: 'Noter un patch',

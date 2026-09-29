@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { useId, useState } from 'react'
+import type { ApplicationSite } from '@/shared/domain/application-site'
 import {
   type RecordPatchApplicationResult,
   recordPatchApplication,
@@ -12,6 +13,8 @@ import { cn } from '@/shared/utils/cn'
 import { formatDose, formatTime } from '@/shared/utils/format'
 import { isSameLocalDay } from '@/shared/utils/local-day'
 import { strings } from '@/shared/utils/strings'
+import { applicationAt, chosenSite, type SiteChoice, untouched } from '../utils/site-choice'
+import { SitePicker } from './SitePicker'
 
 const copy = strings.patch
 
@@ -21,6 +24,10 @@ type DayPatchCardProps = {
   journal: Journal
   /** Only the states that ask for a patch: the app layer shows nothing once the protocol is over. */
   patch: Exclude<ProtocolDayPatch, { status: 'over' }>
+  /** Pressed until the user picks another site or none: the one tap logs it. */
+  suggestedSite: ApplicationSite
+  /** The latest patch application's site: greyed, never pressable. */
+  previousSite: ApplicationSite | null
   /** Injected clock: a one-tap log records at this instant. */
   now: number
   /** Set on arrival from the form: the header confirms it, even for another protocol day. */
@@ -29,15 +36,28 @@ type DayPatchCardProps = {
 }
 
 /** Home screen block: whether the protocol day's patch is on, and the one tap that logs it. */
-export function DayPatchCard({ journal, patch, now, recorded, onRecorded }: DayPatchCardProps) {
+export function DayPatchCard({
+  journal,
+  patch,
+  suggestedSite,
+  previousSite,
+  now,
+  recorded,
+  onRecorded,
+}: DayPatchCardProps) {
   const titleId = useId()
   // Reachable in the sandbox only: a clock moved before the quit moment refuses the tap.
   const [refusal, setRefusal] = useState<Refusal | null>(null)
+  // Untouched, the site follows the suggestion, which moves on once a patch is logged.
+  const [choice, setChoice] = useState<SiteChoice>(untouched)
+  const site = chosenSite(choice, suggestedSite, previousSite)
 
   const applyNow = (doseMg: number) => {
-    const result = recordPatchApplication(journal, { at: now, doseMg }, now)
-    if (result.ok) onRecorded(result.journal)
-    else setRefusal(result.reason)
+    const result = recordPatchApplication(journal, applicationAt(now, doseMg, site), now)
+    if (result.ok) {
+      setChoice(untouched)
+      onRecorded(result.journal)
+    } else setRefusal(result.reason)
   }
 
   return (
@@ -59,12 +79,22 @@ export function DayPatchCard({ journal, patch, now, recorded, onRecorded }: DayP
           <p className="flex flex-col gap-1">
             <span className="text-figure tabular-nums">{copy.logged(formatTime(patch.at))}</span>
             <span className="text-ink-dim text-label">
-              {copy.loggedDetail(isSameLocalDay(patch.at, now), formatDose(patch.doseMg))}
+              {copy.loggedDetail(
+                isSameLocalDay(patch.at, now),
+                formatDose(patch.doseMg),
+                patch.site === undefined ? null : copy.sites[patch.site],
+              )}
             </span>
           </p>
         ) : (
           <>
             <p className="font-semibold text-body">{copy.due}</p>
+            <SitePicker
+              value={site}
+              previous={previousSite}
+              onValueChange={(next) => setChoice({ kind: 'picked', site: next })}
+              onSurface
+            />
             <Button size="lg" onClick={() => applyNow(patch.doseMg)}>
               {copy.apply(formatDose(patch.doseMg))}
             </Button>

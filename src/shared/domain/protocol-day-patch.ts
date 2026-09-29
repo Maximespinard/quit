@@ -29,7 +29,9 @@ export function protocolDayPatch(
     if (fact.type !== PATCH_APPLICATION || fact.at < from || fact.at > now) continue
     if (latest === null || fact.at >= latest.at) latest = fact
   }
-  return latest === null
-    ? { status: 'due', doseMg: position.step.doseMg }
-    : { status: 'logged', at: latest.at, doseMg: latest.doseMg }
+  if (latest === null) return { status: 'due', doseMg: position.step.doseMg }
+  const { at, doseMg, site } = latest
+  return site === undefined
+    ? { status: 'logged', at, doseMg }
+    : { status: 'logged', at, doseMg, site }
 }
