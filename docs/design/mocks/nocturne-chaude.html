@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>quit Nocturne chaude</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@300..800&display=swap">
+<style>
+/* Layout: two phone-sized screens (home, craving timer), side by side when wide, stacked on a phone.
+   Suno owns the world: pitch-black page, a grainy warm haze behind the figure, one gradient pill = Envie.
+   monopo lends only the timer's slow liquid haze (moss + amber) and the hairline ghost pill. */
+:root {
+  color-scheme: dark;
+  --stage: #0a0a0b;
+  --page: #101012;          /* Suno · Pitch Black */
+  --surface: #17171a;       /* Suno · Void Black: cards */
+  --text: #f7f4ef;          /* Suno · Ghost White: text, selected, primary filled */
+  --white: #ffffff;         /* Suno · Pure White: the key figure */
+  --muted: #a3a3a3;         /* Suno · Muted Steel: labels, secondary */
+  --line: rgba(255, 255, 255, 0.08);
+  --ghost: rgba(255, 255, 255, 0.05);       /* Suno · Pill Ghost fill */
+  --ghost-line: rgba(255, 255, 255, 0.3);   /* monopo · ghost pill border */
+  --pink: #fd429c;          /* Suno · Vivid Pink  ┐ Create gradient: Envie only */
+  --yellow: #f5d907;        /* Suno · Sunset Yellow ┘ */
+  --amber: #b8730f;
+  --ember: #8d2a1a;
+  --plum: #7a1b5f;
+  --moss: #33402c;          /* monopo */
+  --bronze: #b88a4f;        /* monopo */
+  --font: "Host Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r-screen: 40px;
+  --r-card: 12px;
+  --r-button: 6px;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--stage); color: var(--text);
+  font-family: var(--font); font-weight: 400; -webkit-font-smoothing: antialiased;
+  padding-inline: 16px; padding-block: 32px 64px;
+}
+.tnum { font-variant-numeric: tabular-nums; }
+
+.intro { max-width: 860px; margin: 0 auto 28px; display: grid; gap: 8px; }
+.intro h1 { margin: 0; font-size: 44px; line-height: 0.95; font-weight: 500; letter-spacing: -0.035em; }
+.intro p { margin: 0; max-width: 60ch; color: var(--muted); font-size: 15px; line-height: 1.5; }
+
+.stage { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 40px; max-width: 900px; margin: 0 auto; }
+.shot { display: grid; gap: 10px; width: min(402px, 100%); }
+.shot-label { font-size: 13px; color: var(--muted); }
+
+.screen {
+  container-type: inline-size; position: relative; width: 100%;
+  border-radius: var(--r-screen); overflow: clip; background: var(--page);
+  outline: 1px solid rgba(255, 255, 255, 0.06);
+}
+/* Grain, as in Suno and monopo: fine noise laid over every haze. */
+.grain {
+  position: absolute; inset: 0; pointer-events: none; mix-blend-mode: overlay; opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.haze {
+  position: absolute; inset: 0 0 auto; height: 640px; pointer-events: none;
+  background:
+    radial-gradient(60% 42% at 12% 6%, var(--amber), transparent 70%),
+    radial-gradient(55% 40% at 86% 12%, var(--plum), transparent 72%),
+    radial-gradient(80% 50% at 50% 34%, var(--ember), transparent 75%),
+    linear-gradient(180deg, #3a1a10 0%, #1c1011 55%, var(--page) 100%);
+}
+.topbar, .hero, .stack, .timer-body, .timer-foot { position: relative; }
+
+.topbar { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; padding: 58px 20px 0; }
+.brand { font-size: 21px; font-weight: 600; letter-spacing: -0.03em; }
+.context { justify-self: end; font-size: 14px; }
+.icon-btn { display: grid; place-items: center; width: 44px; height: 44px; margin-right: -10px; border: 0; background: transparent; color: var(--text); border-radius: 50%; }
+.icon-btn svg { width: 21px; height: 21px; }
+
+/* Hero: Suno's display is large, medium, tightly tracked — not heavy. */
+.hero { padding: 72px 20px 0; text-align: center; display: grid; justify-items: center; gap: 12px; }
+.streak {
+  margin: 0; color: var(--white); font-size: 62cqi; line-height: 0.86; font-weight: 500;
+  letter-spacing: -0.055em; font-variant-numeric: tabular-nums;
+}
+.streak-label { margin: 0; font-size: 18px; letter-spacing: -0.01em; }
+.streak-label span { color: var(--muted); }
+
+.stack { display: grid; gap: 10px; padding: 64px 12px 0; }
+.card { background: var(--surface); border-radius: var(--r-card); padding: 20px; display: grid; gap: 14px; }
+.eyebrow { margin: 0; font-size: 13px; color: var(--muted); }
+.title { margin: 0; font-size: 20px; font-weight: 500; letter-spacing: -0.02em; }
+.muted { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.4; }
+.row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 12px 0; border-top: 1px solid var(--line); }
+.row:first-of-type { border-top: 0; padding-top: 0; }
+.row:last-child { padding-bottom: 0; }
+.row-l { font-size: 14px; color: var(--muted); }
+.row-v { font-size: 30px; line-height: 1; font-weight: 500; letter-spacing: -0.035em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.row-v small { font-size: 0.55em; color: var(--muted); letter-spacing: 0; }
+
+.sites { display: flex; flex-wrap: wrap; gap: 6px; }
+.site {
+  min-height: 40px; padding: 0 16px; border-radius: 999px; border: 0;
+  background: var(--ghost); color: var(--text); font: inherit; font-size: 14px;
+}
+.site[aria-pressed="true"] { background: var(--text); color: var(--page); font-weight: 500; }
+.site:disabled { color: rgba(247, 244, 239, 0.35); text-decoration: line-through; text-decoration-color: rgba(247, 244, 239, 0.25); }
+
+.btn {
+  display: flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 20px;
+  border-radius: 999px; font: inherit; font-size: 16px; font-weight: 500; letter-spacing: -0.02em;
+  text-decoration: none; background: var(--text); color: var(--page); border: 0;
+}
+.btn-ghost { background: transparent; color: var(--text); box-shadow: inset 0 0 0 1px var(--ghost-line); }
+.link { justify-self: start; font-size: 14px; color: var(--text); text-decoration: underline; text-decoration-color: var(--ghost-line); text-underline-offset: 4px; padding: 6px 0; }
+
+.bar { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.bar > span { display: block; height: 100%; background: var(--text); border-radius: 3px; }
+.split { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 14px; color: var(--muted); }
+.split strong { font-size: 17px; font-weight: 500; color: var(--text); }
+.steps { display: flex; gap: 4px; }
+.step { display: grid; gap: 6px; }
+.step .lab { font-size: 12px; color: var(--muted); }
+.step.now .lab { color: var(--text); }
+
+.list { padding: 4px 20px; gap: 0; }
+.list a { display: flex; justify-content: space-between; align-items: center; min-height: 52px; color: var(--text); text-decoration: none; font-size: 16px; border-top: 1px solid var(--line); }
+.list a:first-child { border-top: 0; }
+.list svg { width: 18px; height: 18px; color: var(--muted); }
+
+/* Envie: the one lit object on the screen — Suno's Create gradient, nowhere else. */
+.dock {
+  position: sticky; bottom: 0; display: flex; justify-content: flex-end; padding: 40px 16px 22px;
+  background: linear-gradient(180deg, transparent, rgba(16, 16, 18, 0.92) 55%);
+}
+.envie {
+  min-width: 62%; min-height: 64px; padding: 0 28px; border: 0; border-radius: 999px;
+  background: linear-gradient(90deg, var(--pink), var(--yellow)); color: var(--page);
+  font: inherit; font-size: 23px; font-weight: 600; letter-spacing: -0.03em;
+  box-shadow: 0 14px 40px -10px rgba(253, 66, 156, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.12) inset;
+}
+
+/* Timer: monopo's liquid moss-and-amber haze, drifting slowly. */
+.timer { aspect-ratio: 402 / 874; display: flex; flex-direction: column; }
+.liquid { position: absolute; inset: -20%; pointer-events: none; filter: blur(48px); }
+.liquid i { position: absolute; border-radius: 50%; }
+.liquid i:nth-child(1) { width: 70%; height: 45%; left: 5%; top: 18%; background: var(--bronze); opacity: 0.75; animation: drift1 16s ease-in-out infinite alternate; }
+.liquid i:nth-child(2) { width: 75%; height: 50%; right: 0; top: 40%; background: var(--moss); animation: drift2 19s ease-in-out infinite alternate; }
+.liquid i:nth-child(3) { width: 55%; height: 35%; left: 25%; top: 62%; background: var(--bronze); opacity: 0.55; animation: drift1 22s ease-in-out infinite alternate-reverse; }
+.liquid i:nth-child(4) { width: 60%; height: 40%; left: -5%; top: 55%; background: #0b0b0b; animation: drift2 14s ease-in-out infinite alternate; }
+@keyframes drift1 { to { transform: translate(18%, 10%) scale(1.15); } }
+@keyframes drift2 { to { transform: translate(-15%, -8%) scale(0.9); } }
+.timer-body { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 22px; padding: 0 20px; }
+.lead { margin: 0; font-size: 24px; line-height: 1.2; font-weight: 400; letter-spacing: -0.025em; max-width: 15ch; text-wrap: balance; }
+.count { margin: 0; color: var(--white); font-size: 33cqi; line-height: 0.86; font-weight: 500; letter-spacing: -0.05em; font-variant-numeric: tabular-nums; }
+.count-l { font-size: 14px; color: var(--text); opacity: 0.8; }
+.minutes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.minutes span { height: 4px; border-radius: 2px; background: rgba(255, 255, 255, 0.22); }
+.minutes span.done { background: var(--white); }
+.timer-foot { padding: 0 20px 34px; }
+
+.notes { max-width: 860px; margin: 48px auto 0; display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.notes section { display: grid; gap: 8px; align-content: start; min-width: 0; }
+.notes h2 { margin: 0; font-size: 13px; font-weight: 500; color: var(--muted); }
+.notes ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px; line-height: 1.45; }
+.swatches { display: flex; flex-wrap: wrap; gap: 8px; }
+.sw { display: grid; gap: 4px; font-size: 11px; color: var(--muted); }
+.sw i { display: block; width: 44px; height: 44px; border-radius: 10px; outline: 1px solid rgba(255,255,255,.1); }
+
+:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .liquid i { animation: none; } }
+</style>
+</head>
+<body>
+
+<header class="intro">
+  <h1>Nocturne chaude</h1>
+  <p>Direction B, appliquée à l’accueil et au minuteur d’envie. Données de démo. Couleurs, rayons et boutons repris de Suno ; la police est l’équivalent open-source le plus proche.</p>
+</header>
+
+<main class="stage">
+  <div class="shot">
+    <span class="shot-label">Accueil</span>
+    <section class="screen" aria-label="Accueil">
+      <div class="haze" aria-hidden="true"></div>
+      <div class="grain" aria-hidden="true"></div>
+      <header class="topbar">
+        <span class="brand">quit</span>
+        <span class="context">Étape 2 · 14&nbsp;mg</span>
+        <button class="icon-btn" type="button" aria-label="Réglages">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </header>
+
+      <div class="hero">
+        <p class="streak">47</p>
+        <p class="streak-label">jours de streak <span class="tnum">· 07&nbsp;h&nbsp;42</span></p>
+      </div>
+
+      <div class="stack">
+        <article class="card">
+          <h2 class="eyebrow">Ce qui reste acquis</h2>
+          <div class="row"><span class="row-l">Jours sans fumer</span><span class="row-v">46<small>&nbsp;j</small> 07<small>&nbsp;h</small></span></div>
+        </article>
+
+        <article class="card">
+          <h2 class="eyebrow">Ce que tu gardes</h2>
+          <div class="row"><span class="row-l">Argent économisé</span><span class="row-v">562,20<small>&nbsp;€</small></span></div>
+          <div class="row"><span class="row-l">Cigarettes non fumées</span><span class="row-v">937</span></div>
+        </article>
+
+        <article class="card">
+          <h2 class="eyebrow">Patch du jour</h2>
+          <p class="title">Pas encore posé</p>
+          <div style="display:grid;gap:4px">
+            <p class="muted" style="color:var(--text)">Où le poser</p>
+            <p class="muted" style="font-size:13px">Facultatif · jamais deux fois de suite au même site</p>
+          </div>
+          <div class="sites">
+            <button class="site" type="button" disabled aria-label="Bras gauche, la dernière fois">Bras gauche</button>
+            <button class="site" type="button" aria-pressed="true">Bras droit</button>
+            <button class="site" type="button" aria-pressed="false">Torse gauche</button>
+            <button class="site" type="button" aria-pressed="false">Torse droit</button>
+            <button class="site" type="button" aria-pressed="false">Hanche gauche</button>
+            <button class="site" type="button" aria-pressed="false">Hanche droite</button>
+          </div>
+          <button class="btn" type="button">Poser le patch · 14&nbsp;mg</button>
+          <a class="link" href="#patch">Autre dose ou autre date</a>
+        </article>
+
+        <article class="card">
+          <h2 class="eyebrow">Objectif</h2>
+          <p class="title">Un vélo</p>
+          <div class="split tnum"><span><strong>562,20&nbsp;€</strong> sur 900&nbsp;€</span><span>62&nbsp;%</span></div>
+          <div class="bar" role="img" aria-label="Économies pour Un vélo : 62 %"><span style="width:62%"></span></div>
+        </article>
+
+        <article class="card">
+          <h2 class="eyebrow">Protocole</h2>
+          <div style="display:grid;gap:4px">
+            <p class="title">Étape 2 / 3</p>
+            <p class="muted tnum">14&nbsp;mg · encore 9&nbsp;j avant 7&nbsp;mg</p>
+          </div>
+          <div class="steps" role="img" aria-label="Étape 2 sur 3, jour 5 sur 14">
+            <div class="step" style="flex:42"><div class="bar"><span style="width:100%"></span></div><span class="lab tnum">21&nbsp;mg</span></div>
+            <div class="step now" style="flex:14"><div class="bar"><span style="width:36%"></span></div><span class="lab tnum">14&nbsp;mg</span></div>
+            <div class="step" style="flex:14"><div class="bar"><span style="width:0"></span></div><span class="lab tnum">7&nbsp;mg</span></div>
+          </div>
+          <p class="muted tnum">Jour 5 sur 14</p>
+        </article>
+
+        <a class="btn btn-ghost" href="#past">Noter une envie passée</a>
+
+        <nav class="card list" aria-label="Plus">
+          <a href="#lapse">J’ai fumé<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a>
+          <a href="#stats">Statistiques des envies<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a>
+          <a href="#calendar">Calendrier<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a>
+          <a href="#history">Historique<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a>
+        </nav>
+      </div>
+
+      <div class="dock"><button class="envie" type="button">Envie</button></div>
+    </section>
+  </div>
+
+  <div class="shot">
+    <span class="shot-label">Minuteur d’envie</span>
+    <section class="screen timer" aria-label="Minuteur d’envie">
+      <div class="liquid" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <div class="grain" aria-hidden="true"></div>
+      <header class="topbar">
+        <span class="brand">quit</span>
+        <span class="context">Minuteur d’envie</span>
+        <span></span>
+      </header>
+      <div class="timer-body">
+        <p class="lead">Respire. Une envie passe en quelques minutes.</p>
+        <div style="display:grid;gap:12px">
+          <p class="count" id="count">04:12</p>
+          <span class="count-l">Temps restant</span>
+        </div>
+        <div class="minutes" id="minutes" aria-hidden="true"><span class="done"></span><span></span><span></span><span></span><span></span></div>
+      </div>
+      <div class="timer-foot"><button class="btn btn-ghost" type="button" style="width:100%">Arrêter</button></div>
+    </section>
+  </div>
+</main>
+
+<div class="notes">
+  <section>
+    <h2>Repris de Suno</h2>
+    <ul>
+      <li>Fond <code>#101012</code>, cartes <code>#17171a</code>, texte <code>#f7f4ef</code>, secondaire <code>#a3a3a3</code>.</li>
+      <li>Halo granuleux ambre, braise et prune derrière le chiffre.</li>
+      <li>Chiffre énorme en graisse moyenne, très serré (−0,05 em), en blanc pur.</li>
+      <li>Bouton plein crème en pilule ; le dégradé rose → jaune est réservé à <strong>Envie</strong>, comme « Create ».</li>
+    </ul>
+  </section>
+  <section>
+    <h2>Repris de monopo</h2>
+    <ul>
+      <li>Le fond liquide mousse et bronze du minuteur, qui dérive lentement.</li>
+      <li>Les boutons fantômes en pilule avec un filet blanc à 30 %.</li>
+    </ul>
+    <div class="swatches">
+      <span class="sw"><i style="background:var(--page)"></i>fond</span>
+      <span class="sw"><i style="background:var(--surface)"></i>carte</span>
+      <span class="sw"><i style="background:var(--text)"></i>crème</span>
+      <span class="sw"><i style="background:linear-gradient(90deg,var(--pink),var(--yellow))"></i>envie</span>
+      <span class="sw"><i style="background:var(--moss)"></i>mousse</span>
+    </div>
+  </section>
+  <section>
+    <h2>Police</h2>
+    <ul>
+      <li>Suno utilise Neue Montreal : pas open-source.</li>
+      <li>Ici Host Grotesk, le plus proche parmi les open-source hors polices par défaut des IA.</li>
+      <li>Écartée : la serif Editorial New de Suno (effet mot-décoratif).</li>
+    </ul>
+  </section>
+</div>
+
+<script>
+  (function () {
+    var el = document.getElementById('count');
+    var bars = document.getElementById('minutes').children;
+    var total = 5 * 60, left = 4 * 60 + 12;
+    function pad(n) { return n < 10 ? '0' + n : String(n); }
+    function render() {
+      el.textContent = pad(Math.floor(left / 60)) + ':' + pad(left % 60);
+      var done = Math.floor((total - left) / 60) + 1;
+      for (var i = 0; i < bars.length; i++) bars[i].className = i < done ? 'done' : '';
+    }
+    render();
+    setInterval(function () { left = left > 0 ? left - 1 : total; render(); }, 1000);
+  })();
+</script>
+</body>
+</html>

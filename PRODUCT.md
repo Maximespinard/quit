@@ -66,7 +66,7 @@ Undecided: final product name (`quit` is provisional), domain, XP numbers (tuned
 - Voice: **complicit and direct** — informal "tu", the tone of a friend who already quit: frank, a little humour, never moralising. Applies to labels, empty states and lapse handling.
 - Encouragements are a separate, hand-written library in the author's own voice, each citing one of the user's real figures. They are written with the author, never generated as filler.
 - Typography constraint (binding): open-source typefaces only, and not the usual AI-default picks; a lesser-known face is welcome. The choice itself belongs to the design pass.
-- No visual identity is committed. The three style variants of the earlier prototype (Instrument / Affiche / Registre) were all rejected; its model ideas were kept.
+- Visual identity committed (2026-09-29): **"Nocturne chaude"** — a dark world led by Refero style Suno (warm grainy haze behind a huge white figure, one lit object: Envie), monopo saigon for the craving timer's haze only, Host Grotesk. Contract in the `/design` surface brief, target in `docs/design/mocks/nocturne-chaude.html`. Rejected along the way: prototype variants Instrument / Affiche / Registre, the navy flat world "Le relevé", "Grand air" (cloud sky).
 
 ## Evidence on Hand
 

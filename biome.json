@@ -13,6 +13,7 @@
       "!dev-dist",
       "!dist",
       "!.impeccable",
+      "!docs/design/mocks",
       "!playwright-report",
       "!test-results",
       "!blob-report",

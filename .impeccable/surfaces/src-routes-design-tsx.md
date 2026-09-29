@@ -2,29 +2,31 @@
 version: 1
 slug: "src-routes-design-tsx"
 primary_target: "src/routes/design.tsx"
-related_targets: []
+related_targets: ["src/routes/index.tsx","src/routes/craving/timer.tsx"]
 ---
 
 # Surface brief — /design (design foundations specimen)
 
-Scope: hidden route `/design`, a living specimen of the visual world for SYR-17. No feature screen, no domain logic. All figures are synthetic and labelled as such.
-Visitor mode: Operate. Audience: the single user and the agents building later UI tickets; it is the reference every M1/M2 screen inherits from.
-Must show: tokens, type, buttons and states, streak, level bar, streak multiplier, badges (locked / unlocked), bottom tab bar (Accueil · Calendrier · Progression · Historique), the permanent Envie control, and the reskinned shadcn pieces (Drawer, Dialog, Switch, Tabs, Slider, segmented ToggleGroup).
-Constraints: French UI strings, `CONTEXT.md` vocabulary, iPhone standalone PWA, one-hand reach, daylight legibility, open-source self-hosted fonts, reduced-motion support.
+Scope: hidden route `/design`, a living specimen of the visual world. No feature screen, no domain logic. All figures are synthetic and labelled as such.
+Visitor mode: Operate. Audience: the single user and the agents building later UI tickets; it is the reference every screen inherits from. Home (`/`) and the craving timer are the two surfaces the visual target shows.
+Must show: tokens, type, buttons and states, streak, level bar, streak multiplier, badges (locked / unlocked), bottom tab bar (Accueil · Calendrier · Progression · Historique), the permanent Envie control, the hero haze, and the reskinned shadcn pieces (Drawer, Dialog, Switch, Tabs, Slider, segmented ToggleGroup).
+Constraints: look-only redesign (IA, UX, copy and behaviour unchanged); French UI strings, `CONTEXT.md` vocabulary, iPhone standalone PWA, one-hand reach, legible outdoors at night and in daylight, open-source self-hosted fonts, reduced-motion support.
 Agreed screen inventory: home, calendar, progress (stats inside), fact history, settings (icon from home). Craving timer is a permanent thumb control outside the tabs.
-Rejected worlds (evidence, anti-reference): pinball machine (cartoon, saturated, over-ornamented); earlier prototype variants Instrument / Affiche / Registre (cold, AI-looking); material metaphors (work jacket, stamped passbook, acetate manual) declined as "skins".
-References: `docs/design/references.md` (Refero: Cron, N26, Google Maps level bar, Opal / Imprint badges, Unwind timer) — borrowed for layout, hierarchy and density only, never colour or brand.
+Visual target: `docs/design/mocks/nocturne-chaude.html` (home + craving timer, demo data; published at https://claude.ai/artifact/AgLBg9A9qtCYi7zJjC1nTC).
+Rejected worlds (evidence, anti-reference): the navy flat world "Le relevé" (functional, not striking); "Grand air" (Air-based cloud sky, two mocks); pinball machine (cartoon, saturated, over-ornamented); prototype variants Instrument / Affiche / Registre (cold, AI-looking); material metaphors (work jacket, stamped passbook, acetate manual).
+User-provided asset pending: the hero background image — warm grainy haze in amber, ember and plum, portrait, bottom fading into the page colour, no literal smoke or embers. The code haze is its placeholder and its floor.
+Unresolved: the destructive/error colour (must clear 4.5:1 on the card surface and stay distinct from the haze's ember); tab bar, badges, charts, Dialog and Drawer in this world (not in the target, derive from the system).
 
 ## Direction contract
 
-THESIS: A flat, typographic product UI — the category standard executed at full craft. One deep navy family carries every fact; the page is white; nothing is textured, textured, hatched or grained. Refuses the health-green progress ring on white and refuses every material metaphor.
+THESIS: A warm nocturne — the app opened at night on a balcony instead of a cigarette. Pitch-black page, one grainy warm haze behind a huge white figure, and a single lit object: Envie. Refuses the bright wellness app (white canvas, pastel, green ring) and the cold neon-on-black tool.
 
-OWN-WORLD: Page white #fafafa. Navy #1b3c53 owns the hero block (bottom corners rounded 28px) and every "acquired" state; #234c6a is the action and progress colour (Envie pill, XP fill, active tab); steel #456882 marks "current" (the reached multiplier step). Surfaces #e3e3e3 for cards, #d4d4d4 for locked, hairlines #d4d4d4, muted text #4a5a66 (darkened from #5e6c78 so locked-badge copy clears 4.5:1). One family: Bricolage Grotesque variable (opsz 12–96, wght 400/500/600/800), tabular numerals, tracking -0.02em on display. Radii: 28px hero, 14px cards, 10px steps, pill for Envie. No shadows: depth is colour and hairline only. One warm value, alert red #a6392f, is the single approved exception to the navy-and-grey family: it belongs to destructive actions and errors and to nothing else (user decision, this build).
+OWN-WORLD: Page #101012, cards #17171a radius 12, text #f7f4ef, key figure #ffffff, muted #a3a3a3, hairlines white 8 %. Hero haze: radial amber #b8730f, ember #8d2a1a, plum #7a1b5f over #3a1a10 fading to the page, fractal-noise grain in overlay. Primary = #f7f4ef filled pill, text #101012. Pink #fd429c → yellow #f5d907 gradient belongs to Envie alone, label #101012, pink glow. Chips = white-5 % pills, selected = cream fill. Secondary = ghost pill, 1px white 30 %. Progress = cream on white 8 %. Craving timer only: blurred liquid moss #33402c and bronze #b88a4f drifting over the page. Type: Host Grotesk; figures weight 500, tracking −0.055em, tabular; UI 400/500.
 
-STORY: The user sees the streak as the one huge figure on a navy block, reads under it how long until the next multiplier step and level, sees which badges are earned and which are locked, and reaches Envie with the right thumb without looking.
+STORY: The user sees the streak glowing out of the haze, reads what is acquired and saved on dark cards, logs the patch with one cream pill, and finds Envie under the right thumb without looking. Mid-craving, the screen turns to slow moss and bronze around a white countdown.
 
-FIRST VIEWPORT: Navy hero block from the top edge to under "jours sans fumer · 07 h 42": "quit" top-left, "Étape 1 · 21 mg · J-16 avant 14 mg" top-right, streak days at 176px weight 800 left-aligned, then the label row. On white below, in this order with 20px gaps: multiplier as five 42px steps (acquired navy, current steel, locked outline), level as an 8px bar with numeric endpoints, badges as a 3-column grid of square cards (locked = #d4d4d4 + lock glyph). Envie is a 64px-high pill, right thumb side, above the tab bar. Tab bar: four items, icon + label, active #234c6a.
+FIRST VIEWPORT: Haze fills the top 640px and fades into #101012. Top bar: "quit" 21px/600 left; "Étape 2 · 14 mg" 14px and 44px settings control right. Streak centred, ≈62cqi (≈250px at 402), white, weight 500; "jours de streak · 07 h 42" 18px under it, hours muted. Cards start 64px lower, 10px apart. Envie: 64px gradient pill, right-aligned, 62 % wide, over a bottom fade to the page.
 
-FORM: Category canon, chosen by the user after two rounds of coded studies (seed key f96838ca declined in full; textile / passbook / acetate hand rejected; Bloc composition + ColorHunt 1b3c53-234c6a-456882-e3e3e3 palette locked as study "acier", `.impeccable/mocks/studies-3/acier.html`). Signature interaction: the streak figure counts up digit-wise on load and the multiplier steps fill in sequence, 240ms exponential ease-out, stepped not floaty; reduced motion shows the final state.
+FORM: User-pinned after a Refero exploration of three directions ("Grand air" mocked twice and rejected). Primary Refero style Suno (9844e7bf), secondary monopo saigon (76c30104) for the timer haze and ghost pills only. concept-seed key d9995448 rolled; the pinned direction overrides its assignment. Code-led (no image generation). Signature interaction: the stepped 240ms streak count-up stays; the timer haze drifts under motion-safe only.
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance

@@ -193,6 +193,11 @@ components:
 
 # Design System: quit
 
+> **Being replaced.** The user committed a new world, "Nocturne chaude" (contract in
+> `.impeccable/surfaces/src-routes-design-tsx.md`, target in `docs/design/mocks/nocturne-chaude.html`).
+> This file still describes the navy world the code ships today; it is rewritten from the built
+> world when the foundation ticket lands. New UI work waits for that ticket.
+
 ## Overview
 
 **Creative North Star : « Le relevé »**
