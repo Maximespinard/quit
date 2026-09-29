@@ -7,7 +7,9 @@ import { journalSchema } from './journal.ts'
  * `factSchema`; a change to the shape of the file itself bumps the version.
  */
 export const JOURNAL_FILE_FORMAT = 'quit-journal'
-export const JOURNAL_FILE_VERSION = 1
+/** 2 gives every fact its id; a version 1 file is still read, its facts getting ids once stored. */
+export const JOURNAL_FILE_VERSION = 2
+const READABLE_VERSIONS = [1, JOURNAL_FILE_VERSION] as const
 
 /** Which journal a file was exported from, or is imported into. */
 export const journalOriginSchema = z.enum(['device', 'sandbox'])
@@ -15,7 +17,7 @@ export type JournalOrigin = z.infer<typeof journalOriginSchema>
 
 export const journalFileSchema = z.object({
   format: z.literal(JOURNAL_FILE_FORMAT),
-  version: z.literal(JOURNAL_FILE_VERSION),
+  version: z.literal(READABLE_VERSIONS),
   /** When the file was written. */
   exportedAt: instantSchema,
   origin: journalOriginSchema,

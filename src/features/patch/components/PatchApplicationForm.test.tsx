@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import type { PatchApplicationInput } from '@/shared/domain/facts/patch-application'
 import { emptyJournal, type Journal } from '@/shared/domain/journal'
 import { protocolPosition } from '@/shared/domain/protocol-position'
+import { factId } from '@/shared/test/fact-ids'
 import { strings } from '@/shared/utils/strings'
 import { PatchApplicationForm } from './PatchApplicationForm'
 
@@ -12,7 +13,7 @@ const NOW = new Date(2026, 8, 22, 10, 0).getTime()
 const journal: Journal = { ...emptyJournal, facts: [{ type: 'quit-moment', at: QUIT_MOMENT }] }
 const position = protocolPosition(journal.protocol, QUIT_MOMENT, NOW)
 const copy = strings.patch.form
-const initial = { at: new Date(2026, 8, 21, 23, 40, 12).getTime(), doseMg: 10.5 }
+const initial = { id: factId(7), at: new Date(2026, 8, 21, 23, 40, 12).getTime(), doseMg: 10.5 }
 
 const sites = strings.patch.sites
 
@@ -199,7 +200,7 @@ it('edits a patch application from its own site, not the suggested one', async (
   })
 })
 
-it('edits a patch application from its own dose and time, kept exact when untouched', async () => {
+it('edits a patch application from its own dose and time, kept exact with its id when untouched', async () => {
   const onRecorded = renderEdit()
 
   expect(screen.getByRole('heading', { name: copy.edit.title })).toBeVisible()
@@ -225,7 +226,12 @@ it('moves a patch application across midnight', async () => {
     ...journal,
     facts: [
       ...journal.facts,
-      { type: 'patch-application', at: new Date(2026, 8, 22, 0, 20).getTime(), doseMg: 10.5 },
+      {
+        type: 'patch-application',
+        id: initial.id,
+        at: new Date(2026, 8, 22, 0, 20).getTime(),
+        doseMg: 10.5,
+      },
     ],
   })
 })

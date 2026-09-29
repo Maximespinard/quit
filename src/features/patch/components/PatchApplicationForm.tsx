@@ -5,7 +5,7 @@ import {
   type RecordPatchApplicationResult,
   recordPatchApplication,
 } from '@/shared/domain/facts/patch-application'
-import type { Journal } from '@/shared/domain/journal'
+import { type Journal, keptId } from '@/shared/domain/journal'
 import type { ProtocolPosition } from '@/shared/domain/protocol-position'
 import { Button } from '@/shared/ui/base/button'
 import { Input } from '@/shared/ui/base/input'
@@ -70,7 +70,7 @@ export function PatchApplicationForm({
     }
     const result = recordPatchApplication(
       journal,
-      applicationAt(at, fromDecimalText(dose), site),
+      { ...keptId(initial), ...applicationAt(at, fromDecimalText(dose), site) },
       now,
     )
     if (result.ok) onRecorded(result.journal)

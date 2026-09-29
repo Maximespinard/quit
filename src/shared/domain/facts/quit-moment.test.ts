@@ -1,3 +1,4 @@
+import { factId } from '@/shared/test/fact-ids'
 import { emptyJournal, type Journal } from '../journal'
 import { recordQuitMoment } from './quit-moment'
 
@@ -35,18 +36,48 @@ describe('recordQuitMoment, correcting an existing quit moment', () => {
   const journal: Journal = {
     ...emptyJournal,
     facts: [
-      { type: 'quit-moment', at: quitMoment },
-      { type: 'lapse', at: NOW - 60 * MINUTE, count: 1 },
-      { type: 'craving', at: firstCraving, intensity: 2, heldToEnd: true, tags: [] },
+      { type: 'quit-moment', id: factId(1), at: quitMoment },
+      { type: 'lapse', id: factId(2), at: NOW - 60 * MINUTE, count: 1 },
+      {
+        type: 'craving',
+        id: factId(3),
+        at: firstCraving,
+        intensity: 2,
+        heldToEnd: true,
+        tags: [],
+      },
     ],
   }
 
-  it('moves the quit moment earlier', () => {
+  it('moves the quit moment earlier, as the same fact: its id kept, no second quit moment', () => {
     const at = quitMoment - 60 * MINUTE
 
     expect(recordQuitMoment(journal, at, NOW)).toEqual({
       ok: true,
-      journal: { ...journal, facts: [...journal.facts, { type: 'quit-moment', at }] },
+      journal: {
+        ...journal,
+        facts: [...journal.facts.slice(1), { type: 'quit-moment', id: factId(1), at }],
+      },
+    })
+  })
+
+  it('corrects the quit moment in force, leaving one recorded before it as it was', () => {
+    const corrected: Journal = {
+      ...journal,
+      facts: [{ type: 'quit-moment', at: quitMoment - 60 * MINUTE }, ...journal.facts],
+    }
+    const at = quitMoment - 30 * MINUTE
+
+    expect(recordQuitMoment(corrected, at, NOW)).toEqual({
+      ok: true,
+      journal: {
+        ...corrected,
+        facts: [
+          { type: 'quit-moment', at: quitMoment - 60 * MINUTE },
+          ...journal.facts.slice(1),
+          { type: 'quit-moment', id: factId(1), at },
+        ],
+      },
     })
   })
 

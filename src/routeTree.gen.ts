@@ -20,7 +20,7 @@ import { Route as StatsRouteImport } from './routes/stats'
 import { Route as CravingPastRouteImport } from './routes/craving/past'
 import { Route as CravingTimerRouteImport } from './routes/craving/timer'
 import { Route as HistoryIndexRouteImport } from './routes/history/index'
-import { Route as HistoryFactIndexRouteImport } from './routes/history/$factIndex'
+import { Route as HistoryFactIdRouteImport } from './routes/history/$factId'
 import { Route as PatchNewRouteImport } from './routes/patch/new'
 
 const IndexRoute = IndexRouteImport.update({
@@ -78,9 +78,9 @@ const HistoryIndexRoute = HistoryIndexRouteImport.update({
   path: '/history/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HistoryFactIndexRoute = HistoryFactIndexRouteImport.update({
-  id: '/history/$factIndex',
-  path: '/history/$factIndex',
+const HistoryFactIdRoute = HistoryFactIdRouteImport.update({
+  id: '/history/$factId',
+  path: '/history/$factId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PatchNewRoute = PatchNewRouteImport.update({
@@ -100,7 +100,7 @@ export interface FileRoutesByFullPath {
   '/stats': typeof StatsRoute
   '/craving/past': typeof CravingPastRoute
   '/craving/timer': typeof CravingTimerRoute
-  '/history/$factIndex': typeof HistoryFactIndexRoute
+  '/history/$factId': typeof HistoryFactIdRoute
   '/patch/new': typeof PatchNewRoute
   '/history/': typeof HistoryIndexRoute
 }
@@ -115,7 +115,7 @@ export interface FileRoutesByTo {
   '/stats': typeof StatsRoute
   '/craving/past': typeof CravingPastRoute
   '/craving/timer': typeof CravingTimerRoute
-  '/history/$factIndex': typeof HistoryFactIndexRoute
+  '/history/$factId': typeof HistoryFactIdRoute
   '/patch/new': typeof PatchNewRoute
   '/history': typeof HistoryIndexRoute
 }
@@ -131,7 +131,7 @@ export interface FileRoutesById {
   '/stats': typeof StatsRoute
   '/craving/past': typeof CravingPastRoute
   '/craving/timer': typeof CravingTimerRoute
-  '/history/$factIndex': typeof HistoryFactIndexRoute
+  '/history/$factId': typeof HistoryFactIdRoute
   '/patch/new': typeof PatchNewRoute
   '/history/': typeof HistoryIndexRoute
 }
@@ -148,7 +148,7 @@ export interface FileRouteTypes {
     | '/stats'
     | '/craving/past'
     | '/craving/timer'
-    | '/history/$factIndex'
+    | '/history/$factId'
     | '/patch/new'
     | '/history/'
   fileRoutesByTo: FileRoutesByTo
@@ -163,7 +163,7 @@ export interface FileRouteTypes {
     | '/stats'
     | '/craving/past'
     | '/craving/timer'
-    | '/history/$factIndex'
+    | '/history/$factId'
     | '/patch/new'
     | '/history'
   id:
@@ -178,7 +178,7 @@ export interface FileRouteTypes {
     | '/stats'
     | '/craving/past'
     | '/craving/timer'
-    | '/history/$factIndex'
+    | '/history/$factId'
     | '/patch/new'
     | '/history/'
   fileRoutesById: FileRoutesById
@@ -194,7 +194,7 @@ export interface RootRouteChildren {
   StatsRoute: typeof StatsRoute
   CravingPastRoute: typeof CravingPastRoute
   CravingTimerRoute: typeof CravingTimerRoute
-  HistoryFactIndexRoute: typeof HistoryFactIndexRoute
+  HistoryFactIdRoute: typeof HistoryFactIdRoute
   PatchNewRoute: typeof PatchNewRoute
   HistoryIndexRoute: typeof HistoryIndexRoute
 }
@@ -278,11 +278,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HistoryIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/history/$factIndex': {
-      id: '/history/$factIndex'
-      path: '/history/$factIndex'
-      fullPath: '/history/$factIndex'
-      preLoaderRoute: typeof HistoryFactIndexRouteImport
+    '/history/$factId': {
+      id: '/history/$factId'
+      path: '/history/$factId'
+      fullPath: '/history/$factId'
+      preLoaderRoute: typeof HistoryFactIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/patch/new': {
@@ -306,7 +306,7 @@ const rootRouteChildren: RootRouteChildren = {
   StatsRoute: StatsRoute,
   CravingPastRoute: CravingPastRoute,
   CravingTimerRoute: CravingTimerRoute,
-  HistoryFactIndexRoute: HistoryFactIndexRoute,
+  HistoryFactIdRoute: HistoryFactIdRoute,
   PatchNewRoute: PatchNewRoute,
   HistoryIndexRoute: HistoryIndexRoute,
 }
