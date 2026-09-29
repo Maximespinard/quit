@@ -66,6 +66,20 @@ A missing or invalid variable stops the start with a message naming it.
 `application/problem+json`. Ten failed key checks from one address within 15 minutes, and
 that address gets `429` for every request until the window ends.
 
+### API
+
+The server holds the **mirror** of the device's journal (`docs/adr/0003`). Bodies are checked
+against the `@quit/contract` schemas, for shape only, never a domain rule: a `400` names the
+fields at fault. A fact id is the UUIDv7 the device gave it.
+
+| Route | Body | Answers |
+| --- | --- | --- |
+| `GET /api/health` | — | `200` database reachable, `503` otherwise |
+| `PUT /api/facts/:id` | one fact; its `id`, when present, equals the path's | `204` stored or replaced, a replay leaving one fact, `400`, `401` |
+| `DELETE /api/facts/:id` | — | `204`, also when already absent; `400` on an id that is not a UUIDv7 |
+| `PUT /api/settings` | the whole settings | `204` replaced, protocol steps included, `400`, `401` |
+| `GET /api/mirror` | — | `200` `{ facts, settings }`: the facts ordered by time, `settings` `null` until first sent |
+
 Issue the **device key** where the server runs, with the same `DATA_DIR`:
 
 ```bash

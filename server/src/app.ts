@@ -6,6 +6,7 @@ import { pinoHttp } from 'pino-http'
 import type { Database, Db } from './database.ts'
 import { isActiveDeviceKey } from './device-keys.ts'
 import type { Logger } from './logger.ts'
+import { mirrorRoutes } from './mirror-routes.ts'
 import { sendProblem } from './problem.ts'
 import { serveApp } from './serve-app.ts'
 
@@ -83,6 +84,7 @@ export function createApp({
   logger,
   trustProxyHops,
   appDir,
+  now,
 }: {
   database: Database
   logger: Logger
@@ -90,6 +92,8 @@ export function createApp({
   trustProxyHops: number
   /** The built PWA (`vite build`'s output) to serve outside `/api`. */
   appDir?: string | undefined
+  /** The server's clock: when the mirror received or replaced what it stores. */
+  now: () => Date
 }) {
   const app = express()
   if (trustProxyHops > 0) app.set('trust proxy', trustProxyHops)
@@ -141,6 +145,7 @@ export function createApp({
   )
   api.use(requireDeviceKey(database.db))
   api.use(express.json({ limit: MAX_BODY_BYTES }))
+  api.use(mirrorRoutes({ db: database.db, now }))
   api.use((_req, res) => sendProblem(res, 404, 'No such route.'))
   app.use('/api', api)
 

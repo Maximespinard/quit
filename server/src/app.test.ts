@@ -1,85 +1,9 @@
 import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
-import type { AddressInfo } from 'node:net'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { PROBLEM_CONTENT_TYPE, problemSchema } from '@quit/contract/problem'
-import { afterEach, describe, expect, it } from 'vitest'
-import { AUTH_FAILURES_PER_WINDOW, createApp, MAX_BODY_BYTES } from './app.ts'
-import { openDatabase } from './database.ts'
-import { issueDeviceKey } from './device-keys.ts'
-import { createLogger } from './logger.ts'
-
-const T0 = new Date('2026-10-01T08:00:00Z')
-
-const cleanups: (() => Promise<void>)[] = []
-
-afterEach(async () => {
-  for (const cleanup of cleanups.splice(0).reverse()) await cleanup()
-})
-
-interface RequestOptions {
-  key?: string | null
-  /** Sent as is, with a JSON content type. */
-  body?: string
-  authorization?: string
-  /** The client address a proxy in front would forward. */
-  forwardedFor?: string
-}
-
-async function setup({
-  trustProxyHops = 0,
-  appDir,
-}: {
-  trustProxyHops?: number
-  appDir?: string
-} = {}) {
-  const dir = await mkdtemp(join(tmpdir(), 'quit-server-'))
-  cleanups.push(() => rm(dir, { recursive: true, force: true }))
-  const database = openDatabase(dir)
-  cleanups.push(async () => database.close())
-  const logs: string[] = []
-  const logger = createLogger('info', { write: (line: string) => void logs.push(line) })
-  const app = createApp({
-    database,
-    logger,
-    trustProxyHops,
-    appDir,
-  })
-  const server = app.listen(0, '127.0.0.1')
-  await new Promise((resolve) => server.once('listening', resolve))
-  cleanups.push(() => new Promise((resolve) => server.close(() => resolve())))
-  const { port } = server.address() as AddressInfo
-
-  function request(method: string, path: string, options: RequestOptions = {}) {
-    const headers: Record<string, string> = {}
-    if (options.body !== undefined) headers['content-type'] = 'application/json'
-    if (options.authorization !== undefined) headers.authorization = options.authorization
-    else if (options.key) headers.authorization = `Bearer ${options.key}`
-    if (options.forwardedFor) headers['x-forwarded-for'] = options.forwardedFor
-    return fetch(`http://127.0.0.1:${port}${path}`, {
-      method,
-      headers,
-      ...(options.body === undefined ? {} : { body: options.body }),
-    })
-  }
-
-  return {
-    database,
-    logs,
-    request,
-    /** What the issue command does, at T0. */
-    issueKey: () => issueDeviceKey(database.db, T0),
-  }
-}
-
-/** Asserts a problem+json answer with this status, and returns the problem. */
-async function expectProblem(response: Response, status: number) {
-  expect(response.status).toBe(status)
-  expect(response.headers.get('content-type')).toContain(PROBLEM_CONTENT_TYPE)
-  const problem = problemSchema.parse(await response.json())
-  expect(problem.status).toBe(status)
-  return problem
-}
+import { describe, expect, it } from 'vitest'
+import { AUTH_FAILURES_PER_WINDOW, MAX_BODY_BYTES } from './app.ts'
+import { expectProblem, onCleanup, setup } from './test-api.ts'
 
 describe('health', () => {
   it('answers 200 without a device key while the database is reachable', async () => {
@@ -292,7 +216,7 @@ const HASHED_ASSET = '/assets/index-D5vVQmWf.js'
  */
 async function builtApp() {
   const dir = await mkdtemp(join(tmpdir(), '.quit-app-'))
-  cleanups.push(() => rm(dir, { recursive: true, force: true }))
+  onCleanup(() => rm(dir, { recursive: true, force: true }))
   await mkdir(join(dir, 'assets'))
   await writeFile(join(dir, 'index.html'), INDEX_HTML)
   await writeFile(join(dir, 'sw.js'), 'self.skipWaiting()')

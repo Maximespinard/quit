@@ -4,7 +4,8 @@ import * as z from 'zod/mini'
  * The facts a journal holds, one schema per type; their types are inferred from here and
  * nowhere else. A schema checks shape only: rules such as "not before the quit moment" live
  * in the app's domain (ADR-0002). A new fact type is one schema here plus its entry in
- * `factTypeSchema` and in `factSchema`.
+ * `FACT_TYPES` and in `factSchema`, then its columns on the server: `server/src/schema.ts` (a new
+ * migration) and `server/src/mirror.ts`.
  */
 
 /** An instant, in ms since the epoch. `z.number()` already refuses NaN and infinities. */
@@ -23,7 +24,9 @@ export const CRAVING = 'craving'
 export const PATCH_APPLICATION = 'patch-application'
 export const LAPSE = 'lapse'
 
-export const factTypeSchema = z.enum([QUIT_MOMENT, CRAVING, PATCH_APPLICATION, LAPSE])
+export const FACT_TYPES = [QUIT_MOMENT, CRAVING, PATCH_APPLICATION, LAPSE] as const
+export const factTypeSchema = z.enum(FACT_TYPES)
+export type FactType = z.infer<typeof factTypeSchema>
 
 /** The exact timestamp at which the user stopped smoking. */
 export const quitMomentSchema = z.readonly(

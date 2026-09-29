@@ -8,6 +8,13 @@
       "when": 1790705830399,
       "tag": "0000_device_keys",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1790710820016,
+      "tag": "0001_mirror",
+      "breakpoints": true
     }
   ]
 }
