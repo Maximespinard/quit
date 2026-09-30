@@ -35,7 +35,7 @@ test('deleting the only lapse gives back its smoke-free day, behind a confirmati
   await home(page)
   await expectStreak(page, 4, '00 h 00')
   await expect(page.getByText(/Dernière cigarette/)).toHaveCount(0)
-  await expect(totals(page).getByRole('definition').first()).toHaveText('3')
+  await expect(totals(page)).toHaveCount(0)
 })
 
 test('deleting a lapse of a relapse restarts the streak from the quit moment and drops the personal best', async ({
@@ -60,6 +60,7 @@ test('deleting a lapse of a relapse restarts the streak from the quit moment and
 
   await home(page)
   await expectStreak(page, 5, '00 h 00')
+  await expect(totals(page)).toBeVisible()
   await expect(totals(page).getByText('Plus long streak')).toHaveCount(0)
 })
 
