@@ -1,18 +1,12 @@
 import { expect, type Page, test } from '@playwright/test'
-import { sandboxAt, startNow } from './sandbox'
+import { NOW } from './support/clock'
+import { startNow } from './support/flows'
+import { settingsSpendField, tap } from './support/locators'
+import { daysLater, sandboxAt, sandboxMarker } from './support/sandbox'
 
-const NOW = Date.UTC(2026, 0, 1, 12, 0, 0)
-
-const tap = (page: Page, name: string) => page.getByRole('button', { name, exact: true }).click()
 const goal = (page: Page) => page.getByRole('region', { name: 'Objectif' })
 const figure = (page: Page, term: string) =>
   page.getByRole('term').filter({ hasText: term }).locator('+ dd')
-
-async function daysLater(page: Page, days: number) {
-  await page.getByRole('button', { name: 'Bac à sable' }).click()
-  for (let day = 0; day < days; day += 1) await tap(page, '+1 j')
-  await page.keyboard.press('Escape')
-}
 
 async function setGoal(page: Page, label: string, price: string) {
   await page.getByRole('textbox', { name: 'Ce que tu veux t’offrir' }).fill(label)
@@ -36,7 +30,10 @@ test('a goal set, then time passing fills it until it is reached', async ({ page
   await expect(goal(page)).toContainText('0 € sur 20 €')
   await expect(goal(page).getByRole('progressbar')).toHaveAttribute('aria-valuenow', '0')
 
-  await daysLater(page, 1)
+  // A day on, the panel closed from the keyboard: Escape dismisses it like `Fermer`.
+  await sandboxMarker(page).click()
+  await tap(page, '+1 j')
+  await page.keyboard.press('Escape')
   await expect(figure(page, 'Argent économisé')).toHaveText('5 €')
   await expect(figure(page, 'Cigarettes non fumées')).toHaveText('15')
   await expect(goal(page)).toContainText('5 € sur 20 €')
@@ -64,8 +61,8 @@ test('changing the weekly spend recomputes the money saved at once', async ({ pa
   await expect(figure(page, 'Argent économisé')).toHaveText('35 €')
 
   await page.getByRole('link', { name: 'Réglages' }).click()
-  await page.getByRole('textbox', { name: 'Dépense en tabac par semaine' }).fill('48,90')
-  await page.getByRole('button', { name: 'Enregistrer', exact: true }).click()
+  await settingsSpendField(page).fill('48,90')
+  await tap(page, 'Enregistrer')
 
   await expect(figure(page, 'Argent économisé')).toHaveText('48,90 €')
 })

@@ -1,5 +1,5 @@
 import { defineConfig, devices } from '@playwright/test'
-import { apiEnv, apiUrl } from './e2e/mirror-server'
+import { apiEnv, apiUrl } from './e2e/support/mirror-server'
 
 // Two worktrees run their e2e suites at the same time — each picks its own port
 // (`scripts/e2e-slot.sh` gives one per slot).

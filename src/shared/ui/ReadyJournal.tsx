@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import type { Journal } from '@/shared/domain/journal'
 import type { JournalState } from '@/shared/hooks/useJournal'
 import { strings } from '@/shared/utils/strings'
-import { AppShell } from './app-shell'
+import { AppShell } from './AppShell'
 
 type ReadyJournalProps = {
   state: JournalState

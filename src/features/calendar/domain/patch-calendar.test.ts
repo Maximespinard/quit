@@ -360,6 +360,7 @@ describe('patchCalendar', () => {
   })
 })
 
+// The calendar and the home's patch of the day both ask `asksForPatch`: they agree on today.
 describe('patchCalendar — today agrees with the home’s patch of the day', () => {
   /** What the calendar's today cell says: logged, due, or nothing asked. */
   const calendarSays = (journal: Journal, now: number) =>

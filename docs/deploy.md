@@ -38,6 +38,49 @@ two minutes, and a release that fails its health check is rolled back by itself.
 The timer only ever runs the installed copies, owned by root, never a checkout: a change
 under `deploy/` reaches the host when `setup.sh` runs again.
 
+## The image
+
+One image holds the built app and the server that serves it (`Dockerfile`, built from the
+root). It runs as `node`, not root, with the database on the `/data` volume. CI builds it on
+every pull request and runs the smoke and offline e2e specs against the container; on `main`
+it publishes `ghcr.io/maximespinard/quit` tagged with the commit sha and `main`.
+
+```bash
+docker build -t quit .
+docker run --rm --name quit -p 8080:8080 -v quit-data:/data \
+  -e VAPID_PUBLIC_KEY=… -e VAPID_PRIVATE_KEY=… -e VAPID_SUBJECT=mailto:… quit   # the app on http://localhost:8080
+docker exec quit node src/issue-device-key.ts   # the device key, same DATA_DIR
+E2E_BASE_URL=http://127.0.0.1:8080 npm run test:e2e -- smoke.spec.ts offline.spec.ts
+```
+
+## The server
+
+`server/` runs its TypeScript sources directly on Node ≥ 24, no build step. SQLite (WAL) lives
+in `DATA_DIR`; pending migrations from `server/drizzle/` are applied at start. Its HTTP
+contract (mirror, device key, push) is in [`api.md`](api.md).
+
+```bash
+cd server
+DATA_DIR=./data npm start                # or: node --env-file=.env src/main.ts (see .env.example)
+npm run verify                           # lint · typecheck · tests
+npm run db:generate -- --name <change>   # after editing src/db/schema.ts: writes the next migration
+```
+
+| Variable | Default | |
+| --- | --- | --- |
+| `DATA_DIR` | — (required) | Directory of the database file `quit.db`, created when missing |
+| `VAPID_PUBLIC_KEY` | — (required) | VAPID key pair (`npx web-push generate-vapid-keys`); the public key is the app's `applicationServerKey` |
+| `VAPID_PRIVATE_KEY` | — (required) | |
+| `VAPID_SUBJECT` | — (required) | `mailto:` or `https://` contact for the push services (Apple rejects anything else) |
+| `PORT` | `8080` | |
+| `LOG_LEVEL` | `info` | pino level; logs are JSON lines on stdout, never a body, a query nor a header |
+| `TRUST_PROXY` | `0` | Reverse proxies in front, e.g. `1` behind the tunnel, so the rate limit counts per client |
+| `APP_DIR` | — (API only) | The built PWA (`dist/`) to serve outside `/api` |
+
+A missing or invalid variable stops the start with a message naming it. In production the
+image sets `DATA_DIR` and `APP_DIR`, `deploy/compose.yaml` sets `TRUST_PROXY` to `1`, and the
+VAPID variables come from `/etc/quit/quit.env`.
+
 ## First install
 
 Prerequisites: Docker with Compose v2, and in the Cloudflare dashboard (Zero Trust →

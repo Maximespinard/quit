@@ -1,15 +1,15 @@
 ---
 version: 1
-slug: "src-routes-design-tsx"
-primary_target: "src/routes/design.tsx"
-related_targets: ["src/routes/index.tsx","src/routes/craving/timer.tsx"]
+slug: "src-routes-index-tsx"
+primary_target: "src/routes/index.tsx"
+related_targets: ["src/routes/craving/timer.tsx"]
 ---
 
-# Surface brief — /design (design foundations specimen)
+# Surface brief — design foundations (home and the craving timer)
 
-Scope: hidden route `/design`, a living specimen of the visual world. No feature screen, no domain logic. All figures are synthetic and labelled as such.
+Scope: the visual world every screen inherits from, carried by home (`/`) and the craving timer. It was first shown on a hidden `/design` specimen route, removed in SYR-87; the shared components it showcased (badge card, multiplier steps, tab bar, base slider / switch / tabs) stay in `src/shared/ui/` for M2.
 Visitor mode: Operate. Audience: the single user and the agents building later UI tickets; it is the reference every screen inherits from. Home (`/`) and the craving timer are the two surfaces the visual target shows.
-Must show: tokens, type, buttons and states, streak, level bar, streak multiplier, badges (locked / unlocked), bottom tab bar (Accueil · Calendrier · Progression · Historique), the permanent Envie control, the hero haze, and the reskinned shadcn pieces (Drawer, Dialog, Switch, Tabs, Slider, segmented ToggleGroup).
+Covers: tokens, type, buttons and states, streak, level bar, streak multiplier, badges (locked / unlocked), bottom tab bar (Accueil · Calendrier · Progression · Historique), the permanent Envie control, the hero haze, and the reskinned shadcn pieces (Drawer, Dialog, Switch, Tabs, Slider, segmented ToggleGroup).
 Constraints: look-only redesign (IA, UX, copy and behaviour unchanged); French UI strings, `CONTEXT.md` vocabulary, iPhone standalone PWA, one-hand reach, legible outdoors at night and in daylight, open-source self-hosted fonts, reduced-motion support.
 Agreed screen inventory: home, calendar, progress (stats inside), fact history, settings (icon from home). Craving timer is a permanent thumb control outside the tabs.
 Visual target: `docs/design/mocks/nocturne-chaude.html` (home + craving timer, demo data).
@@ -17,7 +17,7 @@ Rejected worlds (evidence, anti-reference): the navy flat world "Le relevé" (fu
 Hero: the code haze (3 radial glows + fractal-noise grain) is the final hero, not a placeholder (user-provided image SYR-54 canceled 2026-09-29).
 Decided in the final audit (SYR-66, 2026-09-29):
 - Destructive / error colour: `alert` #ff6b72, 6.9:1 on the page, 6.5:1 on a card, far lighter than the haze's ember #8d2a1a. Error text in alert; the destructive button is a hairline ghost pill (1px alert at 70 %, 3.8:1, alert label), never a tinted fill.
-- Tab bar: its look is fixed in the /design specimen (page ground, hairline top, 11px labels, cream active). It ships with M2, when Progression exists; until then the home's list card of rows is the navigation.
+- Tab bar: its look is fixed in `src/shared/ui/TabBar.tsx` (page ground, hairline top, 11px labels, cream active). It ships with M2, when Progression exists; until then the home's list card of rows is the navigation.
 - Badges: 12px-radius squares, unlocked on the surface, locked as a hairline outline in muted with a lock glyph.
 - Charts: cream bars at 60 % on a card (6.5:1; SYR-84 dropped the amber `series`, louder than home), `ghost-line` baseline, 3.15:1 when dimmed, a screen-reader table under each.
 - Dialog: a surface card, radius 12, hairline border, over `page` at 80 %. Drawer: surface, radius 28 on its open edge, a `ghost-line` grab handle.

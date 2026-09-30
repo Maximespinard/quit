@@ -59,7 +59,7 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
-    setupFiles: ['./src/test/setup.ts'],
+    setupFiles: ['./src/shared/test/setup.ts'],
     css: { include: [/index\.css/] },
     // Smoke-free days follow local calendar days: pin a zone with daylight saving so the
     // DST cases test what they claim on any machine.

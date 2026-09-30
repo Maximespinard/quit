@@ -16,12 +16,13 @@
     "preview": "vite preview",
     "lint": "biome check . && eslint .",
     "lint:fix": "biome check --write . && eslint . --fix",
-    "format": "biome format --write .",
     "typecheck": "tsc -b",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "scripts/e2e-slot.sh playwright test",
-    "verify": "npm run lint && npm run typecheck && npm run test && npm run build && npm run verify --workspaces"
+    "icons": "node scripts/render-icons.mjs",
+    "screenshots": "npm run build && node scripts/render-screenshots.mjs",
+    "verify": "npm run lint && npm run typecheck && npm run test && vite build && npm run verify --workspaces"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
@@ -55,6 +56,7 @@
     "eslint-import-resolver-typescript": "^4.4.5",
     "eslint-plugin-boundaries": "^7.2.0",
     "jsdom": "^30.1.0",
+    "quit-server": "*",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.2",
     "vite": "^8.3.0",

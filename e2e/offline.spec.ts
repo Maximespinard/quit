@@ -1,5 +1,7 @@
 import { expect, type Page, test } from '@playwright/test'
-import { expectStreak, startNow, streakRegion } from './sandbox'
+import { expectStreak } from './support/assertions'
+import { startNow } from './support/flows'
+import { streakRegion } from './support/locators'
 
 /** Resolves once the service worker has precached the app and controls the page. */
 const waitForServiceWorker = (page: Page) =>

@@ -19,6 +19,9 @@ export type CravingTagOption = { readonly tag: string; readonly label: string }
 
 const defaultKeys = new Set<string>(DEFAULT_CRAVING_TAGS)
 
+/** Whether a tag is one of the defaults, case and spacing aside. */
+export const isDefaultCravingTag = (tag: string) => defaultKeys.has(tagKey(tag))
+
 /**
  * The tags the user typed on past cravings, offered again: derived from the journal, never
  * stored apart. Most recently used first, each once, spelled as last used.
@@ -28,7 +31,7 @@ export function customTags(journal: Journal): readonly string[] {
     .filter((fact) => fact.type === CRAVING)
     .toSorted((a, b) => b.at - a.at)
   return uniqueTags(newestFirst.flatMap((craving) => craving.tags)).filter(
-    (tag) => !defaultKeys.has(tagKey(tag)),
+    (tag) => !isDefaultCravingTag(tag),
   )
 }
 

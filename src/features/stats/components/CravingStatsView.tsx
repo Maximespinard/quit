@@ -6,16 +6,13 @@ import { buttonVariants } from '@/shared/ui/base/button'
 import { Card } from '@/shared/ui/Card'
 import { keepSearch } from '@/shared/utils/app-search'
 import { strings } from '@/shared/utils/strings'
-import { tagLabel } from '../utils/stats-labels'
+import { HOUR_TICKS, tagLabel } from '../utils/stats-labels'
 import { BarList } from './BarList'
 import { ColumnChart } from './ColumnChart'
 import { CravingTrendCharts } from './CravingTrendCharts'
 import { StatsSummary } from './StatsSummary'
 
 const copy = strings.stats
-
-/** The hours the axis names: every six, from midnight. */
-const HOUR_TICKS = [0, 6, 12, 18]
 
 /**
  * When and why cravings happen, and whether they fade. Short of enough cravings, one sentence
@@ -59,7 +56,7 @@ export function CravingStatsView({ stats }: { stats: CravingStats }) {
             value: count,
             valueText: copy.cravings(count),
           }))}
-          ticks={HOUR_TICKS.map((hour) => ({ index: hour, label: copy.hour(hour) }))}
+          ticks={HOUR_TICKS}
           restingIndex={stats.riskiestHour ?? 0}
         />
       </StatsSection>

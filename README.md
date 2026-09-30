@@ -1,14 +1,55 @@
 # quit
 
+A personal PWA for one smoke-free journey under a self-managed nicotine patch taper: it works
+offline on the phone, and a small server keeps a mirror of its journal.
+
 [![CI](https://github.com/Maximespinard/quit/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Maximespinard/quit/actions/workflows/ci.yml)
 
-Personal PWA tracking one smoke-free journey under a self-managed nicotine patch taper.
-Device-first: the journal lives on the phone and works offline; a small server keeps a mirror
-of it and sends the push notifications. No accounts: one device, linked by its key.
+<p align="center">
+  <img src="docs/screenshots/home.webp" width="190" alt="Home: the streak in days over the amber and plum haze, the Envie button at the bottom right">
+  <img src="docs/screenshots/craving-timer.webp" width="190" alt="Craving timer: a countdown at 2:37 in a moss and bronze haze, with a stop button">
+  <img src="docs/screenshots/calendar.webp" width="190" alt="Calendar: day 4 of 28 of the 7 mg step, and June with a patch applied every day">
+  <img src="docs/screenshots/stats.webp" width="190" alt="Stats: 92 cravings logged, 75 % held to the end, most at 18 h, over coffee">
+</p>
+
+## What it does
 
 - **Craving timer**: one tap starts it, the craving is logged when it ends.
 - **Patch taper**: a protocol of steps, today's patch and a calendar of the ones applied.
-- **Streak and money saved**, stats on cravings, a history of every fact, export and import.
+- **Streak and money saved**, stats on cravings, every fact listed, export and import.
+
+## Key decisions
+
+**State is derived, never stored** ([ADR-0002](docs/adr/0002-state-derived-from-a-journal-of-facts.md)).
+The journal holds facts (the quit moment, patch applications, cravings, lapses) and a few
+settings (the protocol, the weekly spend). Streak, money saved and stats are never persisted:
+they are pure functions of `(journal, now)`, recomputed on demand. Facts can be backdated, edited,
+deleted or imported, and stored totals would drift on each of those; derived values cannot.
+The cost is recomputing from the whole journal each time, which a single person's journal makes
+cheap, and a changed rule rewrites the past (accepted). `now` is always a parameter: ESLint rejects
+`Date.now()` and `new Date()` in domain modules.
+
+**The device is the reference; the server only mirrors it** ([ADR-0003](docs/adr/0003-device-first-journal-mirrored-to-the-server.md)).
+A craving is logged one-handed, often without signal, so the journal lives in IndexedDB and
+the app never waits on the network. Each change becomes a pending change, replayed to the
+server as an idempotent `PUT` or `DELETE` of one fact (ids made on the device) until it is
+acknowledged. The server stores it in relational SQLite tables and checks shapes, never domain
+rules. Trade-offs: iOS gives a PWA no Background Sync API, so pending changes leave only while
+the app is open; the mirror is only as fresh as the last time the app reached the server; the
+data sits on the server in clear.
+
+**One contract for both sides.** `contract/` holds zod schemas (the `zod/mini` build) for the
+facts, the settings, the journal file and every API body. The app and the server import the
+same module and infer the types of those shapes from it, never write them by hand, so a shape
+change fails the typecheck on whichever side it breaks. `zod/mini` over full zod: a smaller
+bundle on the phone, for a functional, wordier API.
+
+**No accounts: one device key.** There is one user with one phone. The maintainer issues a key
+on the server and pastes it into the app once. The server keeps only its SHA-256 hash, compares
+it in constant time, and rate-limits failed attempts; the key carries 256 bits of randomness.
+Issuing a new key revokes the old one, which covers a lost phone: new key, then a restore from
+the mirror. Sign-up, passwords, sessions and recovery flows would add surface without a second
+user to serve. The limit is deliberate: one active device at a time.
 
 ## Architecture
 
@@ -24,103 +65,74 @@ flowchart LR
   ci["GitHub Actions"] -- "image on every merge" --> ghcr["GHCR"] -. "pulled every minute" .-> timer
 ```
 
-- **State is derived, never stored**: the device records facts (a craving, a patch, a lapse);
-  streak, savings and stats are pure functions of the journal and the time (`docs/adr/0002`).
-- **The device is the reference**: every change is queued on the phone and mirrored to the
-  server one at a time, so the app never waits on the network (`docs/adr/0003`).
-- **One contract**: zod schemas in `contract/` type the facts, the journal file and every API
-  body, on both sides.
+The phone runs React 19, TanStack Router, Tailwind v4 and vite-plugin-pwa; the server runs
+Express 5 and SQLite through Drizzle on Node 24. npm workspaces: the app at the root,
+`contract/`, `server/`.
 
-## Getting started
+## Code structure
+
+```
+contract/src/          zod schemas shared by app and server; imports only zod
+src/
+├── shared/            domain (pure functions of journal and now), storage, ui, hooks
+├── features/<name>/   one bounded context each: craving, patch, calendar, stats, mirror, …
+└── routes/            TanStack Router file routes: wire features together, no domain logic
+server/src/
+├── db/                Drizzle schema and SQLite connection
+├── auth/              device keys
+├── mirror/            the mirror's routes and storage
+└── push/              push subscriptions and the sender
+e2e/                   Playwright specs
+```
+
+Imports flow one way, `shared → features → routes`: `shared` imports only itself, a feature
+imports `shared` and itself, never another feature. ESLint's boundaries rule
+([`eslint.config.js`](eslint.config.js)) fails the lint on any other import. `contract/` sits
+below all of it.
+
+## Quality
+
+- **TypeScript fully strict** in the app, the server and the contract (`strict`,
+  `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`); `any` is a lint error.
+- **Domain tests read "facts in, state out"**: a journal and an injected `now` go in, the
+  derived state is asserted. The same named scenarios feed the tests and the in-app sandbox.
+- **Playwright on WebKit at iPhone 16 Pro size**, against the production build and the real
+  server. The offline spec runs in Chromium, since Playwright's WebKit blocks requests the
+  service worker would answer.
+- **CI** runs three jobs side by side: the verify gate; the full e2e suite, then the Docker
+  image built and the smoke and offline specs run against the container, checked not to run as
+  root; a leak scan. On `main`, the image is published only when all three pass.
+- **`npm run verify`** (lint, typecheck, tests, build, then each workspace's own verify) is the
+  local gate before each commit; CI enforces it before each merge.
+- **gitleaks** scans staged changes in the pre-commit hook and the pushed commits in CI.
+
+## Production
+
+A Cloudflare Tunnel dials out from the VPS: the app publishes no port. A timer pulls the image
+CI publishes on every merge to `main`, and a release that fails its health check is rolled back
+by itself. Details: [`docs/deploy.md`](docs/deploy.md).
+
+## Run it locally
 
 ```bash
 npm install
-npm run dev
+npm run dev           # Vite on :3000; the app runs without the server, /api goes to :8080
+npm run verify        # the gate: lint, typecheck, tests, build, every workspace
+npm run test:e2e      # Playwright against the preview build, the API started beside it
+npm run screenshots   # regenerates the screenshots above from sandbox scenarios
+git config core.hooksPath .githooks   # once per clone: gitleaks on every commit
 ```
-
-The repository is npm workspaces, installed together by one `npm install` at the root:
-
-| Workspace | What it holds |
-| --- | --- |
-| root | The PWA: React 19, TanStack Router, Tailwind v4, vite-plugin-pwa |
-| `contract/` | Zod schemas of the facts, the settings, the journal file and the API bodies; their types are inferred from them |
-| `server/` | The API server and Web Push sender: Express 5, SQLite through Drizzle (see [Server](#server)) |
-
-Install the git hooks once per clone (gitleaks scan on every commit):
-
-```bash
-git config core.hooksPath .githooks
-```
-
-The same hook also rejects a commit whose staged changes match a regex in
-`.git/info/banned-words` — a local, never-committed list of wording that is out of scope here.
-
-## Scripts
-
-| Script | What it does |
-| --- | --- |
-| `npm run dev` | Vite dev server on port 3000 |
-| `npm run verify` | lint + typecheck + tests + build, then every workspace's own verify — the gate before any commit |
-| `npm run test` | Vitest once (`test:watch` to watch) |
-| `npm run test:e2e` | Playwright suite (WebKit, iPhone) against the production preview build, or against `E2E_BASE_URL` when set |
-| `npm run build` | Production build (typecheck included) |
-| `npm run lint:fix` | Biome autofix + ESLint fix |
-
-## Server
-
-`server/` runs its TypeScript sources directly on Node ≥ 24, no build step. SQLite (WAL) lives
-in `DATA_DIR`; pending migrations from `server/drizzle/` are applied at start. Its HTTP
-contract (mirror, device key, push) is in [`docs/api.md`](docs/api.md).
-
-```bash
-cd server
-DATA_DIR=./data npm start                # or: node --env-file=.env src/main.ts (see .env.example)
-npm run verify                           # lint · typecheck · tests
-npm run db:generate -- --name <change>   # after editing src/db/schema.ts: writes the next migration
-```
-
-| Variable | Default | |
-| --- | --- | --- |
-| `DATA_DIR` | — (required) | Directory of the database file `quit.db`, created when missing |
-| `VAPID_PUBLIC_KEY` | — (required) | VAPID key pair (`npx web-push generate-vapid-keys`); the public key is the app's `applicationServerKey` |
-| `VAPID_PRIVATE_KEY` | — (required) | |
-| `VAPID_SUBJECT` | — (required) | `mailto:` or `https://` contact for the push services (Apple rejects anything else) |
-| `PORT` | `8080` | |
-| `LOG_LEVEL` | `info` | pino level; logs are JSON lines on stdout, never a body, a query nor a header |
-| `TRUST_PROXY` | `0` | Reverse proxies in front, e.g. `1` behind the tunnel, so the rate limit counts per client |
-| `APP_DIR` | — (API only) | The built PWA (`dist/`) to serve outside `/api` |
-
-A missing or invalid variable stops the start with a message naming it.
-
-## Image
-
-One image holds the built app and the server that serves it (`Dockerfile`, built from the
-root). It runs as `node`, not root, with the database on the `/data` volume. CI builds it on
-every pull request and runs the smoke and offline e2e specs against the container; on `main`
-it publishes `ghcr.io/maximespinard/quit` tagged with the commit sha and `main`.
-
-```bash
-docker build -t quit .
-docker run --rm --name quit -p 8080:8080 -v quit-data:/data \
-  -e VAPID_PUBLIC_KEY=… -e VAPID_PRIVATE_KEY=… -e VAPID_SUBJECT=mailto:… quit   # the app on http://localhost:8080
-docker exec quit node src/issue-device-key.ts   # the device key, same DATA_DIR
-E2E_BASE_URL=http://127.0.0.1:8080 npm run test:e2e -- smoke.spec.ts offline.spec.ts
-```
-
-## Deploy
-
-The image runs on a VPS behind a Cloudflare Tunnel: no inbound port, secrets kept on the host.
-A merge to `main` goes live about two minutes after CI publishes its image, and a release that
-fails its health check is rolled back by itself. Install, operations and rollback: [`docs/deploy.md`](docs/deploy.md).
 
 ## Docs
 
-- `CONTEXT.md` — the domain glossary; the words used in code and UI copy
-- `docs/adr/` — architecture decisions
-- `docs/api.md` — the server's HTTP contract
-- `docs/deploy.md` — production: how it runs, first install, operations
-- `CLAUDE.md` — conventions for agents working in this repo
+- [`CONTEXT.md`](CONTEXT.md): the domain glossary, binding in code and UI copy
+- [`PRODUCT.md`](PRODUCT.md): who it is for and what it must do
+- [`DESIGN.md`](DESIGN.md): the visual system
+- [`docs/adr/`](docs/adr/): architecture decisions
+- [`docs/api.md`](docs/api.md): the server's HTTP contract
+- [`docs/deploy.md`](docs/deploy.md): production, the image and the server's configuration
+- [`CLAUDE.md`](CLAUDE.md): conventions for coding agents
 
 ## License
 
-MIT — see `LICENSE`.
+MIT, see [`LICENSE`](LICENSE).

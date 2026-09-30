@@ -18,5 +18,28 @@ export const formatDate = (ms: number) =>
 export const formatShortDate = (ms: number) =>
   new Date(ms).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
 
+const weekdayDate = new Intl.DateTimeFormat('fr-FR', {
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
+})
+const weekdayDateYear = new Intl.DateTimeFormat('fr-FR', {
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+})
+
+/**
+ * A local calendar date with its weekday, as day headings show it: `jeudi 29 janvier`, or
+ * `mercredi 31 décembre 2025` with its year.
+ */
+export const formatWeekdayDate = (ms: number, withYear = false) =>
+  (withYear ? weekdayDateYear : weekdayDate).format(ms)
+
 /** A whole count as French copy shows it, thousands apart: `1 250`. */
 export const formatCount = (count: number) => count.toLocaleString('fr-FR')
+
+/** An average as French copy shows it, to one decimal at most: `2,6`, `3`. */
+export const formatAverage = (value: number) =>
+  value.toLocaleString('fr-FR', { maximumFractionDigits: 1 })

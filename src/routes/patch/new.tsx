@@ -3,7 +3,7 @@ import { PatchApplicationForm } from '@/features/patch/components/PatchApplicati
 import { derive } from '@/shared/domain/derive'
 import { useCommitThenHome } from '@/shared/hooks/useCommitThenHome'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
-import { AppShell } from '@/shared/ui/app-shell'
+import { AppShell } from '@/shared/ui/AppShell'
 import { CancelLink } from '@/shared/ui/CancelLink'
 import { ReadyJournal } from '@/shared/ui/ReadyJournal'
 import { ThumbZone } from '@/shared/ui/ThumbZone'

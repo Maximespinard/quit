@@ -1,22 +1,10 @@
-import { formatDose } from '@/shared/utils/format'
+import { formatDose, formatWeekdayDate } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
 import type { CalendarDay } from '../domain/patch-calendar'
 
 const copy = strings.calendar
 
-const weekdayDate = new Intl.DateTimeFormat('fr-FR', {
-  weekday: 'long',
-  day: 'numeric',
-  month: 'long',
-})
-const shortDate = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short' })
 const monthYear = new Intl.DateTimeFormat('fr-FR', { month: 'long', year: 'numeric' })
-
-/** `jeudi 29 janvier`. */
-export const formatWeekdayDate = (at: number) => weekdayDate.format(at)
-
-/** `29 janv.` */
-export const formatShortDate = (at: number) => shortDate.format(at)
 
 /** `Janvier 2026`: a month grid's title. */
 export function formatMonth(month: number): string {
