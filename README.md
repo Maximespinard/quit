@@ -1,9 +1,9 @@
 # quit
 
-[![CI](https://github.com/Maximespinard/quit/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Maximespinard/quit/actions/workflows/ci.yml)
-
 A personal PWA for one smoke-free journey under a self-managed nicotine patch taper: it works
 offline on the phone, and a small server keeps a mirror of its journal.
+
+[![CI](https://github.com/Maximespinard/quit/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Maximespinard/quit/actions/workflows/ci.yml)
 
 <p align="center">
   <img src="docs/screenshots/home.webp" width="190" alt="Home: the streak in days over the amber and plum haze, the Envie button at the bottom right">
@@ -21,27 +21,28 @@ offline on the phone, and a small server keeps a mirror of its journal.
 ## Key decisions
 
 **State is derived, never stored** ([ADR-0002](docs/adr/0002-state-derived-from-a-journal-of-facts.md)).
-The device records facts only: the quit moment, patch applications, cravings, lapses, the
-protocol and the weekly spend. Streak, money saved and stats are pure functions of
-`(journal, now)`, recomputed on demand. Facts can be backdated, edited, deleted or
-imported, and stored totals would drift on each of those; derived values cannot. The cost is
-recomputing from the whole journal each time, which a single person's journal makes cheap, and
-a changed rule rewrites the past (accepted). `now` is always a parameter: ESLint rejects a read
-of the system clock in domain modules.
+The journal holds facts (the quit moment, patch applications, cravings, lapses) and a few
+settings (the protocol, the weekly spend). Streak, money saved and stats are never persisted:
+they are pure functions of `(journal, now)`, recomputed on demand. Facts can be backdated, edited,
+deleted or imported, and stored totals would drift on each of those; derived values cannot.
+The cost is recomputing from the whole journal each time, which a single person's journal makes
+cheap, and a changed rule rewrites the past (accepted). `now` is always a parameter: ESLint rejects
+`Date.now()` and `new Date()` in domain modules.
 
 **The device is the reference; the server only mirrors it** ([ADR-0003](docs/adr/0003-device-first-journal-mirrored-to-the-server.md)).
 A craving is logged one-handed, often without signal, so the journal lives in IndexedDB and
 the app never waits on the network. Each change becomes a pending change, replayed to the
 server as an idempotent `PUT` or `DELETE` of one fact (ids made on the device) until it is
 acknowledged. The server stores it in relational SQLite tables and checks shapes, never domain
-rules. Trade-offs: iOS gives a PWA no background sync, so pending changes leave only while the
-app is open; the mirror is only as fresh as the last time the app reached the server; the data
-sits on the server in clear.
+rules. Trade-offs: iOS gives a PWA no Background Sync API, so pending changes leave only while
+the app is open; the mirror is only as fresh as the last time the app reached the server; the
+data sits on the server in clear.
 
 **One contract for both sides.** `contract/` holds zod schemas (the `zod/mini` build) for the
 facts, the settings, the journal file and every API body. The app and the server import the
-same module and infer their types from it; no type is written by hand on either side, so a
-shape change fails the build where it breaks.
+same module and infer the types of those shapes from it, never write them by hand, so a shape
+change fails the typecheck on whichever side it breaks. `zod/mini` over full zod: a smaller
+bundle on the phone, for a functional, wordier API.
 
 **No accounts: one device key.** There is one user with one phone. The maintainer issues a key
 on the server and pastes it into the app once. The server keeps only its SHA-256 hash, compares
@@ -63,6 +64,10 @@ flowchart LR
   server -- "Web Push" --> push["Apple push service"] --> phone
   ci["GitHub Actions"] -- "image on every merge" --> ghcr["GHCR"] -. "pulled every minute" .-> timer
 ```
+
+The phone runs React 19, TanStack Router, Tailwind v4 and vite-plugin-pwa; the server runs
+Express 5 and SQLite through Drizzle on Node 24. npm workspaces: the app at the root,
+`contract/`, `server/`.
 
 ## Code structure
 
@@ -87,25 +92,25 @@ below all of it.
 
 ## Quality
 
-- **TypeScript fully strict** in every workspace (`strict`, `noUncheckedIndexedAccess`,
-  `exactOptionalPropertyTypes`); `any` is a lint error.
+- **TypeScript fully strict** in the app, the server and the contract (`strict`,
+  `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`); `any` is a lint error.
 - **Domain tests read "facts in, state out"**: a journal and an injected `now` go in, the
   derived state is asserted. The same named scenarios feed the tests and the in-app sandbox.
 - **Playwright on WebKit at iPhone 16 Pro size**, against the production build and the real
   server. The offline spec runs in Chromium, since Playwright's WebKit blocks requests the
   service worker would answer.
-- **CI** runs the verify gate, the full e2e suite, then builds the Docker image, runs the smoke
-  and offline specs against the running container and checks it does not run as root. The image
-  is published only when all of it passes.
-- **`npm run verify`** (lint, typecheck, tests, build, then each workspace's own verify) gates
-  every commit.
-- **gitleaks** scans staged changes in the pre-commit hook and the whole history in CI.
+- **CI** runs three jobs side by side: the verify gate; the full e2e suite, then the Docker
+  image built and the smoke and offline specs run against the container, checked not to run as
+  root; a leak scan. On `main`, the image is published only when all three pass.
+- **`npm run verify`** (lint, typecheck, tests, build, then each workspace's own verify) is the
+  local gate before each commit; CI enforces it before each merge.
+- **gitleaks** scans staged changes in the pre-commit hook and the pushed commits in CI.
 
 ## Production
 
-A Cloudflare Tunnel dials out from the VPS: no inbound port is open. A timer pulls the image CI
-publishes on every merge to `main`, and a release that fails its health check is rolled back by
-itself. Details: [`docs/deploy.md`](docs/deploy.md).
+A Cloudflare Tunnel dials out from the VPS: the app publishes no port. A timer pulls the image
+CI publishes on every merge to `main`, and a release that fails its health check is rolled back
+by itself. Details: [`docs/deploy.md`](docs/deploy.md).
 
 ## Run it locally
 
