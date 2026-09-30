@@ -1,6 +1,6 @@
 # Server API
 
-The HTTP contract of `server/`. How to run it and configure it: README, "Server".
+The HTTP contract of `server/`. How to run it and configure it: [`deploy.md`](deploy.md), "The server".
 
 `GET /api/health` is open: `200` while the database answers, `503` otherwise. Every other
 `/api` route requires `Authorization: Bearer <device key>`, else `401`. Errors are
