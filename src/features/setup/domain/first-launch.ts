@@ -1,6 +1,6 @@
 import type { FactId } from '@quit/contract/facts'
-import { recordQuitMoment } from './facts/quit-moment'
-import type { Journal, JournalOutcome } from './journal'
+import { recordQuitMoment } from '@/shared/domain/facts/quit-moment'
+import type { Journal, JournalOutcome } from '@/shared/domain/journal'
 import { setBaselineSmokesPerDay, setWeeklySpend } from './journal-settings'
 
 /** What first launch asks for; the protocol is the journal's own, the default one untouched. */

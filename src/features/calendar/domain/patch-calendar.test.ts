@@ -1,11 +1,12 @@
 import type { Fact } from '@quit/contract/facts'
 import type { Protocol } from '@quit/contract/settings'
-import { DAY_MS } from '@/shared/utils/duration'
+import { derive } from '@/shared/domain/derive'
+import { emptyJournal, type Journal } from '@/shared/domain/journal'
+import { defaultProtocol, setProtocol } from '@/shared/domain/protocol'
+import { scenarioById, scenarios } from '@/shared/domain/scenarios'
+import { DAY_MS, HOUR_MS } from '@/shared/utils/duration'
 import { factId } from '@/shared/utils/fact-id'
-import { emptyJournal, type Journal } from './journal'
 import { type CalendarDay, patchCalendar } from './patch-calendar'
-import { defaultProtocol, setProtocol } from './protocol'
-import { scenarioById } from './scenarios'
 
 // Vitest pins TZ to Europe/Paris: the calendar days below are Paris days.
 const local = (month: number, day: number, hour = 0, minute = 0) =>
@@ -356,5 +357,46 @@ describe('patchCalendar', () => {
     expect(dayOf(days, local(6, 16))).toMatchObject({ cigarettes: 1, cravings: 1 })
     expect(days.filter((day) => day.patch === 'missing')).toEqual([])
     expect(dayOf(days, local(6, 17))).toMatchObject({ isToday: true, patch: 'logged', step: 2 })
+  })
+})
+
+describe('patchCalendar — today agrees with the home’s patch of the day', () => {
+  /** What the calendar's today cell says: logged, due, or nothing asked. */
+  const calendarSays = (journal: Journal, now: number) =>
+    patchCalendar(journal, now)?.days.find((day) => day.isToday)?.patch ?? null
+  /** The same question asked of the home's patch of the day. */
+  const homeSays = (journal: Journal, now: number) => {
+    const { patch } = derive(journal, now)
+    return patch === null || patch.status === 'offered' || patch.status === 'over'
+      ? null
+      : patch.status
+  }
+
+  it.each(scenarios.map((scenario) => [scenario.id, scenario] as const))(
+    '%s, hour by hour over the two days from its clock',
+    (_, { journal, now }) => {
+      for (let hour = 0; hour < 48; hour += 1) {
+        const at = now + hour * HOUR_MS
+        expect(homeSays(journal, at), new Date(at).toString()).toBe(calendarSays(journal, at))
+      }
+    },
+  )
+
+  it('an evening quit with a morning patch most days, hour by hour to past its end', () => {
+    const quitMoment = new Date(2026, 8, 20, 20).getTime()
+    const facts: Fact[] = [{ type: 'quit-moment', id: factId(1), at: quitMoment }]
+    // A patch at 08:00 every day but every third, and one on the end day.
+    for (let day = 1; day <= 10; day += 1)
+      if (day % 3 !== 0)
+        facts.push({
+          type: 'patch-application',
+          id: factId(day + 1),
+          at: new Date(2026, 8, 20 + day, 8).getTime(),
+          doseMg: 7,
+        })
+    const journal: Journal = { ...emptyJournal, protocol: [{ doseMg: 7, durationDays: 8 }], facts }
+
+    for (let at = quitMoment - DAY_MS; at < quitMoment + 12 * DAY_MS; at += HOUR_MS)
+      expect(homeSays(journal, at), new Date(at).toString()).toBe(calendarSays(journal, at))
   })
 })

@@ -10,7 +10,6 @@ import {
   removeFact,
 } from '@/shared/domain/journal'
 import { exportJournal, importJournal } from '@/shared/domain/journal-file'
-import { setWeeklySpend } from '@/shared/domain/journal-settings'
 import type { MirrorLink } from '@/shared/domain/mirror-link'
 import type { PendingChange } from '@/shared/domain/pending-changes'
 import { factIdSequence } from '@/shared/test/fact-ids'
@@ -107,7 +106,7 @@ describe('every change reaches the mirror', () => {
     const app = launch()
     const journal = await app.journal.load()
 
-    await app.journal.save(accepted(setWeeklySpend(journal, 8_400)))
+    await app.journal.save({ ...journal, weeklySpendCents: 8_400 })
     await app.send()
 
     expect((await mirror()).settings).toEqual({

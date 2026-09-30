@@ -1,6 +1,6 @@
-import { patchCalendar } from '@/shared/domain/patch-calendar'
 import { defaultProtocol } from '@/shared/domain/protocol'
 import { factId } from '@/shared/utils/fact-id'
+import { patchCalendar } from '../domain/patch-calendar'
 import { calendarMonths, monthIndexAt } from './calendar-months'
 
 const local = (month: number, day: number, hour = 0) =>

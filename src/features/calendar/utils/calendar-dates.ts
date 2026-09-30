@@ -1,6 +1,6 @@
-import type { CalendarDay } from '@/shared/domain/patch-calendar'
 import { formatDose } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
+import type { CalendarDay } from '../domain/patch-calendar'
 
 const copy = strings.calendar
 

@@ -1,5 +1,5 @@
-import type { CalendarDay } from '@/shared/domain/patch-calendar'
 import { defaultProtocol } from '@/shared/domain/protocol'
+import type { CalendarDay } from '../domain/patch-calendar'
 import { describeDay, formatMonth } from './calendar-dates'
 
 const day = (overrides: Partial<CalendarDay>): CalendarDay => ({

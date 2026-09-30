@@ -1,5 +1,5 @@
 import { localMidnight } from '@/shared/domain/local-day'
-import type { CalendarDay } from '@/shared/domain/patch-calendar'
+import type { CalendarDay } from '../domain/patch-calendar'
 
 /** One date of a month grid; `calendarDay` is `null` outside the calendar's range. */
 export type MonthCell = { readonly day: number; readonly calendarDay: CalendarDay | null }

@@ -1,12 +1,16 @@
 import { CRAVING, PATCH_APPLICATION } from '@quit/contract/facts'
 import type { Step } from '@quit/contract/settings'
+import { lapsesUntil } from '@/shared/domain/facts/lapse'
+import { latestQuitMoment } from '@/shared/domain/facts/quit-moment'
+import type { Journal } from '@/shared/domain/journal'
+import { localMidnight } from '@/shared/domain/local-day'
+import {
+  type ProtocolPosition,
+  plannedEnd,
+  protocolPosition,
+} from '@/shared/domain/protocol-position'
+import { asksForPatch, protocolSpan } from '@/shared/domain/protocol-span'
 import { DAY_MS } from '@/shared/utils/duration'
-import { lapsesUntil } from './facts/lapse'
-import { latestQuitMoment } from './facts/quit-moment'
-import type { Journal } from './journal'
-import { localMidnight } from './local-day'
-import { type ProtocolPosition, plannedEnd, protocolPosition } from './protocol-position'
-import { asksForPatch, protocolSpan } from './protocol-span'
 
 /** One step of the protocol laid over the calendar. */
 export type CalendarStep = {

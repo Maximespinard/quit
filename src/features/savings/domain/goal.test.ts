@@ -1,9 +1,9 @@
+import { derive } from '@/shared/domain/derive'
+import { decodeJournal, emptyJournal, type Journal } from '@/shared/domain/journal'
 import { factIdSequence } from '@/shared/test/fact-ids'
 import { DAY_MS } from '@/shared/utils/duration'
 import { factId } from '@/shared/utils/fact-id'
-import { derive } from './derive'
 import { markGoalCelebrated, setGoal } from './goal'
-import { decodeJournal, emptyJournal, type Journal } from './journal'
 
 const NOW = Date.UTC(2026, 8, 22, 10, 0, 0)
 

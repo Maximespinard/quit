@@ -1,5 +1,5 @@
 import { baselineSmokesPerDaySchema, weeklySpendCentsSchema } from '@quit/contract/settings'
-import type { Journal, JournalOutcome } from './journal'
+import type { Journal, JournalOutcome } from '@/shared/domain/journal'
 
 /** Integer cents, above zero: money saved is computed from it. */
 export const isValidWeeklySpend = (cents: number) => weeklySpendCentsSchema.safeParse(cents).success

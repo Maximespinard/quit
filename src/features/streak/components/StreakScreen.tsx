@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react'
 import type { Streak } from '@/shared/domain/derive'
-import { useLaunchEntrance } from '@/shared/hooks/useLaunchEntrance'
 import { HeroHaze } from '@/shared/ui/HeroHaze'
 import { StreakHero } from '@/shared/ui/StreakHero'
 import { splitDuration } from '@/shared/utils/duration'
 import { strings } from '@/shared/utils/strings'
+import { useLaunchEntrance } from '../hooks/useLaunchEntrance'
 
 /** The hero counts up when the app is opened, not each time home is shown again. */
 const HOME_ENTRANCE = 'home-streak'

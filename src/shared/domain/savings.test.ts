@@ -3,7 +3,6 @@ import { DAY_MS, HOUR_MS } from '@/shared/utils/duration'
 import { factId } from '@/shared/utils/fact-id'
 import { derive } from './derive'
 import { decodeJournal, emptyJournal, type Journal } from './journal'
-import { setBaselineSmokesPerDay, setWeeklySpend } from './journal-settings'
 import { scenarioById } from './scenarios'
 
 const NOW = Date.UTC(2026, 8, 22, 10, 0, 0)
@@ -95,13 +94,12 @@ describe('derive, money saved and cigarettes not smoked', () => {
 
   it('recomputes both at once when the weekly spend or the baseline changes', () => {
     const before = journal(NOW - 7 * DAY_MS)
-    const spend = setWeeklySpend(before, 7_000)
-    const baseline = setBaselineSmokesPerDay(before, 20)
-    if (!spend.ok || !baseline.ok) throw new Error('valid settings refused')
+    const spend: Journal = { ...before, weeklySpendCents: 7_000 }
+    const baseline: Journal = { ...before, baselineSmokesPerDay: 20 }
 
     expect(derive(before, NOW)).toMatchObject({ moneySavedCents: 3_500, cigarettesNotSmoked: 105 })
-    expect(derive(spend.journal, NOW).moneySavedCents).toBe(7_000)
-    expect(derive(baseline.journal, NOW).cigarettesNotSmoked).toBe(140)
+    expect(derive(spend, NOW).moneySavedCents).toBe(7_000)
+    expect(derive(baseline, NOW).cigarettesNotSmoked).toBe(140)
   })
 
   it('derives neither without the settings they are counted from', () => {

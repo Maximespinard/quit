@@ -1,7 +1,7 @@
 import { centsSchema, goalLabelSchema } from '@quit/contract/settings'
-import { latestQuitMoment } from './facts/quit-moment'
-import type { Journal, JournalOutcome } from './journal'
-import { goalProgress } from './savings'
+import { latestQuitMoment } from '@/shared/domain/facts/quit-moment'
+import type { Journal, JournalOutcome } from '@/shared/domain/journal'
+import { goalProgress } from '@/shared/domain/savings'
 
 const isValidLabel = (label: string) => goalLabelSchema.safeParse(label).success
 

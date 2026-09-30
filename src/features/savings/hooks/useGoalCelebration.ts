@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { GoalProgress } from '@/shared/domain/derive'
-import { markGoalCelebrated } from '@/shared/domain/goal'
 import type { Journal } from '@/shared/domain/journal'
+import { markGoalCelebrated } from '../domain/goal'
 
 /**
  * Whether the goal reached is being celebrated on this screen. The first sight of it, on

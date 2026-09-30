@@ -1,6 +1,6 @@
 import { Cigarette, Timer } from 'lucide-react'
-import type { DayPatch } from '@/shared/domain/patch-calendar'
 import { cn } from '@/shared/utils/cn'
+import type { DayPatch } from '../domain/patch-calendar'
 
 /**
  * The patch application a day asks for, one shape per state so hue is never the only cue:

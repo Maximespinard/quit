@@ -5,8 +5,8 @@ import {
   recordQuitMoment,
 } from '@/shared/domain/facts/quit-moment'
 import type { Journal, JournalOutcome } from '@/shared/domain/journal'
-import { setBaselineSmokesPerDay, setWeeklySpend } from '@/shared/domain/journal-settings'
 import { fromDatetimeLocal, toDatetimeLocal } from '@/shared/utils/datetime-local'
+import { setBaselineSmokesPerDay, setWeeklySpend } from '../domain/journal-settings'
 import { baselineInput, spendInput } from './value-inputs'
 
 /** The settings form as its fields hold it: text, read only on save. */
