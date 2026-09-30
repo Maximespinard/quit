@@ -1,7 +1,7 @@
 import { Slider as SliderPrimitive } from '@base-ui/react/slider'
 import { cn } from '@/shared/utils/cn'
 
-/** shadcn `slider`, reskinned: the progress bar's track and cream fill, with a 28px thumb for thumbs. */
+/** shadcn `slider`, reskinned: the progress bar's track with a cream fill, and a 28px thumb for thumbs. */
 function Slider({
   className,
   defaultValue,
