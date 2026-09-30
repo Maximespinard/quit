@@ -23,7 +23,10 @@
   --color-ghost-line: rgb(255 255 255 / 0.36);
   --color-alert: #ff6b72;
   --color-amber: #b8730f;
-  /* The haze's warm floor, from under the glows down to where it meets the page. */
+  /*
+   * The haze's warm floor, from under the glows down to where it meets the page. Floor, ember
+   * and amber also fill the calendar's craving heatmap (SYR-93), the one use beyond the haze.
+   */
   --color-floor: #3a1a10;
   --color-floor-deep: #1c1011;
   --color-ember: #8d2a1a;

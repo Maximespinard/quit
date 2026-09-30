@@ -48,7 +48,7 @@ test('several days of facts land on the right days of the calendar', async ({ pa
   await expect(day(page, 'vendredi 2 janvier, patch posé, 1 cigarette')).toBeVisible()
   await expect(day(page, 'samedi 3 janvier, patch pas noté, 1 envie')).toBeVisible()
   await expect(day(page, 'dimanche 4 janvier, aujourd’hui, patch à poser')).toBeVisible()
-  await expect(day(page, 'jeudi 29 janvier, début de l’étape 2 à 14 mg, patch prévu')).toBeVisible()
+  await expect(day(page, 'jeudi 29 janvier, début de l’étape 2 à 14 mg')).toBeVisible()
 
   await tap(page, 'Mois suivant')
   await tap(page, 'Mois suivant')

@@ -3,9 +3,10 @@ import { useId, useState } from 'react'
 import { localMidnight } from '@/shared/domain/local-day'
 import { Button } from '@/shared/ui/base/button'
 import { strings } from '@/shared/utils/strings'
-import type { CalendarDay } from '../domain/patch-calendar'
+import type { CalendarDay, CalendarStep } from '../domain/patch-calendar'
 import { formatMonth } from '../utils/calendar-dates'
 import { calendarMonths, monthIndexAt } from '../utils/calendar-months'
+import { stepOutlines } from '../utils/step-outline'
 import { CalendarLegend } from './CalendarLegend'
 import { DayCell } from './DayCell'
 
@@ -16,17 +17,19 @@ const pagerControl = 'disabled:bg-transparent disabled:opacity-30'
 
 type MonthCalendarProps = {
   days: readonly CalendarDay[]
+  steps: readonly CalendarStep[]
   now: number
 }
 
 /** One month at a time, opening on today's, paged within the calendar's range. */
-export function MonthCalendar({ days, now }: MonthCalendarProps) {
+export function MonthCalendar({ days, steps, now }: MonthCalendarProps) {
   const titleId = useId()
   const months = calendarMonths(days)
   const [index, setIndex] = useState(() => monthIndexAt(months, now))
   const month = months[Math.min(index, months.length - 1)]
   if (month === undefined) return null
   const todayStart = localMidnight(now)
+  const outlines = stepOutlines(steps)
 
   return (
     <section
@@ -81,6 +84,7 @@ export function MonthCalendar({ days, now }: MonthCalendarProps) {
                   key={cell?.day ?? `blank-${column}`}
                   cell={cell}
                   todayStart={todayStart}
+                  outlines={outlines}
                 />
               ))}
             </tr>

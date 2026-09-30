@@ -39,7 +39,7 @@ function CalendarPage() {
                   nextStepChange={calendar.nextStepChange}
                   plannedEnd={calendar.plannedEnd}
                 />
-                <MonthCalendar days={calendar.days} now={now} />
+                <MonthCalendar days={calendar.days} steps={calendar.steps} now={now} />
                 <StepSpans steps={calendar.steps} position={calendar.position} />
               </div>
             )}

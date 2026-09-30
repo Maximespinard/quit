@@ -300,8 +300,8 @@ metaphor (work jacket, stamped booklet, acetate manual).
 ## Colors
 
 A warm black and two structural grays, a cream that carries text and selection, a warm haze
-family reserved for backgrounds, the Braise gradient of values, and two named exceptions: the
-`Envie` gradient and the alert red.
+family reserved for backgrounds (its one exception is the calendar's craving heatmap), the
+Braise gradient of values, and two named exceptions: the `Envie` gradient and the alert red.
 
 ### Primary
 - **Nocturne cream** (`ink`): all running text, and **every selection**: solid primary button,
@@ -375,7 +375,9 @@ No other button, badge, chart or background borrows them, even in part.
 
 **The Haze Is Ground Rule.** The haze colors (`amber`, `ember`, `plum`, `floor`,
 `floor-deep`, `moss`, `bronze`) paint haze backgrounds only. They never color text, a control
-or data.
+or data. One named exception (SYR-93): the calendar's craving heatmap fills a lived day's cell
+with `floor` → `ember` → `amber` (see Calendar), because a day of cravings is the home's own
+warmth. Braise stays with values: charts and progress bars.
 
 **The Alert Is Not a Fill Rule.** `alert` writes error text (`text-alert`), borders an invalid
 field, and draws the destructive button as a ghost pill with a hairline (1 px `alert` at 70%,
@@ -640,9 +642,20 @@ Square, `rounded-card`, 12 px inset, name in `body` 500 and detail in `detail`. 
 ### Calendar
 Month grid on a card surface, month in `title` and two 44 px arrows; date in tabular `label` inside a 24 px disc; today
 is the only cream disc (`page` text); upcoming days in `muted`, days outside the calendar in
-`muted` 80%. 14 px marks under the date, one shape per state: patch applied = cream dot,
-missed = `muted` dash, due = cream ring, planned = small `muted` dot; lapse = cigarette,
-craving = timer. First day of a step: a `ghost` pill in `detail`.
+`muted` 80%. Only exceptions are marked, 14 px under the date, one shape per state: patch
+not noted = a dash and due = a ring, both in the cell's text colour (the dash at 70 %); lapse = cigarette, craving = timer. A day with its
+patch logged, or still to come, stays bare. First day of a step: a `ghost` pill in `detail`.
+Each cell is a `rounded-lg` tile with a transparent 1.5 px border, and holds one meaning
+(SYR-93). A lived day of the protocol is filled by its craving count, in fixed buckets 0 · 1–2 ·
+3–5 · 6+ (never relative to the user's own maximum, so a day keeps its colour month to month):
+`floor` at 50 % on the card, `floor` → `ember` at 40 %, `ember`, `ember` → `amber` at 56 %. One
+path in four evenly spaced lightness steps (0.23, 0.33, 0.44, 0.54), cream text ≥ 4.9:1 on each
+(the step's dose pill darkens to `page` at 30 % on a fill, and the dash drops to 3.2:1 at 6+, still above the 3:1 of a mark); the count is written beside the timer icon, so hue is never the only cue, and a lapse
+day keeps its cigarette with no alarm fill. A day still to come is not filled: it carries its
+step's outline, cream at 100 %, 70 % and 40 % by dose rank (3.1:1 at the faintest), never a
+Braise or haze hue. Days after the protocol's end, and outside the calendar, stay bare dates. The
+legend shows the four fills (« Moins » … « Plus d'envies ») and the marks; the steps card is the
+outline's legend, each row opening with a swatch of it.
 
 ### Charts
 On a card, a single series in Braise, spanning the whole scale. Columns 24 px wide at most,
@@ -691,7 +704,8 @@ play only under `motion-safe:`, so the haze becomes a still image; every transit
 ### Don't:
 - **Don't** lend the pink → yellow gradient or `Envie`'s glow to any other object.
 - **Don't** paint text, a control or data with a haze color.
-- **Don't** put amber under text outside home: the low band is plum and ember only.
+- **Don't** put amber under text outside home: the low band is plum and ember only. The
+  calendar's 6+ cravings cell, `ember` toward `amber` behind a cream count, is the one exception.
 - **Don't** switch off a screen's haze, nor the stopped timer's.
 - **Don't** add a drop shadow, a `ring-*` or a per-component focus ring: the only `box-shadow` is `Envie`'s glow, and focus is the global `outline`.
 - **Don't** give a destructive button a tinted fill, nor color a lapse in `alert`.
