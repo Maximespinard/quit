@@ -33,7 +33,7 @@
   --color-moss: #33402c;
   --color-bronze: #b88a4f;
   /*
-   * « Braise », the charts' own gradient: low values in orange, the tallest in gold. The low end
+   * « Braise », the gradient of values (charts and progress bars): low in orange, the highest in gold. The low end
    * is the floor: dimmed to 60 % it still holds 3.16:1 on a card, so it never gets darker.
    */
   --color-chart-low: #ff7448;
@@ -216,6 +216,7 @@
   background-position: bottom;
 }
 
+/* Horizontal Braise. ProgressBar stretches it over its track with `bg-[length:100cqw_100%]`. */
 @utility bg-chart-bar {
   background-image: linear-gradient(90deg, var(--color-chart-low), var(--color-chart-high));
 }
