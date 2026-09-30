@@ -60,6 +60,7 @@ test('deleting a lapse of a relapse restarts the streak from the quit moment and
 
   await home(page)
   await expectStreak(page, 5, '00 h 00')
+  await expect(totals(page)).toBeVisible()
   await expect(totals(page).getByText('Plus long streak')).toHaveCount(0)
 })
 

@@ -19,6 +19,7 @@ test('a slip keeps the streak running and costs its smoke-free day', async ({ pa
   await expectStreak(page, 3, '00 h 00')
   await expect(page.getByText('Dernière cigarette il y a moins d’une minute.')).toBeVisible()
   await expect(page.getByText('Un jour avec un écart.', { exact: false })).toBeVisible()
+  await expect(totals(page)).toBeVisible()
   await expect(totals(page).getByText('Plus long streak')).toHaveCount(0)
   await expect(protocolSummary(page)).toContainText('Jour 4 sur 28')
 
