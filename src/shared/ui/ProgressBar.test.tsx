@@ -25,3 +25,11 @@ it('reads a value text in place of the raw figure', () => {
 
   expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuetext', '220,08 € sur 400 €')
 })
+
+it('fills with Braise laid over the whole track', () => {
+  render(<ProgressBar label="XP" value={100} max={1000} />)
+
+  const fill = screen.getByRole('progressbar').firstElementChild
+  expect(fill).toHaveClass('bg-chart-bar', 'bg-[length:100cqw_100%]')
+  expect(fill).not.toHaveClass('bg-ink')
+})

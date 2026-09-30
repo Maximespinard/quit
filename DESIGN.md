@@ -216,7 +216,7 @@ components:
     rounded: "9999px"
     height: "0.5rem"
   progress-fill:
-    backgroundColor: "{colors.ink}"
+    backgroundColor: "{colors.chart-low}"
     rounded: "9999px"
     height: "0.5rem"
   multiplier-step-acquired:
@@ -301,11 +301,11 @@ metaphor (work jacket, stamped booklet, acetate manual).
 
 A warm black and two structural grays, a cream that carries text and selection, a warm haze
 family reserved for backgrounds (its one exception is the calendar's craving heatmap), the
-charts' Braise gradient, and two named exceptions: the `Envie` gradient and the alert red.
+Braise gradient of values, and two named exceptions: the `Envie` gradient and the alert red.
 
 ### Primary
 - **Nocturne cream** (`ink`): all running text, and **every selection**: solid primary button,
-  pressed chip and segment, active tab, checked `Switch`, progress bar fill, acquired multiplier notch,
+  pressed chip and segment, active tab, checked `Switch`, acquired multiplier notch,
   today's date in the calendar, focus ring, caret, text selection. On cream, text switches to
   `page`.
 - **Pure white** (`white`): the key figures only (streak, countdown, minutes held), plus the
@@ -325,9 +325,11 @@ charts' Braise gradient, and two named exceptions: the `Envie` gradient and the 
   They belong to the craving timer screens only.
 
 ### Data
-- **Braise** (`chart-low` → `chart-high`): the charts' own gradient, orange to gold, laid
+- **Braise** (`chart-low` → `chart-high`): the gradient of values, orange to gold, laid
   along the value axis and stretched over the whole scale, so only the tallest bars turn gold.
-  It paints chart bars and nothing else, and never carries a glow.
+  On a progress bar the fill reveals it over the full track: a short fill stays orange, a full
+  one reaches gold. It paints chart bars and progress bar fills and nothing else, and never
+  carries a glow.
 
 ### Neutral
 - **Page** (`page`): the background of the whole app, text set on cream and on `Envie`, the
@@ -349,7 +351,8 @@ charts' Braise gradient, and two named exceptions: the `Envie` gradient and the 
 - `alert`: 6.9:1 on `page`, 6.5:1 on `surface`, and much lighter than the haze's ember, so it is
   never mistaken for it.
 - Braise: `chart-low` 6.7:1 on `surface`, 3.16:1 dimmed to 60 %, the chart floor;
-  `chart-high` 11.3:1.
+  `chart-high` 11.3:1. On a progress bar, `chart-low` holds 5.35:1 against the `line` track on a
+  card (WCAG 1.4.11).
 - `ghost-line`: 3.3:1, a control edge above 3:1 on the page as on a card
   (WCAG 1.4.11).
 - The brand and the streak figure hold ≥ 3:1 (large text) on the lightest pixel of the haze: the
@@ -374,7 +377,7 @@ No other button, badge, chart or background borrows them, even in part.
 `floor-deep`, `moss`, `bronze`) paint haze backgrounds only. They never color text, a control
 or data. One named exception (SYR-93): the calendar's craving heatmap fills a lived day's cell
 with `floor` → `ember` → `amber` (see Calendar), because a day of cravings is the home's own
-warmth. Braise stays the charts'.
+warmth. Braise stays with values: charts and progress bars.
 
 **The Alert Is Not a Fill Rule.** `alert` writes error text (`text-alert`), borders an invalid
 field, and draws the destructive button as a ghost pill with a hairline (1 px `alert` at 70%,
@@ -382,7 +385,8 @@ field, and draws the destructive button as a ghost pill with a hairline (1 px `a
 fact, not an error.
 
 **The One Series Rule.** Charts have a single series, drawn in Braise (`chart-low` →
-`chart-high`, SYR-91): 6.7:1 on the card at its low end, 3.16:1 dimmed. Never a second series,
+`chart-high`, SYR-91), and progress bars fill with it (SYR-94): 6.7:1 on the card at its low
+end, 3.16:1 dimmed. Braise is for values, charts and progress bars only. Never a second series,
 a per-category hue, or `Envie`'s pink → yellow on a bar. Braise has no glow: `Envie` stays the
 only lit object.
 
@@ -624,7 +628,7 @@ and the `hh h mm` clock in `muted`. The real figure is read through `sr-only`; t
   form. No celebration, no reproach.
 
 ### Progress
-- **Bar (`ProgressBar`):** 8 px `line` track, cream fill, width animated over 500 ms. The
+- **Bar (`ProgressBar`):** 8 px `line` track, Braise fill laid over the whole track, width animated over 500 ms. The
   numeric bounds live beside it: the bar never carries text.
 - **Multiplier:** five 42 px notches, `rounded-step`, 1 px hairline: acquired → solid cream,
   `page` text; current → ringed in cream, transparent background, cream text; locked → `ghost`,
@@ -705,7 +709,7 @@ play only under `motion-safe:`, so the haze becomes a still image; every transit
 - **Don't** switch off a screen's haze, nor the stopped timer's.
 - **Don't** add a drop shadow, a `ring-*` or a per-component focus ring: the only `box-shadow` is `Envie`'s glow, and focus is the global `outline`.
 - **Don't** give a destructive button a tinted fill, nor color a lapse in `alert`.
-- **Don't** color a chart bar outside Braise (amber, an accent, a second series, `Envie`'s gradient).
+- **Don't** color a chart bar or a progress fill outside Braise, nor lend Braise to anything else (amber, an accent, a second series, `Envie`'s gradient).
 - **Don't** turn progress into a ring or a gauge: an 8 px bar with its numeric bounds, or a row of notches.
 - **Don't** add a decorative raster: hazes, grain and icons are code.
 - **Don't** create a second top bar, a second card or a second back gesture.

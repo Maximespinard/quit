@@ -81,6 +81,7 @@ function HomePage() {
               <StreakTotals
                 smokeFreeDays={derived.smokeFreeDays}
                 personalBest={derived.personalBest}
+                lastCigarette={derived.lastCigarette}
               />
               {/* The slip note reads as the totals' footnote, aligned with the card's text. */}
               <SlipNote

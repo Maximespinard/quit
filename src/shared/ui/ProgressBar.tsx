@@ -9,7 +9,8 @@ type ProgressBarProps = {
 
 /**
  * A thin bar with numeric endpoints: progress is a number, never a gauge. Level XP and the
- * goal's savings both read on it.
+ * goal's savings both read on it. The fill reveals Braise laid over the whole track (`100cqw`),
+ * so a short fill stays orange and only a full one reaches gold.
  */
 export function ProgressBar({ label, value, max, valueText }: ProgressBarProps) {
   const ratio = max === 0 ? 0 : Math.min(1, value / max)
@@ -22,10 +23,10 @@ export function ProgressBar({ label, value, max, valueText }: ProgressBarProps) 
       aria-valuemax={max}
       aria-valuenow={Math.min(value, max)}
       aria-valuetext={valueText}
-      className="h-2 overflow-hidden rounded-full bg-line"
+      className="@container h-2 overflow-hidden rounded-full bg-line"
     >
       <div
-        className="h-full rounded-full bg-ink transition-[width] duration-500 ease-out-expo motion-reduce:transition-none"
+        className="h-full rounded-full bg-chart-bar bg-[length:100cqw_100%] bg-no-repeat transition-[width] duration-500 ease-out-expo motion-reduce:transition-none"
         style={{ width: `${ratio * 100}%` }}
       />
     </div>
