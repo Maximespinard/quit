@@ -300,8 +300,8 @@ metaphor (work jacket, stamped booklet, acetate manual).
 ## Colors
 
 A warm black and two structural grays, a cream that carries text and selection, a warm haze
-family reserved for backgrounds, the charts' Braise gradient, and two named exceptions: the
-`Envie` gradient and the alert red.
+family reserved for backgrounds (its one exception is the calendar's craving heatmap), the
+charts' Braise gradient, and two named exceptions: the `Envie` gradient and the alert red.
 
 ### Primary
 - **Nocturne cream** (`ink`): all running text, and **every selection**: solid primary button,
@@ -639,14 +639,14 @@ Square, `rounded-card`, 12 px inset, name in `body` 500 and detail in `detail`. 
 Month grid on a card surface, month in `title` and two 44 px arrows; date in tabular `label` inside a 24 px disc; today
 is the only cream disc (`page` text); upcoming days in `muted`, days outside the calendar in
 `muted` 80%. Only exceptions are marked, 14 px under the date, one shape per state: patch
-not noted = `muted` dash, due = cream ring; lapse = cigarette, craving = timer. A day with its
+not noted = a dash and due = a ring, both in the cell's text colour (the dash at 70 %); lapse = cigarette, craving = timer. A day with its
 patch logged, or still to come, stays bare. First day of a step: a `ghost` pill in `detail`.
 Each cell is a `rounded-lg` tile with a transparent 1.5 px border, and holds one meaning
 (SYR-93). A lived day of the protocol is filled by its craving count, in fixed buckets 0 · 1–2 ·
 3–5 · 6+ (never relative to the user's own maximum, so a day keeps its colour month to month):
 `floor` at 50 % on the card, `floor` → `ember` at 40 %, `ember`, `ember` → `amber` at 56 %. One
-path in four evenly spaced lightness steps (0.23, 0.33, 0.44, 0.54), cream text and marks ≥ 4.9:1
-on each; the count is written beside the timer icon, so hue is never the only cue, and a lapse
+path in four evenly spaced lightness steps (0.23, 0.33, 0.44, 0.54), cream text ≥ 4.9:1 on each
+(the step's dose pill darkens to `page` at 30 % on a fill, and the dash drops to 3.2:1 at 6+, still above the 3:1 of a mark); the count is written beside the timer icon, so hue is never the only cue, and a lapse
 day keeps its cigarette with no alarm fill. A day still to come is not filled: it carries its
 step's outline, cream at 100 %, 70 % and 40 % by dose rank (3.1:1 at the faintest), never a
 Braise or haze hue. Days after the protocol's end, and outside the calendar, stay bare dates. The

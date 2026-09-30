@@ -4,7 +4,7 @@ import { cn } from '@/shared/utils/cn'
 import { formatDose, formatShortDate } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
 import type { CalendarStep } from '../domain/patch-calendar'
-import { stepTints } from '../utils/step-tint'
+import { stepOutlines } from '../utils/step-outline'
 
 const copy = strings.calendar
 
@@ -19,7 +19,7 @@ type StepSpansProps = {
  */
 export function StepSpans({ steps, position }: StepSpansProps) {
   const current = position.status === 'running' ? position.stepNumber : null
-  const tints = stepTints(steps)
+  const outlines = stepOutlines(steps)
 
   return (
     <Card title={copy.steps} headingLevel={3} className="gap-1.5">
@@ -37,7 +37,7 @@ export function StepSpans({ steps, position }: StepSpansProps) {
                 <span
                   aria-hidden="true"
                   className="size-3.5 shrink-0 self-center rounded-sm border-[1.5px]"
-                  style={{ borderColor: tints[span.number - 1] }}
+                  style={{ borderColor: outlines[span.number - 1] }}
                 />
                 <span>
                   {copy.step(span.number, formatDose(span.step.doseMg))}

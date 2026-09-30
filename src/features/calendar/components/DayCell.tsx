@@ -23,14 +23,14 @@ type DayCellProps = {
   /** Local midnight of today: days after it are still to come. */
   todayStart: number
   /** The outline colour of each step, in step order. */
-  tints: readonly string[]
+  outlines: readonly string[]
 }
 
 /**
  * One date of the month grid: its number, its marks, then the dose on a step's first day (or
  * the end). A screen reader hears the whole day in one sentence instead.
  */
-export function DayCell({ cell, todayStart, tints }: DayCellProps) {
+export function DayCell({ cell, todayStart, outlines }: DayCellProps) {
   if (cell === null) return <td />
   const { day, calendarDay } = cell
   const date = new Date(day).getDate()
@@ -54,16 +54,13 @@ export function DayCell({ cell, todayStart, tints }: DayCellProps) {
   // One meaning per cell: a lived day of the protocol is filled, a day to come is outlined.
   const lived = step !== null && day <= todayStart
   const heat = lived ? cravingHeat[cravingBucket(cravings)] : undefined
-  const outline = step !== null && !lived ? tints[step - 1] : undefined
+  const outline = step !== null && !lived ? outlines[step - 1] : undefined
 
   return (
     <td className="p-0.5 align-top">
       <div
         className={cn(cellLayout, day > todayStart ? 'text-muted' : 'text-ink')}
-        style={{
-          ...(heat === undefined ? null : { backgroundColor: heat }),
-          ...(outline === undefined ? null : { borderColor: outline }),
-        }}
+        style={{ backgroundColor: heat, borderColor: outline }}
       >
         {/* Today is the one lit date: the cream of the primary pill. */}
         <span
@@ -79,7 +76,13 @@ export function DayCell({ cell, todayStart, tints }: DayCellProps) {
         </span>
         <span aria-hidden="true" className="flex h-4 items-center">
           {stepLabel === null ? null : (
-            <span className="whitespace-nowrap rounded-full bg-ghost px-1.5 font-medium text-detail leading-4">
+            <span
+              className={cn(
+                'whitespace-nowrap rounded-full px-1.5 font-medium text-detail text-ink leading-4',
+                // On a fill the pill darkens instead: the ghost's lift dips the 6+ cell to 4.46:1.
+                heat === undefined ? 'bg-ghost' : 'bg-page/30',
+              )}
+            >
               {stepLabel}
             </span>
           )}

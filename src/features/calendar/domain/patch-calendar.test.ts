@@ -6,6 +6,7 @@ import { defaultProtocol, setProtocol } from '@/shared/domain/protocol'
 import { scenarioById, scenarios } from '@/shared/domain/scenarios'
 import { DAY_MS, HOUR_MS } from '@/shared/utils/duration'
 import { factId } from '@/shared/utils/fact-id'
+import { cravingBucket } from './craving-bucket'
 import { type CalendarDay, patchCalendar } from './patch-calendar'
 
 // Vitest pins TZ to Europe/Paris: the calendar days below are Paris days.
@@ -189,6 +190,18 @@ describe('patchCalendar', () => {
     expect(dayOf(days, local(1, 2))).toMatchObject({ cigarettes: 4, cravings: 0 })
     expect(dayOf(days, local(1, 3))).toMatchObject({ cigarettes: 0, cravings: 1 })
     expect(dayOf(days, local(1, 4))).toMatchObject({ cigarettes: 0, cravings: 0 })
+  })
+
+  it('puts a day of three cravings, from the journal, in the 3–5 bucket', () => {
+    const journal = journalOf(QUIT, [
+      craving(2, local(1, 3, 8)),
+      craving(3, local(1, 3, 12)),
+      craving(4, local(1, 3, 16)),
+    ])
+    const { days } = calendarOf(journal, local(1, 4, 14))
+
+    expect(cravingBucket(dayOf(days, local(1, 3)).cravings)).toBe(2)
+    expect(cravingBucket(dayOf(days, local(1, 2)).cravings)).toBe(0)
   })
 
   it('leaves out facts older than a corrected quit moment', () => {

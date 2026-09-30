@@ -6,7 +6,7 @@ import { strings } from '@/shared/utils/strings'
 import type { CalendarDay, CalendarStep } from '../domain/patch-calendar'
 import { formatMonth } from '../utils/calendar-dates'
 import { calendarMonths, monthIndexAt } from '../utils/calendar-months'
-import { stepTints } from '../utils/step-tint'
+import { stepOutlines } from '../utils/step-outline'
 import { CalendarLegend } from './CalendarLegend'
 import { DayCell } from './DayCell'
 
@@ -29,7 +29,7 @@ export function MonthCalendar({ days, steps, now }: MonthCalendarProps) {
   const month = months[Math.min(index, months.length - 1)]
   if (month === undefined) return null
   const todayStart = localMidnight(now)
-  const tints = stepTints(steps)
+  const outlines = stepOutlines(steps)
 
   return (
     <section
@@ -84,7 +84,7 @@ export function MonthCalendar({ days, steps, now }: MonthCalendarProps) {
                   key={cell?.day ?? `blank-${column}`}
                   cell={cell}
                   todayStart={todayStart}
-                  tints={tints}
+                  outlines={outlines}
                 />
               ))}
             </tr>
