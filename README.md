@@ -101,7 +101,9 @@ below all of it.
   service worker would answer.
 - **CI** runs three jobs side by side: the verify gate; the full e2e suite, then the Docker
   image built and the smoke and offline specs run against the container, checked not to run as
-  root; a leak scan. On `main`, the image is published only when all three pass.
+  root; a leak scan. A pull request runs verify and the leak scan; e2e joins on the `full-ci`
+  label and on every push to `main` (skipped for docs-only changes). On `main`, the image is
+  published only when all three pass.
 - **`npm run verify`** (lint, typecheck, tests, build, then each workspace's own verify) is the
   local gate before each commit; CI enforces it before each merge.
 - **gitleaks** scans staged changes in the pre-commit hook and the pushed commits in CI.
