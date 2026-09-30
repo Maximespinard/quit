@@ -121,12 +121,15 @@ jobs:
 
   publish:
     name: publish (GHCR · sha and main tags)
-    # `always()`: a docs-only push skips e2e, and a skipped need would skip publish with it.
+    # `!cancelled()`: a docs-only push skips e2e, and a skipped need would skip publish with it;
+    # unlike `always()`, a superseded run does not publish. A skipped e2e counts only when the
+    # filter itself succeeded, never when it failed.
     if: >-
-      always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+      !cancelled() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+      && needs.changes.result == 'success'
       && needs.verify.result == 'success' && needs.secret-scan.result == 'success'
       && (needs.e2e.result == 'success' || needs.e2e.result == 'skipped')
-    needs: [verify, e2e, secret-scan]
+    needs: [changes, verify, e2e, secret-scan]
     runs-on: ubuntu-latest
     permissions:
       contents: read
