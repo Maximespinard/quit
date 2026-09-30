@@ -15,6 +15,21 @@ import { defaultProtocol } from './protocol'
  */
 export type { Journal }
 
+/**
+ * What a change to the journal comes to: the changed journal, or why it was refused, the
+ * journal left as it was. A refusal is a reason (`'future'`), or an object when saying it
+ * needs more than one word; `Accepted` adds what an accepted change also returns.
+ */
+export type JournalOutcome<Refusal, Accepted extends object = object> =
+  | (Accepted & { readonly ok: true; readonly journal: Journal })
+  | ({ readonly ok: false } & (Refusal extends string ? { readonly reason: Refusal } : Refusal))
+
+/** Why an outcome can be refused: the reasons it may carry. */
+export type RefusalOf<Outcome> = Extract<
+  Outcome,
+  { readonly ok: false; readonly reason: unknown }
+>['reason']
+
 /** A new journal: no fact yet, the default protocol, no setting, no goal. */
 export const emptyJournal: Journal = {
   facts: [],

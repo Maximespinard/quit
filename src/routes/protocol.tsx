@@ -1,11 +1,11 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { ProtocolEditor } from '@/features/protocol/components/ProtocolEditor'
 import { derive } from '@/shared/domain/derive'
-import type { Journal } from '@/shared/domain/journal'
+import { useCommitThenHome } from '@/shared/hooks/useCommitThenHome'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
-import { AppShell } from '@/shared/ui/AppShell'
 import { BackLink, PageHeader } from '@/shared/ui/PageHeader'
-import { keepSearch } from '@/shared/utils/app-search'
+import { ReadyJournal } from '@/shared/ui/ReadyJournal'
+import { keepSearch, validateAppSearch } from '@/shared/utils/app-search'
 import { strings } from '@/shared/utils/strings'
 
 export const Route = createFileRoute('/protocol')({
@@ -13,35 +13,28 @@ export const Route = createFileRoute('/protocol')({
 })
 
 function ProtocolPage() {
-  const { state, commit, now } = useJournalSource()
-  const navigate = useNavigate()
+  const appSearch = validateAppSearch(Route.useSearch())
+  const { state, now } = useJournalSource()
+  const saved = useCommitThenHome(appSearch)
   const copy = strings.protocol
 
-  const save = async (journal: Journal) => {
-    await commit(journal)
-    await navigate({ to: '/', search: keepSearch })
-  }
-
   return (
-    <AppShell>
-      <PageHeader
-        title={copy.title}
-        back={<BackLink to="/" search={keepSearch} aria-label={copy.back} />}
-      />
-
-      {state.status === 'loading' ? (
-        <p className="text-body text-muted">{strings.journal.loading}</p>
-      ) : state.status === 'error' ? (
-        <p role="alert" className="text-alert text-body">
-          {strings.journal.error}
-        </p>
-      ) : (
+    <ReadyJournal
+      state={state}
+      header={
+        <PageHeader
+          title={copy.title}
+          back={<BackLink to="/" search={keepSearch} aria-label={copy.back} />}
+        />
+      }
+    >
+      {(journal) => (
         <ProtocolEditor
-          journal={state.journal}
-          position={derive(state.journal, now).protocol}
-          onSaved={save}
+          journal={journal}
+          position={derive(journal, now).protocol}
+          onSaved={saved}
         />
       )}
-    </AppShell>
+    </ReadyJournal>
   )
 }

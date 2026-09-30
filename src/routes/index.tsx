@@ -14,8 +14,8 @@ import { FirstLaunch } from '@/features/setup/components/FirstLaunch'
 import { StreakScreen } from '@/features/streak/components/StreakScreen'
 import { StreakTotals } from '@/features/streak/components/StreakTotals'
 import { derive } from '@/shared/domain/derive'
+import { recordedNotice, useCommitThenHome } from '@/shared/hooks/useCommitThenHome'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
-import { recordedNotice, useRecordedThenHome } from '@/shared/hooks/useRecordedThenHome'
 import { AppShell } from '@/shared/ui/AppShell'
 import { buttonVariants } from '@/shared/ui/base/button'
 import { Card } from '@/shared/ui/Card'
@@ -32,7 +32,7 @@ export const Route = createFileRoute('/')({
 function HomePage() {
   const { state, commit, now } = useJournalSource()
   const appSearch = validateAppSearch(Route.useSearch())
-  const imported = useRecordedThenHome(appSearch, 'journalImported')
+  const imported = useCommitThenHome(appSearch, 'journalImported')
   const notice = useLocation({ select: (location) => recordedNotice(location.state) })
   const brand = <SandboxEntry>{strings.app.name}</SandboxEntry>
 

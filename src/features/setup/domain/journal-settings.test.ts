@@ -1,4 +1,4 @@
-import { emptyJournal } from './journal'
+import { emptyJournal } from '@/shared/domain/journal'
 import { setBaselineSmokesPerDay, setWeeklySpend } from './journal-settings'
 
 describe('setWeeklySpend', () => {

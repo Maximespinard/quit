@@ -1,7 +1,7 @@
 import { derive } from '@/shared/domain/derive'
 import { recordCraving } from '@/shared/domain/facts/craving'
 import { recordLapse } from '@/shared/domain/facts/lapse'
-import type { Journal } from '@/shared/domain/journal'
+import type { Journal, JournalOutcome } from '@/shared/domain/journal'
 import type { SandboxControls } from '@/shared/hooks/useJournalSource'
 import { Button } from '@/shared/ui/base/button'
 import { newFactId } from '@/shared/utils/fact-id'
@@ -9,8 +9,6 @@ import { strings } from '@/shared/utils/strings'
 import { INJECTED_CRAVING, INJECTED_LAPSE } from '../utils/injected-facts'
 
 const copy = strings.debug
-
-type RecordResult = { readonly ok: true; readonly journal: Journal } | { readonly ok: false }
 
 type SandboxActionsProps = {
   journal: Journal
@@ -29,7 +27,7 @@ export function SandboxActions({ journal, now, commit, sandbox }: SandboxActions
   const running = derived.protocol?.status === 'running' ? derived.protocol : null
   const canInject = derived.quitMoment !== null
 
-  const inject = (result: RecordResult) => {
+  const inject = (result: JournalOutcome<unknown>) => {
     if (result.ok) void commit(result.journal)
   }
   const injectCraving = () =>

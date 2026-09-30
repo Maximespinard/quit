@@ -1,7 +1,7 @@
-import { type HistoryState, useNavigate } from '@tanstack/react-router'
+import type { HistoryState } from '@tanstack/react-router'
 import type { Journal } from '@/shared/domain/journal'
-import { useJournalSource } from '@/shared/hooks/useJournalSource'
-import { type AppSearch, validateAppSearch } from '@/shared/utils/app-search'
+import { useCommitThen } from '@/shared/hooks/useCommitThen'
+import type { AppSearch } from '@/shared/utils/app-search'
 import { strings } from '@/shared/utils/strings'
 
 /** The history flags a screen sets to have home confirm what it just recorded or imported. */
@@ -28,19 +28,14 @@ export function recordedNotice(state: HistoryState): string | null {
 }
 
 /**
- * Commits the journal holding a newly recorded fact (or an imported journal), then returns home, where `notice`
- * confirms it. The entry is replaced: back never reopens a finished timer or form.
+ * Commits a changed journal, then returns home. With a `notice`, home confirms the fact just
+ * recorded or the journal just imported; without, home is the acknowledgement: it already
+ * shows what the change does.
  */
-export function useRecordedThenHome(
+export function useCommitThenHome(
   search: AppSearch,
-  notice: RecordedNotice,
+  notice?: RecordedNotice,
 ): (journal: Journal) => void {
-  const { commit } = useJournalSource()
-  const navigate = useNavigate()
-  const state: HistoryState = { [notice]: true }
-
-  return (journal) =>
-    void commit(journal).then(() =>
-      navigate({ to: '/', search: validateAppSearch(search), state, replace: true }),
-    )
+  const commitThen = useCommitThen('/', search)
+  return (journal) => commitThen(journal, notice === undefined ? {} : { [notice]: true })
 }

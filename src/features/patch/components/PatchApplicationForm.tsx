@@ -2,10 +2,9 @@ import { type FormEvent, type ReactNode, useId, useState } from 'react'
 import { derive } from '@/shared/domain/derive'
 import {
   type PatchApplicationInput,
-  type RecordPatchApplicationResult,
   recordPatchApplication,
 } from '@/shared/domain/facts/patch-application'
-import type { Journal } from '@/shared/domain/journal'
+import type { Journal, RefusalOf } from '@/shared/domain/journal'
 import type { ProtocolPosition } from '@/shared/domain/protocol-position'
 import { Button } from '@/shared/ui/base/button'
 import { Input } from '@/shared/ui/base/input'
@@ -21,7 +20,7 @@ import { SitePicker } from './SitePicker'
 const copy = strings.patch.form
 
 /** The domain's refusals, plus a date the browser could not give. */
-type FormError = Extract<RecordPatchApplicationResult, { ok: false }>['reason'] | 'invalid'
+type FormError = RefusalOf<ReturnType<typeof recordPatchApplication>> | 'invalid'
 
 type PatchApplicationFormProps = {
   journal: Journal

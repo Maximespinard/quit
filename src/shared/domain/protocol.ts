@@ -1,6 +1,6 @@
 import { doseMgSchema } from '@quit/contract/facts'
 import { durationDaysSchema, type Protocol, type Step } from '@quit/contract/settings'
-import type { Journal } from './journal'
+import type { Journal, JournalOutcome } from './journal'
 
 /**
  * Every new journal starts on this taper. Each step lasts 4 weeks, the upper bound of the
@@ -28,12 +28,11 @@ function normaliseStep({ doseMg, durationDays, brand }: Step): Step {
   return trimmed === '' ? { doseMg, durationDays } : { doseMg, durationDays, brand: trimmed }
 }
 
-export type SetProtocolResult =
-  | { readonly ok: true; readonly journal: Journal }
-  | { readonly ok: false; readonly reason: 'empty' | 'invalid' }
-
 /** Replaces the whole protocol, at any time. Zero steps, or a step without a dose or a duration, is refused. */
-export function setProtocol(journal: Journal, steps: readonly Step[]): SetProtocolResult {
+export function setProtocol(
+  journal: Journal,
+  steps: readonly Step[],
+): JournalOutcome<'empty' | 'invalid'> {
   if (steps.length === 0) return { ok: false, reason: 'empty' }
   if (!steps.every(isValidStep)) return { ok: false, reason: 'invalid' }
   return { ok: true, journal: { ...journal, protocol: steps.map(normaliseStep) } }

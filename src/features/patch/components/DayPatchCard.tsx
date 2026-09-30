@@ -1,11 +1,8 @@
 import type { ApplicationSite } from '@quit/contract/facts'
 import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
-import {
-  type RecordPatchApplicationResult,
-  recordPatchApplication,
-} from '@/shared/domain/facts/patch-application'
-import type { Journal } from '@/shared/domain/journal'
+import { recordPatchApplication } from '@/shared/domain/facts/patch-application'
+import type { Journal, RefusalOf } from '@/shared/domain/journal'
 import type { TodayPatch } from '@/shared/domain/today-patch'
 import { Button, buttonVariants } from '@/shared/ui/base/button'
 import { Card } from '@/shared/ui/Card'
@@ -19,7 +16,7 @@ import { SitePicker } from './SitePicker'
 
 const copy = strings.patch
 
-type Refusal = Extract<RecordPatchApplicationResult, { ok: false }>['reason']
+type Refusal = RefusalOf<ReturnType<typeof recordPatchApplication>>
 
 type DayPatchCardProps = {
   journal: Journal

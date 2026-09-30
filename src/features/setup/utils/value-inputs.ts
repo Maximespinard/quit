@@ -1,7 +1,7 @@
-import { isValidBaseline, isValidWeeklySpend } from '@/shared/domain/journal-settings'
 import { fromDecimalText } from '@/shared/utils/decimal-text'
 import { fromEuroText, toEuroText } from '@/shared/utils/euros'
 import { strings } from '@/shared/utils/strings'
+import { isValidBaseline, isValidWeeklySpend } from '../domain/journal-settings'
 
 /** How one numeric setting is typed, read back and refused, shared by first launch and settings. */
 export type ValueInput = {

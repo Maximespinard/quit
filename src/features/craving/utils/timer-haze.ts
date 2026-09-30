@@ -1,4 +1,4 @@
-import { mix, type Rgb, relativeLuminance } from '@/shared/utils/color'
+import { mix, type Rgb, relativeLuminance } from './color'
 
 /** The colour tokens the timer haze paints with. */
 export type HazeTone = 'bronze' | 'moss' | 'page'

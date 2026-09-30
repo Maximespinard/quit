@@ -1,9 +1,9 @@
+import { derive } from '@/shared/domain/derive'
+import { emptyJournal } from '@/shared/domain/journal'
+import { defaultProtocol } from '@/shared/domain/protocol'
 import { factIdSequence } from '@/shared/test/fact-ids'
 import { factId } from '@/shared/utils/fact-id'
-import { derive } from './derive'
 import { startJourney } from './first-launch'
-import { emptyJournal } from './journal'
-import { defaultProtocol } from './protocol'
 
 const MINUTE = 60_000
 const NOW = Date.UTC(2026, 8, 22, 10, 0, 0)

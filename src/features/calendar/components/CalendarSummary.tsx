@@ -1,7 +1,7 @@
-import type { PatchCalendar } from '@/shared/domain/patch-calendar'
 import { Card } from '@/shared/ui/Card'
 import { formatDate, formatDose, formatWeekdayDate } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
+import type { PatchCalendar } from '../domain/patch-calendar'
 
 const copy = strings.calendar
 

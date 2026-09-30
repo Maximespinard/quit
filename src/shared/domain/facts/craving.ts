@@ -1,5 +1,5 @@
 import { CRAVING, type CravingFact } from '@quit/contract/facts'
-import type { Journal } from '../journal'
+import type { Journal, JournalOutcome } from '../journal'
 
 /** Trims a typed tag and collapses its inner spacing: `'  Jeu   vidéo '` → `'Jeu vidéo'`. */
 export const normalizeTag = (tag: string): string => tag.trim().replace(/\s+/g, ' ')
@@ -20,10 +20,6 @@ export function uniqueTags(tags: readonly string[]): readonly string[] {
 /** A craving to record: a new one under a new id, a corrected one under its own. */
 export type CravingInput = Omit<CravingFact, 'type'>
 
-export type RecordCravingResult =
-  | { readonly ok: true; readonly journal: Journal }
-  | { readonly ok: false; readonly reason: 'future' }
-
 /**
  * Records a craving, its tags cleaned by `uniqueTags`.
  * One set after `now` is refused: nothing happened yet.
@@ -32,7 +28,7 @@ export function recordCraving(
   journal: Journal,
   craving: CravingInput,
   now: number,
-): RecordCravingResult {
+): JournalOutcome<'future'> {
   if (craving.at > now) return { ok: false, reason: 'future' }
   return {
     ok: true,

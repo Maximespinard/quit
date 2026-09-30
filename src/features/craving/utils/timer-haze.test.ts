@@ -1,5 +1,5 @@
 import { themeTokens } from '@/shared/test/theme-tokens'
-import { contrastRatio, hexToRgb, type Rgb } from '@/shared/utils/color'
+import { contrastRatio, hexToRgb, type Rgb } from './color'
 import { brightestHazePixel, type HazeTone, TIMER_HAZE } from './timer-haze'
 
 const colour = (token: string): Rgb => {

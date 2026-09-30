@@ -13,7 +13,7 @@ import {
   journalFileSchema,
 } from '@quit/contract/journal-file'
 import { latestQuitMoment } from './facts/quit-moment'
-import { identifyFacts, type Journal } from './journal'
+import { identifyFacts, type Journal, type JournalOutcome } from './journal'
 
 /**
  * The export file, the user's only backup (ADR-0001). Its shape is the contract's
@@ -50,10 +50,6 @@ export type ImportRefusal =
   | 'invalid-settings'
   | 'no-quit-moment'
   | 'before-quit-moment'
-
-export type ImportJournalResult =
-  | { readonly ok: true; readonly journal: Journal; readonly exportedAt: number }
-  | { readonly ok: false; readonly reason: ImportRefusal }
 
 /** Where the schema found a problem, in the file's own keys. */
 type IssuePath = readonly PropertyKey[]
@@ -115,7 +111,7 @@ export function importJournal(
   text: string,
   into: JournalOrigin,
   newId: () => FactId,
-): ImportJournalResult {
+): JournalOutcome<ImportRefusal, { readonly exportedAt: number }> {
   let raw: unknown
   try {
     raw = JSON.parse(text)

@@ -1,10 +1,10 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { PatchApplicationForm } from '@/features/patch/components/PatchApplicationForm'
 import { derive } from '@/shared/domain/derive'
+import { useCommitThenHome } from '@/shared/hooks/useCommitThenHome'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
-import { useRecordedThenHome } from '@/shared/hooks/useRecordedThenHome'
 import { AppShell } from '@/shared/ui/AppShell'
-import { buttonVariants } from '@/shared/ui/base/button'
+import { CancelLink } from '@/shared/ui/CancelLink'
 import { ReadyJournal } from '@/shared/ui/ReadyJournal'
 import { ThumbZone } from '@/shared/ui/ThumbZone'
 import { validateAppSearch } from '@/shared/utils/app-search'
@@ -17,20 +17,16 @@ export const Route = createFileRoute('/patch/new')({
 function PatchApplicationPage() {
   const appSearch = validateAppSearch(Route.useSearch())
   const { state, now } = useJournalSource()
-  const recorded = useRecordedThenHome(appSearch, 'patchRecorded')
+  const recorded = useCommitThenHome(appSearch, 'patchRecorded')
 
   return (
     <ReadyJournal state={state}>
       {(journal) => {
         const { protocol } = derive(journal, now)
         const cancel = (
-          <Link
-            to="/"
-            search={appSearch}
-            className={buttonVariants({ variant: 'ghost', size: 'lg' })}
-          >
+          <CancelLink to="/" search={appSearch}>
             {strings.patch.form.cancel}
-          </Link>
+          </CancelLink>
         )
         return (
           <AppShell>
