@@ -9,7 +9,7 @@ offline on the phone, and a small server keeps a mirror of its journal.
   <img src="docs/screenshots/home.webp" width="190" alt="Home: the streak in days over the amber and plum haze, the Envie button at the bottom right">
   <img src="docs/screenshots/craving-timer.webp" width="190" alt="Craving timer: a countdown at 2:37 in a moss and bronze haze, with a stop button">
   <img src="docs/screenshots/calendar.webp" width="190" alt="Calendar: day 4 of 28 of the 7 mg step, and June with a patch applied every day">
-  <img src="docs/screenshots/stats.webp" width="190" alt="Stats: 92 cravings logged, 75 % held to the end, most at 18 h, over coffee">
+  <img src="docs/screenshots/stats.webp" width="190" alt="Stats: 92 cravings logged, 99 % held to the end, most at 18 h, over coffee">
 </p>
 
 ## What it does

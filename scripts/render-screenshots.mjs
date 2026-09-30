@@ -15,7 +15,15 @@ const TIMER_ELAPSED_MS = 83_000
 /** WebP quality: the hazes and their grain stay smooth, the four images well under 1.5 MB. */
 const QUALITY = 0.86
 
-const phone = devices['iPhone 16 Pro']
+const device = devices['iPhone 16 Pro Max']
+/** Installed on the home screen, the PWA fills the whole screen: no Safari bars to subtract. */
+const phone = { ...device, viewport: device.screen }
+
+/**
+ * README only, never the app: the showcase leaves out what a reader cannot follow without a
+ * relapse to explain it, and shows the rate a journey held this well would reach.
+ */
+const SHOWCASE_HELD_PERCENT = '99'
 
 /**
  * The frame, drawn around the screen at the device's CSS size: a rounded body, a dark bezel and
@@ -53,6 +61,10 @@ const SCREENS = [
           final.length > 0 && final.every((copy) => read(copy) === read(copy.nextElementSibling))
         )
       })
+      // What stays earned only means something after a relapse: out of the showcase.
+      await page.getByRole('region', { name: 'Ce qui reste acquis' }).evaluate((card) => {
+        card.style.display = 'none'
+      })
     },
   },
   {
@@ -85,6 +97,16 @@ const SCREENS = [
     open: async (page) => {
       await page.goto(sandbox('/stats'))
       await page.getByRole('region', { name: 'En bref' }).waitFor()
+      await page.evaluate((percent) => {
+        const term = [...document.querySelectorAll('dt')].find(
+          (node) => node.textContent === 'Tenues jusqu’au bout',
+        )
+        const figure = [...(term?.nextElementSibling?.childNodes ?? [])].find(
+          (node) => node.nodeType === Node.TEXT_NODE,
+        )
+        if (figure === undefined) throw new Error('No held-to-the-end figure on the stats screen')
+        figure.textContent = figure.textContent.replace(/\d+/, percent)
+      }, SHOWCASE_HELD_PERCENT)
     },
   },
 ]
