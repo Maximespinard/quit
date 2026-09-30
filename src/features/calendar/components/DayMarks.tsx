@@ -3,20 +3,18 @@ import { cn } from '@/shared/utils/cn'
 import type { DayPatch } from '../domain/patch-calendar'
 
 /**
- * The patch application a day asks for, one shape per state so hue is never the only cue:
- * a cream dot once logged, a flat dash when it was not, a cream ring while still to put on,
- * a faint pip while planned.
+ * The patch application a day still lacks, one shape per state so hue is never the only cue:
+ * a flat dash when it was not noted, a ring while still to put on, both in the cell's text colour. A day with its patch
+ * logged is the normal case and stays bare.
  */
-export function PatchMark({ patch }: { patch: DayPatch }) {
+export function PatchMark({ patch }: { patch: Exclude<DayPatch, 'logged'> }) {
   return (
     <span
       aria-hidden="true"
       className={cn(
         'inline-block shrink-0 rounded-full',
-        patch === 'logged' && 'size-2 bg-ink',
-        patch === 'missing' && 'h-0.5 w-2.5 bg-muted',
-        patch === 'due' && 'size-2.5 border-2 border-ink',
-        patch === 'planned' && 'size-1.5 bg-muted',
+        patch === 'missing' && 'h-0.5 w-2.5 bg-current opacity-70',
+        patch === 'due' && 'size-2.5 border-2 border-current',
       )}
     />
   )
@@ -27,7 +25,10 @@ export const CigaretteMark = () => (
   <Cigarette aria-hidden="true" className="size-3.5 shrink-0" strokeWidth={2} />
 )
 
-/** A craving's mark: the timer of the `Envie` pill. */
-export const CravingMark = () => (
-  <Timer aria-hidden="true" className="size-3.5 shrink-0" strokeWidth={2} />
+/** A craving's mark: the timer of the `Envie` pill, the day's count beside it. */
+export const CravingMark = ({ count }: { count: number }) => (
+  <span aria-hidden="true" className="inline-flex items-center gap-0.5">
+    <Timer className="size-3.5 shrink-0" strokeWidth={2} />
+    <span className="text-detail tabular-nums leading-none">{count}</span>
+  </span>
 )

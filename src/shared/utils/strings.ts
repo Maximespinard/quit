@@ -304,12 +304,11 @@ export const strings = {
       ['D', 'dimanche'],
     ],
     legend: {
-      logged: 'Patch posé',
+      less: 'Moins',
+      more: 'Plus d’envies',
       missing: 'Pas noté',
       due: 'À poser',
-      planned: 'Prévu',
       cigarette: 'Cigarette',
-      craving: 'Envie',
     },
     /** What a screen reader hears for one day, after its date. */
     day: {
@@ -317,7 +316,6 @@ export const strings = {
       logged: 'patch posé',
       missing: 'patch pas noté',
       due: 'patch à poser',
-      planned: 'patch prévu',
       stepStart: (number: number, doseMg: string) => `début de l’étape ${number} à ${doseMg} mg`,
       end: 'fin du protocole',
       cigarettes: (count: number) => (count <= 1 ? `${count} cigarette` : `${count} cigarettes`),
@@ -509,6 +507,7 @@ export const strings = {
       'day-45-lapse': 'Jour 45, un écart hier',
       'protocol-over': 'Protocole fini, une semaine sans patch',
       'day-60-cravings': 'Jour 60, deux mois d’envies',
+      'day-41-heatmap': 'Jour 41, envies dans chaque palier',
     } satisfies Record<ScenarioId, string>,
     inject: 'Injecter à l’heure du bac à sable',
     injectCraving: 'Injecter une envie',

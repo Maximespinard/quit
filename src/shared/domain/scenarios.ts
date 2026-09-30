@@ -135,6 +135,19 @@ function fadingCravings(): Unnumbered<CravingFact>[] {
   return cravings
 }
 
+/**
+ * A craving count per day that walks every calendar heatmap bucket (0 · 1–2 · 3–5 · 6+).
+ */
+function heatmapCravings(days: number): Unnumbered<CravingFact>[] {
+  const perDay = [0, 1, 3, 6, 2, 0, 5, 8, 1, 4, 7, 2, 0, 3]
+  const cravings: Unnumbered<CravingFact>[] = []
+  for (let day = 0; day < days; day += 1) {
+    for (let nth = 0; nth < (perDay[day % perDay.length] ?? 0); nth += 1)
+      cravings.push(craving(sinceQuit(day, nth, 20), 2, true))
+  }
+  return cravings
+}
+
 const scenario = <Id extends string>(id: Id, now: number, journal: Journal) => ({
   id,
   now,
@@ -193,6 +206,17 @@ export const scenarios = [
     'day-60-cravings',
     sinceQuit(59, 9),
     journalOf(dailyPatches(defaultProtocol, 60), fadingCravings()),
+  ),
+  // Saturday 13 June, 11:00: day 41, a month of cravings in every heatmap bucket, days to come
+  // in the 14 mg and 7 mg steps, one cigarette on the way.
+  scenario(
+    'day-41-heatmap',
+    sinceQuit(40, 2),
+    journalOf(dailyPatches(defaultProtocol, 41), heatmapCravings(40), [
+      craving(sinceQuit(40, 0, 30), 2, true),
+      craving(sinceQuit(40, 1), 3, true),
+      lapse(sinceQuit(17, 12)),
+    ]),
   ),
 ] as const
 

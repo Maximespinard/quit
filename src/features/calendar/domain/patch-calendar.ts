@@ -29,10 +29,10 @@ export type CalendarStep = {
 
 /**
  * Whether a patch application was put on during a calendar day of the protocol: `due` while
- * the day, today, still has none; `planned` for a day still to come. `asksForPatch` says which
- * days ask for one.
+ * the day, today, still has none. A day still to come has no state yet. `asksForPatch` says
+ * which days ask for one.
  */
-export type DayPatch = 'logged' | 'missing' | 'due' | 'planned'
+export type DayPatch = 'logged' | 'missing' | 'due'
 
 export type CalendarDay = {
   /** Local midnight opening the day. */
@@ -86,10 +86,10 @@ function stepsOver(journal: Journal, quitMoment: number): CalendarStep[] {
   return steps
 }
 
-/** A calendar day asking for a patch application without one: over, today, or to come. */
-function patchStillAsked(day: number, now: number): DayPatch {
+/** A calendar day asking for a patch application without one: over, today, or to come (`null`). */
+function patchStillAsked(day: number, now: number): DayPatch | null {
   if (localMidnight(day, 1) <= now) return 'missing'
-  return day <= now ? 'due' : 'planned'
+  return day <= now ? 'due' : null
 }
 
 /**

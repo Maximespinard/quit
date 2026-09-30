@@ -113,7 +113,7 @@ describe('patchCalendar', () => {
     expect(days.filter((day) => day.isToday).map((day) => day.day)).toEqual([local(1, 4)])
   })
 
-  it('tells logged, missing, due and planned patch applications apart', () => {
+  it('tells logged, missing and due patch applications apart, and leaves days to come bare', () => {
     const journal = journalOf(QUIT, [patch(2, local(1, 1, 13, 5)), patch(3, local(1, 3, 13, 30))])
     const { days } = calendarOf(journal, local(1, 4, 14))
 
@@ -122,7 +122,7 @@ describe('patchCalendar', () => {
     expect(dayOf(days, local(1, 3)).patch).toBe('logged')
     // Today, none put on yet: still time.
     expect(dayOf(days, local(1, 4)).patch).toBe('due')
-    expect(dayOf(days, local(1, 5)).patch).toBe('planned')
+    expect(dayOf(days, local(1, 5)).patch).toBeNull()
   })
 
   it('shows a patch on the day it was put on, whatever the quit moment’s time', () => {
@@ -131,7 +131,7 @@ describe('patchCalendar', () => {
     const journal = journalOf(quitMoment, [patch(2, local(1, 2, 8)), patch(3, local(1, 3, 8))])
     const { days } = calendarOf(journal, local(1, 3, 9))
 
-    expect(days.map((day) => day.patch).slice(0, 4)).toEqual([null, 'logged', 'logged', 'planned'])
+    expect(days.map((day) => day.patch).slice(0, 4)).toEqual([null, 'logged', 'logged', null])
   })
 
   it('asks no patch on the quit day, but shows one put on then', () => {
@@ -341,11 +341,11 @@ describe('patchCalendar', () => {
     ])
   })
 
-  it('waits on planned days when now sits before the quit moment (a moved sandbox clock)', () => {
+  it('asks no patch on days to come when now sits before the quit moment (a moved sandbox clock)', () => {
     const { days } = calendarOf(journalOf(QUIT), QUIT - DAY_MS)
 
     expect(days[0]).toMatchObject({ day: local(1, 1), step: 1, patch: null, isToday: false })
-    expect(days[1]?.patch).toBe('planned')
+    expect(days[1]?.patch).toBeNull()
     expect(days.some((day) => day.isToday)).toBe(false)
   })
 
