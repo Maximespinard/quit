@@ -1,8 +1,7 @@
-import { expect, type Page, test } from '@playwright/test'
-import { apiUrl, issueDeviceKey } from './mirror-server'
-import { startNow, streakRegion } from './sandbox'
-
-const tap = (page: Page, name: string) => page.getByRole('button', { name, exact: true }).click()
+import { expect, test } from '@playwright/test'
+import { startNow } from './support/flows'
+import { streakRegion, tap } from './support/locators'
+import { apiUrl, issueDeviceKey } from './support/mirror-server'
 
 // Against the image (E2E_BASE_URL), no API is started beside the app for the suite to drive.
 test.skip(!!process.env.E2E_BASE_URL, 'needs the API the suite starts')

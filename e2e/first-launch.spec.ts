@@ -1,8 +1,16 @@
-import { expect, type Page, test } from '@playwright/test'
-import { expectStreak, localInput, sandboxAt, startNow, streakRegion } from './sandbox'
-
-const NOW = Date.UTC(2026, 0, 1, 12, 0, 0)
-const HOUR = 60 * 60 * 1000
+import { expect, test } from '@playwright/test'
+import { expectStreak } from './support/assertions'
+import { HOUR, localInput, NOW } from './support/clock'
+import { startNow } from './support/flows'
+import {
+  firstLaunchBaselineField,
+  firstLaunchSpendField,
+  settingsBaselineField,
+  settingsSpendField,
+  streakRegion,
+  tap,
+} from './support/locators'
+import { sandboxAt } from './support/sandbox'
 
 // The tracer bullet on the sandbox clock: first launch → streak, to the second.
 test('first launch sets the quit moment to now and the streak starts at zero', async ({ page }) => {
@@ -28,12 +36,6 @@ test('the quit moment survives a reload', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Maintenant' })).toHaveCount(0)
 })
 
-const tap = (page: Page, name: string) => page.getByRole('button', { name, exact: true }).click()
-const spendField = (page: Page) =>
-  page.getByRole('textbox', { name: 'Combien tu dépensais en tabac par semaine ?' })
-const baselineField = (page: Page) =>
-  page.getByRole('textbox', { name: 'Combien de cigarettes par jour ?' })
-
 test('the full first launch: a backdated quit moment, the spend, the baseline, the default protocol', async ({
   page,
 }) => {
@@ -45,32 +47,32 @@ test('the full first launch: a backdated quit moment, the spend, the baseline, t
   await tap(page, 'C’est depuis là')
 
   await expect(page.getByText('Étape 2 sur 4')).toBeVisible()
-  await spendField(page).fill('-10')
+  await firstLaunchSpendField(page).fill('-10')
   await tap(page, 'Continuer')
   await expect(page.getByRole('alert')).toHaveText(
     'Indique un montant en euros, plus grand que zéro.',
   )
-  await spendField(page).fill('abc')
+  await firstLaunchSpendField(page).fill('abc')
   await tap(page, 'Continuer')
   await expect(page.getByRole('alert')).toBeVisible()
-  await spendField(page).fill('42,50')
+  await firstLaunchSpendField(page).fill('42,50')
   await tap(page, 'Continuer')
 
-  await baselineField(page).fill('7,5')
+  await firstLaunchBaselineField(page).fill('7,5')
   await tap(page, 'Continuer')
   await expect(page.getByRole('alert')).toHaveText(
     'Indique un nombre entier de cigarettes, au moins une.',
   )
   // Back keeps what was already answered, the backdated moment included.
   await tap(page, 'Retour')
-  await expect(spendField(page)).toHaveValue('42,50')
+  await expect(firstLaunchSpendField(page)).toHaveValue('42,50')
   await tap(page, 'Retour')
   await expect(page.getByLabel('Une autre date et heure')).toHaveValue(
     await localInput(page, NOW - 51 * HOUR),
   )
   await tap(page, 'C’est depuis là')
   await tap(page, 'Continuer')
-  await baselineField(page).fill('12')
+  await firstLaunchBaselineField(page).fill('12')
   await tap(page, 'Continuer')
 
   const protocol = page.getByRole('region', { name: 'Ton protocole de patchs' })
@@ -90,8 +92,6 @@ test('every first-launch answer survives a reload', async ({ page }) => {
   await page.reload()
   await page.getByRole('link', { name: 'Réglages' }).click()
 
-  await expect(page.getByRole('textbox', { name: 'Dépense en tabac par semaine' })).toHaveValue(
-    '35',
-  )
-  await expect(page.getByRole('textbox', { name: 'Cigarettes par jour, avant' })).toHaveValue('15')
+  await expect(settingsSpendField(page)).toHaveValue('35')
+  await expect(settingsBaselineField(page)).toHaveValue('15')
 })

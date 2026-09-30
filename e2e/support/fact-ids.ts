@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test'
-import { ONLY_UUID_V7 } from '../src/shared/test/uuid-v7'
+import { ONLY_UUID_V7 } from '../../src/shared/test/uuid-v7'
 
 /** A fact as stored or exported: its id, if any, beside its other keys. */
 export type IdentifiedFact = { readonly id?: string } & Record<string, unknown>

@@ -1,31 +1,13 @@
 import { expect, type Page, test } from '@playwright/test'
 import { UUID_V7 } from '../src/shared/test/uuid-v7'
-import { expectStreak, sandboxAt, shiftClock, startNow } from './sandbox'
+import { expectStreak } from './support/assertions'
+import { NOW } from './support/clock'
+import { daysIn, declareLapse } from './support/flows'
+import { patchCard, rows, tap, totals } from './support/locators'
+import { sandboxAt, shiftClock } from './support/sandbox'
 
 // Times on screen are local: the timezone is pinned so the times below are fixed.
 test.use({ timezoneId: 'Europe/Paris' })
-
-/** 13:00 in Paris. */
-const NOW = Date.UTC(2026, 0, 1, 12, 0, 0)
-
-const tap = (page: Page, name: string | RegExp) =>
-  page.getByRole('button', { name, exact: typeof name === 'string' }).click()
-const totals = (page: Page) => page.getByRole('region', { name: 'Ce qui reste acquis' })
-const patchCard = (page: Page) => page.getByRole('region', { name: 'Patch du jour' })
-const rows = (page: Page, name: RegExp) => page.getByRole('link', { name })
-
-/** A sandbox whose quit moment is `NOW`, its clock then moved `days` on. */
-const daysIn = async (page: Page, days: number) => {
-  await page.goto(sandboxAt(NOW))
-  await startNow(page)
-  if (days > 0) await shiftClock(page, '+1 j', days)
-}
-
-const declareLapse = async (page: Page) => {
-  await page.getByRole('link', { name: 'J’ai fumé' }).click()
-  await tap(page, 'Oui, noter')
-  await expect(page.getByRole('status').filter({ hasText: 'C’est noté.' })).toBeVisible()
-}
 
 const openHistory = (page: Page) => page.getByRole('link', { name: 'Historique' }).click()
 const home = (page: Page) => page.getByRole('link', { name: 'Retour' }).click()
@@ -161,6 +143,6 @@ test('a fact opens by its id, keeps it through an edit, and an unknown id finds 
   await expect(rows(page, /J’ai fumé/)).toHaveAttribute('href', href ?? '')
 
   // A link from before ids, by position: it no longer points to any fact.
-  await page.goto(`/history/1?debug=true&clock=${NOW}`)
+  await page.goto(sandboxAt(NOW, '/history/1'))
   await expect(page.getByText('Ce fait n’est plus dans le journal.')).toBeVisible()
 })

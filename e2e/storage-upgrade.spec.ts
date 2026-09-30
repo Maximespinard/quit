@@ -1,8 +1,6 @@
 import { expect, type Page, test } from '@playwright/test'
-import { expectIdentified, type IdentifiedFact, withoutIds } from './fact-ids'
-
-const HOUR = 60 * 60_000
-const DAY = 24 * HOUR
+import { DAY, HOUR } from './support/clock'
+import { expectIdentified, type IdentifiedFact, withoutIds } from './support/fact-ids'
 
 /**
  * The journal as the previous storage version held it: facts without ids, each type at
