@@ -1,6 +1,6 @@
 import { expect, type Locator, type Page, test } from '@playwright/test'
 import { homeWithStreak } from './support/flows'
-import { streakRegion, tap, totals } from './support/locators'
+import { savingsTotals, streakRegion, tap } from './support/locators'
 import { sandboxMarker, sandboxWith } from './support/sandbox'
 
 const notice = (page: Page, text: string) => page.getByRole('status').filter({ hasText: text })
@@ -18,7 +18,7 @@ async function expectUnderHero(page: Page, text: string) {
   const [hero, status, blocks] = await Promise.all([
     box(streakRegion(page)),
     box(line),
-    box(totals(page)),
+    box(savingsTotals(page)),
   ])
   expect(status.y).toBeGreaterThanOrEqual(hero.y + hero.height)
   expect(status.y + status.height).toBeLessThanOrEqual(blocks.y)
@@ -26,7 +26,7 @@ async function expectUnderHero(page: Page, text: string) {
 
 test('a recorded craving is confirmed under the hero, and nothing else moves', async ({ page }) => {
   await homeWithStreak(page)
-  const before = await box(totals(page))
+  const before = await box(savingsTotals(page))
 
   await page.getByRole('link', { name: 'Noter une envie passée' }).click()
   await page.getByLabel('Date et heure').fill('2026-01-01T09:30')
@@ -34,13 +34,13 @@ test('a recorded craving is confirmed under the hero, and nothing else moves', a
   await tap(page, 'Enregistrer l’envie')
 
   await expectUnderHero(page, 'Envie notée.')
-  expect(await box(totals(page))).toEqual(before)
+  expect(await box(savingsTotals(page))).toEqual(before)
 
   // Leaving home clears it, and the blocks stay where they were.
   await page.getByRole('link', { name: 'Statistiques des envies' }).click()
   await page.getByRole('link', { name: 'Retour' }).click()
   await expect(notice(page, 'Envie notée.')).toHaveCount(0)
-  expect(await box(totals(page))).toEqual(before)
+  expect(await box(savingsTotals(page))).toEqual(before)
 })
 
 test('a declared lapse is confirmed under the hero', async ({ page }) => {

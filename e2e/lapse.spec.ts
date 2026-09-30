@@ -11,7 +11,7 @@ const expectSmokeFreeDays = (page: Page, days: number) =>
 test('a slip keeps the streak running and costs its smoke-free day', async ({ page }) => {
   // Quit mid-day on day 1, now mid-day on day 4: days 2 and 3 are whole and over.
   await daysIn(page, 3)
-  await expectSmokeFreeDays(page, 2)
+  await expect(totals(page)).toHaveCount(0)
   await expect(protocolSummary(page)).toContainText('Jour 4 sur 28')
 
   await declareLapse(page)
@@ -31,9 +31,9 @@ test('a slip keeps the streak running and costs its smoke-free day', async ({ pa
 
 test('three lapse days in a row are a relapse, announced before it lands', async ({ page }) => {
   await daysIn(page, 5)
-  await expectSmokeFreeDays(page, 4)
 
   await declareLapse(page)
+  await expectSmokeFreeDays(page, 4)
   await daysLater(page, 1)
   await declareLapse(page)
   await expect(page.getByText('Deux jours de suite avec un écart.', { exact: false })).toBeVisible()
@@ -83,4 +83,5 @@ test('leaving the lapse screen records nothing', async ({ page }) => {
 
   await expectStreak(page, 3, '00 h 00')
   await expect(page.getByText(/Dernière cigarette/)).toHaveCount(0)
+  await expect(totals(page)).toHaveCount(0)
 })
