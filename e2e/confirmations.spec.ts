@@ -1,10 +1,8 @@
 import { expect, type Locator, type Page, test } from '@playwright/test'
-import { expectStreak, sandboxAt, sandboxWith, startNow, streakRegion } from './sandbox'
+import { homeWithStreak } from './support/flows'
+import { streakRegion, tap, totals } from './support/locators'
+import { sandboxMarker, sandboxWith } from './support/sandbox'
 
-const NOW = Date.UTC(2026, 0, 1, 12, 0, 0)
-
-const tap = (page: Page, name: string) => page.getByRole('button', { name, exact: true }).click()
-const totals = (page: Page) => page.getByRole('region', { name: 'Ce qui reste acquis' })
 const notice = (page: Page, text: string) => page.getByRole('status').filter({ hasText: text })
 
 async function box(locator: Locator) {
@@ -24,13 +22,6 @@ async function expectUnderHero(page: Page, text: string) {
   ])
   expect(status.y).toBeGreaterThanOrEqual(hero.y + hero.height)
   expect(status.y + status.height).toBeLessThanOrEqual(blocks.y)
-}
-
-/** A sandbox with a quit moment, its clock stopped on `NOW`. */
-const homeWithStreak = async (page: Page) => {
-  await page.goto(sandboxAt(NOW))
-  await startNow(page)
-  await expectStreak(page, 0, '00 h 00')
 }
 
 test('a recorded craving is confirmed under the hero, and nothing else moves', async ({ page }) => {
@@ -77,7 +68,7 @@ test('an imported journal is confirmed under the hero', async ({ page }) => {
   await tap(page, 'Exporter le bac à sable')
   const file = await (await download).path()
 
-  await page.getByRole('button', { name: 'Bac à sable', exact: true }).click()
+  await sandboxMarker(page).click()
   await tap(page, 'Vider')
   await tap(page, 'Fermer')
   const chooser = page.waitForEvent('filechooser')

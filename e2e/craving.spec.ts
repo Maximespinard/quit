@@ -1,10 +1,9 @@
 import { expect, type Page, test } from '@playwright/test'
-import { expectStreak, sandboxAt, startNow } from './sandbox'
+import { expectStreak } from './support/assertions'
+import { homeWithStreak, startNow } from './support/flows'
+import { cravingLauncher, cravingTimer, tap } from './support/locators'
+import { shiftClock } from './support/sandbox'
 
-const NOW = Date.UTC(2026, 0, 1, 12, 0, 0)
-
-const tap = (page: Page, name: string) => page.getByRole('button', { name, exact: true }).click()
-const timer = (page: Page) => page.getByRole('timer', { name: 'Temps restant' })
 const recordedNotice = (page: Page) => page.getByRole('status').filter({ hasText: 'Envie notée.' })
 
 const rateAndRecord = async (page: Page, intensity: string) => {
@@ -12,25 +11,16 @@ const rateAndRecord = async (page: Page, intensity: string) => {
   await tap(page, 'Enregistrer l’envie')
 }
 
-/** A sandbox with a quit moment, its clock stopped on `NOW`. */
-const homeWithStreak = async (page: Page) => {
-  await page.goto(sandboxAt(NOW))
-  await startNow(page)
-  await expectStreak(page, 0, '00 h 00')
-}
-
 test('a craving held to the end is celebrated, rated and recorded', async ({ page }) => {
   await homeWithStreak(page)
 
   // One tap, nothing asked first.
   await tap(page, 'Envie')
-  await expect(timer(page)).toHaveText('4:00')
+  await expect(cravingTimer(page)).toHaveText('4:00')
   await expect(page.getByRole('group', { name: 'Intensité de l’envie' })).toHaveCount(0)
 
   // The sandbox clock jumps past the timer's duration.
-  await tap(page, 'Bac à sable')
-  await tap(page, '+1 h')
-  await tap(page, 'Fermer')
+  await shiftClock(page, '+1 h')
 
   await expect(page.getByRole('heading', { name: 'Tu as tenu jusqu’au bout.' })).toBeVisible()
   await rateAndRecord(page, '3')
@@ -54,20 +44,20 @@ test('a craving stopped early is still recorded, without the celebration', async
 // `Arrêter`, which waits a beat before it answers.
 test('a double tap on Envie leaves the timer running', async ({ page }) => {
   await homeWithStreak(page)
-  const envie = await page.getByRole('button', { name: 'Envie', exact: true }).boundingBox()
-  if (envie === null) throw new Error('Envie is not on screen')
+  const launcher = await cravingLauncher(page).boundingBox()
+  if (launcher === null) throw new Error('Envie is not on screen')
 
-  const x = envie.x + envie.width / 2
-  const y = envie.y + envie.height / 2
+  const x = launcher.x + launcher.width / 2
+  const y = launcher.y + launcher.height / 2
 
   // Two thumb taps a stressed beat apart, the second one on the timer screen.
   await page.touchscreen.tap(x, y)
   await page.waitForTimeout(150)
   await page.touchscreen.tap(x, y)
 
-  await expect(timer(page)).toHaveText('4:00')
+  await expect(cravingTimer(page)).toHaveText('4:00')
   await page.waitForTimeout(1_000)
-  await expect(timer(page)).toBeVisible()
+  await expect(cravingTimer(page)).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Minuteur arrêté.' })).toHaveCount(0)
 
   // Once in, `Arrêter` stops the timer as before.
@@ -90,12 +80,12 @@ test('a reload mid-timer keeps counting from the start instant', async ({ page }
   await page.goto('/')
   await startNow(page)
   await tap(page, 'Envie')
-  await expect(timer(page)).toBeVisible()
+  await expect(cravingTimer(page)).toBeVisible()
 
   await page.waitForTimeout(2_000)
   await page.reload()
 
-  await expect(timer(page)).toHaveText(/^3:5\d$/)
+  await expect(cravingTimer(page)).toHaveText(/^3:5\d$/)
 })
 
 /** The cravings as stored on the device: no screen lists their tags yet. */
@@ -170,7 +160,7 @@ test('a craving started from the calendar runs and records like one started from
   await expect(page.getByRole('heading', { name: 'Calendrier' })).toBeVisible()
 
   await tap(page, 'Envie')
-  await expect(timer(page)).toBeVisible()
+  await expect(cravingTimer(page)).toBeVisible()
   await tap(page, 'Arrêter')
   await rateAndRecord(page, '2')
 
@@ -190,7 +180,7 @@ test('the timer haze drifts only when motion is allowed', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' })
   await homeWithStreak(page)
   await tap(page, 'Envie')
-  await expect(timer(page)).toBeVisible()
+  await expect(cravingTimer(page)).toBeVisible()
 
   expect(await hazeAnimations(page)).toEqual([
     'haze-drift-a',

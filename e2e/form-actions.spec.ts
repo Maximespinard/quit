@@ -1,15 +1,13 @@
 import { expect, type Locator, type Page, test } from '@playwright/test'
-import { sandboxWith } from './sandbox'
+import { button, rows } from './support/locators'
+import { sandboxWith } from './support/sandbox'
 
 // Day 45: a goal, a lapse, cravings and patch applications, all in the journal already.
-const seeded = (path: string) => sandboxWith('day-45-lapse').replace('/?', `${path}?`)
-
-const button = (page: Page, name: string) => page.getByRole('button', { name, exact: true })
-const rows = (page: Page, name: RegExp) => page.getByRole('link', { name })
+const atDay45 = (path: string) => sandboxWith('day-45-lapse', path)
 
 /** Opens the history detail of the first fact whose row matches `row`. */
 const openFact = async (page: Page, row: RegExp) => {
-  await page.goto(seeded('/history'))
+  await page.goto(atDay45('/history'))
   await rows(page, row).first().click()
   await expect(button(page, 'Supprimer')).toBeVisible()
 }
@@ -53,25 +51,25 @@ type FormCase = {
 const screens: readonly FormCase[] = [
   {
     name: 'goal',
-    open: (page) => page.goto(seeded('/goal')),
+    open: (page) => page.goto(atDay45('/goal')),
     primary: 'Enregistrer l’objectif',
     wayOut: 'Annuler',
   },
   {
     name: 'lapse',
-    open: (page) => page.goto(seeded('/lapse')),
+    open: (page) => page.goto(atDay45('/lapse')),
     primary: 'Oui, noter',
     wayOut: 'Annuler',
   },
   {
     name: 'past craving',
-    open: (page) => page.goto(seeded('/craving/past')),
+    open: (page) => page.goto(atDay45('/craving/past')),
     primary: 'Enregistrer l’envie',
     wayOut: 'Annuler',
   },
   {
     name: 'patch application',
-    open: (page) => page.goto(seeded('/patch/new')),
+    open: (page) => page.goto(atDay45('/patch/new')),
     primary: 'Enregistrer le patch',
     wayOut: 'Annuler',
   },
@@ -123,7 +121,7 @@ test.describe('on a small screen', () => {
   test('a past craving keeps recording within reach while its tags push the form down', async ({
     page,
   }) => {
-    await page.goto(seeded('/craving/past'))
+    await page.goto(atDay45('/craving/past'))
     await button(page, '3').click()
 
     const record = button(page, 'Enregistrer l’envie')

@@ -1,5 +1,7 @@
 import { expect, type Page, test } from '@playwright/test'
-import { sandboxAt, sandboxWith, startNow } from './sandbox'
+import { NOW } from './support/clock'
+import { startNow } from './support/flows'
+import { sandboxAt, sandboxWith } from './support/sandbox'
 
 // Hours on screen are local: the timezone is pinned so the scenario's 18:00 stays 18:00.
 test.use({ timezoneId: 'Europe/Paris' })
@@ -43,7 +45,7 @@ test('two months of cravings: the riskiest hour, the top situation and the trend
 })
 
 test('without a craving the screen says what will appear, with no chart', async ({ page }) => {
-  await page.goto(sandboxAt(Date.UTC(2026, 0, 1, 12)))
+  await page.goto(sandboxAt(NOW))
   await startNow(page)
   await openStats(page)
 

@@ -1,7 +1,6 @@
 import { expect, type Page, test } from '@playwright/test'
-import { expectStreak, sandboxWith } from './sandbox'
-
-const tap = (page: Page, name: string) => page.getByRole('button', { name, exact: true }).click()
+import { expectStreak } from './support/assertions'
+import { sandboxWith, shiftClock } from './support/sandbox'
 
 declare global {
   interface Window {
@@ -63,9 +62,7 @@ test('the streak counts up once per app launch, never on the way back home', asy
   expect(await takeFrames(page)).toEqual(['44 02 h 00'])
 
   // A sandbox clock shift moves the figures, it does not replay the count.
-  await tap(page, 'Bac à sable')
-  await tap(page, '+1 h')
-  await tap(page, 'Fermer')
+  await shiftClock(page, '+1 h')
   await expectStreak(page, 44, '03 h 00')
   expect(await takeFrames(page)).not.toContainEqual(expect.stringMatching(/^0 /))
 
