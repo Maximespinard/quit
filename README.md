@@ -72,7 +72,7 @@ The same hook also rejects a commit whose staged changes match a regex in
 | `npm run test:e2e` | Playwright suite (WebKit, iPhone) against the production preview build, or against `E2E_BASE_URL` when set |
 | `npm run build` | Production build (typecheck included) |
 | `npm run lint:fix` | Biome autofix + ESLint fix |
-| `npm run screenshots` | Builds, then renders the screenshots above into `docs/screenshots/`: demo scenarios, clock stopped, WebKit at iPhone 16 Pro size, phone frame drawn in code |
+| `npm run screenshots` | Builds, then renders the screenshots above into `docs/screenshots/`: sandbox scenarios, clock stopped, WebKit at iPhone 16 Pro size, phone frame drawn in code |
 
 ## Server
 

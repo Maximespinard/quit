@@ -1,6 +1,6 @@
 // Renders the README screenshots into docs/screenshots/: four screens of the production build,
-// each in a phone frame drawn in code. Demo data only: every screen runs in the sandbox, seeded
-// from a scenario whose clock is stopped, so each run renders the same images.
+// each in a phone frame drawn in code. Never the real journal: every screen runs in the sandbox,
+// seeded from a scenario whose clock is stopped, so each run renders the same images.
 // Rerun after a visible change: `npm run screenshots` (builds first).
 import { mkdir, writeFile } from 'node:fs/promises'
 import { chromium, devices, webkit } from '@playwright/test'
@@ -36,11 +36,7 @@ const framePage = (screen) => `<!doctype html>
 </style>
 <div class="device"><img class="screen" src="data:image/png;base64,${screen.toString('base64')}"></div>`
 
-const server = await preview({ logLevel: 'warn', preview: { host: '127.0.0.1', port: 4990 } })
-const baseURL = server.resolvedUrls?.local[0]
-if (baseURL === undefined) throw new Error('The preview server gave no url')
-
-const sandbox = (path, extra = '') => `${path}?debug=true&scenario=${SCENARIO}${extra}`
+const sandbox = (path) => `${path}?debug=true&scenario=${SCENARIO}`
 
 /** Each screen: its file, then how to reach it and what to wait for before the capture. */
 const SCREENS = [
@@ -64,20 +60,22 @@ const SCREENS = [
     open: async (page) => {
       // Envie gives the sandbox's instant; the timer is then reopened a little after it started.
       await page.goto(sandbox('/'))
+      const timer = page.getByRole('timer', { name: 'Temps restant' })
       await page.getByRole('button', { name: 'Envie', exact: true }).click()
-      await page.getByRole('timer', { name: 'Temps restant' }).waitFor()
+      await timer.waitFor()
       const url = new URL(page.url())
-      const startedAt = Number(url.searchParams.get('startedAt'))
+      const startedAt = Number(url.searchParams.get('startedAt') ?? Number.NaN)
+      if (!Number.isFinite(startedAt)) throw new Error(`No timer start in ${url.href}`)
       url.searchParams.set('startedAt', String(startedAt - TIMER_ELAPSED_MS))
       await page.goto(url.href)
-      await page.getByRole('timer', { name: 'Temps restant' }).waitFor()
+      await timer.waitFor()
     },
   },
   {
     file: 'calendar',
     open: async (page) => {
       await page.goto(sandbox('/calendar'))
-      // Two days into July: June shows a full month of patches and the step down to 7 mg.
+      // The scenario's clock stops on 2 July: June shows a full month of patches from the 14 mg step.
       await page.getByRole('button', { name: 'Mois précédent' }).click()
       await page.getByText('Juin 2026').waitFor()
     },
@@ -91,9 +89,15 @@ const SCREENS = [
   },
 ]
 
-const capturer = await webkit.launch()
-const framer = await chromium.launch()
+const server = await preview({ logLevel: 'warn', preview: { host: '127.0.0.1', port: 4990 } })
+const browsers = []
 try {
+  const baseURL = server.resolvedUrls?.local[0]
+  if (baseURL === undefined) throw new Error('The preview server gave no url')
+  const capturer = await webkit.launch()
+  browsers.push(capturer)
+  const framer = await chromium.launch()
+  browsers.push(framer)
   const app = await capturer.newContext({
     ...phone,
     baseURL,
@@ -132,18 +136,20 @@ try {
         canvas.width = image.naturalWidth
         canvas.height = image.naturalHeight
         canvas.getContext('2d')?.drawImage(image, 0, 0)
-        return canvas.toDataURL('image/webp', quality).split(',')[1] ?? ''
+        return canvas.toDataURL('image/webp', quality)
       },
       { png: framed.toString('base64'), quality: QUALITY },
     )
     await tab.close()
 
-    const bytes = Buffer.from(webp, 'base64')
+    // A canvas that cannot encode WebP falls back to PNG: never write that under a .webp name.
+    const [header, data] = webp.split(',')
+    if (header !== 'data:image/webp;base64' || !data) throw new Error(`${file}: no WebP encoded`)
+    const bytes = Buffer.from(data, 'base64')
     await writeFile(new URL(`${file}.webp`, outDir), bytes)
     console.log(`docs/screenshots/${file}.webp  ${Math.round(bytes.length / 1024)} kB`)
   }
 } finally {
-  await capturer.close()
-  await framer.close()
+  await Promise.allSettled(browsers.map((browser) => browser.close()))
   await server.close()
 }
