@@ -1,4 +1,6 @@
 import { factIdSequence } from '@/shared/test/fact-ids'
+import { journalWithLapses } from '@/shared/test/journals'
+import { local } from '@/shared/test/local-time'
 import { factId } from '@/shared/utils/fact-id'
 import { derive } from './derive'
 import { decodeJournal, emptyJournal, type Journal } from './journal'
@@ -11,24 +13,10 @@ const DAY = 24 * HOUR
 
 const NOW = Date.UTC(2026, 8, 22, 10, 0, 0)
 
-/** A local wall-clock time in 2026; `month` is 1-based. The suite runs in Europe/Paris (vite.config). */
-const local = (month: number, day: number, hour = 0, minute = 0) =>
-  new Date(2026, month - 1, day, hour, minute).getTime()
-
-const journalOf = (quitMoment: number, lapses: readonly number[] = []): Journal => ({
-  protocol: defaultProtocol,
-  weeklySpendCents: null,
-  baselineSmokesPerDay: null,
-  goal: null,
-  facts: [
-    { type: 'quit-moment', id: factId(1), at: quitMoment },
-    ...lapses.map((at, i) => ({ type: 'lapse' as const, id: factId(100 + i), at, count: 1 })),
-  ],
-})
-
 // Quit on 1 January at 20:00; the lapses below fall on the following days.
 const QUIT = local(1, 1, 20)
-const derivedAt = (now: number, lapses: readonly number[]) => derive(journalOf(QUIT, lapses), now)
+const derivedAt = (now: number, lapses: readonly number[]) =>
+  derive(journalWithLapses(QUIT, lapses), now)
 
 describe('derive', () => {
   it('derives nothing from an empty journal', () => {
@@ -53,7 +41,7 @@ describe('derive', () => {
   })
 
   it('starts the streak at zero when the quit moment is now', () => {
-    expect(derive(journalOf(NOW), NOW)).toMatchObject({
+    expect(derive(journalWithLapses(NOW), NOW)).toMatchObject({
       quitMoment: NOW,
       streak: { elapsedMs: 0 },
     })
@@ -62,7 +50,7 @@ describe('derive', () => {
   it('measures the streak from a backdated quit moment', () => {
     const quitMoment = NOW - (3 * DAY + 7 * HOUR + 4 * MINUTE)
 
-    expect(derive(journalOf(quitMoment), NOW)).toMatchObject({
+    expect(derive(journalWithLapses(quitMoment), NOW)).toMatchObject({
       quitMoment,
       streak: { elapsedMs: 3 * DAY + 7 * HOUR + 4 * MINUTE },
     })
@@ -91,7 +79,7 @@ describe('derive', () => {
   it('holds the streak at zero while now is still before the quit moment', () => {
     const quitMoment = NOW + HOUR
 
-    expect(derive(journalOf(quitMoment), NOW)).toMatchObject({
+    expect(derive(journalWithLapses(quitMoment), NOW)).toMatchObject({
       quitMoment,
       streak: { elapsedMs: 0 },
     })
@@ -120,7 +108,7 @@ describe('derive — the lapses it counts', () => {
   })
 
   it('ignores a lapse that has not happened yet on a clock moved back', () => {
-    const journal = journalOf(NOW - 10 * DAY, [NOW + HOUR])
+    const journal = journalWithLapses(NOW - 10 * DAY, [NOW + HOUR])
 
     expect(derive(journal, NOW)).toMatchObject({
       streak: { elapsedMs: 10 * DAY },

@@ -1,10 +1,7 @@
+import { local } from '@/shared/test/local-time'
 import { localMidnight } from './local-day'
 
 const HOUR = 60 * 60_000
-
-/** A local wall-clock time; `month` is 1-based. The suite runs in Europe/Paris (vite.config). */
-const local = (month: number, day: number, hour = 0, minute = 0, year = 2026) =>
-  new Date(year, month - 1, day, hour, minute).getTime()
 
 describe('localMidnight', () => {
   it('opens the local calendar day holding the instant', () => {

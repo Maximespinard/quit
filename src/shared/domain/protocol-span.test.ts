@@ -1,5 +1,6 @@
 import type { Fact } from '@quit/contract/facts'
 import type { Protocol } from '@quit/contract/settings'
+import { local } from '@/shared/test/local-time'
 import { factId } from '@/shared/utils/fact-id'
 import { derive } from './derive'
 import { emptyJournal, type Journal } from './journal'
@@ -9,10 +10,6 @@ import { scenarios } from './scenarios'
 
 const HOUR = 60 * 60_000
 const DAY = 24 * HOUR
-
-/** A local wall-clock time in 2026; `month` is 1-based. The suite runs in Europe/Paris (vite.config). */
-const local = (month: number, day: number, hour = 0, minute = 0) =>
-  new Date(2026, month - 1, day, hour, minute).getTime()
 
 // An evening quit: Sunday 20 September, 20:00; three protocol days end on the 23rd at 20:00.
 const QUIT = local(9, 20, 20)

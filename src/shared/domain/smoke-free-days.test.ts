@@ -1,10 +1,7 @@
+import { local } from '@/shared/test/local-time'
 import { smokeFreeDays } from './smoke-free-days'
 
 const HOUR = 60 * 60_000
-
-/** A local wall-clock time in 2026; `month` is 1-based. The suite runs in Europe/Paris (vite.config). */
-const local = (month: number, day: number, hour = 0, minute = 0) =>
-  new Date(2026, month - 1, day, hour, minute).getTime()
 
 /** Smoke-free days at `now`, each lapse one cigarette. */
 const daysAt = (quitMoment: number, now: number, lapses: readonly number[] = []) =>

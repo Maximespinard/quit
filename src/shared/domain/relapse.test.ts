@@ -1,35 +1,22 @@
+import { journalWithLapses } from '@/shared/test/journals'
+import { local } from '@/shared/test/local-time'
 import { factId } from '@/shared/utils/fact-id'
 import { derive } from './derive'
 import { recordLapse } from './facts/lapse'
 import type { Journal } from './journal'
-import { defaultProtocol } from './protocol'
 import { triggersRelapse } from './relapse'
 
 /** A local wall-clock time in January 2026. The suite runs in Europe/Paris (vite.config). */
 const jan = (day: number, hour = 10) => new Date(2026, 0, day, hour).getTime()
 
-const journalOf = (lapses: readonly number[]): Journal => ({
-  protocol: defaultProtocol,
-  weeklySpendCents: null,
-  baselineSmokesPerDay: null,
-  goal: null,
-  facts: [
-    { type: 'quit-moment', id: factId(1), at: jan(1, 20) },
-    ...lapses.map((at, i) => ({ type: 'lapse' as const, id: factId(100 + i), at, count: 1 })),
-  ],
-})
-
+// Quit on 1 January at 20:00; the lapses below fall on the following days.
+const QUIT = jan(1, 20)
 const NOW = jan(20)
-
 const HOUR = 60 * 60_000
 
-/** A local wall-clock time in 2026; `month` is 1-based. */
-const local = (month: number, day: number, hour = 0, minute = 0) =>
-  new Date(2026, month - 1, day, hour, minute).getTime()
-
-// Quit on 1 January at 20:00, as `journalOf` holds it; the lapses below fall on the following days.
-const QUIT = local(1, 1, 20)
-// A relapse moves the streak and hides the last cigarette: only `derive` puts them together.
+const journalOf = (lapses: readonly number[]): Journal => journalWithLapses(QUIT, lapses)
+// The slip, relapse and lapse-day tests assert the streak, the relapses and the last cigarette
+// together, as `derive` assembles them from the relapse module's runs.
 const derivedAt = (now: number, lapses: readonly number[]) => derive(journalOf(lapses), now)
 
 describe('triggersRelapse', () => {

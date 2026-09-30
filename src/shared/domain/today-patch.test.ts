@@ -1,8 +1,10 @@
 import type { PatchApplicationFact } from '@quit/contract/facts'
 import type { Protocol } from '@quit/contract/settings'
 import { factIdSequence } from '@/shared/test/fact-ids'
+import { local } from '@/shared/test/local-time'
 import { factId } from '@/shared/utils/fact-id'
 import { recordPatchApplication } from './facts/patch-application'
+import { latestQuitMoment } from './facts/quit-moment'
 import { emptyJournal, type Journal } from './journal'
 import { defaultProtocol } from './protocol'
 import { protocolPosition } from './protocol-position'
@@ -13,8 +15,6 @@ const HOUR = 60 * MINUTE
 const DAY = 24 * HOUR
 
 // Today is the local calendar day holding `now`, wherever the quit moment sits in it.
-const local = (month: number, day: number, hour: number, minute = 0) =>
-  new Date(2026, month - 1, day, hour, minute).getTime()
 // An evening quit: Sunday 20 September, 20:00.
 const QUIT = local(9, 20, 20)
 // Quit moments take ids 1 and 2; patch applications count up from 10.
@@ -135,17 +135,19 @@ describe('todayPatch', () => {
   })
 
   it('counts from a quit moment corrected later: its day is the quit day', () => {
-    const corrected = local(9, 22, 12)
     const journal: Journal = {
       ...emptyJournal,
       facts: [
         { type: 'quit-moment', id: factId(1), at: QUIT },
         applied(local(9, 22, 8)),
-        { type: 'quit-moment', id: factId(2), at: corrected },
+        { type: 'quit-moment', id: factId(2), at: local(9, 22, 12) },
       ],
     }
+    // The latest quit moment recorded is the one in force, as `derive` reads it.
+    const quitMoment = latestQuitMoment(journal)
+    if (quitMoment === null) throw new Error('the journal should hold a quit moment')
 
-    expect(patchOf(journal, local(9, 22, 20), corrected)).toEqual({
+    expect(patchOf(journal, local(9, 22, 20), quitMoment)).toEqual({
       status: 'offered',
       doseMg: 21,
     })
