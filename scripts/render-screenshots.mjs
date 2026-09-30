@@ -61,10 +61,6 @@ const SCREENS = [
           final.length > 0 && final.every((copy) => read(copy) === read(copy.nextElementSibling))
         )
       })
-      // What stays earned only means something after a relapse: out of the showcase.
-      await page.getByRole('region', { name: 'Ce qui reste acquis' }).evaluate((card) => {
-        card.style.display = 'none'
-      })
     },
   },
   {
@@ -87,7 +83,7 @@ const SCREENS = [
     file: 'calendar',
     open: async (page) => {
       await page.goto(sandbox('/calendar'))
-      // The scenario's clock stops on 2 July: June shows a full month of patches from the 14 mg step.
+      // The scenario's clock stops on 2 July: June is a fully lived month, its days shaded by cravings.
       await page.getByRole('button', { name: 'Mois précédent' }).click()
       await page.getByText('Juin 2026').waitFor()
     },
