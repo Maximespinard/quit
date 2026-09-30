@@ -2,19 +2,45 @@ name: CI
 
 on:
   pull_request:
+    # `labeled`: adding `full-ci` starts the e2e jobs on the head, without a new push.
+    types: [opened, synchronize, reopened, labeled]
   push:
     branches: [main]
 
-# A new push to a branch makes the previous run pointless; on main every run publishes its
-# commit's image, so none is cancelled.
+# A new push makes the previous run pointless, `main` included: when squash-merges land back to
+# back, only the last run goes to the end and publishes (no `sha` image for the ones in between).
+# A run started by an unrelated label gets its own group, so it cannot cancel the real one.
 concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+  group: ci-${{ github.ref }}-${{ github.event.action == 'labeled' && github.event.label.name != 'full-ci' && github.run_id || '' }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
 
 jobs:
+  # Whether the change is more than docs; the e2e jobs are skipped when it is not. A job-level
+  # filter, not `paths-ignore`: verify and the leak scan still run on docs (a secret can land there).
+  changes:
+    name: changes (docs only?)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read # the filter lists the pull request's files
+    outputs:
+      code: ${{ steps.filter.outputs.code }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dorny/paths-filter@v4
+        id: filter
+        with:
+          filters: |
+            code:
+              - '**'
+              - '!**/*.md'
+              - '!docs/**'
+              - '!.claude/**'
+              - '!LICENSE'
+
   verify:
     name: verify (every workspace · lint · typecheck · test · build)
     runs-on: ubuntu-latest
@@ -30,8 +56,13 @@ jobs:
       # every workspace's own verify (contract, server).
       - run: npm run verify
 
-  e2e:
-    name: e2e (Playwright · WebKit iPhone · preview build, then the image)
+  # Both e2e jobs run on main always; on a pull request only when it carries `full-ci`
+  # (`/review-batch` puts it on the top of its chain). Skipped for a docs-only change.
+  # They share nothing, so they start together: the preview build, and the release image.
+  e2e-preview:
+    name: e2e (Playwright · WebKit iPhone · preview build)
+    needs: changes
+    if: needs.changes.outputs.code == 'true' && (github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'full-ci'))
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -55,6 +86,38 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit == 'true'
       - run: npm run build
       - run: npm run test:e2e
+      - name: Upload report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-preview
+          path: playwright-report/
+          retention-days: 7
+
+  e2e-image:
+    name: e2e (release image · smoke and offline specs)
+    needs: changes
+    if: needs.changes.outputs.code == 'true' && (github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'full-ci'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-webkit-chromium-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - name: Install WebKit and Chromium
+        run: npx playwright install --with-deps webkit chromium --only-shell
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+      - name: Install the browsers' OS deps
+        run: npx playwright install-deps webkit chromium
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
       # The release image, loaded into the runner's Docker and never pushed here: publishing is
       # its own job, on main only.
       - uses: docker/setup-buildx-action@v4
@@ -85,14 +148,22 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-report-image
           path: playwright-report/
           retention-days: 7
 
   publish:
     name: publish (GHCR · sha and main tags)
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [verify, e2e, secret-scan]
+    # `!cancelled()`: a docs-only push skips both e2e jobs, and a skipped need would skip publish with it;
+    # unlike `always()`, a superseded run does not publish. A skipped e2e counts only when the
+    # filter itself succeeded, never when it failed.
+    if: >-
+      !cancelled() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+      && needs.changes.result == 'success'
+      && needs.verify.result == 'success' && needs.secret-scan.result == 'success'
+      && (needs.e2e-preview.result == 'success' || needs.e2e-preview.result == 'skipped')
+      && (needs.e2e-image.result == 'success' || needs.e2e-image.result == 'skipped')
+    needs: [changes, verify, e2e-preview, e2e-image, secret-scan]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -108,7 +179,7 @@ jobs:
       # Image names are lowercase; the owner's login is not.
       - name: Name the image
         run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_ENV"
-      # The same build as the one the e2e job ran against: every layer comes from its cache.
+      # The same build as the one the e2e-image job ran against: every layer comes from its cache.
       - uses: docker/build-push-action@v7
         with:
           context: .
