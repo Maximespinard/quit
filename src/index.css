@@ -32,6 +32,12 @@
   --color-yellow: #f5d907;
   --color-moss: #33402c;
   --color-bronze: #b88a4f;
+  /*
+   * « Braise », the charts' own gradient: low values in orange, the tallest in gold. The low end
+   * is the floor: dimmed to 60 % it still holds 3.16:1 on a card, so it never gets darker.
+   */
+  --color-chart-low: #ff7448;
+  --color-chart-high: #ffc35d;
   --color-transparent: transparent;
   --color-current-color: currentColor;
 
@@ -198,6 +204,20 @@
   box-shadow:
     0 14px 40px -10px color-mix(in srgb, var(--color-pink) 60%, transparent),
     inset 0 0 0 1px rgb(255 255 255 / 0.12);
+}
+
+/*
+ * The chart gradient, low → high along the value axis and stretched over the whole scale
+ * (`background-size` set inline from `gradientLength`), so a bar turns gold only near the top.
+ * Distinct from Envie's pink → yellow, and without its glow.
+ */
+@utility bg-chart-column {
+  background-image: linear-gradient(to top, var(--color-chart-low), var(--color-chart-high));
+  background-position: bottom;
+}
+
+@utility bg-chart-bar {
+  background-image: linear-gradient(90deg, var(--color-chart-low), var(--color-chart-high));
 }
 
 @layer base {

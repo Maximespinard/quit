@@ -259,6 +259,16 @@
           "oklch(95% 0.037 135)"
         ]
       },
+      "chart-low": {
+        "role": "data",
+        "displayName": "Braise low",
+        "canonical": "#ff7448"
+      },
+      "chart-high": {
+        "role": "data",
+        "displayName": "Braise high",
+        "canonical": "#ffc35d"
+      },
       "bronze": {
         "role": "tertiary",
         "displayName": "Bronze",
@@ -535,7 +545,7 @@
       },
       {
         "name": "The One Series Rule",
-        "body": "Charts have a single hue: cream at 60% (6.5:1 on the card), below running text. Never amber or an accent on a bar: the most data-heavy screen stays calmer than home and its only lit object, `Envie`.",
+        "body": "Charts have a single series, drawn in Braise (`chart-low` → `chart-high`, SYR-91): 6.7:1 on the card at its low end, 3.16:1 dimmed. Never a second series, a per-category hue, or `Envie`'s pink → yellow on a bar. Braise has no glow: `Envie` stays the only lit object.",
         "section": "colors"
       },
       {
@@ -604,7 +614,7 @@
       "**Don't** switch off a screen's haze, nor the stopped timer's.",
       "**Don't** add a drop shadow, a `ring-*` or a per-component focus ring: the only `box-shadow` is `Envie`'s glow, and focus is the global `outline`.",
       "**Don't** give a destructive button a tinted fill, nor color a lapse in `alert`.",
-      "**Don't** color a chart bar (amber, accent, a second series): they all stay cream at 60%.",
+      "**Don't** color a chart bar outside Braise (amber, an accent, a second series, `Envie`'s gradient).",
       "**Don't** turn progress into a ring or a gauge: an 8 px bar with its numeric bounds, or a row of notches.",
       "**Don't** add a decorative raster: hazes, grain and icons are code.",
       "**Don't** create a second top bar, a second card or a second back gesture.",

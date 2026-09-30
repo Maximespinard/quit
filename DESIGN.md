@@ -20,6 +20,8 @@ colors:
   yellow: "#f5d907"
   moss: "#33402c"
   bronze: "#b88a4f"
+  chart-low: "#ff7448"
+  chart-high: "#ffc35d"
   transparent: "transparent"
   current-color: "currentColor"
 typography:
@@ -250,7 +252,7 @@ components:
   tab-item-active:
     textColor: "{colors.ink}"
   chart-series:
-    backgroundColor: "rgb(247 244 239 / 0.6)"
+    backgroundColor: "{colors.chart-low}"
     rounded: "{rounded.mark}"
     width: "1.5rem"
   dialog:
@@ -298,14 +300,14 @@ metaphor (work jacket, stamped booklet, acetate manual).
 ## Colors
 
 A warm black and two structural grays, a cream that carries text and selection, a warm haze
-family reserved for backgrounds, and two named exceptions: the `Envie` gradient and the alert
-red.
+family reserved for backgrounds, the charts' Braise gradient, and two named exceptions: the
+`Envie` gradient and the alert red.
 
 ### Primary
 - **Nocturne cream** (`ink`): all running text, and **every selection**: solid primary button,
-  pressed chip and segment, active tab, checked `Switch`, bar fill, acquired multiplier notch,
+  pressed chip and segment, active tab, checked `Switch`, progress bar fill, acquired multiplier notch,
   today's date in the calendar, focus ring, caret, text selection. On cream, text switches to
-  `page`. Chart bars carry it at 60%.
+  `page`.
 - **Pure white** (`white`): the key figures only (streak, countdown, minutes held), plus the
   timer's minute notches and the thumb of the `Switch` and the `Slider`. White is the light of
   the figure; text stays cream.
@@ -321,6 +323,11 @@ red.
   component.
 - **The timer haze**: **Moss** (`moss`) and **Bronze** (`bronze`), as drifting blurred blobs.
   They belong to the craving timer screens only.
+
+### Data
+- **Braise** (`chart-low` → `chart-high`): the charts' own gradient, orange to gold, laid
+  along the value axis and stretched over the whole scale, so only the tallest bars turn gold.
+  It paints chart bars and nothing else, and never carries a glow.
 
 ### Neutral
 - **Page** (`page`): the background of the whole app, text set on cream and on `Envie`, the
@@ -341,6 +348,8 @@ red.
 - `muted`: 7.5:1 on `page`, 7.1:1 on `surface`.
 - `alert`: 6.9:1 on `page`, 6.5:1 on `surface`, and much lighter than the haze's ember, so it is
   never mistaken for it.
+- Braise: `chart-low` 6.7:1 on `surface`, 3.16:1 dimmed to 60 %, the chart floor;
+  `chart-high` 11.3:1.
 - `ghost-line`: 3.3:1, a control edge above 3:1 on the page as on a card
   (WCAG 1.4.11).
 - The brand and the streak figure hold ≥ 3:1 (large text) on the lightest pixel of the haze: the
@@ -370,9 +379,10 @@ field, and draws the destructive button as a ghost pill with a hairline (1 px `a
 3.8:1, `alert` label, 10% on press). Never a tinted fill, never red on a lapse: a lapse is a
 fact, not an error.
 
-**The One Series Rule.** Charts have a single hue: cream at 60% (6.5:1 on the card), below
-running text. Never amber or an accent on a bar: the most data-heavy screen stays calmer than
-home and its only lit object, `Envie`.
+**The One Series Rule.** Charts have a single series, drawn in Braise (`chart-low` →
+`chart-high`, SYR-91): 6.7:1 on the card at its low end, 3.16:1 dimmed. Never a second series,
+a per-category hue, or `Envie`'s pink → yellow on a bar. Braise has no glow: `Envie` stays the
+only lit object.
 
 ## Typography
 
@@ -631,12 +641,12 @@ missed = `muted` dash, due = cream ring, planned = small `muted` dot; lapse = ci
 craving = timer. First day of a step: a `ghost` pill in `detail`.
 
 ### Charts
-On a card, a single series in cream at 60%. Columns 24 px wide at most, 2 px apart,
-`rounded-mark` at the data end, sitting on a `ghost-line` baseline; horizontal bars
+On a card, a single series in Braise, spanning the whole scale. Columns 24 px wide at most,
+2 px apart, `rounded-mark` at the data end, sitting on a `ghost-line` baseline; horizontal bars
 8 px thick, same rule, baseline on the left. A step change = a 1 px `muted` hairline across the full
 height, dose in cream `detail` above it. Axes in `detail` `muted`. A readout line in
 `label` names one column (name in cream 500); a sliding finger picks another and the others
-drop to 60% (3.15:1 against the card, never below 3:1). Every chart has its `table` twin in
+drop to 60% (3.16:1 against the card at the low end, never below 3:1). Every chart has its `table` twin in
 `sr-only` (as `block`, so it never widens the page).
 
 ### Overlays
@@ -681,7 +691,7 @@ play only under `motion-safe:`, so the haze becomes a still image; every transit
 - **Don't** switch off a screen's haze, nor the stopped timer's.
 - **Don't** add a drop shadow, a `ring-*` or a per-component focus ring: the only `box-shadow` is `Envie`'s glow, and focus is the global `outline`.
 - **Don't** give a destructive button a tinted fill, nor color a lapse in `alert`.
-- **Don't** color a chart bar (amber, accent, a second series): they all stay cream at 60%.
+- **Don't** color a chart bar outside Braise (amber, an accent, a second series, `Envie`'s gradient).
 - **Don't** turn progress into a ring or a gauge: an 8 px bar with its numeric bounds, or a row of notches.
 - **Don't** add a decorative raster: hazes, grain and icons are code.
 - **Don't** create a second top bar, a second card or a second back gesture.

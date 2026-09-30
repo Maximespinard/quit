@@ -2,6 +2,7 @@ import { type PointerEvent, useState } from 'react'
 import { cn } from '@/shared/utils/cn'
 import { strings } from '@/shared/utils/strings'
 import type { ChartColumn, ChartMark } from '../types/charts'
+import { gradientLength } from '../utils/chart-gradient'
 
 type ColumnChartProps = {
   /** The table twin's caption: what a screen reader hears instead of the columns. */
@@ -28,11 +29,12 @@ const labelStyle = (from: number, to: number) =>
   from > HANG_LEFT_FROM || to >= 1 ? { right: `${(1 - to) * 100}%` } : { left: `${from * 100}%` }
 
 /**
- * One series in columns of one hue: thin bars, 2px apart, grown from a hairline baseline.
- * A finger dragged across (or a pointer over) the plot names one column in the readout;
- * the other columns step back while it does, never below 3:1 against the card (cream at 60 %,
- * dimmed to 60 % of that: 3.15:1 on the surface — lowering either breaks the floor). Every value
- * is also in a table for screen readers.
+ * One series in columns: thin bars, 2px apart, grown from a hairline baseline, the chart
+ * gradient spanning the whole scale so only the tallest turn gold. A finger dragged across (or
+ * a pointer over) the plot names one column in the readout; the other columns step back while
+ * it does, never below 3:1 against the card (the gradient's low end dimmed to 60 %: 3.16:1 on
+ * the surface — darkening either breaks the floor). Every value is also in a table for screen
+ * readers.
  */
 export function ColumnChart({
   label,
@@ -95,7 +97,7 @@ export function ColumnChart({
               >
                 <div
                   className={cn(
-                    'w-full max-w-6 rounded-t-mark bg-ink/60 transition-opacity duration-150 ease-out-expo motion-reduce:transition-none',
+                    'w-full max-w-6 rounded-t-mark bg-chart-column transition-opacity duration-150 ease-out-expo motion-reduce:transition-none',
                     active !== null && index !== active && 'opacity-60',
                   )}
                   // A column holding anything stays visible, however small beside the tallest.
@@ -104,6 +106,7 @@ export function ColumnChart({
                       column.value === 0 || max === 0
                         ? 0
                         : `max(2px, ${(column.value / max) * 100}%)`,
+                    backgroundSize: `100% ${gradientLength(column.value, max)}`,
                   }}
                 />
               </div>

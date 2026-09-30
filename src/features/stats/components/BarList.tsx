@@ -1,6 +1,7 @@
 import { cn } from '@/shared/utils/cn'
 import { strings } from '@/shared/utils/strings'
 import type { BarRow } from '../types/charts'
+import { gradientLength } from '../utils/chart-gradient'
 
 type BarListProps = {
   rows: readonly BarRow[]
@@ -10,7 +11,7 @@ type BarListProps = {
 
 /**
  * Categories as rows, the longest names included: the name and its count on one line, a thin
- * bar of one hue under them, scaled to `max`. Every value is written, so no reading depends on
+ * bar under them, scaled to `max`, its chart gradient spanning the whole scale. Every value is written, so no reading depends on
  * the bar alone.
  */
 export function BarList({ rows, max }: BarListProps) {
@@ -30,11 +31,12 @@ export function BarList({ rows, max }: BarListProps) {
           {/* Grown from a hairline baseline, rounded only at its data end. */}
           <div aria-hidden className="h-2 border-ghost-line border-l">
             <div
-              className="h-full rounded-r-mark bg-ink/60"
+              className="h-full rounded-r-mark bg-chart-bar"
               // A row holding anything keeps a visible stub; an empty one draws nothing.
               style={{
                 width:
                   row.count === 0 || max === 0 ? 0 : `max(0.5rem, ${(row.count / max) * 100}%)`,
+                backgroundSize: `${gradientLength(row.count, max)} 100%`,
               }}
             />
           </div>
