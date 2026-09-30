@@ -22,7 +22,8 @@ Single-context repo (this one):
 ├── CONTEXT.md
 └── docs/adr/
     ├── 0001-local-first-data-with-a-dumb-push-sender.md
-    └── 0002-state-derived-from-a-journal-of-facts.md
+    ├── 0002-state-derived-from-a-journal-of-facts.md
+    └── 0003-device-first-journal-mirrored-to-the-server.md
 ```
 
 ## Use the glossary's vocabulary

@@ -1,9 +1,12 @@
-import { tagKey, uniqueTags } from '@/shared/domain/facts/craving'
+import { uniqueTags } from '@/shared/domain/facts/craving'
 import type { Journal } from '@/shared/domain/journal'
 import { strings } from '@/shared/utils/strings'
-import { type CravingTagOption, customTags, DEFAULT_CRAVING_TAGS } from '../domain/craving-tags'
-
-const defaultKeys = new Set<string>(DEFAULT_CRAVING_TAGS)
+import {
+  type CravingTagOption,
+  customTags,
+  DEFAULT_CRAVING_TAGS,
+  isDefaultCravingTag,
+} from '../domain/craving-tags'
 
 /**
  * Every tag the form offers: the defaults in their fixed order, then the user's own. `kept`:
@@ -14,7 +17,7 @@ export function tagOptions(
   kept: readonly string[] = [],
 ): readonly CravingTagOption[] {
   const custom = uniqueTags([...customTags(journal), ...kept]).filter(
-    (tag) => !defaultKeys.has(tagKey(tag)),
+    (tag) => !isDefaultCravingTag(tag),
   )
   return [
     ...DEFAULT_CRAVING_TAGS.map((tag) => ({ tag, label: strings.craving.tags.defaults[tag] })),

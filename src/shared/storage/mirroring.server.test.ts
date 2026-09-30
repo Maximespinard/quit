@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { type Mirror, mirrorSchema } from '@quit/contract/mirror'
-import { closeTestApis, openTestApi, type TestApi } from 'quit-server/src/test/test-api.ts'
+import { closeTestApis, openTestApi, type TestApi } from 'quit-server/test-api'
 import { recordCraving } from '@/shared/domain/facts/craving'
 import { recordQuitMoment } from '@/shared/domain/facts/quit-moment'
 import { emptyJournal, type Journal, removeFact } from '@/shared/domain/journal'

@@ -1,6 +1,6 @@
 // Renders the app icons into public/: the home haze, its grain, and a white Host Grotesk "q".
 // The icons are code, like the hero: this script is their source. Rerun it after changing the
-// haze tokens or the typeface: `node scripts/render-icons.mjs`.
+// haze tokens or the typeface: `npm run icons`.
 import { readFile, writeFile } from 'node:fs/promises'
 import { crc32 } from 'node:zlib'
 import { chromium } from '@playwright/test'

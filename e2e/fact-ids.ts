@@ -1,7 +1,5 @@
 import { expect } from '@playwright/test'
-
-/** A UUIDv7, as the device makes fact ids. */
-export const UUID_V7 = /[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/
+import { UUID_V7 } from '../src/shared/utils/fact-id'
 
 /** A fact as stored or exported: its id, if any, beside its other keys. */
 export type IdentifiedFact = { readonly id?: string } & Record<string, unknown>

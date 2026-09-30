@@ -15,7 +15,7 @@ COPY server/package.json ./server/
 RUN npm ci --ignore-scripts --include-workspace-root --workspace contract
 
 # Every project tsconfig.json references: Vite's transform resolves them all.
-COPY tsconfig.json tsconfig.app.json tsconfig.node.json tsconfig.server-tests.json ./
+COPY tsconfig.json tsconfig.app.json tsconfig.node.json tsconfig.server-tests.json tsconfig.e2e.json ./
 COPY vite.config.ts index.html ./
 COPY public ./public
 COPY src ./src

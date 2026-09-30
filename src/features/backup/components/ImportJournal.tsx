@@ -1,7 +1,7 @@
 import { type ChangeEvent, useId, useRef, useState } from 'react'
 import { backedUpAt } from '@/shared/domain/backup-reminder'
 import type { Journal } from '@/shared/domain/journal'
-import { type ImportRefusal, importJournal } from '@/shared/domain/journal-file'
+import { importJournal } from '@/shared/domain/journal-file'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
 import { Button } from '@/shared/ui/base/button'
 import {
@@ -16,6 +16,7 @@ import {
 import { newFactId } from '@/shared/utils/fact-id'
 import { formatDate } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
+import type { ImportState } from '../types/import-state'
 
 type ImportJournalProps = {
   /** The journal in place: replacing one that holds facts asks first. */
@@ -27,13 +28,6 @@ type ImportJournalProps = {
   /** Commits the imported journal; the backup record is already updated. */
   onImported: (journal: Journal) => void
 }
-
-type ImportState =
-  | { readonly step: 'idle' }
-  | { readonly step: 'refused'; readonly reason: ImportRefusal }
-  | { readonly step: 'confirming'; readonly journal: Journal; readonly exportedAt: number }
-  /** Once confirmed: a second tap must not replace the journal twice. */
-  | { readonly step: 'replacing' }
 
 const copy = strings.backup
 

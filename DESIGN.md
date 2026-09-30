@@ -586,7 +586,7 @@ gradient and glow: `ghost` fill, `muted` text.
 - **Row list (current):** on home, a `rows` card of `RowLink` carries the
   navigation: each row 52 px, cream `cta` 400 label, 18 px `muted` right chevron at the end,
   `line` hairline between rows; press → `muted` text.
-- **Tab bar (with M2):** its look is fixed in the `/design` specimen and it arrives
+- **Tab bar (with M2):** its look is fixed in `src/shared/ui/TabBar.tsx` and it arrives
   with Progression: `page` background, top `line` hairline bounded to the column, four items (Accueil ·
   Calendrier · Progression · Historique), 24 px icon over a `tab` label, 48 px item. Active →
   cream, with no background or indicator; inactive → `muted`, cream on press. `aria-current="page"`.
@@ -672,7 +672,7 @@ play only under `motion-safe:`, so the haze becomes a still image; every transit
 - **Do** check every text set on a haze: ≥ 3:1 for the brand and the figure, ≥ 4.5:1 for running text.
 - **Do** declare every new `@theme` size or radius in `src/shared/utils/cn.ts`.
 - **Do** keep every animation behind `motion-safe:` or `motion-reduce:transition-none`, and render a counter's final value under reduced motion.
-- **Do** rerun `scripts/render-icons.mjs` after any change to a haze stop or the typeface.
+- **Do** rerun `npm run icons` (`scripts/render-icons.mjs`) after any change to a haze stop or the typeface.
 
 ### Don't:
 - **Don't** lend the pink → yellow gradient or `Envie`'s glow to any other object.

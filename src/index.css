@@ -6,7 +6,7 @@
 @custom-variant data-vertical (&[data-orientation="vertical"]);
 
 /*
- * Tokens of the "Nocturne chaude" world (contract: .impeccable/surfaces/src-routes-design-tsx.md).
+ * Tokens of the "Nocturne chaude" world (contract: .impeccable/surfaces/src-routes-index-tsx.md).
  * Every value here is a decision, not a default. Class names must land on a token declared here:
  * `--color-*: initial` drops Tailwind's palette, so a class on a missing token renders nothing.
  */

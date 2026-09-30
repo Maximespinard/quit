@@ -61,10 +61,15 @@ The same hook also rejects a commit whose staged changes match a regex in
 | --- | --- |
 | `npm run dev` | Vite dev server on port 3000 |
 | `npm run verify` | lint + typecheck + tests + build, then every workspace's own verify — the gate before any commit |
-| `npm run test` | Vitest once (`test:watch` to watch) |
+| `npm run lint` | Biome check + ESLint (feature boundaries, domain clock ban) |
+| `npm run lint:fix` | Biome autofix (format included) + ESLint fix |
+| `npm run typecheck` | `tsc -b`: the app, its configs, the server-backed tests and `e2e/` |
+| `npm run test` | Vitest once |
+| `npm run test:watch` | Vitest in watch mode |
 | `npm run test:e2e` | Playwright suite (WebKit, iPhone) against the production preview build, or against `E2E_BASE_URL` when set |
-| `npm run build` | Production build (typecheck included) |
-| `npm run lint:fix` | Biome autofix + ESLint fix |
+| `npm run build` | Production build (typecheck of what ships included) |
+| `npm run preview` | Serves the production build |
+| `npm run icons` | Renders the app icons into `public/` (`scripts/render-icons.mjs`) |
 
 ## Server
 
@@ -116,9 +121,14 @@ fails its health check is rolled back by itself. Install, operations and rollbac
 ## Docs
 
 - `CONTEXT.md` — the domain glossary; the words used in code and UI copy
+- `PRODUCT.md` — who the app is for, what it does and refuses, its tone
+- `DESIGN.md` — the visual system: tokens, type, components, do's and don'ts
 - `docs/adr/` — architecture decisions
 - `docs/api.md` — the server's HTTP contract
 - `docs/deploy.md` — production: how it runs, first install, operations
+- `docs/design/` — design references and the visual target mocks
+- `docs/research/` — research notes behind product decisions
+- `docs/agents/` — how agent skills use this repo (issue tracker, labels, domain docs)
 - `CLAUDE.md` — conventions for agents working in this repo
 
 ## License

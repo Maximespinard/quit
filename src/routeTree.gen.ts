@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CalendarRouteImport } from './routes/calendar'
-import { Route as DesignRouteImport } from './routes/design'
 import { Route as GoalRouteImport } from './routes/goal'
 import { Route as LapseRouteImport } from './routes/lapse'
 import { Route as ProtocolRouteImport } from './routes/protocol'
@@ -31,11 +30,6 @@ const IndexRoute = IndexRouteImport.update({
 const CalendarRoute = CalendarRouteImport.update({
   id: '/calendar',
   path: '/calendar',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DesignRoute = DesignRouteImport.update({
-  id: '/design',
-  path: '/design',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GoalRoute = GoalRouteImport.update({
@@ -92,7 +86,6 @@ const PatchNewRoute = PatchNewRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
-  '/design': typeof DesignRoute
   '/goal': typeof GoalRoute
   '/lapse': typeof LapseRoute
   '/protocol': typeof ProtocolRoute
@@ -107,7 +100,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
-  '/design': typeof DesignRoute
   '/goal': typeof GoalRoute
   '/lapse': typeof LapseRoute
   '/protocol': typeof ProtocolRoute
@@ -123,7 +115,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
-  '/design': typeof DesignRoute
   '/goal': typeof GoalRoute
   '/lapse': typeof LapseRoute
   '/protocol': typeof ProtocolRoute
@@ -140,7 +131,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/calendar'
-    | '/design'
     | '/goal'
     | '/lapse'
     | '/protocol'
@@ -155,7 +145,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/calendar'
-    | '/design'
     | '/goal'
     | '/lapse'
     | '/protocol'
@@ -170,7 +159,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/calendar'
-    | '/design'
     | '/goal'
     | '/lapse'
     | '/protocol'
@@ -186,7 +174,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CalendarRoute: typeof CalendarRoute
-  DesignRoute: typeof DesignRoute
   GoalRoute: typeof GoalRoute
   LapseRoute: typeof LapseRoute
   ProtocolRoute: typeof ProtocolRoute
@@ -213,13 +200,6 @@ declare module '@tanstack/react-router' {
       path: '/calendar'
       fullPath: '/calendar'
       preLoaderRoute: typeof CalendarRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/design': {
-      id: '/design'
-      path: '/design'
-      fullPath: '/design'
-      preLoaderRoute: typeof DesignRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/goal': {
@@ -298,7 +278,6 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CalendarRoute: CalendarRoute,
-  DesignRoute: DesignRoute,
   GoalRoute: GoalRoute,
   LapseRoute: LapseRoute,
   ProtocolRoute: ProtocolRoute,

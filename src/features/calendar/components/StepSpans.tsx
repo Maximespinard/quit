@@ -2,9 +2,8 @@ import type { CalendarStep } from '@/shared/domain/patch-calendar'
 import type { ProtocolPosition } from '@/shared/domain/protocol-position'
 import { Card } from '@/shared/ui/Card'
 import { cn } from '@/shared/utils/cn'
-import { formatDose } from '@/shared/utils/format'
+import { formatDose, formatShortDate } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
-import { formatShortDate } from '../utils/calendar-dates'
 
 const copy = strings.calendar
 

@@ -15,6 +15,7 @@ dist-ssr
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
+.zed/
 .idea
 .DS_Store
 *.suo
@@ -51,3 +52,4 @@ dev-dist
 .impeccable/review/
 .impeccable/build/
 .impeccable/questions/
+.impeccable/critique/
