@@ -1,9 +1,9 @@
 import { expect, type Page, test } from '@playwright/test'
-import { sandboxAt, startNow, streakRegion } from './sandbox'
+import { NOW } from './support/clock'
+import { startNow } from './support/flows'
+import { protocolSummary, streakRegion } from './support/locators'
+import { sandboxAt } from './support/sandbox'
 
-const NOW = Date.UTC(2026, 0, 1, 12, 0, 0)
-
-const protocolSummary = (page: Page) => page.getByRole('region', { name: 'Protocole' })
 const step = (page: Page, number: number) => page.getByRole('group', { name: `Étape ${number}` })
 
 async function openEditor(page: Page) {

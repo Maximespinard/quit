@@ -1,22 +1,15 @@
 import { readFile } from 'node:fs/promises'
 import { expect, type Page, test } from '@playwright/test'
-import { expectIdentified, type IdentifiedFact, withoutIds } from './fact-ids'
-import { expectStreak, sandboxWith, startNow } from './sandbox'
+import { expectStreak } from './support/assertions'
+import { expectIdentified, type IdentifiedFact, withoutIds } from './support/fact-ids'
+import { openSettings, startNow } from './support/flows'
+import { protocolSummary, settingsSpendField, tap, totals } from './support/locators'
+import { factCount, sandboxMarker, sandboxWith, shiftClock } from './support/sandbox'
 
-const tap = (page: Page, name: string) => page.getByRole('button', { name, exact: true }).click()
-const marker = (page: Page) => page.getByRole('button', { name: 'Bac à sable', exact: true })
-const totals = (page: Page) => page.getByRole('region', { name: 'Ce qui reste acquis' })
-const protocolSummary = (page: Page) => page.getByRole('region', { name: 'Protocole' })
 const reminder = (page: Page) => page.getByRole('region', { name: 'Rappel de sauvegarde' })
 const backupSection = (page: Page) => page.getByRole('region', { name: 'Sauvegarde' })
-const factCount = (page: Page) => page.getByText(/^\d+ faits?$/)
 
 type ExportFile = { version: number; journal: { facts: IdentifiedFact[] } }
-
-async function openSettings(page: Page) {
-  await page.getByRole('link', { name: 'Réglages' }).click()
-  await expect(page.getByRole('heading', { name: 'Réglages' })).toBeVisible()
-}
 
 /** Taps an export button and returns the file it hands over, as its name and its text. */
 async function exportFile(page: Page, button: string) {
@@ -63,7 +56,7 @@ test('export, wipe, import: every figure comes back as it was', async ({ page })
   expectIdentified((JSON.parse(file.text) as ExportFile).journal.facts)
   await expect(backupSection(page).getByRole('status')).toHaveText('Journal exporté.')
 
-  await marker(page).click()
+  await sandboxMarker(page).click()
   await tap(page, 'Vider')
   await tap(page, 'Fermer')
   await expect(page.getByRole('button', { name: 'Maintenant', exact: true })).toBeVisible()
@@ -84,7 +77,7 @@ test('a version 1 file, exported before facts had an id, imports and its facts g
   const facts = withoutIds(current.journal.facts)
   const v1 = { ...current, version: 1, journal: { ...current.journal, facts } }
 
-  await marker(page).click()
+  await sandboxMarker(page).click()
   await tap(page, 'Vider')
   await tap(page, 'Fermer')
   await importFile(page, 'Restaurer une sauvegarde', {
@@ -126,7 +119,7 @@ test('replacing a journal that holds facts asks first', async ({ page }) => {
   const file = await exportFile(page, 'Exporter le bac à sable')
 
   await page.goto(sandboxWith('day-3-craving'))
-  await marker(page).click()
+  await sandboxMarker(page).click()
   const day3Facts = await factCount(page).textContent()
   await tap(page, 'Fermer')
   await openSettings(page)
@@ -137,7 +130,7 @@ test('replacing a journal that holds facts asks first', async ({ page }) => {
   await dialog.getByRole('button', { name: 'Garder le mien' }).click()
   await expect(dialog).toHaveCount(0)
   await page.getByRole('link', { name: 'Retour' }).click()
-  await marker(page).click()
+  await sandboxMarker(page).click()
   await expect(factCount(page)).toHaveText(day3Facts ?? '')
   await tap(page, 'Fermer')
 
@@ -146,7 +139,7 @@ test('replacing a journal that holds facts asks first', async ({ page }) => {
   await dialog.getByRole('button', { name: 'Oui, remplacer' }).click()
 
   await expect(page.getByText('Journal restauré.')).toBeVisible()
-  await marker(page).click()
+  await sandboxMarker(page).click()
   await expect(factCount(page)).not.toHaveText(day3Facts ?? '')
 })
 
@@ -159,14 +152,9 @@ test('the reminder shows when no export exists, hides for a few days, then comes
   await reminder(page).getByRole('button', { name: 'Plus tard' }).click()
   await expect(reminder(page)).toHaveCount(0)
 
-  await marker(page).click()
-  await tap(page, '+1 j')
-  await tap(page, '+1 j')
-  await tap(page, 'Fermer')
+  await shiftClock(page, '+1 j', 2)
   await expect(reminder(page)).toHaveCount(0)
-  await marker(page).click()
-  await tap(page, '+1 j')
-  await tap(page, 'Fermer')
+  await shiftClock(page, '+1 j')
   await expect(reminder(page)).toBeVisible()
 
   // An export from the banner is a backup: the reminder goes away.
@@ -220,8 +208,6 @@ test('the real journal survives a storage wipe through its export', async ({ pag
   await page.reload()
   await expectStreak(page, 0, '00 h \\d\\d')
   await openSettings(page)
-  await expect(page.getByRole('textbox', { name: 'Dépense en tabac par semaine' })).toHaveValue(
-    '35',
-  )
+  await expect(settingsSpendField(page)).toHaveValue('35')
   await expect(backupSection(page)).toContainText('Dernière sauvegarde le')
 })

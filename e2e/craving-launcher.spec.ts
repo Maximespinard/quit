@@ -1,18 +1,18 @@
 import { expect, type Page, test } from '@playwright/test'
+import { cravingLauncher, cravingTimer } from './support/locators'
+import { sandboxWith } from './support/sandbox'
 
 /** Two months of cravings: every screen has enough to scroll. */
 const SCENARIO = 'day-60-cravings'
 
-const envie = (page: Page) => page.getByRole('button', { name: 'Envie', exact: true })
-const openWithScenario = (page: Page, path: string) =>
-  page.goto(`${path}?debug=true&scenario=${SCENARIO}`)
+const openWithScenario = (page: Page, path: string) => page.goto(sandboxWith(SCENARIO, path))
 
 /**
  * Scrolled to the end, how far the lowest piece of content reaches past the top of Envie's
  * fade band: zero or less means nothing sits under the pill, nor under its fade. The sandbox
  * pads `main` for its marker, which the real app does not: measured without that padding.
  */
-const reachUnderEnvie = (page: Page) =>
+const reachUnderLauncher = (page: Page) =>
   page.evaluate(() => {
     document.querySelector('main')?.style.setProperty('padding-bottom', '0px')
     window.scrollTo(0, document.documentElement.scrollHeight)
@@ -38,15 +38,15 @@ test('Envie sits in the same place on every screen outside the forms, clear of t
   page,
 }) => {
   await openWithScenario(page, '/')
-  const home = await envie(page).boundingBox()
+  const home = await cravingLauncher(page).boundingBox()
   // It hugs its label: nowhere near the column's width.
   expect(home?.width).toBeLessThan((page.viewportSize()?.width ?? 0) / 3)
 
   for (const screen of SCREENS) {
     await openWithScenario(page, screen)
-    await expect(envie(page), screen).toBeVisible()
-    expect(await envie(page).boundingBox(), screen).toEqual(home)
-    expect(await reachUnderEnvie(page), screen).toBeLessThanOrEqual(0)
+    await expect(cravingLauncher(page), screen).toBeVisible()
+    expect(await cravingLauncher(page).boundingBox(), screen).toEqual(home)
+    expect(await reachUnderLauncher(page), screen).toBeLessThanOrEqual(0)
   }
 })
 
@@ -56,13 +56,13 @@ test('Envie stays off the forms, the craving timer and the screens before first 
   for (const screen of ['/calendar', '/history']) {
     await page.goto(screen)
     await expect(page.getByRole('heading', { level: 2 }).first(), screen).toBeVisible()
-    await expect(envie(page), screen).toHaveCount(0)
+    await expect(cravingLauncher(page), screen).toHaveCount(0)
   }
 
   for (const form of ['/lapse', '/patch/new', '/goal', '/craving/past', '/protocol']) {
     await openWithScenario(page, form)
     await expect(page.getByRole('heading', { level: 2 }).first(), form).toBeVisible()
-    await expect(envie(page), form).toHaveCount(0)
+    await expect(cravingLauncher(page), form).toHaveCount(0)
   }
 
   await openWithScenario(page, '/history')
@@ -71,10 +71,10 @@ test('Envie stays off the forms, the craving timer and the screens before first 
     .first()
     .click()
   await expect(page.getByRole('button', { name: 'Supprimer' })).toBeVisible()
-  await expect(envie(page)).toHaveCount(0)
+  await expect(cravingLauncher(page)).toHaveCount(0)
 
   await openWithScenario(page, '/')
-  await envie(page).click()
-  await expect(page.getByRole('timer', { name: 'Temps restant' })).toBeVisible()
-  await expect(envie(page)).toHaveCount(0)
+  await cravingLauncher(page).click()
+  await expect(cravingTimer(page)).toBeVisible()
+  await expect(cravingLauncher(page)).toHaveCount(0)
 })
