@@ -6,6 +6,8 @@ import { Button } from '@/shared/ui/base/button'
 import { cn } from '@/shared/utils/cn'
 import { newFactId } from '@/shared/utils/fact-id'
 import { strings } from '@/shared/utils/strings'
+import type { FirstLaunchAnswers } from '../types/first-launch-answers'
+import { EMPTY_ANSWERS, FIRST_LAUNCH_STEPS } from '../utils/first-launch-steps'
 import { baselineInput, spendInput } from '../utils/value-inputs'
 import { ProtocolStep } from './ProtocolStep'
 import { QuitMomentStep } from './QuitMomentStep'
@@ -20,14 +22,6 @@ type FirstLaunchProps = {
   restore?: ReactNode
 }
 
-type Answers = {
-  quitMoment: number | null
-  weeklySpendCents: number | null
-  baselineSmokesPerDay: number | null
-}
-
-const STEPS = [1, 2, 3, 4] as const
-const STEP_COUNT = STEPS.length
 const copy = strings.firstLaunch
 
 /**
@@ -36,13 +30,9 @@ const copy = strings.firstLaunch
  */
 export function FirstLaunch({ journal, now, onStarted, restore }: FirstLaunchProps) {
   const [step, setStep] = useState(1)
-  const [answers, setAnswers] = useState<Answers>({
-    quitMoment: null,
-    weeklySpendCents: null,
-    baselineSmokesPerDay: null,
-  })
+  const [answers, setAnswers] = useState<FirstLaunchAnswers>(EMPTY_ANSWERS)
 
-  const answer = (next: Partial<Answers>) => {
+  const answer = (next: Partial<FirstLaunchAnswers>) => {
     setAnswers((current) => ({ ...current, ...next }))
     setStep((current) => current + 1)
   }
@@ -80,7 +70,7 @@ export function FirstLaunch({ journal, now, onStarted, restore }: FirstLaunchPro
         )}
         {/* Crans, like the multiplier: answered in cream, current in muted, ahead as a ghost line. */}
         <div aria-hidden="true" className="flex flex-1 gap-1.5">
-          {STEPS.map((number) => (
+          {FIRST_LAUNCH_STEPS.map((number) => (
             <span
               key={number}
               className={cn(
@@ -91,7 +81,9 @@ export function FirstLaunch({ journal, now, onStarted, restore }: FirstLaunchPro
           ))}
         </div>
         {/* On the haze: ink, like the question's lead. */}
-        <p className="text-ink text-label tabular-nums">{copy.progress(step, STEP_COUNT)}</p>
+        <p className="text-ink text-label tabular-nums">
+          {copy.progress(step, FIRST_LAUNCH_STEPS.length)}
+        </p>
       </div>
 
       {step === 1 ? (

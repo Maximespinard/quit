@@ -1,7 +1,5 @@
 import { expect } from '@playwright/test'
-
-/** A UUIDv7, as the device makes fact ids. */
-export const UUID_V7 = /[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/
+import { ONLY_UUID_V7 } from '../../src/shared/test/uuid-v7'
 
 /** A fact as stored or exported: its id, if any, beside its other keys. */
 export type IdentifiedFact = { readonly id?: string } & Record<string, unknown>
@@ -10,7 +8,7 @@ export type IdentifiedFact = { readonly id?: string } & Record<string, unknown>
 export function expectIdentified(facts: readonly IdentifiedFact[]) {
   const ids = facts.map((fact) => fact.id ?? '')
   expect(ids.length).toBeGreaterThan(0)
-  expect(ids.every((id) => new RegExp(`^${UUID_V7.source}$`).test(id))).toBe(true)
+  expect(ids.every((id) => ONLY_UUID_V7.test(id))).toBe(true)
   expect(new Set(ids).size).toBe(ids.length)
 }
 

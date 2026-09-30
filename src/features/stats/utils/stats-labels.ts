@@ -9,6 +9,12 @@ const defaultTagLabels: Readonly<Record<string, string>> = strings.craving.tags.
 /** A tag as the screen shows it: a default tag's French label, a typed tag's own words. */
 export const tagLabel = (tag: string): string => defaultTagLabels[tag] ?? tag
 
+/** The hours the axis names: every six, from midnight. */
+export const HOUR_TICKS: readonly ChartMark[] = [0, 6, 12, 18].map((hour) => ({
+  index: hour,
+  label: strings.stats.hour(hour),
+}))
+
 /** A whole percentage of `whole`, 0 when there is nothing to divide. */
 export const percentOf = (part: number, whole: number): number =>
   whole === 0 ? 0 : Math.round((part / whole) * 100)

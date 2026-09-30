@@ -1,6 +1,7 @@
 import type { ApplicationSite } from '@quit/contract/facts'
 import type { ImportRefusal } from '@/shared/domain/journal-file'
 import type { ScenarioId } from '@/shared/domain/scenarios'
+import { formatAverage, formatCount } from '@/shared/utils/format'
 
 export const strings = {
   app: { name: 'quit' },
@@ -397,12 +398,11 @@ export const strings = {
       countByWeek: 'Envies par jour, en moyenne sur chaque semaine',
       /** A week's cravings, then its daily average: `18 envies · 2,6 par jour`. */
       weekCount: (count: number, perDay: number) =>
-        `${count <= 1 ? `${count} envie` : `${count} envies`} · ${perDay.toLocaleString('fr-FR', { maximumFractionDigits: 1 })} par jour`,
+        `${count <= 1 ? `${count} envie` : `${count} envies`} · ${formatAverage(perDay)} par jour`,
       intensity: 'Intensité moyenne',
       noIntensity: 'aucune envie',
       /** An average intensity out of 3: `2,5 sur 3`. */
-      average: (average: number) =>
-        `${average.toLocaleString('fr-FR', { maximumFractionDigits: 1 })} sur 3`,
+      average: (average: number) => `${formatAverage(average)} sur 3`,
       /** A week of the trend, its first and last days: the oldest may be shorter. */
       week: (first: string, last: string) => `${first} – ${last}`,
       today: 'aujourd’hui',
@@ -528,74 +528,11 @@ export const strings = {
   level: {
     title: (level: number) => `Niveau ${level}`,
     label: (level: number) => `XP du niveau ${level}`,
-    xp: (into: number, total: number) =>
-      `${into.toLocaleString('fr-FR')} / ${total.toLocaleString('fr-FR')} XP`,
+    xp: (into: number, total: number) => `${formatCount(into)} / ${formatCount(total)} XP`,
   },
   badges: {
     title: 'Badges',
     count: (unlocked: number, total: number) => `${unlocked} / ${total}`,
     locked: 'à débloquer',
-  },
-  design: {
-    synthetic: 'Toutes les données sont fictives.',
-    sections: {
-      controls: 'Composants',
-      fields: 'Champs',
-      colors: 'Couleurs',
-      type: 'Typographie',
-      radii: 'Rayons',
-      navigation: 'Navigation',
-    },
-    /** The tab bar's look is set; it ships once its fourth screen, Progression, exists (M2). */
-    tabBarLater:
-      'Barre d’onglets : elle arrive avec Progression (M2). D’ici là, la liste de l’accueil.',
-    buttons: {
-      primary: 'Poser le patch',
-      secondary: 'Plus tard',
-      ghost: 'Annuler',
-      destructive: 'Supprimer ce fait',
-      link: 'Autre dose ou autre date',
-      disabled: 'Indisponible',
-    },
-    switchLabel: 'Rappel du patch',
-    switchOffLabel: 'Rappel de sauvegarde',
-    switchDisabledLabel: 'Notifications, bloquées par le téléphone',
-    chipsLabel: 'Site du patch',
-    chips: ['Bras gauche', 'Bras droit', 'Torse gauche'],
-    chipPrevious: 'Hanche droite',
-    segmentedLabel: 'Intensité de l’envie',
-    segments: ['1', '2', '3'],
-    sliderLabel: 'Humeur du check-in',
-    tabsLabel: 'Période',
-    tabs: ['Semaine', 'Mois', 'Tout'],
-    tabsEmpty: 'Rien à afficher pour cette période.',
-    tabsLineLabel: 'Vue',
-    tabsLine: ['Heures', 'Tags', 'Intensité'],
-    fields: {
-      label: 'Ce que tu veux t’offrir',
-      placeholder: 'Ex. un vélo',
-      price: 'Son prix',
-      priceValue: '900',
-      invalid: 'Date et heure',
-      invalidValue: '31/12/2027 23:59',
-      error: 'Cette date est dans le futur.',
-      disabled: 'Marque du patch',
-      disabledValue: 'Patch 24 h',
-    },
-    drawer: {
-      open: 'Ouvrir le tiroir',
-      title: 'Poser le patch',
-      body: 'Site suggéré : bras gauche. Le précédent était sur l’épaule droite.',
-      confirm: 'C’est posé',
-      cancel: 'Plus tard',
-    },
-    dialog: {
-      open: 'Ouvrir la boîte de dialogue',
-      title: 'Enregistrer un écart ?',
-      body: 'Le streak et le multiplicateur repartent de zéro. Tes badges et tes jours sans fumer restent.',
-      confirm: 'Enregistrer',
-      cancel: 'Non, pas cette fois',
-      close: 'Fermer',
-    },
   },
 } as const

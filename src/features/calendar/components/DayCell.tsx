@@ -1,7 +1,7 @@
 import { cn } from '@/shared/utils/cn'
-import { formatDose } from '@/shared/utils/format'
+import { formatDose, formatWeekdayDate } from '@/shared/utils/format'
 import { strings } from '@/shared/utils/strings'
-import { describeDay, formatWeekdayDate } from '../utils/calendar-dates'
+import { describeDay } from '../utils/calendar-dates'
 import type { MonthCell } from '../utils/calendar-months'
 import { CigaretteMark, CravingMark, PatchMark } from './DayMarks'
 

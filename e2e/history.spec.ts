@@ -1,7 +1,7 @@
 import { expect, type Page, test } from '@playwright/test'
+import { UUID_V7 } from '../src/shared/test/uuid-v7'
 import { expectStreak } from './support/assertions'
 import { NOW } from './support/clock'
-import { UUID_V7 } from './support/fact-ids'
 import { daysIn, declareLapse } from './support/flows'
 import { patchCard, rows, tap, totals } from './support/locators'
 import { sandboxAt, shiftClock } from './support/sandbox'

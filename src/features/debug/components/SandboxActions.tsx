@@ -6,12 +6,9 @@ import type { SandboxControls } from '@/shared/hooks/useJournalSource'
 import { Button } from '@/shared/ui/base/button'
 import { newFactId } from '@/shared/utils/fact-id'
 import { strings } from '@/shared/utils/strings'
+import { INJECTED_CRAVING, INJECTED_LAPSE } from '../utils/injected-facts'
 
 const copy = strings.debug
-
-/** What an injected fact holds, beyond its instant: a middling craving held to the end, one cigarette. */
-const INJECTED_CRAVING = { intensity: 2, heldToEnd: true, tags: [] } as const
-const INJECTED_LAPSE = { count: 1 } as const
 
 type RecordResult = { readonly ok: true; readonly journal: Journal } | { readonly ok: false }
 

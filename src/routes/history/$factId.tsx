@@ -8,7 +8,7 @@ import { PatchApplicationForm } from '@/features/patch/components/PatchApplicati
 import { derive } from '@/shared/domain/derive'
 import { type Journal, removeFact } from '@/shared/domain/journal'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
-import { AppShell } from '@/shared/ui/app-shell'
+import { AppShell } from '@/shared/ui/AppShell'
 import { buttonVariants } from '@/shared/ui/base/button'
 import { ReadyJournal } from '@/shared/ui/ReadyJournal'
 import { ThumbZone } from '@/shared/ui/ThumbZone'
