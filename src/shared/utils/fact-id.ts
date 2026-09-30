@@ -1,8 +1,5 @@
 import type { FactId } from '@quit/contract/facts'
 
-/** A UUIDv7 as `uuidv7` writes it, unanchored: tests match fact ids with it. */
-export const UUID_V7 = /[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/
-
 /** Bytes of randomness a UUIDv7 takes beside its 48-bit instant. */
 const RANDOM_BYTES = 10
 

@@ -1,5 +1,6 @@
 import type { FactId } from '@quit/contract/facts'
-import { factId, UUID_V7 } from '@/shared/utils/fact-id'
+import { factId } from '@/shared/utils/fact-id'
+import { ONLY_UUID_V7 } from './uuid-v7'
 
 /**
  * An id source handing out `factId(first)`, `factId(first + 1)`, … in turn: where the device
@@ -14,4 +15,4 @@ export function factIdSequence(first = 1): () => FactId {
 }
 
 /** Any UUIDv7: the id the device made for a fact a test recorded, unknown in advance. */
-export const anyFactId = expect.stringMatching(new RegExp(`^${UUID_V7.source}$`))
+export const anyFactId = expect.stringMatching(ONLY_UUID_V7)

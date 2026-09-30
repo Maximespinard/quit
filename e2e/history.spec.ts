@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test'
-import { UUID_V7 } from '../src/shared/utils/fact-id'
+import { UUID_V7 } from '../src/shared/test/uuid-v7'
 import { expectStreak, sandboxAt, shiftClock, startNow } from './sandbox'
 
 // Times on screen are local: the timezone is pinned so the times below are fixed.

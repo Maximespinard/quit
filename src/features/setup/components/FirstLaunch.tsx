@@ -6,11 +6,8 @@ import { Button } from '@/shared/ui/base/button'
 import { cn } from '@/shared/utils/cn'
 import { newFactId } from '@/shared/utils/fact-id'
 import { strings } from '@/shared/utils/strings'
-import {
-  FIRST_LAUNCH_STEPS,
-  type FirstLaunchAnswers,
-  NO_ANSWERS,
-} from '../utils/first-launch-steps'
+import type { FirstLaunchAnswers } from '../types/first-launch-answers'
+import { EMPTY_ANSWERS, FIRST_LAUNCH_STEPS } from '../utils/first-launch-steps'
 import { baselineInput, spendInput } from '../utils/value-inputs'
 import { ProtocolStep } from './ProtocolStep'
 import { QuitMomentStep } from './QuitMomentStep'
@@ -33,7 +30,7 @@ const copy = strings.firstLaunch
  */
 export function FirstLaunch({ journal, now, onStarted, restore }: FirstLaunchProps) {
   const [step, setStep] = useState(1)
-  const [answers, setAnswers] = useState<FirstLaunchAnswers>(NO_ANSWERS)
+  const [answers, setAnswers] = useState<FirstLaunchAnswers>(EMPTY_ANSWERS)
 
   const answer = (next: Partial<FirstLaunchAnswers>) => {
     setAnswers((current) => ({ ...current, ...next }))
