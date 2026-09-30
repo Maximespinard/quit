@@ -52,7 +52,7 @@ Explicitly refused:
 - UI strings are French, centralised in one strings module. Everything else is English.
 - The app tracks one thing: being smoke-free. Only tobacco and nicotine are ever mentioned.
 - Money is the user's weekly tobacco spend, gross, in integer cents; every cigarette smoked in a lapse is subtracted from money saved and cigarettes not smoked; only the display layer divides.
-- Two elapsed figures: streak (restarts on a relapse, survives a slip) and smoke-free days (never resets). The hero shows the streak, the totals card the smoke-free days; after a slip the home also says how long since the last cigarette. Personal best streak appears only once a relapse exists.
+- Two elapsed figures: streak (restarts on a relapse, survives a slip) and smoke-free days (never resets). The hero shows the streak; the totals card, which appears once a lapse exists, the smoke-free days; after a slip the home also says how long since the last cigarette. Personal best streak appears only once a relapse exists.
 - Application site is auto-suggested, switchable, never the same as the previous one.
 - Craving intensity is 1–3; tags are optional and offered after the timer. Check-in mood is 1–5.
 - Out of scope: plasma nicotine curve, shareable card, "comeback" badge, per-brand presets, 16 h patches.

@@ -13,6 +13,7 @@ export const rows = (page: Page, name: RegExp) => page.getByRole('link', { name 
 export const streakRegion = (page: Page) =>
   page.getByRole('region', { name: 'Streak', exact: true })
 export const totals = (page: Page) => page.getByRole('region', { name: 'Ce qui reste acquis' })
+export const savingsTotals = (page: Page) => page.getByRole('region', { name: 'Ce que tu gardes' })
 export const protocolSummary = (page: Page) => page.getByRole('region', { name: 'Protocole' })
 export const patchCard = (page: Page) => page.getByRole('region', { name: 'Patch du jour' })
 
