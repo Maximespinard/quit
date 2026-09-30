@@ -1,9 +1,9 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { LapseForm } from '@/features/lapse/components/LapseForm'
+import { useCommitThenHome } from '@/shared/hooks/useCommitThenHome'
 import { useJournalSource } from '@/shared/hooks/useJournalSource'
-import { useRecordedThenHome } from '@/shared/hooks/useRecordedThenHome'
 import { AppShell } from '@/shared/ui/app-shell'
-import { buttonVariants } from '@/shared/ui/base/button'
+import { CancelLink } from '@/shared/ui/CancelLink'
 import { ReadyJournal } from '@/shared/ui/ReadyJournal'
 import { validateAppSearch } from '@/shared/utils/app-search'
 import { strings } from '@/shared/utils/strings'
@@ -15,7 +15,7 @@ export const Route = createFileRoute('/lapse')({
 function LapsePage() {
   const appSearch = validateAppSearch(Route.useSearch())
   const { state, now } = useJournalSource()
-  const recorded = useRecordedThenHome(appSearch, 'lapseRecorded')
+  const recorded = useCommitThenHome(appSearch, 'lapseRecorded')
 
   return (
     <ReadyJournal state={state}>
@@ -26,13 +26,9 @@ function LapsePage() {
             now={now}
             onRecorded={recorded}
             secondary={
-              <Link
-                to="/"
-                search={appSearch}
-                className={buttonVariants({ variant: 'ghost', size: 'lg' })}
-              >
+              <CancelLink to="/" search={appSearch}>
                 {strings.lapse.cancel}
-              </Link>
+              </CancelLink>
             }
           />
         </AppShell>
