@@ -1,5 +1,6 @@
 import { expect, type Page, test } from '@playwright/test'
-import { startNow, streakRegion } from './sandbox'
+import { startNow } from './support/flows'
+import { streakRegion } from './support/locators'
 
 // Proves the harness: the real bundle serves and the shell renders.
 test('the app loads and shows its shell', async ({ page }) => {

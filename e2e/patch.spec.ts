@@ -1,22 +1,11 @@
 import { expect, type Page, test } from '@playwright/test'
-import { expectStreak, sandboxAt, shiftClock, startNow } from './sandbox'
+import { NOW } from './support/clock'
+import { homeWithStreak, startNow } from './support/flows'
+import { patchCard, protocolSummary, tap } from './support/locators'
+import { sandboxAt, shiftClock } from './support/sandbox'
 
 // Times on screen are local: the timezone is pinned so the times below are fixed.
 test.use({ timezoneId: 'Europe/Paris' })
-
-/** 13:00 in Paris. */
-const NOW = Date.UTC(2026, 0, 1, 12, 0, 0)
-
-const tap = (page: Page, name: string | RegExp) =>
-  page.getByRole('button', { name, exact: typeof name === 'string' }).click()
-const patchCard = (page: Page) => page.getByRole('region', { name: 'Patch du jour' })
-
-/** A sandbox with a quit moment, its clock stopped on `NOW`. */
-const homeWithStreak = async (page: Page) => {
-  await page.goto(sandboxAt(NOW))
-  await startNow(page)
-  await expectStreak(page, 0, '00 h 00')
-}
 
 test('one tap logs the patch; it holds until midnight, the new day asks again', async ({
   page,
@@ -137,7 +126,7 @@ test('a missed day is caught up and a dose overridden for one patch only', async
 
   await expect(patchCard(page)).toContainText('Posé à 13:00')
   await expect(patchCard(page)).toContainText(/aujourd’hui · 10,5\smg/)
-  await expect(page.getByRole('region', { name: 'Protocole' })).toContainText(/21\smg/)
+  await expect(protocolSummary(page)).toContainText(/21\smg/)
 })
 
 test('a patch before the quit moment or in the future is refused', async ({ page }) => {

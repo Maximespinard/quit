@@ -1,35 +1,9 @@
 import { expect, type Page, test } from '@playwright/test'
-import { expectStreak, sandboxAt, startNow } from './sandbox'
-
-const NOW = Date.UTC(2026, 0, 1, 12, 0, 0)
-const HOUR = 60 * 60_000
-const DAY = 24 * HOUR
-
-const tap = (page: Page, name: string) => page.getByRole('button', { name, exact: true }).click()
-const totals = (page: Page) => page.getByRole('region', { name: 'Ce qui reste acquis' })
-const protocolSummary = (page: Page) => page.getByRole('region', { name: 'Protocole' })
-
-/** Moves the sandbox clock on by whole days from the debug panel. */
-const daysLater = async (page: Page, days: number) => {
-  await tap(page, 'Bac à sable')
-  for (let day = 0; day < days; day += 1) await tap(page, '+1 j')
-  await tap(page, 'Fermer')
-}
-
-/** A sandbox whose quit moment is `NOW`, its clock then moved `days` on. */
-const daysIn = async (page: Page, days: number) => {
-  await page.goto(sandboxAt(NOW))
-  await startNow(page)
-  await daysLater(page, days)
-  await expectStreak(page, days, '00 h 00')
-}
-
-const declareLapse = async (page: Page) => {
-  await page.getByRole('link', { name: 'J’ai fumé' }).click()
-  await expect(page.getByRole('heading', { name: 'Tu as fumé ?' })).toBeVisible()
-  await tap(page, 'Oui, noter')
-  await expect(page.getByRole('status').filter({ hasText: 'C’est noté.' })).toBeVisible()
-}
+import { expectStreak } from './support/assertions'
+import { DAY, localInput, NOW } from './support/clock'
+import { daysIn, declareLapse } from './support/flows'
+import { protocolSummary, tap, totals } from './support/locators'
+import { daysLater } from './support/sandbox'
 
 const expectSmokeFreeDays = (page: Page, days: number) =>
   expect(totals(page).getByRole('definition').first()).toHaveText(String(days))
@@ -93,13 +67,7 @@ test('a backdated lapse filling the gap between two lapse days makes a relapse',
 
   // Lapses on day 4 and day 6 (now): the day in between completes the run.
   await page.getByRole('link', { name: 'J’ai fumé' }).click()
-  const dayBefore = new Date(NOW + 4 * DAY)
-  const local = (part: number) => String(part).padStart(2, '0')
-  await page
-    .getByLabel('Quand')
-    .fill(
-      `${dayBefore.getFullYear()}-${local(dayBefore.getMonth() + 1)}-${local(dayBefore.getDate())}T${local(dayBefore.getHours())}:${local(dayBefore.getMinutes())}`,
-    )
+  await page.getByLabel('Quand').fill(await localInput(page, NOW + 4 * DAY))
   await expect(page.getByText('Ce sera une rechute')).toBeVisible()
   await tap(page, 'Oui, noter')
 

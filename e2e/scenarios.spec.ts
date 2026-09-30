@@ -1,14 +1,9 @@
-import { expect, type Page, test } from '@playwright/test'
-import { expectStreak, sandboxAt, sandboxWith, startNow } from './sandbox'
-
-const NOW = Date.UTC(2026, 0, 1, 12, 0, 0)
-
-const tap = (page: Page, name: string) => page.getByRole('button', { name, exact: true }).click()
-const marker = (page: Page) => page.getByRole('button', { name: 'Bac à sable' })
-const totals = (page: Page) => page.getByRole('region', { name: 'Ce qui reste acquis' })
-const protocolSummary = (page: Page) => page.getByRole('region', { name: 'Protocole' })
-const patchCard = (page: Page) => page.getByRole('region', { name: 'Patch du jour' })
-const factCount = (page: Page) => page.getByText(/^\d+ faits?$/)
+import { expect, test } from '@playwright/test'
+import { expectStreak } from './support/assertions'
+import { NOW } from './support/clock'
+import { startNow } from './support/flows'
+import { patchCard, protocolSummary, tap, totals } from './support/locators'
+import { factCount, sandboxAt, sandboxMarker, sandboxWith } from './support/sandbox'
 
 test('a scenario in the url seeds the sandbox: day 45 shows yesterday’s slip', async ({ page }) => {
   await page.goto(sandboxWith('day-45-lapse'))
@@ -30,7 +25,7 @@ test('the panel loads a scenario, marks it current, and the real journal is unto
   await expectStreak(page, 0, '00 h 00')
 
   await page.goto(sandboxAt(NOW))
-  await marker(page).click()
+  await sandboxMarker(page).click()
   await tap(page, 'Jour 29, étape 2')
   await expect(page.getByRole('button', { name: 'Jour 29, étape 2' })).toHaveAttribute(
     'aria-current',
@@ -48,7 +43,7 @@ test('the panel loads a scenario, marks it current, and the real journal is unto
   await expect(page.getByRole('button', { name: /^Poser le patch · 14\smg$/ })).toBeVisible()
 
   // Wiping empties the sandbox and clears the current scenario.
-  await marker(page).click()
+  await sandboxMarker(page).click()
   await tap(page, 'Vider')
   await expect(page.getByRole('button', { name: 'Jour 29, étape 2' })).not.toHaveAttribute(
     'aria-current',
@@ -59,13 +54,13 @@ test('the panel loads a scenario, marks it current, and the real journal is unto
 
   // The real journal still holds its own quit moment, and nothing else.
   await page.goto('/')
-  await expect(marker(page)).toHaveCount(0)
+  await expect(sandboxMarker(page)).toHaveCount(0)
   await expectStreak(page, 0, '00 h 00')
 })
 
 test('a craving and a lapse are injected at the sandbox’s current time', async ({ page }) => {
   await page.goto(sandboxWith('day-29'))
-  await marker(page).click()
+  await sandboxMarker(page).click()
   await expect(factCount(page)).toHaveText('34 faits')
 
   await tap(page, 'Injecter une envie')
@@ -82,7 +77,7 @@ test('a craving and a lapse are injected at the sandbox’s current time', async
 
 test('nothing can be injected before a quit moment exists', async ({ page }) => {
   await page.goto(sandboxAt(NOW))
-  await marker(page).click()
+  await sandboxMarker(page).click()
 
   await expect(page.getByRole('button', { name: 'Injecter une envie' })).toBeDisabled()
   await expect(page.getByRole('button', { name: 'Injecter un écart' })).toBeDisabled()
@@ -96,7 +91,7 @@ test('the clock jumps to the next step change, then to the end of the protocol',
   await expect(protocolSummary(page)).toContainText('Jour 28 sur 28')
   await expect(protocolSummary(page)).toContainText('encore 1 j avant 14 mg')
 
-  await marker(page).click()
+  await sandboxMarker(page).click()
   await tap(page, 'Sauter à l’étape suivante')
   await tap(page, 'Fermer')
 
@@ -105,7 +100,7 @@ test('the clock jumps to the next step change, then to the end of the protocol',
   await expect(protocolSummary(page)).toContainText('Jour 1 sur 28')
   await expect(page.getByRole('button', { name: /^Poser le patch · 14\smg$/ })).toBeVisible()
 
-  await marker(page).click()
+  await sandboxMarker(page).click()
   await tap(page, 'Sauter à l’étape suivante')
   await tap(page, 'Sauter à la fin du protocole')
   await expect(page.getByRole('button', { name: 'Sauter à l’étape suivante' })).toBeDisabled()
