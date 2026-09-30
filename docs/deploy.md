@@ -41,9 +41,15 @@ under `deploy/` reaches the host when `setup.sh` runs again.
 ## The image
 
 One image holds the built app and the server that serves it (`Dockerfile`, built from the
-root). It runs as `node`, not root, with the database on the `/data` volume. CI builds it on
-every pull request and runs the smoke and offline e2e specs against the container; on `main`
-it publishes `ghcr.io/maximespinard/quit` tagged with the commit sha and `main`.
+root). It runs as `node`, not root, with the database on the `/data` volume. CI runs each
+check once per content. A pull request gets `verify` and the leak scan only; the `e2e` job
+(the full suite, then the smoke and offline specs against the container) runs on a pull request
+carrying the `full-ci` label, which `/review-batch` puts on the top of its chain. Every push to
+`main` runs `verify`, `e2e` and the leak scan, then publishes `ghcr.io/maximespinard/quit`
+tagged with the commit sha and `main`. `e2e` is skipped when only docs changed (`**/*.md`,
+`docs/**`, `.claude/**`, `LICENSE`); `publish` still runs. A newer push cancels the run in
+progress, `main` included: of several back-to-back merges only the last publishes, so
+intermediate commits get no sha image.
 
 ```bash
 docker build -t quit .
