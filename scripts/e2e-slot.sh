@@ -2,11 +2,12 @@
 # Runs the e2e suite once one of E2E_SLOTS slots is free, so parallel sessions on one
 # machine never run more suites at once than it can hold. A slot is an flock on a file:
 # the kernel releases it when the process exits, even killed, so no lock goes stale.
+# The lock dir is fixed, not under TMPDIR: every repo and session on the machine shares it.
 # Without flock (macOS) or in CI, the suite runs straight away.
 set -euo pipefail
 
 slots="${E2E_SLOTS:-3}"
-lock_dir="${E2E_LOCK_DIR:-${TMPDIR:-/tmp}/quit-e2e-slots}"
+lock_dir="${E2E_LOCK_DIR:-/tmp/e2e-slots}"
 
 if [[ -n "${CI:-}" ]] || ! command -v flock >/dev/null 2>&1; then
   exec "$@"
