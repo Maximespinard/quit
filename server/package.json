@@ -7,7 +7,7 @@
     "./test-api": "./src/test/test-api.ts"
   },
   "engines": {
-    "node": ">=24"
+    "node": "^24.0.0"
   },
   "scripts": {
     "start": "node src/main.ts",
