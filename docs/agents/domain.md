@@ -5,7 +5,7 @@ codebase.
 
 ## Before exploring, read these
 
-- **`CONTEXT.md`** at the repo root — the glossary.
+- **`GLOSSARY.md`** at the repo root — the glossary.
 - **`docs/adr/`**: read ADRs that touch the area you're about to work in.
 
 If any of these files don't exist, **proceed silently**. Don't flag their absence; don't
@@ -19,7 +19,7 @@ Single-context repo (this one):
 
 ```
 /
-├── CONTEXT.md
+├── GLOSSARY.md
 └── docs/adr/
     ├── 0001-local-first-data-with-a-dumb-push-sender.md
     ├── 0002-state-derived-from-a-journal-of-facts.md
@@ -29,7 +29,7 @@ Single-context repo (this one):
 ## Use the glossary's vocabulary
 
 When your output names a domain concept (in an issue title, a refactor proposal, a hypothesis,
-a test name), use the term as defined in `CONTEXT.md`. Don't drift to synonyms the glossary
+a test name), use the term as defined in `GLOSSARY.md`. Don't drift to synonyms the glossary
 explicitly avoids.
 
 If the concept you need isn't in the glossary yet, that's a signal: either you're inventing
