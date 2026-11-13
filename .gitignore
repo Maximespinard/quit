@@ -33,7 +33,7 @@ dist-ssr
 .claude/settings.local.json
 .claude/worktrees/
 
-# Grill seed — never commit (durable record lives in CONTEXT.md + docs/adr)
+# Grill seed — never commit (durable record lives in GLOSSARY.md + docs/adr)
 BRIEF.md
 
 # PWA dev build output

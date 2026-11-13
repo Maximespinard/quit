@@ -67,7 +67,7 @@ persisted; streak, XP, level, badges and money saved are pure functions of `(jou
 **Language** — UI strings are **French**, centralised in one strings module, no i18n lib.
 Everything else — code, identifiers, comments, commits, branches, tickets — is English.
 
-**Vocabulary** — `CONTEXT.md` is the glossary and it is binding. Use its terms in code and copy;
+**Vocabulary** — `GLOSSARY.md` is the glossary and it is binding. Use its terms in code and copy;
 never a synonym it lists under _Avoid_.
 
 **Money** — integer cents everywhere (storage, domain, props, tests). Only the display layer divides.
@@ -110,8 +110,8 @@ The five canonical roles, each label string equal to its name. See `docs/agents/
 
 ### Domain docs
 
-Single-context: `CONTEXT.md` + `docs/adr/` at the root. See `docs/agents/domain.md`.
+Single-context: `GLOSSARY.md` + `docs/adr/` at the root. See `docs/agents/domain.md`.
 
 ## References
 
-Architecture decisions: `docs/adr/`. Domain vocabulary: `CONTEXT.md`. Deploy runbook: `docs/deploy.md`.
+Architecture decisions: `docs/adr/`. Domain vocabulary: `GLOSSARY.md`. Deploy runbook: `docs/deploy.md`.

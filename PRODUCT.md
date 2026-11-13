@@ -48,7 +48,7 @@ Explicitly refused:
 
 ## Capabilities and Constraints
 
-- Vocabulary is binding: `CONTEXT.md`. Use its terms in UI copy, never a synonym listed under _Avoid_.
+- Vocabulary is binding: `GLOSSARY.md`. Use its terms in UI copy, never a synonym listed under _Avoid_.
 - UI strings are French, centralised in one strings module. Everything else is English.
 - The app tracks one thing: being smoke-free. Only tobacco and nicotine are ever mentioned.
 - Money is the user's weekly tobacco spend, gross, in integer cents; every cigarette smoked in a lapse is subtracted from money saved and cigarettes not smoked; only the display layer divides.
@@ -70,7 +70,7 @@ Undecided: final product name (`quit` is provisional), domain, XP numbers (tuned
 
 ## Evidence on Hand
 
-- Domain glossary: `CONTEXT.md`. Decisions: `docs/adr/`.
+- Domain glossary: `GLOSSARY.md`. Decisions: `docs/adr/`.
 - Real data will be the user's own journal. Screenshots for publication come from demo mode's fictional journey, never from real data.
 - App icons in `public/` are rendered from code by `scripts/render-icons.mjs` (the home haze and a Host Grotesk "q").
 - Not available yet, do not fabricate: health milestone facts (each must be sourced), encouragement texts, XP values, default step durations from official notices.

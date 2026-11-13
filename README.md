@@ -127,7 +127,7 @@ git config core.hooksPath .githooks   # once per clone: gitleaks on every commit
 
 ## Docs
 
-- [`CONTEXT.md`](CONTEXT.md): the domain glossary, binding in code and UI copy
+- [`GLOSSARY.md`](GLOSSARY.md): the domain glossary, binding in code and UI copy
 - [`PRODUCT.md`](PRODUCT.md): who it is for and what it must do
 - [`DESIGN.md`](DESIGN.md): the visual system
 - [`docs/adr/`](docs/adr/): architecture decisions
